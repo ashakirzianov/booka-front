@@ -9,7 +9,7 @@ describe("Utils", () => {
     });
 
     it('trim', () => {
-        expect(trimStart("   hello ", " ho")).toBe("ello ");
-        expect(trimEnd("   hello ", " ho")).toBe("   hell");
+        expect(trimStart("   hey ", " hy")).toBe("ey ");
+        expect(trimEnd("   hey ", " hy")).toBe("   he");
     });
 });
