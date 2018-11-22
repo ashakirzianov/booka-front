@@ -55,7 +55,10 @@ const ErrorBookComp: Comp<ErrorBook> = props =>
 const TopComp = connect(['book'])((props) =>
     <Switch>
         <Redirect push exact from='/' to='/wap' />
-        <Route path='/' render={() => <BookComp {...props.book} />} />
+        <Route path='/' render={
+            // tslint:disable-next-line:jsx-no-lambda
+            () => <BookComp {...props.book} />
+        } />
     </Switch>
 );
 

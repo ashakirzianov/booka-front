@@ -10,16 +10,3 @@ declare module 'store' {
     const store: Store;
     export = store;
 }
-
-declare module '@rgrove/parse-xml' {
-    type ParsingOptions = {
-        preserveComments?: boolean,
-    };
-    const parseXml: (xml: string, options?: ParsingOptions) => any;
-    export = parseXml;
-}
-
-// TODO: bug workaround: https://github.com/Microsoft/TypeScript-React-Native-Starter/issues/19
-// Lister all but node typings in the tsconfig file, but 'registerServiceWorker.ts' still req process to be defined
-// Try removing this fix
-declare var process: any;

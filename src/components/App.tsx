@@ -4,7 +4,7 @@ import { Router } from "react-router-dom";
 import { dispatchHistoryEvent, history } from "./misc";
 
 export class AppComp extends React.Component {
-    componentWillMount() {
+    public componentWillMount() {
         // TODO: this doesn't feel right. Think of another way.
         dispatchHistoryEvent(history.location);
         history.listen((location, action) => {
@@ -12,7 +12,7 @@ export class AppComp extends React.Component {
         });
     }
 
-    render() {
+    public render() {
         return <Router history={history}>
             <TopComp />
         </Router>;
