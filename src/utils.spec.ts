@@ -1,4 +1,4 @@
-import { combineFs, trimStart, trimEnd } from "./utils";
+import { combineFs, trimEnd, trimStart } from "./utils";
 
 describe("Utils", () => {
     it('combineFs last-to-first order', () => {
