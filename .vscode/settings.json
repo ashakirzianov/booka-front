@@ -1,0 +1,16 @@
+{
+    "files.exclude": {
+        "**/build/**": true,
+        "**/node_modules/**": true
+    },
+    "tslint.autoFixOnSave": true,
+    "cSpell.words": [
+        "Hoverable",
+        "Shakirzianov",
+        "Subpart",
+        "Whitespaces",
+        "onstatechange",
+        "precached",
+        "timeouted"
+    ]
+}
