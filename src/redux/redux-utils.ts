@@ -94,15 +94,32 @@ function findReducerT<State, Template, Key extends keyof Template>(
     }
 
     const promiseTemplate = reducerTs as { [k: string]: PromiseReducerT<State, any> };
-    const promiseReducer = stringEndCondition(actionType, '_PENDING', actual => promiseTemplate[actual].pending)
-        || stringEndCondition(actionType, '_REJECTED', actual => promiseTemplate[actual].rejected)
-        || stringEndCondition(actionType, '_FULFILLED', actual => promiseTemplate[actual].fulfilled);
-
-    if (promiseReducer) {
-        return promiseReducer;
+    const actionKeyPair = parsePromiseActionName(actionType);
+    if (actionKeyPair) {
+        const promiseReducerTemplate = promiseTemplate[actionKeyPair.action];
+        const promiseReducer = promiseReducerTemplate && promiseReducerTemplate[actionKeyPair.key];
+    
+        if (promiseReducer) {
+            return promiseReducer;
+        }
     }
 
     return undefined;
+}
+
+function parsePromiseActionName(actionName: string) {
+    return stringEndCondition(actionName, '_PENDING', action => ({
+        key: 'pending' as 'pending',
+        action,
+    }))
+    || stringEndCondition(actionName, '_REJECTED', action => ({
+        key: 'rejected' as 'rejected',
+        action,
+    }))
+    || stringEndCondition(actionName, '_FULFILLED', action => ({
+        key: 'fulfilled' as 'fulfilled',
+        action,
+    }))
 }
 
 function stringEndCondition<T>(str: string, toTrim: string, f: (trimmed: string) => T): T | undefined {
