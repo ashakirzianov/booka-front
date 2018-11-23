@@ -8,8 +8,16 @@ export async function fetchLibrary(): Promise<Library> {
     return {
         bookMetas: [
             {
-                title: 'War and Peace',
+                title: 'Война и мир',
                 id: 'wap',
+            },
+            {
+                title: 'Капитал',
+                id: 'capital',
+            },
+            {
+                title: 'Generation "П"',
+                id: 'genp',
             },
         ],
     };

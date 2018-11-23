@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Library, BookMeta } from 'src/model';
 import { Comp } from './comp-utils';
-import { Column, Row, TextBlock } from './Elements';
+import { Column, Row, LinkButton } from './Elements';
 import { loadable } from './higherLevel';
 
 const BookMetaComp: Comp<BookMeta> = props =>
     <Row>
-        <TextBlock text={props.title} />
+        <LinkButton text={props.title} to={'/book/' + props.id} />
     </Row>;
 
 export const LibraryComp = loadable<Library>(props =>
