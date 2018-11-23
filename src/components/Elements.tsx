@@ -8,6 +8,9 @@ export const TextBlock: Comp<{ text: string }> = props =>
 export const Column: Comp = props =>
     <View style={{ flexDirection: 'column' }}>{props.children}</View>;
 
+export const Row: Comp = props =>
+<View style={{ flexDirection: 'row' }}>{props.children}</View>;
+
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Text style={{ fontSize: 16 }}>{props.text}</Text>
