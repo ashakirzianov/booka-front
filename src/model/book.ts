@@ -6,7 +6,7 @@ export type Chapter = {
     content: BookNode[],
 };
 
-export type BookNode = Chapter | Paragraph | LoadingStub;
+export type BookNode = Chapter | Paragraph;
 
 export type BookMeta = {
     title: string,
@@ -20,10 +20,6 @@ export type ActualBook = {
     content: BookNode[],
 };
 
-export type LoadingStub = {
-    book: 'loading-stub',
-};
-
 export type NoBook = {
     book: 'no-book',
 };
@@ -33,17 +29,11 @@ export type ErrorBook = {
     error: string,
 };
 
-export type Book = ActualBook | NoBook | ErrorBook | LoadingStub;
+export type Book = ActualBook | NoBook | ErrorBook;
 
 export function noBook(): NoBook {
     return {
         book: 'no-book',
-    };
-}
-
-export function loadingStub(): LoadingStub {
-    return {
-        book: 'loading-stub',
     };
 }
 

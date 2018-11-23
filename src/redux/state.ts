@@ -22,5 +22,8 @@ function validateState(restored: State | undefined) {
 function createNewState(): State {
     return {
         book: { book: 'no-book' },
+        library: {
+            bookMetas: [],
+        },
     };
 }

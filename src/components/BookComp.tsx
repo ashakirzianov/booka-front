@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Comp } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadingStub, NoBook, ActualBook, ErrorBook,
+    isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
     TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle,
 } from './Elements';
 import { assertNever } from '../utils';
+import { loadable } from './higherLevel';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;
@@ -25,8 +26,7 @@ const ChapterComp: Comp<Chapter> = props =>
 const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
     isParagraph(props.node) ? <ParagraphComp p={props.node} />
         : props.node.book === 'chapter' ? <ChapterComp {...props.node} />
-            : props.node.book === 'loading-stub' ? <LoadingStubComp {...props.node} />
-                : assertNever(props.node, props.count.toString());
+            : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
     <Column>
@@ -34,15 +34,12 @@ const ActualBookComp: Comp<ActualBook> = props =>
         {buildNodes(props.content)}
     </Column>;
 
-const BookComp: Comp<Book> = props =>
-    props.book === 'loading-stub' ? <LoadingStubComp {...props} />
-        : props.book === 'no-book' ? <NoBookComp {...props} />
-            : props.book === 'error' ? <ErrorBookComp {...props} />
-                : props.book === 'book' ? <ActualBookComp {...props} />
-                    : assertNever(props);
-
-const LoadingStubComp: Comp<LoadingStub> = props =>
-    <div>Loading now...</div>;
+const BookComp = loadable<Book>(props =>
+    props.book === 'no-book' ? <NoBookComp {...props} />
+        : props.book === 'error' ? <ErrorBookComp {...props} />
+            : props.book === 'book' ? <ActualBookComp {...props} />
+                : assertNever(props)
+);
 
 const NoBookComp: Comp<NoBook> = props =>
     <div>No book selected</div>;
