@@ -1,12 +1,18 @@
 import * as React from 'react';
-import { Text, View } from './Atoms';
+import { Text, View, Link as AtomLink } from './Atoms';
 import { Comp } from './comp-utils';
 
 export const TextBlock: Comp<{ text: string }> = props =>
     <Text style={{ fontSize: 16 }}>{'\t' /* React Native is missing text-indent styling */}{props.text}</Text>;
 
+export const LinkButton: Comp<{ to: string, text: string }> = props =>
+    <AtomLink to={props.to}>{props.text}</AtomLink>;
+
 export const Column: Comp = props =>
     <View style={{ flexDirection: 'column' }}>{props.children}</View>;
+
+export const Row: Comp = props =>
+<View style={{ flexDirection: 'row' }}>{props.children}</View>;
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -30,5 +36,5 @@ export const BookTitle: Comp<{ text?: string }> = props =>
 
 export {
     Text,
-    Route, Redirect, Switch,
+    Route, Redirect, Switch, Router,
 } from './Atoms';
