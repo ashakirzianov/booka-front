@@ -3,24 +3,11 @@ import { Book, noBook, errorBook, BookLocator, Library } from "../model";
 
 const backendBase = 'https://reader-back.herokuapp.com/';
 const jsonPath = 'json/';
+const libraryApi = 'library';
 
 export async function fetchLibrary(): Promise<Library> {
-    return {
-        bookMetas: [
-            {
-                title: 'Война и мир',
-                id: 'wap',
-            },
-            {
-                title: 'Капитал',
-                id: 'capital',
-            },
-            {
-                title: 'Generation "П"',
-                id: 'genp',
-            },
-        ],
-    };
+    const lib = await fetchJson(backendBase + libraryApi) as Library;
+    return lib;
 }
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {

@@ -13,7 +13,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         loadLib: {
             pending: s => loading(),
             fulfilled: (_, p) => p,
-            rejected: (s, p) => ({ bookMetas: [] }),
+            rejected: (s, p) => ({}),
         }
     },
 });

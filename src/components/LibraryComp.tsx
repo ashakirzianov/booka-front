@@ -4,13 +4,16 @@ import { Comp } from './comp-utils';
 import { Column, Row, LinkButton } from './Elements';
 import { loadable } from './higherLevel';
 
-const BookMetaComp: Comp<BookMeta> = props =>
+const BookMetaComp: Comp<{ meta: BookMeta, id: string }> = props =>
     <Row>
-        <LinkButton text={props.title} to={'/book/' + props.id} />
+        <LinkButton text={props.meta.title} to={'/book/' + props.id} />
     </Row>;
 
 export const LibraryComp = loadable<Library>(props =>
     <Column>
-        { props.bookMetas.map(bm => <BookMetaComp key={bm.id} {...bm} /> ) }
+        {
+            Object.keys(props).map(
+                id => <BookMetaComp key={id} meta={props[id]!} id={id} /> )
+        }
     </Column>
 );
