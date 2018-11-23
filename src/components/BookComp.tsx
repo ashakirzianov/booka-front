@@ -32,7 +32,7 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
 
 const ActualBookComp: Comp<ActualBook> = props =>
     <Column>
-        <BookTitle text={props.title} />
+        <BookTitle text={props.meta.title} />
         {buildNodes(props.content)}
     </Column>;
 
