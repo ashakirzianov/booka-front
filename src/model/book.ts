@@ -11,6 +11,7 @@ export type BookNode = Chapter | Paragraph | LoadingStub;
 export type BookMeta = {
     title: string,
     author?: string,
+    id: string,
 };
 
 export type ActualBook = {
