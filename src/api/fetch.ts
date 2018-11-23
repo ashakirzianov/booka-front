@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Book, noBook, errorBook, BookLocator } from "../model";
 
-const backendBase = 'https://reader-back.herokuapp.com';
-const jsonPath = '/json';
+const backendBase = 'https://reader-back.herokuapp.com/';
+const jsonPath = 'json/';
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
     switch (bookLocator.bl) {

@@ -6,7 +6,12 @@ import { staticBookLocator, BookLocator, actionsTemplate, App } from "../model";
 export const history = createBrowserHistory();
 
 export function dispatchHistoryEvent(location: Location, action?: Action) {
-    dispatchLoadBLAction(staticBookLocator(location.pathname));
+    // TODO: this is bad. do better
+    const bookRouteMatch = location.pathname.match(/^\/book\/(\w+)/);
+    if (bookRouteMatch) {
+        const bookName = bookRouteMatch[1];
+        dispatchLoadBLAction(staticBookLocator(bookName));
+    }
 }
 
 const actionCreators = buildActionCreators(actionsTemplate);

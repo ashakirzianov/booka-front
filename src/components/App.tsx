@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BookComp } from "./BookComp";
-import { Switch, Router, Redirect, Route } from "./Elements";
+import { Switch, Router, Route } from "./Elements";
 import { dispatchHistoryEvent, history, connect } from "./misc";
 
 export class AppComp extends React.Component {
@@ -21,8 +21,8 @@ export class AppComp extends React.Component {
 
 const TopComp = connect(['book'])((props) =>
     <Switch>
-        <Redirect push exact from='/' to='/wap' />
-        <Route path='/' render={
+        <Route exact path='/' />
+        <Route path='/book/:name' render={
             // tslint:disable-next-line:jsx-no-lambda
             () => <BookComp {...props.book} />
         } />
