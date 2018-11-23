@@ -1,2 +1,2 @@
 export { Text, View } from 'react-native';
-export { Route, Redirect, Switch } from 'react-router-dom';
+export { Route, Router, Redirect, Switch } from 'react-router-dom';

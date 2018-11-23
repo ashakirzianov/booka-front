@@ -1,7 +1,7 @@
 import * as React from "react";
-import { TopComp } from "./BookComp";
-import { Router } from "react-router-dom";
-import { dispatchHistoryEvent, history } from "./misc";
+import { BookComp } from "./BookComp";
+import { Switch, Router, Redirect, Route } from "./Elements";
+import { dispatchHistoryEvent, history, connect } from "./misc";
 
 export class AppComp extends React.Component {
     public componentWillMount() {
@@ -18,3 +18,13 @@ export class AppComp extends React.Component {
         </Router>;
     }
 }
+
+const TopComp = connect(['book'])((props) =>
+    <Switch>
+        <Redirect push exact from='/' to='/wap' />
+        <Route path='/' render={
+            // tslint:disable-next-line:jsx-no-lambda
+            () => <BookComp {...props.book} />
+        } />
+    </Switch>
+);
