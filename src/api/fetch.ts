@@ -1,8 +1,19 @@
 import axios from 'axios';
-import { Book, noBook, errorBook, BookLocator } from "../model";
+import { Book, noBook, errorBook, BookLocator, Library } from "../model";
 
 const backendBase = 'https://reader-back.herokuapp.com/';
 const jsonPath = 'json/';
+
+export async function fetchLibrary(): Promise<Library> {
+    return {
+        bookMetas: [
+            {
+                title: 'War and Peace',
+                id: 'wap',
+            },
+        ],
+    };
+}
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
     switch (bookLocator.bl) {

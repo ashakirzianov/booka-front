@@ -9,5 +9,11 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             rejected: (s, p) => errorBook(p && p.toString && p.toString()),
         },
     },
-    library: {},
+    library: {
+        loadLib: {
+            pending: s => loading(),
+            fulfilled: (_, p) => p,
+            rejected: (s, p) => ({ bookMetas: [] }),
+        }
+    },
 });
