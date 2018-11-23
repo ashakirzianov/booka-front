@@ -1,5 +1,5 @@
-import { BookMeta } from './book';
+import { BookMeta } from "./book";
 
 export type Library = {
-    bookMetas: BookMeta[],
+    [key: string]: BookMeta | undefined;
 };
