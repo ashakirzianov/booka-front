@@ -6,9 +6,9 @@ import {
 } from '../model';
 import {
     TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle,
+    loadable,
 } from './Elements';
 import { assertNever } from '../utils';
-import { loadable } from './higherLevel';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;
