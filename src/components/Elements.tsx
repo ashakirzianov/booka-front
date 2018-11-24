@@ -4,7 +4,12 @@ import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 
 export const TextBlock: Comp<{ text: string }> = props =>
-    <Text style={{ fontSize: 20 }}>{'\t' /* React Native is missing text-indent styling */}{props.text}</Text>;
+    <Text style={{
+        fontSize: 20,
+        textAlign: 'justify',
+    }}>{'\t' /*
+            React Native is missing text-indent styling
+        */}{props.text}</Text>;
 
 export const LinkButton: Comp<{ to: string, text: string }> = props =>
     <AtomLink to={props.to}>{props.text}</AtomLink>;
