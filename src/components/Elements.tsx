@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Text, View, Link as AtomLink } from './Atoms';
 import { Comp } from './comp-utils';
+import { FlexStyle } from 'react-native';
 
 export const TextBlock: Comp<{ text: string }> = props =>
     <Text style={{ fontSize: 16 }}>{'\t' /* React Native is missing text-indent styling */}{props.text}</Text>;
@@ -8,8 +9,18 @@ export const TextBlock: Comp<{ text: string }> = props =>
 export const LinkButton: Comp<{ to: string, text: string }> = props =>
     <AtomLink to={props.to}>{props.text}</AtomLink>;
 
-export const Column: Comp = props =>
-    <View style={{ flexDirection: 'column' }}>{props.children}</View>;
+export type Align = FlexStyle['alignItems'];
+export const Column: Comp<{
+    maxWidth?: number,
+    align?: Align,
+}> = props =>
+    <View style={{
+        flexDirection: 'column',
+        maxWidth: props.maxWidth,
+        alignItems: props.align,
+    }}>
+        {props.children}
+    </View>;
 
 export const Row: Comp = props =>
 <View style={{ flexDirection: 'row' }}>{props.children}</View>;
