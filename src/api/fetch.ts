@@ -3,7 +3,8 @@ import { Book, noBook, errorBook, BookLocator, Library } from "../model";
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
-const backendBase = backendBaseProd; // TODO: set depending on env var
+const backendBase = process.env.NODE_ENV === 'production' ?
+    backendBaseProd : backendBaseDebug;
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
