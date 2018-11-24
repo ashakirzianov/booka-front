@@ -16,7 +16,7 @@ export const Column: Comp<{
 }> = props =>
     <View style={{
         flexDirection: 'column',
-        maxWidth: props.maxWidth,
+        maxWidth: `${props.maxWidth}em`,
         alignItems: props.align,
     }}>
         {props.children}
