@@ -22,6 +22,7 @@ export const LinkButton: Comp<{ to: string, text: string }> = props =>
 export type Align = FlexStyle['alignItems'];
 export const Column: Comp<{
     maxWidth?: number,
+    margin?: number,
     align?: Align,
     backgroundColor?: string,
 }> = props =>
@@ -30,6 +31,7 @@ export const Column: Comp<{
         maxWidth: size(props.maxWidth),
         alignItems: props.align,
         backgroundColor: props.backgroundColor,
+        margin: size(props.margin),
     }}>
         {props.children}
     </View>;
