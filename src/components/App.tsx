@@ -21,7 +21,7 @@ export class AppComp extends React.Component {
 }
 
 const TopComp = connect(['book', 'library'])((props) =>
-    <Column align='center'>
+    <Column align='center' backgroundColor='black'>
         <Switch>
             <Route exact path='/' render={
                 // tslint:disable-next-line:jsx-no-lambda
