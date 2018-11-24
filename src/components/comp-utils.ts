@@ -7,3 +7,7 @@ type Callbacks<A> = {
 type CallbacksOpt<A> = Partial<Callbacks<A>>;
 type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;
 export type Comp<P = {}, A = {}> = React.SFC<CompProps<P, A>>;
+
+export function size(s: number | undefined): string | undefined {
+    return s === undefined ? undefined : `${s}em`;
+}
