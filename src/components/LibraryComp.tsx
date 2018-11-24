@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Library, BookMeta } from 'src/model';
 import { Comp } from './comp-utils';
-import { Column, Row, LinkButton } from './Elements';
-import { loadable } from './higherLevel';
+import { Column, Row, LinkButton, loadable } from './Elements';
 
 const BookMetaComp: Comp<{ meta: BookMeta, id: string }> = props =>
     <Row>

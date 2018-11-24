@@ -6,9 +6,9 @@ import {
 } from '../model';
 import {
     TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle,
+    loadable,
 } from './Elements';
 import { assertNever } from '../utils';
-import { loadable } from './higherLevel';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;
@@ -29,7 +29,7 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
             : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
-    <Column>
+    <Column maxWidth={50} align='center' margin={1.5}>
         <BookTitle text={props.meta.title} />
         {buildNodes(props.content)}
     </Column>;
