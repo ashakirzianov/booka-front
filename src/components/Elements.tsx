@@ -16,14 +16,21 @@ const defaultStyle = {
     fontFamily: 'Georgia',
     color: '#999999',
 };
+// export const TextBlock: Comp<{ text: string }> = props =>
+//     <Text style={{
+//         ...defaultStyle,
+//         fontSize: 20,
+//         textAlign: 'justify' as any,
+//         justifyContent: 'space-evenly',
+//     }}>{'\t' /*
+//             React Native is missing text-indent styling
+//         */}{props.text}</Text>;
 export const TextBlock: Comp<{ text: string }> = props =>
     <Text style={{
         ...defaultStyle,
         fontSize: 20,
         textAlign: 'justify',
-    }}>{'\t' /*
-            React Native is missing text-indent styling
-        */}{props.text}</Text>;
+    }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
 export const LinkButton: Comp<{ to: string, text: string }> = props =>
     <AtomLink to={props.to}>{props.text}</AtomLink>;
@@ -40,7 +47,7 @@ export const Column: Comp<{
         maxWidth: size(props.maxWidth),
         alignItems: props.align,
         backgroundColor: props.backgroundColor,
-        margin: size(props.margin),
+        margin: 'auto', // size(props.margin),
     }}>
         {props.children}
     </View>;
@@ -64,7 +71,7 @@ export const SubpartTitle: Comp<{ text?: string }> = props =>
     </View>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
-    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
         <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: 28 }}>{props.text}</Text>
     </View>;
 
