@@ -16,19 +16,16 @@ const defaultStyle = {
     fontFamily: 'Georgia',
     color: '#999999',
 };
-// export const TextBlock: Comp<{ text: string }> = props =>
-//     <Text style={{
-//         ...defaultStyle,
-//         fontSize: 20,
-//         textAlign: 'justify' as any,
-//         justifyContent: 'space-evenly',
-//     }}>{'\t' /*
-//             React Native is missing text-indent styling
-//         */}{props.text}</Text>;
+const fontSize = {
+    normal: 26,
+    subtitle: 30,
+    title: 36,
+};
+
 export const TextBlock: Comp<{ text: string }> = props =>
     <Text style={{
         ...defaultStyle,
-        fontSize: 20,
+        fontSize: fontSize.normal,
         textAlign: 'justify',
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
@@ -57,22 +54,22 @@ export const Row: Comp = props =>
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text style={{ ...defaultStyle, fontSize: 20 }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle, fontSize: fontSize.normal }}>{props.text}</Text>
     </View>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: 24 }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.subtitle }}>{props.text}</Text>
     </View>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: 20 }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.normal }}>{props.text}</Text>
     </View>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: 28 }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.title }}>{props.text}</Text>
     </View>;
 
 export {
