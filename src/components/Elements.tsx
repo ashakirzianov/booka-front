@@ -72,6 +72,18 @@ export const BookTitle: Comp<{ text?: string }> = props =>
         <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.title }}>{props.text}</Text>
     </View>;
 
+export const Screen: Comp<{
+    color?: string,
+}> = props =>
+    <View style={{
+        position: 'absolute',
+        minHeight: '100%',
+        minWidth: '100%',
+        backgroundColor: props.color,
+    }}>
+        {props.children}
+    </View>
+
 export {
     Text,
     Route, Redirect, Switch, Router,
