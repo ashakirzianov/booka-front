@@ -47,7 +47,7 @@ export const Column: Comp<{
         maxWidth: size(props.maxWidth),
         alignItems: props.align,
         backgroundColor: props.backgroundColor,
-        margin: 'auto', // size(props.margin),
+        margin: size(props.margin),
     }}>
         {props.children}
     </View>;
