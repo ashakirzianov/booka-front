@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Library, BookMeta } from 'src/model';
+import { Library, BookMeta } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, loadable } from './Elements';
 
