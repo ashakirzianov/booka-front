@@ -1,8 +1,8 @@
 import * as React from "react";
-import { BookComp } from "./BookComp";
-import { Switch, Router, Route, Column, Screen } from "./Elements";
+
+import { Column, Screen } from "./Elements";
 import { dispatchHistoryEvent, history, connect } from "./misc";
-import { LibraryComp } from './LibraryComp';
+import { ScreenComp } from './ScreenComp';
 
 export class AppComp extends React.Component {
     public componentWillMount() {
@@ -14,25 +14,14 @@ export class AppComp extends React.Component {
     }
 
     public render() {
-        return <Router history={history}>
-            <TopComp />
-        </Router>;
+        return <TopComp />;
     }
 }
 
-const TopComp = connect(['book', 'library'])((props) =>
+const TopComp = connect(['screen'])((props) =>
     <Screen color='black'>
         <Column align='center'>
-            <Switch>
-                <Route exact path='/' render={
-                    // tslint:disable-next-line:jsx-no-lambda
-                    () => <LibraryComp {...props.library} />
-                } />
-                <Route path='/book/:name' render={
-                    // tslint:disable-next-line:jsx-no-lambda
-                    () => <BookComp {...props.book} />
-                } />
-            </Switch>
+            <ScreenComp {...props.screen} />
         </Column>
     </Screen>
 

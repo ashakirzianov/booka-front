@@ -1,5 +1,5 @@
 import * as store from "store";
-import { App } from "../model";
+import { App, libraryScreen, loading } from "../model";
 
 export type State = App;
 
@@ -21,7 +21,6 @@ function validateState(restored: State | undefined) {
 
 function createNewState(): State {
     return {
-        book: { book: 'no-book' },
-        library: {},
+        screen: libraryScreen(loading()),
     };
 }

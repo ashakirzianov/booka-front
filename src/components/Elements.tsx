@@ -6,7 +6,8 @@ import { Loading, Loadable, isLoading } from '../model';
 
 export function loadable<T>(Cmp: Comp<T>): Comp<Loadable<T>> {
     return props =>
-        isLoading(props) ? <LoadingComp {...props} /> : <Cmp {...props} />;
+        isLoading(props) ? <LoadingComp {...props} />
+            : <Cmp {...props} />;
 }
 
 const LoadingComp: Comp<Loading> = props =>
@@ -39,18 +40,18 @@ export const Column: Comp<{
     align?: Align,
     backgroundColor?: string,
 }> = props =>
-    <View style={{
-        flexDirection: 'column',
-        maxWidth: size(props.maxWidth),
-        alignItems: props.align,
-        backgroundColor: props.backgroundColor,
-        margin: size(props.margin),
-    }}>
-        {props.children}
-    </View>;
+        <View style={{
+            flexDirection: 'column',
+            maxWidth: size(props.maxWidth),
+            alignItems: props.align,
+            backgroundColor: props.backgroundColor,
+            margin: size(props.margin),
+        }}>
+            {props.children}
+        </View>;
 
 export const Row: Comp = props =>
-<View style={{ flexDirection: 'row' }}>{props.children}</View>;
+    <View style={{ flexDirection: 'row' }}>{props.children}</View>;
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -75,14 +76,14 @@ export const BookTitle: Comp<{ text?: string }> = props =>
 export const Screen: Comp<{
     color?: string,
 }> = props =>
-    <View style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        backgroundColor: props.color,
-    }}>
-        {props.children}
-    </View>
+        <View style={{
+            position: 'absolute',
+            minHeight: '100%',
+            minWidth: '100%',
+            backgroundColor: props.color,
+        }}>
+            {props.children}
+        </View>
 
 export {
     Text,
