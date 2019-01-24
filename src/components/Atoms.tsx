@@ -8,7 +8,10 @@ export const Text: Comp<{
     onClick: any,
 }> = props =>
     <span
-        style={props.style}
+        style={{
+            cursor: 'pointer',
+            ...props.style,
+        }}
         onClick={props.onClick} // TODO: why do we need '!' here? investigate
     >
         {props.children}
