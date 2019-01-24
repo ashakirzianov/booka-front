@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Text, View, Link as AtomLink } from './Atoms';
+import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 import { Loading, Loadable, isLoading } from '../model';
+import { dispatchNavigationTo } from './misc';
 
 export function loadable<T>(Cmp: Comp<T>): Comp<Loadable<T>> {
     return props =>
@@ -31,7 +32,11 @@ export const TextBlock: Comp<{ text: string }> = props =>
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
 export const LinkButton: Comp<{ to: string, text: string }> = props =>
-    <AtomLink to={props.to}>{props.text}</AtomLink>;
+    <Text style={{
+        ...defaultStyle,
+    }} onClick={() => dispatchNavigationTo(props.to)}>
+    {props.text}
+    </Text>;
 
 export type Align = FlexStyle['alignItems'];
 export const Column: Comp<{

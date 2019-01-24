@@ -7,13 +7,18 @@ export const history = createBrowserHistory();
 
 export function dispatchHistoryEvent(location: Location, action?: Action) {
     // TODO: this is bad. do better
-    const bookRouteMatch = location.pathname.match(/^\/book\/(\w+)/);
+    dispatchNavigationTo(location.pathname);
+}
+
+export type Destination = string;
+export function dispatchNavigationTo(dest: Destination) {
+    const bookRouteMatch = dest.match(/^\/book\/(\w+)/);
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
         dispatchLoadBLAction(staticBookLocator(bookName));
     }
 
-    if (location.pathname === '/') {
+    if (dest === '/') {
         dispatchLoadLibraryAction();
     }
 }
