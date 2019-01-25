@@ -1,5 +1,5 @@
 import * as store from "store";
-import { App, libraryScreen, loading } from "../model";
+import { App, libraryScreen, noBook } from "../model";
 
 export type State = App;
 
@@ -21,6 +21,8 @@ function validateState(restored: State | undefined) {
 
 function createNewState(): State {
     return {
-        screen: libraryScreen(loading()),
+        screenStack: [libraryScreen()],
+        currentBook: noBook(),
+        library: {},
     };
 }

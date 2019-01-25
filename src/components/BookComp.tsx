@@ -9,6 +9,7 @@ import {
     loadable,
 } from './Elements';
 import { assertNever } from '../utils';
+import { connect } from './misc';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;
@@ -41,6 +42,10 @@ const BookComp = loadable<Book>(props =>
                 : assertNever(props)
 );
 
+export const CurrentBookComp = connect(['currentBook'])(
+    props => <BookComp {...props.currentBook} />
+);
+
 const NoBookComp: Comp<NoBook> = props =>
     <div>No book selected</div>;
 
@@ -50,5 +55,3 @@ const ErrorBookComp: Comp<ErrorBook> = props =>
 function buildNodes(nodes: BookNode[]) {
     return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} count={i} />);
 }
-
-export { BookComp };

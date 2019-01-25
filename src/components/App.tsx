@@ -18,10 +18,12 @@ export class AppComp extends React.Component {
     }
 }
 
-const TopComp = connect(['screen'])((props) =>
+const TopComp = connect(['screenStack'])((props) =>
     <Screen color='black'>
         <Column align='center'>
-            <ScreenComp {...props.screen} />
+            {
+                props.screenStack.length > 0 ? <ScreenComp {...props.screenStack[0]} /> : '' // TODO: better handle empty stack situation
+            }
         </Column>
     </Screen>
 
