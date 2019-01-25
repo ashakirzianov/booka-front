@@ -3,7 +3,7 @@ import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 import { Loading, Loadable, isLoading } from '../model';
-import { dispatchNavigationTo } from './misc';
+import { dispatchNavidationEvent } from './misc';
 
 export function loadable<T>(Cmp: Comp<T>): Comp<Loadable<T>> {
     return props =>
@@ -34,7 +34,7 @@ export const TextBlock: Comp<{ text: string }> = props =>
 export const LinkButton: Comp<{ to: string, text: string }> = props =>
     <Text style={{
         ...defaultStyle,
-    }} onClick={() => dispatchNavigationTo(props.to)}>
+    }} onClick={() => dispatchNavidationEvent(props.to)}>
     {props.text}
     </Text>;
 

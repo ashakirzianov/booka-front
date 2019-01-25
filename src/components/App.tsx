@@ -1,15 +1,15 @@
 import * as React from "react";
 
 import { Column, Screen } from "./Elements";
-import { dispatchHistoryEvent, history, connect } from "./misc";
+import { history, connect, dispatchNavidationEvent } from "./misc";
 import { ScreenComp } from './ScreenComp';
 
 export class AppComp extends React.Component {
     public componentWillMount() {
         // TODO: this doesn't feel right. Think of another way.
-        dispatchHistoryEvent(history.location);
+        dispatchNavidationEvent(history.location.pathname);
         history.listen((location, action) => {
-            dispatchHistoryEvent(location, action);
+            dispatchNavidationEvent(location.pathname);
         });
     }
 
