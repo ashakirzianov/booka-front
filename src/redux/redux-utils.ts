@@ -1,5 +1,5 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject } from "../utils";
+import { mapObject, Callback } from "../utils";
 import { combineReducers, Reducer as ReducerRedux } from "redux";
 
 // Actions:
@@ -13,7 +13,7 @@ export type ActionsType<Templates> =
 
 export type ActionCreator<Type extends PropertyKey, Payload> = (payload: Payload) => ActionType<Type, Payload>;
 export type ActionCreators<Template> = { [k in keyof Template]: ActionCreator<k, Template[k]> };
-export type ActionDispatcher<Payload> = (payload: Payload) => void;
+export type ActionDispatcher<Payload> = Callback<Payload>;
 export type ActionDispatchers<Template> = { [k in keyof Template]: ActionDispatcher<Template[k]> };
 
 function buildActionCreator<T extends PropertyKey>(type: T): ActionCreator<T, any> {
