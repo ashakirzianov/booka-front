@@ -6,8 +6,8 @@ export type Library = {
     },
 };
 
-export function emptyLibrary(): Library {
+export function library(books: Library['books'] = {}): Library {
     return {
-        books: {},
+        books: books,
     };
 }

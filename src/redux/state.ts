@@ -1,5 +1,5 @@
 import * as store from "store";
-import { App, libraryScreen, noBook, emptyLibrary } from "../model";
+import { App, libraryScreen, noBook, library } from "../model";
 
 export type State = App;
 
@@ -23,6 +23,6 @@ function createNewState(): State {
     return {
         screenStack: [libraryScreen()],
         currentBook: noBook(),
-        library: emptyLibrary(),
+        library: library(),
     };
 }
