@@ -41,7 +41,7 @@ const BookComp: Comp<Book> = (props =>
                 : assertNever(props)
 );
 
-export const CurrentBookComp = connect(['currentBook'])(
+export const ConnectedBookComp = connect(['currentBook'])(
     props => renderLoadable(props.currentBook, BookComp)
 );
 
