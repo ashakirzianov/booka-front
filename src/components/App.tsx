@@ -3,6 +3,7 @@ import * as React from "react";
 import { Column, Screen } from "./Elements";
 import { history, connect, dispatchNavidationEvent } from "./misc";
 import { ScreenComp } from './ScreenComp';
+import { topScreen } from '../model';
 
 export class AppComp extends React.Component {
     public componentWillMount() {
@@ -22,7 +23,7 @@ const TopComp = connect(['screenStack'])((props) =>
     <Screen color='black'>
         <Column align='center'>
             {
-                props.screenStack.length > 0 ? <ScreenComp {...props.screenStack[0]} /> : '' // TODO: better handle empty stack situation
+                <ScreenComp {...topScreen(props.screenStack)} />
             }
         </Column>
     </Screen>

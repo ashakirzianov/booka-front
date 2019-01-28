@@ -21,9 +21,17 @@ export function pushScreen(stack: ScreenStack, screen: Screen): ScreenStack {
     return newStack;
 }
 
-export type Screen = BookScreen | LibraryScreen;
+export function topScreen(stack: ScreenStack): Screen {
+    return stack.length > 0
+        ? stack[stack.length - 1]
+        : blankScreen()
+        ;
+}
+
+export type Screen = BookScreen | LibraryScreen | BlankScreen;
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
+export type BlankScreen = ReturnType<typeof blankScreen>;
 
 export function bookScreen() {
     return {
@@ -35,4 +43,10 @@ export function libraryScreen() {
     return {
         screen: 'library' as 'library',
     };
+}
+
+export function blankScreen() {
+    return {
+        screen: 'blank' as 'blank',
+    }
 }
