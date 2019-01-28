@@ -5,10 +5,10 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle,
-    loadable,
+    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, renderLoadable,
 } from './Elements';
 import { assertNever } from '../utils';
+import { connect } from './misc';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;
@@ -34,11 +34,15 @@ const ActualBookComp: Comp<ActualBook> = props =>
         {buildNodes(props.content)}
     </Column>;
 
-const BookComp = loadable<Book>(props =>
+const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />
         : props.book === 'error' ? <ErrorBookComp {...props} />
             : props.book === 'book' ? <ActualBookComp {...props} />
                 : assertNever(props)
+);
+
+export const ConnectedBookComp = connect(['currentBook'])(
+    props => renderLoadable(props.currentBook, BookComp)
 );
 
 const NoBookComp: Comp<NoBook> = props =>
@@ -50,5 +54,3 @@ const ErrorBookComp: Comp<ErrorBook> = props =>
 function buildNodes(nodes: BookNode[]) {
     return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} count={i} />);
 }
-
-export { BookComp };

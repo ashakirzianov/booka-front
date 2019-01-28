@@ -1,5 +1,6 @@
 export type Loading = { loading: true };
-export type Loadable<T> = T | Loading;
+export type Loaded<T> = T;
+export type Loadable<T> = Loaded<T> | Loading;
 
 export function loading(): Loading {
     return {

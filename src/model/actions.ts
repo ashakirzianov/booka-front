@@ -3,7 +3,9 @@ import { Book } from "./book";
 import { Library } from './library';
 
 export const actionsTemplate = {
-    setBook: def<Promise<Book>>(),
-    loadLib: def<Promise<Library>>(),
+    setCurrentBook: def<Promise<Book>>(),
+    loadLibrary: def<Promise<Library>>(),
+    navigateToBookScreen: def(),
+    navigateToLibraryScreen: def(),
 };
 export type ActionsTemplate = typeof actionsTemplate;

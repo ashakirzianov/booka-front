@@ -1,19 +1,28 @@
-import { ActionsTemplate, App, loading, errorBook } from "../model";
+import { ActionsTemplate, App, loading, errorBook, bookScreen, libraryScreen, pushScreen, library } from "../model";
 import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    book: {
-        setBook: {
-            pending: s => loading(),
-            fulfilled: (_, p) => p,
-            rejected: (s, p) => errorBook(p && p.toString && p.toString()),
-        },
+    screenStack: {
+        navigateToBookScreen:
+            (s, _) => pushScreen(s, bookScreen()),
+        navigateToLibraryScreen:
+            (s, _) => pushScreen(s, libraryScreen()),
     },
     library: {
-        loadLib: {
+        loadLibrary: {
             pending: s => loading(),
             fulfilled: (_, p) => p,
-            rejected: (s, p) => ({}),
+            rejected: (s, p) => library(), // TODO: report load error
+        },
+    },
+    currentBook: {
+        setCurrentBook: {
+            pending:
+                _ => loading(),
+            fulfilled:
+                (_, p) => p,
+            rejected:
+                (_, p) => errorBook(p && p.toString && p.toString()),
         }
     },
 });

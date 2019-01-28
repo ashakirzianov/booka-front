@@ -1,5 +1,5 @@
 import * as store from "store";
-import { App } from "../model";
+import { App, libraryScreen, noBook, library } from "../model";
 
 export type State = App;
 
@@ -21,7 +21,8 @@ function validateState(restored: State | undefined) {
 
 function createNewState(): State {
     return {
-        book: { book: 'no-book' },
-        library: {},
+        screenStack: [libraryScreen()],
+        currentBook: noBook(),
+        library: library(),
     };
 }

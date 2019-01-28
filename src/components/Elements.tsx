@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Text, View, Link as AtomLink } from './Atoms';
+import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 import { Loading, Loadable, isLoading } from '../model';
 
-export function loadable<T>(Cmp: Comp<T>): Comp<Loadable<T>> {
-    return props =>
-        isLoading(props) ? <LoadingComp {...props} /> : <Cmp {...props} />;
+export function renderLoadable<T>(input: Loadable<T>, Cmp: Comp<T>) {
+    return isLoading(input)
+        ? <LoadingComp {...input} />
+        : <Cmp {...input} />
+        ;
 }
 
-const LoadingComp: Comp<Loading> = props =>
+export const LoadingComp: Comp<Loading> = props =>
     <TextBlock text='Loading now...' />;
 
 const defaultStyle = {
@@ -29,8 +31,18 @@ export const TextBlock: Comp<{ text: string }> = props =>
         textAlign: 'justify',
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
-export const LinkButton: Comp<{ to: string, text: string }> = props =>
-    <AtomLink to={props.to}>{props.text}</AtomLink>;
+export const LinkButton: Comp<{
+    text: string,
+}, {
+    onClick: void,
+}> = props =>
+    <Text style={{
+        ...defaultStyle,
+    }}
+    onClick={props.onClick}
+    >
+    {props.text}
+    </Text>;
 
 export type Align = FlexStyle['alignItems'];
 export const Column: Comp<{
@@ -39,18 +51,18 @@ export const Column: Comp<{
     align?: Align,
     backgroundColor?: string,
 }> = props =>
-    <View style={{
-        flexDirection: 'column',
-        maxWidth: size(props.maxWidth),
-        alignItems: props.align,
-        backgroundColor: props.backgroundColor,
-        margin: size(props.margin),
-    }}>
-        {props.children}
-    </View>;
+        <View style={{
+            flexDirection: 'column',
+            maxWidth: size(props.maxWidth),
+            alignItems: props.align,
+            backgroundColor: props.backgroundColor,
+            margin: size(props.margin),
+        }}>
+            {props.children}
+        </View>;
 
 export const Row: Comp = props =>
-<View style={{ flexDirection: 'row' }}>{props.children}</View>;
+    <View style={{ flexDirection: 'row' }}>{props.children}</View>;
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -75,14 +87,14 @@ export const BookTitle: Comp<{ text?: string }> = props =>
 export const Screen: Comp<{
     color?: string,
 }> = props =>
-    <View style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        backgroundColor: props.color,
-    }}>
-        {props.children}
-    </View>
+        <View style={{
+            position: 'absolute',
+            minHeight: '100%',
+            minWidth: '100%',
+            backgroundColor: props.color,
+        }}>
+            {props.children}
+        </View>
 
 export {
     Text,
