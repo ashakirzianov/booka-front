@@ -29,11 +29,11 @@ const LibraryComp: Comp<Library, { openBook: Promise<Book> }> = (props =>
     </Column>
 );
 
-export const ConnectedLibraryComp = connect(['library'], ['setBook'])(
+export const ConnectedLibraryComp = connect(['library'], ['setCurrentBook'])(
     props => isLoading(props.library)
         ? <LoadingComp {...props.library} />
         : <LibraryComp
-            openBook={props.setBook as any} // TODO: !! fix this
+            openBook={props.setCurrentBook as any} // TODO: !! fix this
             {...props.library}
             />
 );

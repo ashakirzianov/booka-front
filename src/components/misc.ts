@@ -19,11 +19,11 @@ export function navigationToAction(dest: Destination) {
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
         const bl = staticBookLocator(bookName);
-        return actionCreators.setBook(fetchBL(bl));
+        return actionCreators.setCurrentBook(fetchBL(bl));
     }
 
     if (dest === '/') {
-        return actionCreators.loadLib(fetchLibrary());
+        return actionCreators.loadLibrary(fetchLibrary());
     }
 
     return undefined;

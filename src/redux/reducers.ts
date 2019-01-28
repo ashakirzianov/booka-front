@@ -3,22 +3,22 @@ import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
     screenStack: {
-        setBook: {
+        setCurrentBook: {
             pending: (s, _) => pushScreen(s, bookScreen()),
         },
-        loadLib: {
+        loadLibrary: {
             pending: (s, _) => pushScreen(s, libraryScreen()),
         },
     },
     library: {
-        loadLib: {
+        loadLibrary: {
             pending: s => loading(),
             fulfilled: (_, p) => p,
             rejected: (s, p) => ({}), // TODO: report load error
         },
     },
     currentBook: {
-        setBook: {
+        setCurrentBook: {
             pending: s => loading(),
             fulfilled: (_, p) => p,
             rejected: (s, p) => errorBook(p && p.toString && p.toString()),
