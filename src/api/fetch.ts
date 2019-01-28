@@ -8,9 +8,12 @@ const backendBase = process.env.NODE_ENV === 'production' ?
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
+type BackendLibraryJson = Library['books']; // TODO: address this mess with contract mismatch !!
 export async function fetchLibrary(): Promise<Library> {
-    const lib = await fetchJson(backendBase + libraryApi) as Library;
-    return lib;
+    const lib = await fetchJson(backendBase + libraryApi) as BackendLibraryJson;
+    return {
+        books: lib,
+    };
 }
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {

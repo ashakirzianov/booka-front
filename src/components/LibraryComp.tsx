@@ -18,9 +18,9 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: Promise<Boo
 const LibraryComp: Comp<Library, { openBook: Promise<Book> }> = (props =>
     <Column>
         {
-            Object.keys(props).map(
+            Object.keys(props.books).map(
                 id => <BookMetaComp
-                    key={id} meta={props[id]!} id={id}
+                    key={id} meta={props.books[id]!} id={id}
                     openBook={props.openBook}
                     /> )
         }
@@ -32,7 +32,7 @@ export const ConnectedLibraryComp = connect(['library'], ['setCurrentBook', 'nav
         ? <LoadingComp {...props.library} />
         : <LibraryComp
             {...props.library}
-            openBook={(book: any) => {
+            openBook={book => {
                 props.setCurrentBook(book);
                 props.navigateToBookScreen();
             }}

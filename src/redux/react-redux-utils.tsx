@@ -21,7 +21,11 @@ export function buildConnectRedux<S, AT>(at: AT) {
             const ac = buildActionCreators(pick(at, ...ak));
             function mapDispatchToProps(dispatch: Dispatch<Action<any>>) {
                 function buildCallbacks<T>(creators: ActionCreators<T>): ActionDispatchers<T> {
-                    return mapObject(creators, (key, value) => (x: any) => dispatch(value(x)));
+                    return mapObject(
+                        creators,
+                        (key, value) =>
+                            ((x: any) => { dispatch(value(x)); }) as any // TODO: try to remove this last cast
+                            );
                 }
 
                 const callbacks = buildCallbacks(ac);
