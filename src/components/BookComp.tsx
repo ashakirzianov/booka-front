@@ -5,8 +5,7 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle,
-    loadable,
+    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, renderLoadable,
 } from './Elements';
 import { assertNever } from '../utils';
 import { connect } from './misc';
@@ -35,7 +34,7 @@ const ActualBookComp: Comp<ActualBook> = props =>
         {buildNodes(props.content)}
     </Column>;
 
-const BookComp = loadable<Book>(props =>
+const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />
         : props.book === 'error' ? <ErrorBookComp {...props} />
             : props.book === 'book' ? <ActualBookComp {...props} />
@@ -43,7 +42,7 @@ const BookComp = loadable<Book>(props =>
 );
 
 export const CurrentBookComp = connect(['currentBook'])(
-    props => <BookComp {...props.currentBook} />
+    props => renderLoadable(props.currentBook, BookComp)
 );
 
 const NoBookComp: Comp<NoBook> = props =>

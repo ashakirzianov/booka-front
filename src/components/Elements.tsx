@@ -3,15 +3,15 @@ import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 import { Loading, Loadable, isLoading } from '../model';
-import { dispatchNavidationEvent } from './misc';
 
-export function loadable<T>(Cmp: Comp<T>): Comp<Loadable<T>> {
-    return props =>
-        isLoading(props) ? <LoadingComp {...props} />
-            : <Cmp {...props} />;
+export function renderLoadable<T>(input: Loadable<T>, Cmp: Comp<T>) {
+    return isLoading(input)
+        ? <LoadingComp {...input} />
+        : <Cmp {...input} />
+        ;
 }
 
-const LoadingComp: Comp<Loading> = props =>
+export const LoadingComp: Comp<Loading> = props =>
     <TextBlock text='Loading now...' />;
 
 const defaultStyle = {
@@ -31,10 +31,16 @@ export const TextBlock: Comp<{ text: string }> = props =>
         textAlign: 'justify',
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
-export const LinkButton: Comp<{ to: string, text: string }> = props =>
+export const LinkButton: Comp<{
+    text: string,
+}, {
+    onClick: void,
+}> = props =>
     <Text style={{
         ...defaultStyle,
-    }} onClick={() => dispatchNavidationEvent(props.to)}>
+    }}
+    onClick={props.onClick}
+    >
     {props.text}
     </Text>;
 
