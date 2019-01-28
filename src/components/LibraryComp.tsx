@@ -21,19 +21,20 @@ const LibraryComp: Comp<Library, { openBook: Promise<Book> }> = (props =>
             Object.keys(props).map(
                 id => <BookMetaComp
                     key={id} meta={props[id]!} id={id}
-                    openBook={book => {
-                        props.openBook && props.openBook(book);
-                    }}
+                    openBook={props.openBook}
                     /> )
         }
     </Column>
 );
 
-export const ConnectedLibraryComp = connect(['library'], ['setCurrentBook'])(
+export const ConnectedLibraryComp = connect(['library'], ['setCurrentBook', 'navigateToBookScreen'])(
     props => isLoading(props.library)
         ? <LoadingComp {...props.library} />
         : <LibraryComp
-            openBook={props.setCurrentBook as any} // TODO: !! fix this
             {...props.library}
+            openBook={(book: any) => {
+                props.setCurrentBook(book);
+                props.navigateToBookScreen();
+            }}
             />
 );
