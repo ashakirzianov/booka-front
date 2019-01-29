@@ -3,7 +3,7 @@ import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
 
-export const LoadingComp: Comp = props =>
+export const ActivityIndicator: Comp = props =>
     <TextBlock text='Loading now...' />;
 
 const defaultStyle = {
