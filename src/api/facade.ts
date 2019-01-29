@@ -1,4 +1,4 @@
-import { BookLocator, Book, loadingBook } from '../model';
+import { BookLocator, Book, loadingBook, Library, loadingLibrary } from '../model';
 import { fetchBL, fetchLibrary } from './fetch';
 import { OptimisticPromise, optimisticPromise } from '../promisePlus';
 
@@ -7,5 +7,7 @@ export const facade = {
         return optimisticPromise(fetchBL(bookLocator), loadingBook(bookLocator));
     },
 
-    library: fetchLibrary,
+    library(): OptimisticPromise<Library> {
+        return optimisticPromise(fetchLibrary(), loadingLibrary());
+    },
 }

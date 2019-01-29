@@ -5,7 +5,7 @@ import { OptimisticPromise } from '../promisePlus';
 
 export const actionsTemplate = {
     setCurrentBook: def<OptimisticPromise<Book>>(),
-    loadLibrary: def<Promise<Library>>(),
+    loadLibrary: def<OptimisticPromise<Library>>(),
     navigateToBookScreen: def(),
     navigateToLibraryScreen: def(),
 };
