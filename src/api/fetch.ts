@@ -16,6 +16,7 @@ type BackendBookJson = ExcludeKeys<Book, 'locator'>;
 export async function fetchLibrary(): Promise<Library> {
     const lib = await fetchJson(backendBase + libraryApi) as BackendLibraryJson;
     return {
+        loading: false,
         books: lib,
     };
 }

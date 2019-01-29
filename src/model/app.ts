@@ -1,10 +1,9 @@
 import { Book } from "./book";
 import { Library } from './library';
-import { Loadable } from './base';
 
 export type App = {
     screenStack: ScreenStack,
-    library: Loadable<Library>,
+    library: Library,
     currentBook: Book,
 };
 

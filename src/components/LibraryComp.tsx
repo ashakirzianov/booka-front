@@ -19,7 +19,8 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticP
 const LibraryComp: Comp<Library, { openBook: OptimisticPromise<Book> }> = (props =>
     <Column>
         {
-            Object.keys(props.books).map(
+            props.loading ? <LoadingComp />
+            : Object.keys(props.books).map(
                 id => <BookMetaComp
                     key={id} meta={props.books[id]!} id={id}
                     openBook={props.openBook}

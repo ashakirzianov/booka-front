@@ -1,4 +1,4 @@
-import { ActionsTemplate, App, loading, errorBook, bookScreen, libraryScreen, pushScreen, library } from "../model";
+import { ActionsTemplate, App, errorBook, bookScreen, libraryScreen, pushScreen, library, loadingLibrary } from "../model";
 import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
@@ -10,7 +10,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
     },
     library: {
         loadLibrary: {
-            pending: s => loading(),
+            pending: s => loadingLibrary(),
             fulfilled: (_, p) => p,
             rejected: (s, p) => library(), // TODO: report load error
         },
