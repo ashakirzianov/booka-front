@@ -2,14 +2,6 @@ import * as React from 'react';
 import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
-import { Loadable, isLoading } from '../model';
-
-export function renderLoadable<T>(input: Loadable<T>, Cmp: Comp<T>) {
-    return isLoading(input)
-        ? <LoadingComp />
-        : <Cmp {...input} />
-        ;
-}
 
 export const LoadingComp: Comp = props =>
     <TextBlock text='Loading now...' />;
