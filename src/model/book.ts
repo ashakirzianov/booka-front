@@ -33,17 +33,18 @@ export type ErrorBook = {
     error: string,
 };
 
-export type Book = ActualBook | NoBook | ErrorBook;
+export type LoadingBook = {
+    book: 'loading',
+    locator: BookLocator,
+};
 
-export function fakeBook(bl: BookLocator): ActualBook {
+export type Book = ActualBook | NoBook | ErrorBook | LoadingBook;
+
+export function loadingBook(bl: BookLocator): LoadingBook {
     return {
-        book: 'book',
+        book: 'loading',
         locator: bl,
-        content: [],
-        meta: {
-            title: 'loading',
-        },
-    }
+    };
 }
 
 export function noBook(): NoBook {

@@ -5,7 +5,7 @@ import { Loadable } from './base';
 export type App = {
     screenStack: ScreenStack,
     library: Loadable<Library>,
-    currentBook: Loadable<Book>,
+    currentBook: Book,
 };
 
 export type ScreenStack = Screen[];

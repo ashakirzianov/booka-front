@@ -18,7 +18,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
     currentBook: {
         setCurrentBook: {
             pending:
-                _ => loading(),
+                (_, p) => p,
             fulfilled:
                 (_, p) => p,
             rejected:
