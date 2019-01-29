@@ -1,3 +1,4 @@
+// TODO: add some comment explaining whe we need this type. It's a bit cryptic.
 export type KeyRestriction<T, U extends PropertyKey> = {
     [k in U]?: never;
 } & {
