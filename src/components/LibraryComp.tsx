@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Library, BookMeta, Book, staticBookLocator, isLoading, BookLocator } from '../model';
+import { Library, BookMeta, Book, staticBookLocator, isLoading } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, LoadingComp } from './Elements';
 import { connect } from './misc';
 import api from '../api';
-import { PromisePlus } from '../promisePlus';
+import { OptimisticPromise } from '../promisePlus';
 
-const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus<Book, BookLocator> }> = props =>
+const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticPromise<Book> }> = props =>
     <Row>
         <LinkButton
             text={props.meta.title}
@@ -16,7 +16,7 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus
         />
     </Row>;
 
-const LibraryComp: Comp<Library, { openBook: PromisePlus<Book, BookLocator> }> = (props =>
+const LibraryComp: Comp<Library, { openBook: OptimisticPromise<Book> }> = (props =>
     <Column>
         {
             Object.keys(props.books).map(

@@ -35,6 +35,17 @@ export type ErrorBook = {
 
 export type Book = ActualBook | NoBook | ErrorBook;
 
+export function fakeBook(bl: BookLocator): ActualBook {
+    return {
+        book: 'book',
+        locator: bl,
+        content: [],
+        meta: {
+            title: 'loading',
+        },
+    }
+}
+
 export function noBook(): NoBook {
     return {
         book: 'no-book',

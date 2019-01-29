@@ -1,11 +1,10 @@
 import { def } from "../utils";
 import { Book } from "./book";
 import { Library } from './library';
-import { BookLocator } from './bookLocator';
-import { PromisePlus } from '../promisePlus';
+import { OptimisticPromise } from '../promisePlus';
 
 export const actionsTemplate = {
-    setCurrentBook: def<PromisePlus<Book, BookLocator>>(),
+    setCurrentBook: def<OptimisticPromise<Book>>(),
     loadLibrary: def<Promise<Library>>(),
     navigateToBookScreen: def(),
     navigateToLibraryScreen: def(),

@@ -1,10 +1,10 @@
-import { BookLocator, Book } from '../model';
+import { BookLocator, Book, fakeBook } from '../model';
 import { fetchBL, fetchLibrary } from './fetch';
-import { PromisePlus, promisePlus } from '../promisePlus';
+import { OptimisticPromise, optimisticPromise } from '../promisePlus';
 
 export const facade = {
-    bookForLocator(bookLocator: BookLocator): PromisePlus<Book, BookLocator> {
-        return promisePlus(fetchBL(bookLocator), bookLocator);
+    bookForLocator(bookLocator: BookLocator): OptimisticPromise<Book> {
+        return optimisticPromise(fetchBL(bookLocator), fakeBook(bookLocator));
     },
 
     library: fetchLibrary,
