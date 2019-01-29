@@ -2,6 +2,11 @@ import { ActionsTemplate, App, loading, errorBook, bookScreen, libraryScreen, pu
 import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
+    currentBookLocator: {
+        setCurrentBook: {
+            pending: (_, bl) => bl,
+        },
+    },
     screenStack: {
         navigateToBookScreen:
             (s, _) => pushScreen(s, bookScreen()),

@@ -1,11 +1,13 @@
 import { Book } from "./book";
 import { Library } from './library';
 import { Loadable } from './base';
+import { BookLocator } from './bookLocator';
 
 export type App = {
     screenStack: ScreenStack,
     library: Loadable<Library>,
     currentBook: Loadable<Book>,
+    currentBookLocator: BookLocator,
 };
 
 export type ScreenStack = Screen[];
