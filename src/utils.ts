@@ -1,3 +1,4 @@
+// Test user name for commit. Sorry about that.
 export type KeyRestriction<T, U extends PropertyKey> = {
     [k in U]?: never;
 } & {
