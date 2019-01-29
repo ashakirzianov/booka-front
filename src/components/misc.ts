@@ -5,7 +5,7 @@ import { staticBookLocator, actionsTemplate, App } from "../model";
 
 export const history = createBrowserHistory();
 
-export function dispatchNavidationEvent(dest: Destination) {
+export function dispatchNavigationEvent(dest: Destination) {
     const action = navigationToAction(dest);
     if (action) {
         store.dispatch(action);
