@@ -1,1 +1,4 @@
-export * from './fetch';
+import { facade } from './facade';
+
+export default facade;
+

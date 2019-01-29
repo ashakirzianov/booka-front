@@ -5,7 +5,7 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, renderLoadable,
+    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
 } from './Elements';
 import { assertNever } from '../utils';
 import { connect } from './misc';
@@ -38,11 +38,12 @@ const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />
         : props.book === 'error' ? <ErrorBookComp {...props} />
             : props.book === 'book' ? <ActualBookComp {...props} />
-                : assertNever(props)
+                : props.book === 'loading' ? <ActivityIndicator />
+                    : assertNever(props)
 );
 
 export const ConnectedBookComp = connect(['currentBook'])(
-    props => renderLoadable(props.currentBook, BookComp)
+    props => <BookComp {...props.currentBook} />
 );
 
 const NoBookComp: Comp<NoBook> = props =>

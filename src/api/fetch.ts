@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Book, noBook, errorBook, BookLocator, Library } from "../model";
+import { ExcludeKeys } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -8,10 +9,14 @@ const backendBase = process.env.NODE_ENV === 'production' ?
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
-type BackendLibraryJson = Library['books']; // TODO: address this mess with contract mismatch !!
+// TODO: address this mess with contract mismatch !!
+type BackendLibraryJson = Library['books'];
+type BackendBookJson = ExcludeKeys<Book, 'locator'>;
+
 export async function fetchLibrary(): Promise<Library> {
     const lib = await fetchJson(backendBase + libraryApi) as BackendLibraryJson;
     return {
+        loading: false,
         books: lib,
     };
 }
@@ -21,13 +26,16 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
         case 'no-book':
             return Promise.resolve(noBook());
         case 'static-book':
-            return fetchBook(bookLocator.name);
+            const backendBook = fetchBook(bookLocator.name);
+            let book = backendBook as any as Book;
+            book.locator = bookLocator;
+            return book;
         default:
             return Promise.resolve(noBook());
     }
 }
 
-export async function fetchBook(bookName: string): Promise<Book> {
+export async function fetchBook(bookName: string): Promise<BackendBookJson> {
     try {
         const response = await fetchJson(backendBase + jsonPath + bookName);
         return response as Book;

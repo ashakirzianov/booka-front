@@ -1,11 +1,11 @@
 import { createBrowserHistory } from "history";
-import { fetchBL, fetchLibrary } from "../api";
+import api from "../api";
 import { store, buildActionCreators, buildConnectRedux } from '../redux';
 import { staticBookLocator, actionsTemplate, App } from "../model";
 
 export const history = createBrowserHistory();
 
-export function dispatchNavidationEvent(dest: Destination) {
+export function dispatchNavigationEvent(dest: Destination) {
     const action = navigationToAction(dest);
     if (action) {
         store.dispatch(action);
@@ -19,11 +19,11 @@ export function navigationToAction(dest: Destination) {
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
         const bl = staticBookLocator(bookName);
-        return actionCreators.setCurrentBook(fetchBL(bl));
+        return actionCreators.setCurrentBook(api.bookForLocator(bl));
     }
 
     if (dest === '/') {
-        return actionCreators.loadLibrary(fetchLibrary());
+        return actionCreators.loadLibrary(api.library());
     }
 
     return undefined;
