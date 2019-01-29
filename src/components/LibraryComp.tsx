@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { Library, BookMeta, Book, staticBookLocator, isLoading } from '../model';
+import { Library, BookMeta, Book, staticBookLocator, isLoading, BookLocator } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, LoadingComp } from './Elements';
 import { connect } from './misc';
-import { fetchBL } from '../api';
+import { fetchBookForLocator } from '../api';
+import { PromisePlus } from '../utils';
 
-const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: Promise<Book> }> = props =>
+const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus<Book, BookLocator> }> = props =>
     <Row>
         <LinkButton
             text={props.meta.title}
             onClick={
-                () => props.openBook && props.openBook(fetchBL(staticBookLocator(props.id)))
+                () => props.openBook && props.openBook(fetchBookForLocator(staticBookLocator(props.id)))
             }
         />
     </Row>;
 
-const LibraryComp: Comp<Library, { openBook: Promise<Book> }> = (props =>
+const LibraryComp: Comp<Library, { openBook: PromisePlus<Book, BookLocator> }> = (props =>
     <Column>
         {
             Object.keys(props.books).map(

@@ -1,9 +1,10 @@
-import { def } from "../utils";
+import { def, PromisePlus } from "../utils";
 import { Book } from "./book";
 import { Library } from './library';
+import { BookLocator } from './bookLocator';
 
 export const actionsTemplate = {
-    setCurrentBook: def<Promise<Book>>(),
+    setCurrentBook: def<PromisePlus<Book, BookLocator>>(),
     loadLibrary: def<Promise<Library>>(),
     navigateToBookScreen: def(),
     navigateToLibraryScreen: def(),
