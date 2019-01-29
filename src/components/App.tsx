@@ -1,9 +1,10 @@
 import * as React from "react";
 
 import { Column, Screen } from "./Elements";
-import { history, connect, dispatchNavigationEvent } from "./misc";
+import { history, connect } from "./misc";
 import { ScreenComp } from './ScreenComp';
 import { topScreen } from '../model';
+import { dispatchNavigationEvent } from '../redux';
 
 export class AppComp extends React.Component {
     public componentWillMount() {

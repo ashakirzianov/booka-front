@@ -1,5 +1,5 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject, Callback } from "../utils";
+import { mapObject, Callback, Func } from "../utils";
 import { PromisePlus } from '../promisePlus';
 import { combineReducers, Reducer as ReducerRedux } from "redux";
 
@@ -12,7 +12,7 @@ export type ActionType<Type extends PropertyKey, Payload> = {
 export type ActionsType<Templates> =
     ({ [k in keyof Templates]: ActionType<k, Templates[k]> })[keyof Templates];
 
-export type ActionCreator<Type extends PropertyKey, Payload> = (payload: Payload) => ActionType<Type, Payload>;
+export type ActionCreator<Type extends PropertyKey, Payload> = Func<Payload, ActionType<Type, Payload>>;
 export type ActionCreators<Template> = { [k in keyof Template]: ActionCreator<k, Template[k]> };
 export type ActionDispatcher<Payload> = Callback<Payload>;
 export type ActionDispatchers<Template> = { [k in keyof Template]: ActionDispatcher<Template[k]> };
