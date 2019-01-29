@@ -1,7 +1,8 @@
-import { def, PromisePlus } from "../utils";
+import { def } from "../utils";
 import { Book } from "./book";
 import { Library } from './library';
 import { BookLocator } from './bookLocator';
+import { PromisePlus } from '../promisePlus';
 
 export const actionsTemplate = {
     setCurrentBook: def<PromisePlus<Book, BookLocator>>(),

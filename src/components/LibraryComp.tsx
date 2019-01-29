@@ -4,7 +4,7 @@ import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, LoadingComp } from './Elements';
 import { connect } from './misc';
 import api from '../api';
-import { PromisePlus } from '../utils';
+import { PromisePlus } from '../promisePlus';
 
 const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus<Book, BookLocator> }> = props =>
     <Row>

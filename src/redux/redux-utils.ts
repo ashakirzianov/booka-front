@@ -1,5 +1,6 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject, Callback, PromisePlus } from "../utils";
+import { mapObject, Callback } from "../utils";
+import { PromisePlus } from '../promisePlus';
 import { combineReducers, Reducer as ReducerRedux } from "redux";
 
 // Actions:

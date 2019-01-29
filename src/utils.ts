@@ -13,18 +13,6 @@ export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>
 
 export type Callback<Argument> = Argument extends undefined ? () => void : (payload: Argument) => void;
 
-export type PromisePlus<T, Data = undefined> = {
-    promise: Promise<T>,
-    data: Data,
-}
-
-export function promisePlus<T, D>(promise: Promise<T>, data: D): PromisePlus<T, D> {
-    return {
-        promise: promise,
-        data: data,
-    };
-}
-
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
 }
