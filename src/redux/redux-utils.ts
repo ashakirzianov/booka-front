@@ -1,5 +1,5 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject, Callback } from "../utils";
+import { mapObject, Callback, PromisePlus } from "../utils";
 import { combineReducers, Reducer as ReducerRedux } from "redux";
 
 // Actions:
@@ -31,13 +31,14 @@ export function buildActionCreators<Template>(actionTemplate: Template): ActionC
 
 type SimpleReducerT<State, Payload = {}> =
     (state: State, payload: Payload) => State;
-type PromiseReducerT<State, Payload = {}> = {
-    pending?: SimpleReducerT<State, {}>,
+type PromiseReducerT<State, Payload = {}, Data = undefined> = {
+    pending?: SimpleReducerT<State, Data>,
     rejected?: SimpleReducerT<State, any>,
     fulfilled?: SimpleReducerT<State, Payload>,
 };
-type SingleReducerT<State, ActionsT, Key extends keyof ActionsT> = ActionsT[Key] extends Promise<infer Fulfilled>
-    ? PromiseReducerT<State, Fulfilled>
+type SingleReducerT<State, ActionsT, Key extends keyof ActionsT> =
+    ActionsT[Key] extends Promise<infer Fulfilled> ? PromiseReducerT<State, Fulfilled>
+    : ActionsT[Key] extends PromisePlus<infer F, infer D> ? PromiseReducerT<State, F, D>
     : SimpleReducerT<State, ActionsT[Key]>
     ;
 
