@@ -1,5 +1,5 @@
 import { createBrowserHistory } from "history";
-import { fetchLibrary, fetchBookForLocator } from "../api";
+import api from "../api";
 import { store, buildActionCreators, buildConnectRedux } from '../redux';
 import { staticBookLocator, actionsTemplate, App } from "../model";
 
@@ -19,11 +19,11 @@ export function navigationToAction(dest: Destination) {
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
         const bl = staticBookLocator(bookName);
-        return actionCreators.setCurrentBook(fetchBookForLocator(bl));
+        return actionCreators.setCurrentBook(api.bookForLocator(bl));
     }
 
     if (dest === '/') {
-        return actionCreators.loadLibrary(fetchLibrary());
+        return actionCreators.loadLibrary(api.library());
     }
 
     return undefined;

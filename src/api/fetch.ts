@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Book, noBook, errorBook, BookLocator, Library } from "../model";
-import { promisePlus, PromisePlus } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -26,10 +25,6 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
         default:
             return Promise.resolve(noBook());
     }
-}
-
-export function fetchBookForLocator(bookLocator: BookLocator): PromisePlus<Book, BookLocator> {
-    return promisePlus(fetchBL(bookLocator), bookLocator);
 }
 
 export async function fetchBook(bookName: string): Promise<Book> {

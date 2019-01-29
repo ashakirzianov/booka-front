@@ -3,7 +3,7 @@ import { Library, BookMeta, Book, staticBookLocator, isLoading, BookLocator } fr
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, LoadingComp } from './Elements';
 import { connect } from './misc';
-import { fetchBookForLocator } from '../api';
+import api from '../api';
 import { PromisePlus } from '../utils';
 
 const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus<Book, BookLocator> }> = props =>
@@ -11,7 +11,7 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: PromisePlus
         <LinkButton
             text={props.meta.title}
             onClick={
-                () => props.openBook && props.openBook(fetchBookForLocator(staticBookLocator(props.id)))
+                () => props.openBook && props.openBook(api.bookForLocator(staticBookLocator(props.id)))
             }
         />
     </Row>;
