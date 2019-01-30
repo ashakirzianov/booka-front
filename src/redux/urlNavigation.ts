@@ -1,12 +1,10 @@
-import { buildActionCreators, ActionsType } from './redux-utils';
-import { actionsTemplate, staticBookLocator } from '../model';
+import { staticBookLocator } from '../model';
 import api from '../api';
-import { store } from './store';
+import { Action, actionCreators, dispatchAction } from './store';
 
-const actionCreators = buildActionCreators(actionsTemplate);
 
 export type Destination = string;
-export function destinationToActions(dest: Destination): ActionsType<typeof actionsTemplate>[] {
+export function destinationToActions(dest: Destination): Action[] {
     const bookRouteMatch = dest.match(/^\/book\/(\w+)/);
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
@@ -29,5 +27,5 @@ export function destinationToActions(dest: Destination): ActionsType<typeof acti
 
 export function dispatchNavigationEvent(dest: Destination) {
     const actions = destinationToActions(dest);
-    actions.forEach(a => store.dispatch(a));
+    actions.forEach(a => dispatchAction(a));
 }
