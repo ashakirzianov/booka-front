@@ -1,7 +1,10 @@
 import * as React from "react";
 import { TopComp } from './TopComp';
 import { dispatchNavigationEvent } from '../redux';
-import { history } from './misc';
+
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 export class AppComp extends React.Component {
     public componentWillMount() {
