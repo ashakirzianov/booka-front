@@ -15,7 +15,7 @@ export function size(s: number | undefined): string | undefined {
     return s === undefined ? undefined : `${s}em`;
 }
 
-export const connect = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);
+export const connected = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);
 
 export type Hoverable<T extends KeyRestriction<T, ":hover">> = T & { ":hover"?: Partial<T> };
 

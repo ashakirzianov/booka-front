@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp, connect } from './comp-utils';
+import { Comp, connected } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, NoBook, ActualBook, ErrorBook,
@@ -41,7 +41,7 @@ const BookComp: Comp<Book> = (props =>
                     : assertNever(props)
 );
 
-export const ConnectedBookComp = connect(['currentBook'])(
+export const ConnectedBookComp = connected(['currentBook'])(
     props => <BookComp {...props.currentBook} />
 );
 

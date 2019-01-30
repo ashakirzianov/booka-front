@@ -3,9 +3,9 @@ import * as React from "react";
 import { Column, Screen } from "./Elements";
 import { ScreenComp } from './ScreenComp';
 import { topScreen } from '../model';
-import { connect } from './comp-utils';
+import { connected } from './comp-utils';
 
-export const TopComp = connect(['screenStack'])((props) =>
+export const TopComp = connected(['screenStack'])((props) =>
     <Screen color='black'>
         <Column align='center'>
             {
