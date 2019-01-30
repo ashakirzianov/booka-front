@@ -1,12 +1,12 @@
 import * as store from "store";
-import { State } from './state';
+import { App } from '../model';
 
 export const implementation = {
-    setState(state: State) {
+    setState(state: App) {
         store.set('state', state);
     },
 
-    readState(): State | undefined {
-        return store.get('state') as State;
+    readState(): App | undefined {
+        return store.get('state') as App;
     },
 }
