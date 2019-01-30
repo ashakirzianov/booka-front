@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp } from './comp-utils';
+import { Comp, connect } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, NoBook, ActualBook, ErrorBook,
@@ -8,7 +8,6 @@ import {
     TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
 } from './Elements';
 import { assertNever } from '../utils';
-import { connect } from './higherLevel';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;

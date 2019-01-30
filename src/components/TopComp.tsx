@@ -3,7 +3,7 @@ import * as React from "react";
 import { Column, Screen } from "./Elements";
 import { ScreenComp } from './ScreenComp';
 import { topScreen } from '../model';
-import { connect } from './higherLevel';
+import { connect } from './comp-utils';
 
 export const TopComp = connect(['screenStack'])((props) =>
     <Screen color='black'>
