@@ -18,4 +18,3 @@ export const Text: Comp<{
     </span>;
 
 export { View } from 'react-native';
-export { Route, Router, Redirect, Switch, Link } from 'react-router-dom';

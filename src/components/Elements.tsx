@@ -90,5 +90,4 @@ export const Screen: Comp<{
 
 export {
     Text,
-    Route, Redirect, Switch, Router,
 } from './Atoms';
