@@ -1,15 +1,14 @@
-// import * as store from "store";
 import { App, libraryScreen, noBook, library } from "../model";
+import { persistentStore } from './persistentStore';
 
 export type State = App;
 
 export function storeState(state: State) {
-    // store.set("state", state);
+    persistentStore.setState(state);
 }
 
 export function restoreState(): State | undefined {
-    // return store.get("state") as State;
-    return undefined;
+    return persistentStore.readState();
 }
 
 export function initialState(): State {
