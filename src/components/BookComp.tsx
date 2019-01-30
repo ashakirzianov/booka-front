@@ -8,7 +8,7 @@ import {
     TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
 } from './Elements';
 import { assertNever } from '../utils';
-import { connect } from './misc';
+import { connect } from './higherLevel';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <TextBlock text={props.p} />;

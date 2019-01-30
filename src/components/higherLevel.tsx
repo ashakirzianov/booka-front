@@ -1,6 +1,10 @@
 import * as React from "react";
 import Radium from "radium";
 import { KeyRestriction, ExcludeKeys } from "../utils";
+import { buildConnectRedux } from '../redux';
+import { actionsTemplate, App } from "../model";
+
+export const connect = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);
 
 export type Hoverable<T extends KeyRestriction<T, ":hover">> = T & { ":hover"?: Partial<T> };
 

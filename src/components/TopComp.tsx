@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import { Column, Screen } from "./Elements";
-import { connect } from "./misc";
 import { ScreenComp } from './ScreenComp';
 import { topScreen } from '../model';
+import { connect } from './higherLevel';
 
 export const TopComp = connect(['screenStack'])((props) =>
     <Screen color='black'>
