@@ -1,14 +1,15 @@
-import * as store from "store";
+// import * as store from "store";
 import { App, libraryScreen, noBook, library } from "../model";
 
 export type State = App;
 
 export function storeState(state: State) {
-    store.set("state", state);
+    // store.set("state", state);
 }
 
 export function restoreState(): State | undefined {
-    return store.get("state") as State;
+    // return store.get("state") as State;
+    return undefined;
 }
 
 export function initialState(): State {
@@ -23,6 +24,10 @@ function createNewState(): State {
     return {
         screenStack: [libraryScreen()],
         currentBook: noBook(),
-        library: library(),
+        library: library({
+            wap: {
+                title: 'War & Peace',
+            },
+        }),
     };
 }

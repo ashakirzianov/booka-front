@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { dispatchNavigationEvent } from '../redux';
+import * as React from "react";
 import { TopComp } from './TopComp';
+import { dispatchNavigationEvent } from '../redux';
 import { history } from './misc';
 
-export class EntryComp extends React.Component {
+export class AppComp extends React.Component {
     public componentWillMount() {
         // TODO: this doesn't feel right. Think of another way.
         dispatchNavigationEvent(history.location.pathname);
@@ -11,7 +11,7 @@ export class EntryComp extends React.Component {
             dispatchNavigationEvent(location.pathname);
         });
     }
-
+    
     public render() {
         return <TopComp />;
     }

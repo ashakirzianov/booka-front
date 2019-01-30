@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://mw-35r.anonymous.booka-front.exp.direct",
-  "packagerNgrokUrl": "https://packager.mw-35r.anonymous.booka-front.exp.direct",
-  "ngrokPid": 23861
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 20760,
+  "expoServerNgrokUrl": "https://qc-m5n.anonymous.booka-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.qc-m5n.anonymous.booka-front.exp.direct",
+  "ngrokPid": 20775
 }
