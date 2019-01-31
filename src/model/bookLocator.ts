@@ -1,13 +1,13 @@
 export type NoBookLocator = { bl: 'no-book' };
 export type ErrorBookLocator = { bl: 'error-book' } // TODO: rethink and, perhaps, remove?
-export type StaticBookLocator = {
-    bl: 'static-book',
+export type RemoteBookLocator = {
+    bl: 'remote-book',
     name: string,
 };
 
 export type BookLocator = 
     | NoBookLocator
-    | StaticBookLocator
+    | RemoteBookLocator
     | ErrorBookLocator
     ;
 
@@ -23,9 +23,9 @@ export function errorBookLocator(): ErrorBookLocator {
     };
 }
 
-export function staticBookLocator(name: string): StaticBookLocator {
+export function remoteBookLocator(name: string): RemoteBookLocator {
     return {
-        bl: 'static-book',
+        bl: 'remote-book',
         name: name,
     };
 }

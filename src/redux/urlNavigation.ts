@@ -1,4 +1,4 @@
-import { staticBookLocator } from '../model';
+import { remoteBookLocator } from '../model';
 import api from '../api';
 import { Action, actionCreators, dispatchAction } from './store';
 
@@ -8,7 +8,7 @@ export function destinationToActions(dest: Destination): Action[] {
     const bookRouteMatch = dest.match(/^\/book\/(\w+)/);
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
-        const bl = staticBookLocator(bookName);
+        const bl = remoteBookLocator(bookName);
         return [
             actionCreators.setCurrentBook(api.bookForLocator(bl)),
             actionCreators.navigateToBookScreen(),

@@ -25,7 +25,7 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
     switch (bookLocator.bl) {
         case 'no-book':
             return Promise.resolve(noBook());
-        case 'static-book':
+        case 'remote-book':
             const backendBook = fetchBook(bookLocator.name);
             let book = backendBook as any as Book;
             book.locator = bookLocator;

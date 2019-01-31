@@ -22,7 +22,7 @@ function restoreState(): State | undefined {
 }
 
 function validateState(restored: State | undefined) {
-    return undefined;
+    return undefined; // TODO: implement
 }
 
 function createNewState(): State {

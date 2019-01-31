@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Library, BookMeta, Book, staticBookLocator } from '../model';
+import { Library, BookMeta, Book, remoteBookLocator } from '../model';
 import { Comp, connected } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
 import api from '../api';
@@ -10,7 +10,7 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticP
         <LinkButton
             text={props.meta.title}
             onClick={
-                () => props.openBook && props.openBook(api.bookForLocator(staticBookLocator(props.id)))
+                () => props.openBook && props.openBook(api.bookForLocator(remoteBookLocator(props.id)))
             }
         />
     </Row>;
