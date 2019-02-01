@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextProps, TextCallbacks } from './Atoms.common';
+import { TextProps, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>

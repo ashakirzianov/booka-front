@@ -3,7 +3,18 @@ import { FlexStyle, View } from 'react-native';
 import { Comp, size } from './comp-utils';
 
 export { Text } from './Atoms.platform';
-// export { View } from 'react-native';
+
+export type TextCallbacks = {
+    onClick: void,
+};
+export type TextProps = {
+    style: {
+        fontFamily?: string,
+        fontSize?: number,
+        textAlign?: 'justify',
+        color?: string,
+    },
+};
 
 export type Align = FlexStyle['alignItems'];
 export type JustifyContent = 'center' | 'flex-start';

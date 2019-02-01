@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, Row } from './Atoms';
 import { Comp } from './comp-utils';
-import { TextProps } from './Atoms.common';
+import { TextProps } from './Atoms';
 
 export const ActivityIndicator: Comp = props =>
     <TextBlock text='Loading now...' />;
