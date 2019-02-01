@@ -5,8 +5,12 @@ import { Comp } from './comp-utils';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <NativeText
-        style={{
-            ...props.style,
+        style={props.style && {
+            fontWeight: props.style.fontWeight,
+            fontFamily: props.style.fontWeight,
+            fontSize: props.style.fontSize,
+            textAlign: props.style.textAlign,
+            color: props.style.color,
         }}
         onPress={props.onClick}
     >
