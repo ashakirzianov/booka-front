@@ -1,11 +1,11 @@
 import * as React from "react";
 import Radium from "radium";
-import { KeyRestriction, ExcludeKeys } from "../utils";
+import { KeyRestriction, ExcludeKeys, Callback } from "../utils";
 import { buildConnectRedux } from '../redux';
 import { actionsTemplate, App } from "../model";
 
 export type Callbacks<A> = {
-    [name in keyof A]: ((arg: A[name]) => void);
+    [name in keyof A]: Callback<A[name]>;
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;

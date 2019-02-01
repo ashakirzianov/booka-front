@@ -2,11 +2,12 @@ import * as React from 'react';
 import { Text, View } from './Atoms';
 import { Comp, size } from './comp-utils';
 import { FlexStyle } from 'react-native';
+import { TextProps } from './Atoms.common';
 
 export const ActivityIndicator: Comp = props =>
     <TextBlock text='Loading now...' />;
 
-const defaultStyle = {
+const defaultStyle: TextProps['style'] = {
     fontFamily: 'Georgia',
     color: '#999999',
 };
@@ -21,12 +22,13 @@ export const TextBlock: Comp<{ text: string }> = props =>
         ...defaultStyle,
         fontSize: fontSize.normal,
         textAlign: 'justify',
+        foo: 'foo', // TODO: why excessive property check doesn't work here ?
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
 
 export const LinkButton: Comp<{
     text: string,
 }, {
-    onClick: void,
+    onClick: undefined,
 }> = props =>
     <Text style={{
         ...defaultStyle,
