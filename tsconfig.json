@@ -17,6 +17,7 @@
     "noImplicitAny": true,
     "importHelpers": true,
     "suppressImplicitAnyIndexErrors": false,
+    "suppressExcessPropertyErrors": false,
     "noUnusedLocals": true,
     "module": "esnext",
     "moduleResolution": "node",

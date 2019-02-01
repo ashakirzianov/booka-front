@@ -2,7 +2,7 @@ import { implementation } from './persistentStore.platform';
 import { App, libraryScreen, noBook, library } from "../model";
 
 type State = App;
-type PersistentStore = {
+export type PersistentStore = {
     setState(value: State): void,
     readState(): State | undefined,
 };

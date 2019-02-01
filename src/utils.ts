@@ -13,7 +13,7 @@ export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>
 
 export type Callback<Argument> = Func<Argument, void>;
 
-export type Func<Argument, Return> = Argument extends undefined ? () => Return : (payload: Argument) => Return;
+export type Func<Argument, Return> = Argument extends void ? () => Return : (payload: Argument) => Return;
 
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
@@ -51,7 +51,7 @@ export function pick<T, Keys extends keyof T>(obj: T, ...ks: Keys[]): Pick<T, Ke
     return ks.reduce((ret, key) => ({ ...ret, [key]: obj[key] }), {}) as Pick<T, Keys>;
 }
 
-export function def<T = undefined>() {
+export function def<T = void>() {
     return null as any as T;
 }
 
