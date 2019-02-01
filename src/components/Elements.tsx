@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Text, View } from './Atoms';
-import { Comp, size } from './comp-utils';
-import { FlexStyle } from 'react-native';
+import { Text, Row } from './Atoms';
+import { Comp } from './comp-utils';
 import { TextProps } from './Atoms.common';
 
 export const ActivityIndicator: Comp = props =>
@@ -30,66 +29,34 @@ export const LinkButton: Comp<{
 }, {
     onClick: undefined,
 }> = props =>
-    <Text style={{
-        ...defaultStyle,
-    }}
-    onClick={props.onClick}
-    >
-    {props.text}
-    </Text>;
-
-export type Align = FlexStyle['alignItems'];
-export const Column: Comp<{
-    maxWidth?: number,
-    margin?: number,
-    align?: Align,
-    backgroundColor?: string,
-}> = props =>
-        <View style={{
-            flexDirection: 'column',
-            maxWidth: size(props.maxWidth),
-            alignItems: props.align,
-            backgroundColor: props.backgroundColor,
-            margin: size(props.margin),
-        }}>
-            {props.children}
-        </View>;
-
-export const Row: Comp = props =>
-    <View style={{ flexDirection: 'row' }}>{props.children}</View>;
+        <Text style={{
+            ...defaultStyle,
+        }}
+            onClick={props.onClick}
+        >
+            {props.text}
+        </Text>;
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
-    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <Row style={{ justifyContent: 'center' }}>
         <Text style={{ ...defaultStyle, fontSize: fontSize.normal }}>{props.text}</Text>
-    </View>;
+    </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
-    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <Row style={{ justifyContent: 'center' }}>
         <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.subtitle }}>{props.text}</Text>
-    </View>;
+    </Row>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
-    <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+    <Row style={{ justifyContent: 'flex-start' }}>
         <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.normal }}>{props.text}</Text>
-    </View>;
+    </Row>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
-    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+    <Row style={{ justifyContent: 'center', width: '100%' }}>
         <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.title }}>{props.text}</Text>
-    </View>;
-
-export const Screen: Comp<{
-    color?: string,
-}> = props =>
-        <View style={{
-            position: 'absolute',
-            minHeight: '100%',
-            minWidth: '100%',
-            backgroundColor: props.color,
-        }}>
-            {props.children}
-        </View>
+    </Row>;
 
 export {
-    Text,
+    Text, Column, Row, Screen,
 } from './Atoms';
