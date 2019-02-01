@@ -1,4 +1,1 @@
-import { facade } from './facade';
-
-export default facade;
-
+export { facade as api } from './facade';

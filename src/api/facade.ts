@@ -33,7 +33,7 @@ function fakeBook(bookLocator: BookLocator): Book {
     return {
         book: 'book',
         meta: {
-            title: 'Fake book',
+            title: bookLocator.bl === 'remote-book' ? bookLocator.name : bookLocator.bl,
         },
         locator: bookLocator,
         content: [
@@ -46,8 +46,9 @@ function fakeLibrary(): Library {
     return {
         loading: false,
         books: {
-            wap: { title: 'War & Peace' },
-            capital: { title: 'Das Kapital' },
+            fake1: { title: 'I am not a book' },
+            fake2: { title: 'Neither am I' },
+            fake3: { title: 'We are all fake' },
         },
     };
 }

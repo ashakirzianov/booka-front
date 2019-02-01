@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Library, BookMeta, Book, remoteBookLocator } from '../model';
 import { Comp, connected } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
-import api from '../api';
+import { api } from '../api';
 import { OptimisticPromise } from '../promisePlus';
 
 const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticPromise<Book> }> = props =>
