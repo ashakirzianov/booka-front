@@ -61,7 +61,7 @@ export function defOpt<T>() {
 
 export function timeouted<U>(f: () => U, timeout?: number): () => Promise<U>;
 export function timeouted<T, U>(f: (x: T) => U, timeout?: number): (x: T) => Promise<U>;
-export function timeouted<T, U>(f: (x: T) => U, timeout?: number): (x: T) => Promise<U> {
+export function timeouted<T, U>(f: (x: T) => U, timeout: number = 500): (x: T) => Promise<U> {
     return (x: T) => new Promise((res, rej) => {
         setTimeout(() => {
             try {
