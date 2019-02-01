@@ -31,6 +31,7 @@ export const LinkButton: Comp<{
 }> = props =>
         <Text style={{
             ...defaultStyle,
+            cursor: 'pointer',
         }}
             onClick={props.onClick}
         >

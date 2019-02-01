@@ -13,6 +13,7 @@ export type TextProps = {
         fontSize?: number,
         textAlign?: 'justify',
         color?: string,
+        cursor?: 'pointer',
     },
 };
 
