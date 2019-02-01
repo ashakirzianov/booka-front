@@ -3,7 +3,7 @@ import { fetchBL, fetchLibrary } from './fetch';
 import { OptimisticPromise, optimisticPromise } from '../promisePlus';
 import { timeouted } from '../utils';
 
-export const facade = {
+export const realFacade = {
     bookForLocator(bookLocator: BookLocator): OptimisticPromise<Book> {
         return optimisticPromise(fetchBL(bookLocator), loadingBook(bookLocator));
     },
@@ -13,7 +13,7 @@ export const facade = {
     },
 }
 
-export const fakeFacade: typeof facade = {
+export const fakeFacade: typeof realFacade = {
     bookForLocator(bookLocator: BookLocator): OptimisticPromise<Book> {
         return optimisticPromise(
             timeouted(fakeBook)(bookLocator),
@@ -51,3 +51,5 @@ function fakeLibrary(): Library {
         },
     };
 }
+
+export const facade = realFacade;
