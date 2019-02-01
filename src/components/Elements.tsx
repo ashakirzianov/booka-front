@@ -4,22 +4,29 @@ import { Comp } from './comp-utils';
 import { TextProps } from './Atoms';
 
 export const ActivityIndicator: Comp = props =>
-    <TextBlock text='Loading now...' />;
+    <Label text='Loading now...' />;
 
-const defaultStyle: TextProps['style'] = {
-    fontFamily: 'Georgia',
-    color: '#999999',
-};
 const fontSize = {
     normal: 26,
     subtitle: 30,
     title: 36,
 };
 
-export const TextBlock: Comp<{ text: string }> = props =>
+const defaultStyle: TextProps['style'] = {
+    fontFamily: 'Georgia',
+    color: '#999999',
+    fontSize: fontSize.normal,
+};
+
+export const Label: Comp<{ text: string }> = props =>
     <Text style={{
         ...defaultStyle,
-        fontSize: fontSize.normal,
+        foo: 'foo', // TODO: why excessive property check doesn't work here ?
+    }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
+
+export const ParagraphText: Comp<{ text: string }> = props =>
+    <Text style={{
+        ...defaultStyle,
         textAlign: 'justify',
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
     }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
@@ -40,7 +47,7 @@ export const LinkButton: Comp<{
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
-        <Text style={{ ...defaultStyle, fontSize: fontSize.normal }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle }}>{props.text}</Text>
     </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
@@ -50,7 +57,7 @@ export const PartTitle: Comp<{ text?: string }> = props =>
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <Text style={{ ...defaultStyle, fontWeight: 'bold', fontSize: fontSize.normal }}>{props.text}</Text>
+        <Text style={{ ...defaultStyle, fontWeight: 'bold' }}>{props.text}</Text>
     </Row>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>

@@ -5,10 +5,10 @@ import { ConnectedBookComp } from './BookComp';
 import { ConnectedLibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp } from './comp-utils';
-import { TextBlock } from './Elements';
+import { Label } from './Elements';
 
 export const BlankScreenComp: Comp = props =>
-    <TextBlock text='Nothing here. This screen should never be visible' />;
+    <Label text='Nothing here. This screen should never be visible' />;
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <ConnectedBookComp />

@@ -5,12 +5,12 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    TextBlock, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
+    ParagraphText, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
 } from './Elements';
 import { assertNever } from '../utils';
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
-    <TextBlock text={props.p} />;
+    <ParagraphText text={props.p} />;
 
 const ChapterComp: Comp<Chapter> = props =>
     <Column>
