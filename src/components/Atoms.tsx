@@ -8,7 +8,8 @@ export type TextCallbacks = {
     onClick: void,
 };
 export type TextProps = {
-    style: {
+    style?: {
+        fontWeight?: 'bold',
         fontFamily?: string,
         fontSize?: number,
         textAlign?: 'justify',

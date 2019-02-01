@@ -5,9 +5,29 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    ParagraphText, Column, BookTitle, ChapterTitle, PartTitle, SubpartTitle, ActivityIndicator,
+    ParagraphText, Column, ActivityIndicator, Text, Row, fontSize,
 } from './Elements';
 import { assertNever } from '../utils';
+
+export const ChapterTitle: Comp<{ text?: string }> = props =>
+    <Row style={{ justifyContent: 'center' }}>
+        <Text>{props.text}</Text>
+    </Row>;
+
+export const PartTitle: Comp<{ text?: string }> = props =>
+    <Row style={{ justifyContent: 'center' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: fontSize.subtitle }}>{props.text}</Text>
+    </Row>;
+
+export const SubpartTitle: Comp<{ text?: string }> = props =>
+    <Row style={{ justifyContent: 'flex-start' }}>
+        <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
+    </Row>;
+
+export const BookTitle: Comp<{ text?: string }> = props =>
+    <Row style={{ justifyContent: 'center', width: '100%' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: fontSize.title }}>{props.text}</Text>
+    </Row>;
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
     <ParagraphText text={props.p} />;
