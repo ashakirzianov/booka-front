@@ -6,16 +6,10 @@ import { TextProps } from './Atoms';
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
 
-export const fontSize = {
-    normal: 26,
-    subtitle: 30,
-    title: 36,
-};
-
 export const defaultStyle: TextProps['style'] = {
     fontFamily: 'Georgia',
     color: '#999999',
-    fontSize: fontSize.normal,
+    fontSize: 26,
 };
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>

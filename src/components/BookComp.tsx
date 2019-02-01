@@ -5,7 +5,7 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    ParagraphText, Column, ActivityIndicator, Text, Row, fontSize,
+    ParagraphText, Column, ActivityIndicator, Text, Row,
 } from './Elements';
 import { assertNever } from '../utils';
 
@@ -16,7 +16,7 @@ export const ChapterTitle: Comp<{ text?: string }> = props =>
 
 export const PartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: fontSize.subtitle }}>{props.text}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</Text>
     </Row>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
@@ -26,7 +26,7 @@ export const SubpartTitle: Comp<{ text?: string }> = props =>
 
 export const BookTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: fontSize.title }}>{props.text}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</Text>
     </Row>;
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
