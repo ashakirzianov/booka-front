@@ -27,7 +27,7 @@ export const TextBlock: Comp<{ text: string }> = props =>
 export const LinkButton: Comp<{
     text: string,
 }, {
-    onClick: undefined,
+    onClick: void,
 }> = props =>
         <Text style={{
             ...defaultStyle,

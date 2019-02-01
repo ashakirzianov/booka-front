@@ -1,5 +1,5 @@
 export type TextCallbacks = {
-    onClick: undefined,
+    onClick: void,
 };
 export type TextProps = {
     style: {
