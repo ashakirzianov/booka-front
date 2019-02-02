@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FlexStyle, View } from 'react-native';
 import { Comp, size } from './comp-utils';
 
-export { Text } from './Atoms.platform';
+export { Text, showAlert } from './Atoms.platform';
 
 export type TextCallbacks = {
     onClick: void,
@@ -43,16 +43,16 @@ export const Row: Comp<{
         width?: WidthHeight,
     },
 }> = props =>
-    <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
+        <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
 
 export const Screen: Comp<{
-        color?: string,
-    }> = props =>
-            <View style={{
-                position: 'absolute',
-                minHeight: '100%',
-                minWidth: '100%',
-                backgroundColor: props.color,
-            }}>
-                {props.children}
-            </View>
+    color?: string,
+}> = props =>
+        <View style={{
+            position: 'absolute',
+            minHeight: '100%',
+            minWidth: '100%',
+            backgroundColor: props.color,
+        }}>
+            {props.children}
+        </View>;

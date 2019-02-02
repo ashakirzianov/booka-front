@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text as NativeText } from 'react-native';
+import { Text as NativeText, Alert } from 'react-native';
 import { TextProps, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 
@@ -16,3 +16,9 @@ export const Text: Comp<TextProps, TextCallbacks> = props =>
     >
         {props.children}
     </NativeText>;
+
+
+
+export function showAlert(message: string) {
+    Alert.alert('Alert', message);
+}
