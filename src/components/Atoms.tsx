@@ -9,7 +9,7 @@ export type TextCallbacks = {
 };
 export type TextProps = {
     style?: {
-        fontWeight?: 'bold',
+        fontWeight?: 'normal' | 'bold' | number,
         fontFamily?: string,
         fontSize?: number,
         textAlign?: 'justify',

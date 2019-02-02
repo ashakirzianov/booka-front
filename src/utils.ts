@@ -15,6 +15,8 @@ export type Callback<Argument> = Func<Argument, void>;
 
 export type Func<Argument, Return> = Argument extends void ? () => Return : (payload: Argument) => Return;
 
+export type Defined<T> = T extends undefined ? never : T;
+
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
 }
