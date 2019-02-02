@@ -3,6 +3,7 @@ import { FlexStyle, View } from 'react-native';
 import { Comp, size } from './comp-utils';
 
 export { Text, showAlert } from './Atoms.platform';
+export { SafeAreaView } from 'react-native';
 
 export type TextCallbacks = {
     onClick: void,
