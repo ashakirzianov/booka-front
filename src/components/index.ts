@@ -1,1 +1,1 @@
-export * from './App';
+export { AppComp } from './App';

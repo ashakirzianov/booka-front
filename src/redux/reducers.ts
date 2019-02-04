@@ -12,17 +12,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         loadLibrary: {
             pending: (_, p) => p,
             fulfilled: (_, p) => p,
-            rejected: (s, p) => library({
-                wap: {
-                    title: 'War & Peace',
-                },
-                genp: {
-                    title: 'War & Peace',
-                },
-                capital: {
-                    title: 'War & Peace',
-                },
-            }), // TODO: report load error
+            rejected: (s, p) => library({}), // TODO: report load error
         },
     },
     currentBook: {
