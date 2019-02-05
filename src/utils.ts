@@ -15,6 +15,8 @@ export type Callback<Argument> = Func<Argument, void>;
 
 export type Func<Argument, Return> = Argument extends void ? () => Return : (payload: Argument) => Return;
 
+export type Defined<T> = T extends undefined ? never : T;
+
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
 }
@@ -61,7 +63,7 @@ export function defOpt<T>() {
 
 export function timeouted<U>(f: () => U, timeout?: number): () => Promise<U>;
 export function timeouted<T, U>(f: (x: T) => U, timeout?: number): (x: T) => Promise<U>;
-export function timeouted<T, U>(f: (x: T) => U, timeout?: number): (x: T) => Promise<U> {
+export function timeouted<T, U>(f: (x: T) => U, timeout: number = 500): (x: T) => Promise<U> {
     return (x: T) => new Promise((res, rej) => {
         setTimeout(() => {
             try {

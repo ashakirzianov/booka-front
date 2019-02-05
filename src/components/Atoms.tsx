@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { FlexStyle, View } from 'react-native';
 import { Comp, size } from './comp-utils';
+import { platformValue } from '../platform';
 
-export { Text } from './Atoms.platform';
+export { Text, showAlert } from './Atoms.platform';
+export { SafeAreaView, ScrollView } from 'react-native';
 
 export type TextCallbacks = {
     onClick: void,
 };
 export type TextProps = {
     style?: {
-        fontWeight?: 'bold',
+        fontWeight?: 'normal' | 'bold' | number,
         fontFamily?: string,
         fontSize?: number,
         textAlign?: 'justify',
@@ -43,16 +45,18 @@ export const Row: Comp<{
         width?: WidthHeight,
     },
 }> = props =>
-    <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
+        <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
 
-export const Screen: Comp<{
-        color?: string,
-    }> = props =>
-            <View style={{
-                position: 'absolute',
-                minHeight: '100%',
-                minWidth: '100%',
-                backgroundColor: props.color,
-            }}>
-                {props.children}
-            </View>
+export const ScreenLayout: Comp<{
+    color?: string,
+}> = props =>
+        <View style={{
+            position: 'absolute',
+            minHeight: '100%',
+            minWidth: '100%',
+            width: platformValue({ mobile: '100%' }),
+            height: platformValue({ mobile: '100%' }),
+            backgroundColor: props.color,
+        }}>
+            {props.children}
+        </View>;

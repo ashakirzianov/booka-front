@@ -30,9 +30,8 @@ function createNewState(): State {
         screenStack: [libraryScreen()],
         currentBook: noBook(),
         library: library({
-            wap: {
-                title: 'War & Peace',
-            },
+            wap: { title: 'War & Peace' },
+            capital: { title: 'Das Kapital' },
         }),
     };
 }

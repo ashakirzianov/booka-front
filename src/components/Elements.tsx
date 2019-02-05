@@ -38,5 +38,5 @@ export const LinkButton: Comp<{
         >{props.text}</Text>;
 
 export {
-    Column, Row, Screen,
+    Column, Row, ScreenLayout, ScrollView,
 } from './Atoms';

@@ -11,3 +11,7 @@ export const Text: Comp<TextProps, TextCallbacks> = props =>
     >
         {props.children}
     </span>;
+
+export function showAlert(message: string) {
+    alert(message);
+}

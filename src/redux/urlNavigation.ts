@@ -1,5 +1,5 @@
 import { remoteBookLocator } from '../model';
-import api from '../api';
+import { api } from '../api';
 import { Action, actionCreators, dispatchAction } from './store';
 
 

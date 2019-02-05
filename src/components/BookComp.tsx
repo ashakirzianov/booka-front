@@ -5,7 +5,8 @@ import {
     isParagraph, NoBook, ActualBook, ErrorBook,
 } from '../model';
 import {
-    ParagraphText, Column, ActivityIndicator, Text, Row,
+    ParagraphText, Column, ActivityIndicator, Text, Row, Label,
+    ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
 
@@ -48,9 +49,11 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
             : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
-    <Column maxWidth={50} align='flex-start' margin={1.5}>
-        <BookTitle text={props.meta.title} />
-        {buildNodes(props.content)}
+    <Column maxWidth={50} align='flex-start' margin={2}>
+        <ScrollView>
+            <BookTitle text={props.meta.title} />
+            {buildNodes(props.content)}
+        </ScrollView>
     </Column>;
 
 const BookComp: Comp<Book> = (props =>
@@ -66,10 +69,10 @@ export const ConnectedBookComp = connected(['currentBook'])(
 );
 
 const NoBookComp: Comp<NoBook> = props =>
-    <div>No book selected</div>;
+    <Label text='No book selected' />;
 
 const ErrorBookComp: Comp<ErrorBook> = props =>
-    <div>{props.error}</div>;
+    <Label text={'Error: ' + props.error} />;
 
 function buildNodes(nodes: BookNode[]) {
     return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} count={i} />);

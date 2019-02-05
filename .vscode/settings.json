@@ -6,12 +6,14 @@
     "tslint.autoFixOnSave": true,
     "cSpell.words": [
         "Hoverable",
+        "Kapital",
         "Metas",
         "Shakirzianov",
         "Subpart",
         "Whitespaces",
         "backend",
         "booka",
+        "browserslist",
         "onstatechange",
         "precached",
         "timeouted"

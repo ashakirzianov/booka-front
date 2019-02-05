@@ -3,6 +3,7 @@ import Radium from "radium";
 import { KeyRestriction, ExcludeKeys, Callback } from "../utils";
 import { buildConnectRedux } from '../redux';
 import { actionsTemplate, App } from "../model";
+import { platformValue } from '../platform';
 
 export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
@@ -11,8 +12,14 @@ export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;
 export type Comp<P = {}, A = {}> = React.SFC<CompProps<P, A>>;
 
-export function size(s: number | undefined): string | undefined {
-    return s === undefined ? undefined : `${s}em`;
+export function size(s: number | undefined) {
+    return s === undefined
+        ? undefined
+        : platformValue({
+            web: `${s}em`,
+            mobile: s * 10, // TODO: rethink this
+        })
+        ;
 }
 
 export const connected = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);

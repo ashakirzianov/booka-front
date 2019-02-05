@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Library, BookMeta, Book, remoteBookLocator } from '../model';
 import { Comp, connected } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
-import api from '../api';
+import { api } from '../api';
 import { OptimisticPromise } from '../promisePlus';
+import { SafeAreaView } from './Atoms';
 
 const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticPromise<Book> }> = props =>
     <Row>
@@ -16,16 +17,18 @@ const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticP
     </Row>;
 
 const LibraryComp: Comp<Library, { openBook: OptimisticPromise<Book> }> = (props =>
-    <Column>
-        {
-            props.loading ? <ActivityIndicator />
-                : Object.keys(props.books).map(
-                    id => <BookMetaComp
-                        key={id} meta={props.books[id]!} id={id}
-                        openBook={props.openBook}
-                    />)
-        }
-    </Column>
+    <SafeAreaView>
+        <Column>
+            {
+                props.loading ? <ActivityIndicator />
+                    : Object.keys(props.books).map(
+                        id => <BookMetaComp
+                            key={id} meta={props.books[id]!} id={id}
+                            openBook={props.openBook}
+                        />)
+            }
+        </Column>
+    </SafeAreaView>
 );
 
 export const ConnectedLibraryComp = connected(['library'], ['setCurrentBook', 'navigateToBookScreen'])(
