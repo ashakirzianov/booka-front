@@ -7,7 +7,7 @@ export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView, ScrollView } from 'react-native';
 
 export type TextCallbacks = {
-    onClick: void,
+    onClick: any,
 };
 export type TextProps = {
     style?: {

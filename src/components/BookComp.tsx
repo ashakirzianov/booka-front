@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp, connected } from './comp-utils';
+import { Comp } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, NoBook, ActualBook, ErrorBook,
@@ -56,16 +56,12 @@ const ActualBookComp: Comp<ActualBook> = props =>
         </ScrollView>
     </Column>;
 
-const BookComp: Comp<Book> = (props =>
+export const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />
         : props.book === 'error' ? <ErrorBookComp {...props} />
             : props.book === 'book' ? <ActualBookComp {...props} />
                 : props.book === 'loading' ? <ActivityIndicator />
                     : assertNever(props)
-);
-
-export const ConnectedBookComp = connected(['currentBook'])(
-    props => <BookComp {...props.currentBook} />
 );
 
 const NoBookComp: Comp<NoBook> = props =>

@@ -1,10 +1,9 @@
 import { Book } from "./book";
 import { Library } from './library';
+import { BookLocator } from './bookLocator';
 
 export type App = {
     screenStack: ScreenStack,
-    library: Library,
-    currentBook: Book,
 };
 
 export type ScreenStack = Screen[];
@@ -28,24 +27,50 @@ export function topScreen(stack: ScreenStack): Screen {
 }
 
 export type Screen = BookScreen | LibraryScreen | BlankScreen;
-export type BookScreen = ReturnType<typeof bookScreen>;
-export type LibraryScreen = ReturnType<typeof libraryScreen>;
+export type BookScreen = 
+    | ReturnType<typeof bookScreen>
+    //| ReturnType<typeof loadBookScreen>
+    ;
+export type LibraryScreen =
+    | ReturnType<typeof libraryScreen>
+    //| ReturnType<typeof loadingLibraryScreen>
+    ;
 export type BlankScreen = ReturnType<typeof blankScreen>;
 
-export function bookScreen() {
+export function bookScreen(book: Book, bl: BookLocator) {
     return {
         screen: 'book' as 'book',
+        book: book,
+        bl: bl,
+        loading: false as false,
     };
 }
 
-export function libraryScreen() {
+export function loadBookScreen(bl: BookLocator) {
+    return {
+        screen: 'book' as 'book',
+        bl: bl,
+        loading: true as true,
+    };
+}
+
+export function libraryScreen(library: Library) {
     return {
         screen: 'library' as 'library',
+        library: library,
+        loading: false as false,
+    };
+}
+
+export function loadingLibraryScreen() {
+    return {
+        screen: 'library' as 'library',
+        loading: true as true,
     };
 }
 
 export function blankScreen() {
     return {
         screen: 'blank' as 'blank',
-    }
+    };
 }

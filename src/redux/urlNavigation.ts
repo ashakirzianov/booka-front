@@ -10,15 +10,13 @@ export function destinationToActions(dest: Destination): Action[] {
         const bookName = bookRouteMatch[1];
         const bl = remoteBookLocator(bookName);
         return [
-            actionCreators.setCurrentBook(api.bookForLocator(bl)),
-            actionCreators.navigateToBookScreen(),
+            actionCreators.navigateToScreen(api.bookScreen(bl)),
         ];
     }
 
     if (dest === '/') {
         return [
-            actionCreators.loadLibrary(api.library()),
-            actionCreators.navigateToLibraryScreen(),
+            actionCreators.navigateToScreen(api.libraryScreen()),
         ];
     }
 

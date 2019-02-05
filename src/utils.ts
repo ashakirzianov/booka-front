@@ -13,7 +13,7 @@ export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>
 
 export type Callback<Argument> = Func<Argument, void>;
 
-export type Func<Argument, Return> = Argument extends void ? () => Return : (payload: Argument) => Return;
+export type Func<Argument, Return> = (payload: Argument) => Return;
 
 export type Defined<T> = T extends undefined ? never : T;
 
@@ -109,4 +109,9 @@ export function caseInsensitiveEq(left: string, right: string) {
 
 export function caseSensitiveEq(left: string, right: string) {
     return left.localeCompare(right) === 0;
+}
+
+export function voidCallback(cb: Callback<void>): () => void;
+export function voidCallback(cb?: Callback<void>): (() => void) | undefined {
+    return cb === undefined ? undefined : () => cb();
 }

@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { Library, BookMeta, Book, remoteBookLocator } from '../model';
-import { Comp, connected } from './comp-utils';
+import { Library, BookMeta, BookLocator, remoteBookLocator } from '../model';
+import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
-import { api } from '../api';
-import { OptimisticPromise } from '../promisePlus';
 import { SafeAreaView } from './Atoms';
 
-const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: OptimisticPromise<Book> }> = props =>
+const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: BookLocator }> = (props =>
     <Row>
         <LinkButton
             text={props.meta.title}
             onClick={
-                () => props.openBook && props.openBook(api.bookForLocator(remoteBookLocator(props.id)))
+                () => props.openBook && props.openBook(remoteBookLocator(props.id))
             }
         />
-    </Row>;
+    </Row>
+);
 
-const LibraryComp: Comp<Library, { openBook: OptimisticPromise<Book> }> = (props =>
+export const LibraryComp: Comp<Library, { openBook: BookLocator }> = (props =>
     <SafeAreaView>
         <Column>
             {
@@ -29,15 +28,4 @@ const LibraryComp: Comp<Library, { openBook: OptimisticPromise<Book> }> = (props
             }
         </Column>
     </SafeAreaView>
-);
-
-export const ConnectedLibraryComp = connected(['library'], ['setCurrentBook', 'navigateToBookScreen'])(
-    props =>
-        <LibraryComp
-            {...props.library}
-            openBook={book => {
-                props.setCurrentBook(book);
-                props.navigateToBookScreen();
-            }}
-        />
 );
