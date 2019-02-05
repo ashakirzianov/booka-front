@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Provider } from 'react-redux';
-
 import { AppComp } from './src/components';
-import { store, ConnectedProvider } from "./src/redux";
+import { ConnectedProvider, dispatchNavigationEvent } from "./src/redux";
 
+// TODO: think of better solution
+dispatchNavigationEvent('/');
 export default class App extends React.Component {
   render() {
     return (
