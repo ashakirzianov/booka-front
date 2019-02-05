@@ -6,6 +6,7 @@ import {
 } from '../model';
 import {
     ParagraphText, Column, ActivityIndicator, Text, Row, Label,
+    ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
 
@@ -49,8 +50,10 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
 
 const ActualBookComp: Comp<ActualBook> = props =>
     <Column maxWidth={50} align='flex-start' margin={2}>
-        <BookTitle text={props.meta.title} />
-        {buildNodes(props.content)}
+        <ScrollView>
+            <BookTitle text={props.meta.title} />
+            {buildNodes(props.content)}
+        </ScrollView>
     </Column>;
 
 const BookComp: Comp<Book> = (props =>

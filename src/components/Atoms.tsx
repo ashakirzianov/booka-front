@@ -4,7 +4,7 @@ import { Comp, size } from './comp-utils';
 import { platformValue } from '../platform';
 
 export { Text, showAlert } from './Atoms.platform';
-export { SafeAreaView } from 'react-native';
+export { SafeAreaView, ScrollView } from 'react-native';
 
 export type TextCallbacks = {
     onClick: void,

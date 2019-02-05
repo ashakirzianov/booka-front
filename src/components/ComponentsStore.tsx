@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {
-    Label, ParagraphText, Row, Column, Screen, LinkButton,
+    Label, ParagraphText, Row, Column, ScreenLayout, LinkButton,
 } from './Elements';
 import { showAlert } from './Atoms';
 
 export const ElementsStore: React.SFC = props => (
-    <Screen color='green'>
+    <ScreenLayout color='green'>
         <ParagraphText text='Paragraph' />
         <Row>
             <Column>
@@ -32,5 +32,5 @@ export const ElementsStore: React.SFC = props => (
             </Row>
         </Column>
         <LinkButton text='Link' onClick={() => showAlert('Clicked!')}/>
-    </Screen>
+    </ScreenLayout>
 );
