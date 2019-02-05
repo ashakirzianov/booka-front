@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FlexStyle, View } from 'react-native';
 import { Comp, size } from './comp-utils';
+import { platformValue } from '../platform';
 
 export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView } from 'react-native';
@@ -53,6 +54,8 @@ export const ScreenLayout: Comp<{
             position: 'absolute',
             minHeight: '100%',
             minWidth: '100%',
+            width: platformValue({ mobile: '100%' }),
+            height: platformValue({ mobile: '100%' }),
             backgroundColor: props.color,
         }}>
             {props.children}
