@@ -15,7 +15,7 @@ export type Comp<P = {}, A = {}> = React.SFC<CompProps<P, A>>;
 export function size(s: number | undefined) {
     return s === undefined
         ? undefined
-        : platformValue<string | number>({
+        : platformValue({
             web: `${s}em`,
             mobile: s * 10, // TODO: rethink this
         })
