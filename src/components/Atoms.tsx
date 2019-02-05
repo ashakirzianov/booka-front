@@ -46,7 +46,7 @@ export const Row: Comp<{
 }> = props =>
         <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
 
-export const Screen: Comp<{
+export const ScreenLayout: Comp<{
     color?: string,
 }> = props =>
         <View style={{
