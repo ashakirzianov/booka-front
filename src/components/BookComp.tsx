@@ -48,7 +48,7 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
             : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
-    <Column maxWidth={50} align='flex-start' margin={1.5}>
+    <Column maxWidth={50} align='flex-start' margin={2}>
         <BookTitle text={props.meta.title} />
         {buildNodes(props.content)}
     </Column>;
