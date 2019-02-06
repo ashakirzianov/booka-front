@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Library, BookMeta, BookLocator, remoteBookLocator } from '../model';
+import { Library, BookInfo, BookLocator, remoteBookLocator } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
 import { SafeAreaView } from './Atoms';
 
-const BookMetaComp: Comp<{ meta: BookMeta, id: string }, { openBook: BookLocator }> = (props =>
+const BookMetaComp: Comp<{ meta: BookInfo, id: string }, { openBook: BookLocator }> = (props =>
     <Row>
         <LinkButton
             text={props.meta.title}

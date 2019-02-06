@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { Book, noBook, errorBook, BookLocator, Library, BookMeta, BookNode } from "../model";
+import {
+    Book, noBook, errorBook, BookLocator, Library, BookNode,
+} from "../model";
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -9,10 +11,18 @@ const jsonPath = 'json/';
 const libraryApi = 'library';
 
 // TODO: address this mess with contract mismatch !!
-type BackendLibraryJson = Library['books'];
+type BackendLibraryJson = {
+    [key: string]: {
+        title: string,
+        author?: string,
+    } | undefined;
+};
 type BackendBookJson = {
     book: "book",
-    meta: BookMeta,
+    meta: {
+        title: string,
+        author?: string,
+    },
     content: BookNode[],
 };
 
