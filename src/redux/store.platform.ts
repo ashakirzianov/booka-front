@@ -8,7 +8,9 @@ const history = createBrowserHistory();
 export function storeDidCreate() {
     dispatchNavigationEvent(history.location.pathname);
     history.listen((location, action) => {
-        dispatchNavigationEvent(location.pathname);
+        if (action === 'REPLACE') {
+            dispatchNavigationEvent(location.pathname);
+        }
     });
 }
 
