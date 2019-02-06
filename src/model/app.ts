@@ -19,6 +19,10 @@ export function pushScreen(stack: ScreenStack, screen: Screen): ScreenStack {
     return newStack;
 }
 
+export function replaceScreen(stack: ScreenStack, screen: Screen) {
+    return pushScreen(popScreen(stack), screen);
+}
+
 export function topScreen(stack: ScreenStack): Screen {
     return stack.length > 0
         ? stack[stack.length - 1]
