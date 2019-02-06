@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {
-    Book, noBook, errorBook, BookLocator, Library, BookNode,
+    Book, noBook, errorBook, BookLocator, Library,
 } from "../model";
+import { LibraryJson, BookJson } from './contracts';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -10,24 +11,8 @@ const backendBase = process.env.NODE_ENV === 'production' ?
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
-// TODO: address this mess with contract mismatch !!
-type BackendLibraryJson = {
-    [key: string]: {
-        title: string,
-        author?: string,
-    } | undefined;
-};
-type BackendBookJson = {
-    book: "book",
-    meta: {
-        title: string,
-        author?: string,
-    },
-    content: BookNode[],
-};
-
 export async function fetchLibrary(): Promise<Library> {
-    const lib = await fetchJson(backendBase + libraryApi) as BackendLibraryJson;
+    const lib = await fetchJson(backendBase + libraryApi) as LibraryJson;
     return {
         loading: false,
         books: lib,
@@ -48,7 +33,7 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
 
 export async function fetchBook(bookName: string): Promise<Book> {
     try {
-        const response = await fetchJson(backendBase + jsonPath + bookName) as BackendBookJson;
+        const response = await fetchJson(backendBase + jsonPath + bookName) as BookJson;
         return response;
     } catch (reason) {
         return errorBook("Can't find static book: " + bookName);
