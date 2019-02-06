@@ -49,12 +49,10 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
             : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
-    <Column maxWidth={50} align='flex-start' margin={2}>
-        <ScrollView>
-            <BookTitle text={props.meta.title} />
-            {buildNodes(props.content)}
-        </ScrollView>
-    </Column>;
+    <ScrollView>
+        <BookTitle text={props.meta.title} />
+        {buildNodes(props.content)}
+    </ScrollView>;
 
 export const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />

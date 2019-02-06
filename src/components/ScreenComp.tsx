@@ -5,7 +5,7 @@ import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp } from './comp-utils';
-import { Label } from './Elements';
+import { Label, Column } from './Elements';
 import { api } from '../api';
 import { OptimisticPromise } from '../promisePlus';
 
@@ -18,7 +18,15 @@ export const ScreenComp: Comp<Screen, Navigation> = (props =>
 );
 
 const BookScreenComp: Comp<BookScreen> = (props =>
-    <BookComp {...props.book} />
+    <BookScreenLayout>
+        <BookComp {...props.book} />
+    </BookScreenLayout>
+);
+
+const BookScreenLayout: Comp = props => (
+    <Column maxWidth={50} align='flex-start' margin={2}>
+        {props.children}
+    </Column>
 );
 
 const LibraryScreenComp: Comp<LibraryScreen, Navigation> = (props =>
