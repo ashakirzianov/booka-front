@@ -4,8 +4,8 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp } from './comp-utils';
-import { Label, Column, Row } from './Elements';
+import { Comp, connected } from './comp-utils';
+import { Label, Column, Row, LinkButton } from './Elements';
 import { api } from '../api';
 import { OptimisticPromise } from '../promisePlus';
 
@@ -18,7 +18,7 @@ export const ScreenComp: Comp<Screen, Navigation> = (props =>
 );
 
 const BookScreenComp: Comp<BookScreen> = (props =>
-    <BookScreenLayout>
+    <BookScreenLayout title={props.book.book === 'book' ? props.book.meta.title : ''}>
         <BookComp {...props.book} />
     </BookScreenLayout>
 );
@@ -28,15 +28,19 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
         {/* Left */}
         <Row>{props.children}</Row>
         {/* Center */}
-        <Row>{ props.title && <Label text={props.title}/>}</Row>
+        <Row>{ props.title !== undefined ? <Label text={props.title}/> : undefined }</Row>
         {/* Right */}
         <Row>{props.right}</Row>
     </Row>
 );
 
-const BookScreenLayout: Comp = props => (
+const BackButton = connected([], ['navigateBack'])(props =>
+    <LinkButton text='< Back' onClick={props.navigateBack} />
+);
+
+const BookScreenLayout: Comp<{title: string}> = props => (
     <Column width='100%' align='center'>
-        <Header title='Title' />
+        <Header title={props.title}><BackButton /></Header>
         <Row maxWidth={50} align='center' margin={2}>
             {props.children}
         </Row>
