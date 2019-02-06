@@ -21,8 +21,6 @@ export async function fetchLibrary(): Promise<Library> {
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
     switch (bookLocator.bl) {
-        case 'no-book':
-            return Promise.resolve(noBook());
         case 'remote-book':
             const backendBook = fetchBook(bookLocator.name);
             return backendBook;
