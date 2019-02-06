@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlexStyle, View } from 'react-native';
+import { FlexStyle, View, ViewStyle } from 'react-native';
 import { Comp, size } from './comp-utils';
 import { platformValue } from '../platform';
 
@@ -23,33 +23,37 @@ export type TextProps = {
 export type Align = FlexStyle['alignItems'];
 export type JustifyContent = 'center' | 'flex-start';
 export type WidthHeight = string;
-export const Column: Comp<{
+export type LayoutProps = {
+    justifyContent?: JustifyContent,
+    width?: WidthHeight,
+    height?: WidthHeight,
     maxWidth?: number,
+    maxHeight?: number,
     margin?: number,
     align?: Align,
     backgroundColor?: string,
-}> = props =>
-        <View style={{
-            flexDirection: 'column',
-            maxWidth: size(props.maxWidth),
-            alignItems: props.align,
-            backgroundColor: props.backgroundColor,
-            margin: size(props.margin),
-        }}>
-            {props.children}
-        </View>;
+};
+function styleFromProps(props: LayoutProps): ViewStyle {
+    return {
+        width: props.width,
+        height: props.height,
+        maxWidth: size(props.maxWidth),
+        maxHeight: size(props.maxHeight),
+        alignItems: props.align,
+        backgroundColor: props.backgroundColor,
+        margin: size(props.margin),
+        justifyContent: props.justifyContent,
+    };
+}
+export const Column: Comp<LayoutProps> = props =>
+        <View style={{...styleFromProps(props), flexDirection: 'column'}}>{props.children}</View>;
 
-export const Row: Comp<{
-    style?: {
-        justifyContent?: JustifyContent,
-        width?: WidthHeight,
-    },
-}> = props =>
-        <View style={{ ...props.style, flexDirection: 'row' }}>{props.children}</View>;
+export const Row: Comp<LayoutProps> = props =>
+    <View style={{...styleFromProps(props), flexDirection: 'row'}}>{props.children}</View>;
 
 export const ScreenLayout: Comp<{
     color?: string,
-}> = props =>
+}> = props => (
         <View style={{
             position: 'absolute',
             minHeight: '100%',
@@ -59,4 +63,5 @@ export const ScreenLayout: Comp<{
             backgroundColor: props.color,
         }}>
             {props.children}
-        </View>;
+        </View>
+);
