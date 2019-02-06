@@ -1,5 +1,5 @@
 import { implementation } from './persistentStore.platform';
-import { App, libraryScreen, noBook, library } from "../model";
+import { App, blankScreen } from "../model";
 
 type State = App;
 export type PersistentStore = {
@@ -27,11 +27,6 @@ function validateState(restored: State | undefined) {
 
 function createNewState(): State {
     return {
-        screenStack: [libraryScreen()],
-        currentBook: noBook(),
-        library: library({
-            wap: { title: 'War & Peace' },
-            capital: { title: 'Das Kapital' },
-        }),
+        screenStack: [blankScreen()],
     };
 }

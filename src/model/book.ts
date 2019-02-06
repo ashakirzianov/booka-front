@@ -1,4 +1,7 @@
-import { BookLocator, noBookLocator, errorBookLocator } from './bookLocator';
+export type BookMeta = {
+    title: string,
+    author?: string,
+};
 
 export type Paragraph = string;
 export type Chapter = {
@@ -10,54 +13,42 @@ export type Chapter = {
 
 export type BookNode = Chapter | Paragraph;
 
-export type BookMeta = {
-    title: string,
-    author?: string,
-};
-
 export type ActualBook = {
     book: "book",
-    locator: BookLocator,
     meta: BookMeta,
     content: BookNode[],
 };
 
 export type NoBook = {
     book: 'no-book',
-    locator: BookLocator,
 };
 
 export type ErrorBook = {
     book: 'error',
-    locator: BookLocator,
     error: string,
 };
 
 export type LoadingBook = {
     book: 'loading',
-    locator: BookLocator,
 };
 
 export type Book = ActualBook | NoBook | ErrorBook | LoadingBook;
 
-export function loadingBook(bl: BookLocator): LoadingBook {
+export function loadingBook(): LoadingBook {
     return {
         book: 'loading',
-        locator: bl,
     };
 }
 
 export function noBook(): NoBook {
     return {
         book: 'no-book',
-        locator: noBookLocator(),
     };
 }
 
 export function errorBook(error: string): ErrorBook {
     return {
         book: 'error',
-        locator: errorBookLocator(),
         error: error,
     };
 }

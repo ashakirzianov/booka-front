@@ -1,9 +1,12 @@
-import { BookMeta } from "./book";
+export type BookInfo = {
+    title: string,
+    author?: string,
+};
 
 export type Library = {
     loading: boolean,
     books: {
-        [key: string]: BookMeta | undefined;
+        [key: string]: BookInfo | undefined;
     },
 };
 

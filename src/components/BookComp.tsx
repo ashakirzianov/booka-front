@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp, connected } from './comp-utils';
+import { Comp } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, NoBook, ActualBook, ErrorBook,
@@ -11,22 +11,22 @@ import {
 import { assertNever } from '../utils';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
-    <Row style={{ justifyContent: 'center' }}>
+    <Row justifyContent='center'>
         <Text>{props.text}</Text>
     </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
-    <Row style={{ justifyContent: 'center' }}>
+    <Row justifyContent='center'>
         <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</Text>
     </Row>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
-    <Row style={{ justifyContent: 'flex-start' }}>
+    <Row justifyContent='flex-start'>
         <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
     </Row>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
-    <Row style={{ justifyContent: 'center', width: '100%' }}>
+    <Row justifyContent='center' width='100%'>
         <Text style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</Text>
     </Row>;
 
@@ -49,23 +49,17 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
             : assertNever(props.node as never, props.count.toString());
 
 const ActualBookComp: Comp<ActualBook> = props =>
-    <Column maxWidth={50} align='flex-start' margin={2}>
-        <ScrollView>
-            <BookTitle text={props.meta.title} />
-            {buildNodes(props.content)}
-        </ScrollView>
-    </Column>;
+    <ScrollView>
+        <BookTitle text={props.meta.title} />
+        {buildNodes(props.content)}
+    </ScrollView>;
 
-const BookComp: Comp<Book> = (props =>
+export const BookComp: Comp<Book> = (props =>
     props.book === 'no-book' ? <NoBookComp {...props} />
         : props.book === 'error' ? <ErrorBookComp {...props} />
             : props.book === 'book' ? <ActualBookComp {...props} />
                 : props.book === 'loading' ? <ActivityIndicator />
                     : assertNever(props)
-);
-
-export const ConnectedBookComp = connected(['currentBook'])(
-    props => <BookComp {...props.currentBook} />
 );
 
 const NoBookComp: Comp<NoBook> = props =>

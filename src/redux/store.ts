@@ -7,6 +7,7 @@ import { storeState, initialState } from "./state";
 import promiseMiddleware from 'redux-promise-middleware';
 import { buildActionCreators, ActionsType } from './redux-utils';
 import { actionsTemplate } from '../model';
+import { storeDidCreate, updateHistoryMiddleware } from './store.platform';
 
 export const actionCreators = buildActionCreators(actionsTemplate);
 export type Action = ActionsType<typeof actionsTemplate>;
@@ -19,8 +20,11 @@ export const ConnectedProvider: React.SFC = props =>
 const initial = initialState();
 const store = createStore(reducer, initial, applyMiddleware(
     promiseMiddleware(),
+    updateHistoryMiddleware,
 ));
 
 store.subscribe(throttle(() => {
     storeState(store.getState());
 }, 1000));
+
+storeDidCreate();
