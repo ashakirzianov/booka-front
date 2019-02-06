@@ -21,7 +21,7 @@ export type TextProps = {
 };
 
 export type Align = FlexStyle['alignItems'];
-export type JustifyContent = 'center' | 'flex-start';
+export type JustifyContent = FlexStyle['justifyContent'];
 export type WidthHeight = string;
 export type LayoutProps = {
     justifyContent?: JustifyContent,
@@ -30,6 +30,7 @@ export type LayoutProps = {
     maxWidth?: number,
     maxHeight?: number,
     margin?: number,
+    marginHorizontal?: number,
     align?: Align,
     backgroundColor?: string,
 };
@@ -43,6 +44,7 @@ function styleFromProps(props: LayoutProps): ViewStyle {
         backgroundColor: props.backgroundColor,
         margin: size(props.margin),
         justifyContent: props.justifyContent,
+        marginHorizontal: size(props.marginHorizontal),
     };
 }
 export const Column: Comp<LayoutProps> = props =>

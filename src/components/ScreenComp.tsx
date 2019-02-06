@@ -5,7 +5,7 @@ import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp } from './comp-utils';
-import { Label, Column } from './Elements';
+import { Label, Column, Row } from './Elements';
 import { api } from '../api';
 import { OptimisticPromise } from '../promisePlus';
 
@@ -23,9 +23,23 @@ const BookScreenComp: Comp<BookScreen> = (props =>
     </BookScreenLayout>
 );
 
+const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
+    <Row width='100%' height='3%' justifyContent='space-between' marginHorizontal={30}>
+        {/* Left */}
+        <Row>{props.children}</Row>
+        {/* Center */}
+        <Row>{ props.title && <Label text={props.title}/>}</Row>
+        {/* Right */}
+        <Row>{props.right}</Row>
+    </Row>
+);
+
 const BookScreenLayout: Comp = props => (
-    <Column maxWidth={50} align='flex-start' margin={2}>
-        {props.children}
+    <Column width='100%' align='center'>
+        <Header title='Title' />
+        <Row maxWidth={50} align='center' margin={2}>
+            {props.children}
+        </Row>
     </Column>
 );
 
