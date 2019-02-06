@@ -1,4 +1,4 @@
-import { ActionsTemplate, App, pushScreen } from "../model";
+import { ActionsTemplate, App, pushScreen, popScreen } from "../model";
 import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
@@ -7,5 +7,6 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             pending: (s, p) => pushScreen(s, p),
             fulfilled: (s, p) => pushScreen(s, p),
         },
+        navigateBack: (s, _) => popScreen(s),
     },
 });

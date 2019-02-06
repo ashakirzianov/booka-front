@@ -4,5 +4,6 @@ import { OptimisticPromise } from '../promisePlus';
 
 export const actionsTemplate = {
     navigateToScreen: def<OptimisticPromise<Screen>>(),
+    navigateBack: def(),
 };
 export type ActionsTemplate = typeof actionsTemplate;
