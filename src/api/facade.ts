@@ -8,7 +8,7 @@ export const realFacade = {
     bookScreen(bl: BookLocator): OptimisticPromise<BookScreen> {
         const screen = fetchBL(bl)
             .then(b => bookScreen(b, bl));
-        const loading = bookScreen(loadingBook(bl), bl);
+        const loading = bookScreen(loadingBook(), bl);
 
         return optimisticPromise(screen, loading);
     },

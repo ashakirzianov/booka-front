@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Book, noBook, errorBook, BookLocator, Library } from "../model";
-import { ExcludeKeys } from '../utils';
+import { Book, noBook, errorBook, BookLocator, Library, BookMeta, BookNode } from "../model";
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -11,7 +10,11 @@ const libraryApi = 'library';
 
 // TODO: address this mess with contract mismatch !!
 type BackendLibraryJson = Library['books'];
-type BackendBookJson = ExcludeKeys<Book, 'locator'>;
+type BackendBookJson = {
+    book: "book",
+    meta: BookMeta,
+    content: BookNode[],
+};
 
 export async function fetchLibrary(): Promise<Library> {
     const lib = await fetchJson(backendBase + libraryApi) as BackendLibraryJson;
@@ -27,18 +30,16 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
             return Promise.resolve(noBook());
         case 'remote-book':
             const backendBook = fetchBook(bookLocator.name);
-            let book = backendBook as any as Book;
-            book.locator = bookLocator;
-            return book;
+            return backendBook;
         default:
             return Promise.resolve(noBook());
     }
 }
 
-export async function fetchBook(bookName: string): Promise<BackendBookJson> {
+export async function fetchBook(bookName: string): Promise<Book> {
     try {
-        const response = await fetchJson(backendBase + jsonPath + bookName);
-        return response as Book;
+        const response = await fetchJson(backendBase + jsonPath + bookName) as BackendBookJson;
+        return response;
     } catch (reason) {
         return errorBook("Can't find static book: " + bookName);
     }
