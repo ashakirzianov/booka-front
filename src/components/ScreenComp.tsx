@@ -6,7 +6,7 @@ import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
-import { facade } from '../logic';
+import { buildBookScreen } from '../logic';
 
 type Navigation = { navigateToScreen: Screen }
 export const ScreenComp: Comp<Screen, Navigation> = (props =>
@@ -48,7 +48,7 @@ const BookScreenLayout: Comp<{title: string}> = props => (
 
 const LibraryScreenComp: Comp<LibraryScreen, Navigation> = (props =>
     <LibraryComp {...props.library} openBook={
-        bl => props.navigateToScreen && props.navigateToScreen(facade.bookScreen(bl))
+        bl => props.navigateToScreen && props.navigateToScreen(buildBookScreen(bl))
     } />
 );
 

@@ -1,5 +1,5 @@
 import {
-    BookLocator, loadingBook, BookScreen, bookScreen, LibraryScreen, libraryScreen, Book, Library, LoadBookDesc, pointToSameBook, library,
+    BookLocator, loadingBook, Book, Library, LoadBookDesc, pointToSameBook, library,
 } from '../model';
 import { dispatchAction, actionCreators } from '../redux';
 import { fetchBL, fetchLibrary } from '../api';
@@ -22,7 +22,7 @@ function storeBook(store: BookStore, desc: LoadBookDesc) {
     }
 }
 
-function bookForLocator(bl: BookLocator): Book {
+export function bookForLocator(bl: BookLocator): Book {
     const book = bookFromStore(bookStore, bl);
     if (book) {
         return book;
@@ -42,7 +42,7 @@ function bookForLocator(bl: BookLocator): Book {
 }
 
 let cachedLibrary = library();
-function loadLibrary(): Library {
+export function currentLibrary(): Library {
     const lib = fetchLibrary()
         .then(l => {
             cachedLibrary = l;
@@ -52,19 +52,3 @@ function loadLibrary(): Library {
     dispatchAction(actionCreators.loadLibrary(lib));
     return cachedLibrary;
 }
-
-export const realFacade = {
-    bookScreen(bl: BookLocator): BookScreen {
-        const screen = bookScreen(bookForLocator(bl), bl);
-
-        return screen;
-    },
-
-    libraryScreen(): LibraryScreen {
-        const screen = libraryScreen(loadLibrary());
-
-        return screen;
-    }
-};
-
-export const facade = realFacade;
