@@ -1,7 +1,7 @@
 import {
     BookLocator, loadingBook, BookScreen, bookScreen, LibraryScreen, libraryScreen, Book, Library, LoadBookDesc, pointToSameBook, library,
 } from '../model';
-import { dispatchAction, actionCreators } from './store';
+import { dispatchAction, actionCreators } from '../redux';
 import { fetchBL, fetchLibrary } from '../api';
 
 type BookStore = Array<LoadBookDesc>;

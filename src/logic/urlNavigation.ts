@@ -1,9 +1,9 @@
 import { remoteBookLocator } from '../model';
 import { facade } from './facade';
-import { Action, actionCreators, dispatchAction } from './store';
+import { actionCreators, dispatchAction } from '../redux';
 
 export type Destination = string;
-export function destinationToActions(dest: Destination): Action[] {
+export function destinationToActions(dest: Destination) {
     const bookRouteMatch = dest.match(/^\/book\/(\w+)/);
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];

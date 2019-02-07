@@ -1,5 +1,5 @@
 import { createBrowserHistory } from 'history';
-import { dispatchNavigationEvent } from './urlNavigation';
+import { dispatchNavigationEvent } from '../logic/urlNavigation';
 import { Middleware } from 'redux';
 import { App, topScreen } from '../model';
 import { assertNever } from '../utils';

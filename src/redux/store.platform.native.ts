@@ -1,4 +1,4 @@
-import { dispatchNavigationEvent } from './urlNavigation';
+import { dispatchNavigationEvent } from '../logic/urlNavigation';
 import { Middleware } from 'redux';
 
 export function storeDidCreate() {
