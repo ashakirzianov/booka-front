@@ -6,7 +6,7 @@ import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
-import { facade } from '../logic/facade';
+import { facade } from '../logic';
 
 type Navigation = { navigateToScreen: Screen }
 export const ScreenComp: Comp<Screen, Navigation> = (props =>

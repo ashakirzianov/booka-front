@@ -1,11 +1,11 @@
 import { createBrowserHistory } from 'history';
-import { dispatchNavigationEvent } from '../logic/urlNavigation';
 import { Middleware } from 'redux';
+import { dispatchNavigationEvent } from './urlNavigation';
 import { App, topScreen } from '../model';
 import { assertNever } from '../utils';
 
 const history = createBrowserHistory();
-export function storeDidCreate() {
+export function onInit() {
     dispatchNavigationEvent(history.location.pathname);
     history.listen((location, action) => {
         if (action === 'REPLACE') {

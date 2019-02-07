@@ -1,16 +1,15 @@
 import React from 'react';
 
 import { AppComp } from './src/components';
-import { ConnectedProvider, subscribe } from "./src/redux";
+import { ConnectedProvider } from "./src/redux";
+import { onInit } from './src/logic';
 
 export default class App extends React.Component {
-  componentWillMount() {
-    subscribe();
-  }
-  
   render() {
     return (
       <ConnectedProvider><AppComp /></ConnectedProvider>
     );
   }
 }
+
+onInit();
