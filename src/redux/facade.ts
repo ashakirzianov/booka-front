@@ -1,14 +1,9 @@
 import {
-    BookLocator, loadingBook, BookScreen, bookScreen, LibraryScreen, libraryScreen, Book, Library, LoadBookDesc, pointToSameBook, library, actionsTemplate,
+    BookLocator, loadingBook, BookScreen, bookScreen, LibraryScreen, libraryScreen, Book, Library, LoadBookDesc, pointToSameBook, library,
 } from '../model';
-import { dispatchAction, buildActionCreators } from '.';
+import { dispatchAction, actionCreators } from './store';
 import { fetchBL, fetchLibrary } from '../api';
-import { ActionCreators } from './redux-utils';
 
-
-function actionCreators(): ActionCreators<typeof actionsTemplate> {
-    return buildActionCreators(actionsTemplate);
-}
 type BookStore = Array<LoadBookDesc>;
 const bookStore: BookStore = [];
 function bookFromStore(store: BookStore, bl: BookLocator): Book | undefined {
@@ -41,7 +36,7 @@ function bookForLocator(bl: BookLocator): Book {
         storeBook(bookStore, d);
         return d;
     });
-    dispatchAction(actionCreators().loadBook(desc));
+    dispatchAction(actionCreators.loadBook(desc));
 
     return loadingBook();
 }
@@ -54,7 +49,7 @@ function loadLibrary(): Library {
             return l;
         });
 
-    dispatchAction(actionCreators().loadLibrary(lib));
+    dispatchAction(actionCreators.loadLibrary(lib));
     return cachedLibrary;
 }
 
