@@ -35,18 +35,10 @@ export function topScreen(stack: ScreenStack): Screen {
         ;
 }
 
-export function ifBookScreen(stack: ScreenStack, f: (s: BookScreen) => Screen) {
-    const top = topScreen(stack);
-    if (top.screen === 'book') {
-        const updated = f(top);
-        return top === updated ? stack : replaceScreen(stack, updated);
-    }
-
-    return stack;
-}
-
 type ForScreenMap = {
-    [key in Screen['screen']]?: (screen: Screen & { screen: key }) => Screen;
+    book?: (screen: BookScreen) => Screen,
+    library?: (screen: LibraryScreen) => Screen,
+    blank?: (screen: BlankScreen) => Screen,
 };
 
 export function forScreen(stack: ScreenStack, map: ForScreenMap): ScreenStack {
