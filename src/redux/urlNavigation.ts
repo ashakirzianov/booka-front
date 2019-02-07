@@ -1,5 +1,5 @@
 import { remoteBookLocator } from '../model';
-import { api } from '../api';
+import { facade } from './facade';
 import { Action, actionCreators, dispatchAction } from './store';
 
 export type Destination = string;
@@ -9,13 +9,13 @@ export function destinationToActions(dest: Destination): Action[] {
         const bookName = bookRouteMatch[1];
         const bl = remoteBookLocator(bookName);
         return [
-            actionCreators.navigateToScreen(api.bookScreen(bl)),
+            actionCreators.navigateToScreen(facade.bookScreen(bl)),
         ];
     }
 
     if (dest === '/') {
         return [
-            actionCreators.navigateToScreen(api.libraryScreen()),
+            actionCreators.navigateToScreen(facade.libraryScreen()),
         ];
     }
 

@@ -1,9 +1,9 @@
 import {
     BookLocator, loadingBook, BookScreen, bookScreen, LibraryScreen, libraryScreen, Book, Library, LoadBookDesc, pointToSameBook, library, actionsTemplate,
 } from '../model';
-import { dispatchAction, buildActionCreators } from '../redux';
-import { fetchBL, fetchLibrary } from './fetch';
-import { ActionCreators } from '../redux/redux-utils';
+import { dispatchAction, buildActionCreators } from '.';
+import { fetchBL, fetchLibrary } from '../api';
+import { ActionCreators } from './redux-utils';
 
 
 function actionCreators(): ActionCreators<typeof actionsTemplate> {
