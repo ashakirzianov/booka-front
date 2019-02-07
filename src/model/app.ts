@@ -6,6 +6,11 @@ export type App = {
     screenStack: ScreenStack,
 };
 
+export type LoadBookDesc = {
+    locator: BookLocator,
+    book: Book,
+};
+
 export type ScreenStack = Screen[];
 
 export function popScreen(stack: ScreenStack): ScreenStack {
@@ -28,6 +33,31 @@ export function topScreen(stack: ScreenStack): Screen {
         ? stack[stack.length - 1]
         : blankScreen()
         ;
+}
+
+export function ifBookScreen(stack: ScreenStack, f: (s: BookScreen) => Screen) {
+    const top = topScreen(stack);
+    if (top.screen === 'book') {
+        const updated = f(top);
+        return top === updated ? stack : replaceScreen(stack, updated);
+    }
+
+    return stack;
+}
+
+type ForScreenMap = {
+    [key in Screen['screen']]?: (screen: Screen & { screen: key }) => Screen;
+};
+
+export function forScreen(stack: ScreenStack, map: ForScreenMap): ScreenStack {
+    const top = topScreen(stack);
+    const f = map[top.screen];
+    if (f !== undefined) {
+        const updatedScreen = f(top as any); // TODO: try to remove 'as any'
+        return replaceScreen(stack, updatedScreen);
+    }
+
+    return stack;
 }
 
 export type Screen = BookScreen | LibraryScreen | BlankScreen;

@@ -23,8 +23,9 @@ const store = createStore(reducer, initial, applyMiddleware(
     updateHistoryMiddleware,
 ));
 
-store.subscribe(throttle(() => {
-    storeState(store.getState());
-}, 1000));
-
-storeDidCreate();
+export function subscribe() {
+    store.subscribe(throttle(() => {
+        storeState(store.getState());
+    }, 1000));
+    storeDidCreate();
+}

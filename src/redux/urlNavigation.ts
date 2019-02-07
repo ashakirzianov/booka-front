@@ -2,7 +2,6 @@ import { remoteBookLocator } from '../model';
 import { api } from '../api';
 import { Action, actionCreators, dispatchAction } from './store';
 
-
 export type Destination = string;
 export function destinationToActions(dest: Destination): Action[] {
     const bookRouteMatch = dest.match(/^\/book\/(\w+)/);

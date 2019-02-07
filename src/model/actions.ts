@@ -1,9 +1,11 @@
 import { def } from "../utils";
-import { Screen } from './app';
-import { OptimisticPromise } from '../promisePlus';
+import { Screen, LoadBookDesc } from './app';
+import { Library } from './library';
 
 export const actionsTemplate = {
-    navigateToScreen: def<OptimisticPromise<Screen>>(),
+    navigateToScreen: def<Screen>(),
     navigateBack: def(),
+    loadBook: def<Promise<LoadBookDesc>>(),
+    loadLibrary: def<Promise<Library>>(),
 };
 export type ActionsTemplate = typeof actionsTemplate;

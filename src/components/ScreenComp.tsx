@@ -7,9 +7,8 @@ import { assertNever } from '../utils';
 import { Comp, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { api } from '../api';
-import { OptimisticPromise } from '../promisePlus';
 
-type Navigation = { navigateToScreen: OptimisticPromise<Screen> }
+type Navigation = { navigateToScreen: Screen }
 export const ScreenComp: Comp<Screen, Navigation> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
