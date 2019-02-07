@@ -1,6 +1,13 @@
 import { def } from "../utils";
-import { Screen, LoadBookDesc } from './app';
+import { Screen } from './screen';
 import { Library } from './library';
+import { BookLocator } from './bookLocator';
+import { Book } from './book';
+
+export type LoadBookDesc = {
+    locator: BookLocator,
+    book: Book,
+};
 
 export const actionsTemplate = {
     navigateToScreen: def<Screen>(),
