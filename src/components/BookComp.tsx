@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Comp } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, NoBook, ActualBook, ErrorBook,
+    isParagraph, ActualBook, ErrorBook,
 } from '../model';
 import {
     ParagraphText, Column, ActivityIndicator, Text, Row, Label,
@@ -55,15 +55,11 @@ const ActualBookComp: Comp<ActualBook> = props =>
     </ScrollView>;
 
 export const BookComp: Comp<Book> = (props =>
-    props.book === 'no-book' ? <NoBookComp {...props} />
-        : props.book === 'error' ? <ErrorBookComp {...props} />
-            : props.book === 'book' ? <ActualBookComp {...props} />
-                : props.book === 'loading' ? <ActivityIndicator />
-                    : assertNever(props)
+    props.book === 'error' ? <ErrorBookComp {...props} />
+        : props.book === 'book' ? <ActualBookComp {...props} />
+            : props.book === 'loading' ? <ActivityIndicator />
+                : assertNever(props)
 );
-
-const NoBookComp: Comp<NoBook> = props =>
-    <Label text='No book selected' />;
 
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;

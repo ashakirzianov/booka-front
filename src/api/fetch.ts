@@ -1,8 +1,9 @@
 import axios from 'axios';
 import {
-    Book, noBook, errorBook, BookLocator, Library,
+    Book, errorBook, BookLocator, Library,
 } from "../model";
 import { LibraryJson, BookJson } from './contracts';
+import { throwExp } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -25,7 +26,7 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
             const backendBook = fetchBook(bookLocator.name);
             return backendBook;
         default:
-            return Promise.resolve(noBook());
+            return throwExp(`Unsupported book locator: ${bookLocator}`);
     }
 }
 
