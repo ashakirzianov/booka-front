@@ -8,7 +8,7 @@ import {
 
 export function buildConnectRedux<S, AT>(at: AT) {
     return function f<SK extends keyof S, AK extends Exclude<keyof AT, SK> = Exclude<keyof AT, SK>>(
-        kk: Array<SK | AK>,
+        ...kk: Array<SK | AK>
     ) {
         type ComponentProps = Pick<S, SK> & {
             [k in AK]: ActionDispatcher<AT[k]>;
