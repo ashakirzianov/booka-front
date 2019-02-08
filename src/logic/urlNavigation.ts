@@ -1,22 +1,21 @@
 import { remoteBookLocator } from '../model';
-import { api } from '../api';
-import { Action, actionCreators, dispatchAction } from './store';
-
+import { actionCreators, dispatchAction } from '../redux';
+import { buildBookScreen, buildLibraryScreen } from './screenBuilders';
 
 export type Destination = string;
-export function destinationToActions(dest: Destination): Action[] {
+export function destinationToActions(dest: Destination) {
     const bookRouteMatch = dest.match(/^\/book\/(\w+)/);
     if (bookRouteMatch) {
         const bookName = bookRouteMatch[1];
         const bl = remoteBookLocator(bookName);
         return [
-            actionCreators.navigateToScreen(api.bookScreen(bl)),
+            actionCreators.navigateToScreen(buildBookScreen(bl)),
         ];
     }
 
     if (dest === '/') {
         return [
-            actionCreators.navigateToScreen(api.libraryScreen()),
+            actionCreators.navigateToScreen(buildLibraryScreen()),
         ];
     }
 

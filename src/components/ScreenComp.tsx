@@ -6,11 +6,9 @@ import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
-import { api } from '../api';
-import { OptimisticPromise } from '../promisePlus';
+import { buildBookScreen } from '../logic';
 
-type Navigation = { navigateToScreen: OptimisticPromise<Screen> }
-export const ScreenComp: Comp<Screen, Navigation> = (props =>
+export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
             : props.screen === 'blank' ? <BlankScreenComp />
@@ -34,7 +32,7 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     </Row>
 );
 
-const BackButton = connected([], ['navigateBack'])(props =>
+const BackButton = connected('navigateBack')(props =>
     <LinkButton text='< Back' onClick={props.navigateBack} />
 );
 
@@ -47,9 +45,9 @@ const BookScreenLayout: Comp<{title: string}> = props => (
     </Column>
 );
 
-const LibraryScreenComp: Comp<LibraryScreen, Navigation> = (props =>
+const LibraryScreenComp = connected('navigateToScreen') <LibraryScreen>(props =>
     <LibraryComp {...props.library} openBook={
-        bl => props.navigateToScreen && props.navigateToScreen(api.bookScreen(bl))
+        bl => props.navigateToScreen && props.navigateToScreen(buildBookScreen(bl))
     } />
 );
 

@@ -1,7 +1,7 @@
 import { dispatchNavigationEvent } from './urlNavigation';
 import { Middleware } from 'redux';
 
-export function storeDidCreate() {
+export function onInit() {
     dispatchNavigationEvent('/');
 }
 

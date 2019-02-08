@@ -19,10 +19,6 @@ export type ActualBook = {
     content: BookNode[],
 };
 
-export type NoBook = {
-    book: 'no-book',
-};
-
 export type ErrorBook = {
     book: 'error',
     error: string,
@@ -32,17 +28,11 @@ export type LoadingBook = {
     book: 'loading',
 };
 
-export type Book = ActualBook | NoBook | ErrorBook | LoadingBook;
+export type Book = ActualBook | ErrorBook | LoadingBook;
 
 export function loadingBook(): LoadingBook {
     return {
         book: 'loading',
-    };
-}
-
-export function noBook(): NoBook {
-    return {
-        book: 'no-book',
     };
 }
 

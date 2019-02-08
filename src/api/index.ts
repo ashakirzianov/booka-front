@@ -1,1 +1,1 @@
-export { facade as api } from './facade';
+export { fetchBL, fetchLibrary } from './fetch';
