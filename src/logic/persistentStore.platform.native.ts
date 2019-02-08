@@ -1,10 +1,7 @@
-import { App } from '../model';
-import { PersistentStore } from './persistentStore';
+export function storeValue(key: string, value: object) {
+    // TODO: implement
+}
 
-// TODO: implement
-export const implementation: PersistentStore = {
-    setState(state: App) {},
-    readState(): App | undefined {
-        return undefined;
-    },
+export function readValue(key: string): object | undefined {
+    return undefined; // TODO: implement
 }

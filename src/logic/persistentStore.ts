@@ -1,31 +1,24 @@
-import { implementation } from './persistentStore.platform';
+import { readValue, storeValue } from './persistentStore.platform';
 import { App, blankScreen } from "../model";
 
-type State = App;
-export type PersistentStore = {
-    setState(value: State): void,
-    readState(): State | undefined,
-};
-
-const persistentStore: PersistentStore = implementation;
-
-export function storeState(state: State) {
-    persistentStore.setState(state);
+const storeKey = 'state';
+export function storeState(state: App) {
+    storeValue(storeKey, state);
 }
 
-export function initialState(): State {
+export function initialState(): App {
     return validateState(restoreState()) || createNewState();
 }
 
-function restoreState(): State | undefined {
-    return persistentStore.readState();
+function restoreState(): object | undefined {
+    return readValue(storeKey);
 }
 
-function validateState(restored: State | undefined) {
+function validateState(restored: object | undefined): App | undefined {
     return undefined; // TODO: implement
 }
 
-function createNewState(): State {
+function createNewState(): App {
     return {
         screenStack: [blankScreen()],
     };

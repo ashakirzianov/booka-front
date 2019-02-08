@@ -1,13 +1,9 @@
 import * as store from "store";
-import { App } from '../model';
-import { PersistentStore } from './persistentStore';
 
-export const implementation: PersistentStore = {
-    setState(state: App) {
-        store.set('state', state);
-    },
+export function storeValue(key: string, value: object) {
+    store.set(key, value);
+}
 
-    readState(): App | undefined {
-        return store.get('state') as App;
-    },
+export function readValue(key: string): object | undefined {
+    return store.get(key);
 }
