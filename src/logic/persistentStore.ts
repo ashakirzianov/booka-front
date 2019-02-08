@@ -1,5 +1,5 @@
 import { readValue, storeValue } from './persistentStore.platform';
-import { App, blankScreen } from "../model";
+import { App } from "../model";
 
 const storeKey = 'state';
 export function storeState(state: App) {
@@ -20,6 +20,6 @@ function validateState(restored: object | undefined): App | undefined {
 
 function createNewState(): App {
     return {
-        screenStack: [blankScreen()],
+        screenStack: [],
     };
 }
