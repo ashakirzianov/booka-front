@@ -13,7 +13,7 @@ export function buildConnectRedux<S, AT>(at: AT) {
         type ComponentProps = Pick<S, SK> & {
             [k in AK]: ActionDispatcher<AT[k]>;
         };
-        return function ff<P extends ComponentProps>(Comp: React.ComponentType<P>): React.ComponentType<ExcludeKeys<P, SK | AK>> {
+        return function ff<P>(Comp: React.ComponentType<P & ComponentProps>): React.ComponentType<ExcludeKeys<P, SK | AK>> {
             function mapStateToProps(store: S): Pick<S, SK> {
                 return pick(store, ...sk);
             }

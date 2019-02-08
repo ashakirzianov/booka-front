@@ -8,8 +8,7 @@ import { Comp, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { buildBookScreen } from '../logic';
 
-type Navigation = { navigateToScreen: Screen }
-export const ScreenComp: Comp<Screen, Navigation> = (props =>
+export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
             : props.screen === 'blank' ? <BlankScreenComp />
@@ -46,7 +45,7 @@ const BookScreenLayout: Comp<{title: string}> = props => (
     </Column>
 );
 
-const LibraryScreenComp: Comp<LibraryScreen, Navigation> = (props =>
+const LibraryScreenComp = connected([], ['navigateToScreen']) <LibraryScreen>(props =>
     <LibraryComp {...props.library} openBook={
         bl => props.navigateToScreen && props.navigateToScreen(buildBookScreen(bl))
     } />

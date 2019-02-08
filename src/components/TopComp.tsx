@@ -5,15 +5,10 @@ import { ScreenComp } from './ScreenComp';
 import { topScreen } from '../model';
 import { connected } from './comp-utils';
 
-export const TopComp = connected(['screenStack'], ['navigateToScreen'])((props) =>
+export const TopComp = connected(['screenStack'])((props) =>
     <ScreenLayout color='black'>
         <Column align='center'>
-            {
-                <ScreenComp
-                    navigateToScreen={props.navigateToScreen}
-                    {...topScreen(props.screenStack)}
-                    />
-            }
+            { <ScreenComp {...topScreen(props.screenStack)} /> }
         </Column>
     </ScreenLayout>
 );
