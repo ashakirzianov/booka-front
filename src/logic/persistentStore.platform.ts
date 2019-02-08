@@ -1,6 +1,6 @@
 import * as store from "store";
 import { App } from '../model';
-import { PersistentStore } from './state';
+import { PersistentStore } from './persistentStore';
 
 export const implementation: PersistentStore = {
     setState(state: App) {

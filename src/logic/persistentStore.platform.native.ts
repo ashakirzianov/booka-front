@@ -1,5 +1,5 @@
 import { App } from '../model';
-import { PersistentStore } from './state';
+import { PersistentStore } from './persistentStore';
 
 // TODO: implement
 export const implementation: PersistentStore = {

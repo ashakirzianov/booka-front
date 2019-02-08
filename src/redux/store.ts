@@ -3,11 +3,10 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from 'react-redux';
 import { throttle } from "lodash";
 import { reducer } from "./reducers";
-import { storeState, initialState } from "./state";
 import promiseMiddleware from 'redux-promise-middleware';
 import { buildActionCreators, ActionsType } from './redux-utils';
 import { actionsTemplate } from '../model';
-import { updateHistoryMiddleware } from '../logic';
+import { storeState, initialState, updateHistoryMiddleware } from '../logic';
 
 export const actionCreators = buildActionCreators(actionsTemplate);
 export type Action = ActionsType<typeof actionsTemplate>;
