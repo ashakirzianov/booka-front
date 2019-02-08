@@ -1,18 +1,14 @@
 import * as React from 'react';
-import { Text as NativeText, Alert, TextStyle } from 'react-native';
+import {
+    Text as NativeText, Alert, TextStyle, StyleProp,
+} from 'react-native';
 import { TextProps, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 import { Defined } from '../utils';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <NativeText
-        style={props.style && {
-            fontWeight: fontWeight(props.style.fontWeight),
-            fontFamily: props.style.fontFamily,
-            fontSize: props.style.fontSize,
-            textAlign: props.style.textAlign,
-            color: props.style.color,
-        }}
+        style={convertStyle(props.style)}
         onPress={props.onClick}
     >
         {props.children}
@@ -22,7 +18,16 @@ export function showAlert(message: string) {
     Alert.alert('Alert', message);
 }
 
-function fontWeight(w: Defined<TextProps['style']>['fontWeight']): TextStyle['fontWeight'] {
+type AtomTextStyle = Defined<TextProps['style']>;
+type NativeTextStyle = StyleProp<TextStyle>;
+function convertStyle(style: AtomTextStyle | undefined): NativeTextStyle | undefined {
+    return style && {
+        ...style,
+        fontWeight: fontWeight(style.fontWeight),
+    };
+}
+
+function fontWeight(w: AtomTextStyle['fontWeight']): TextStyle['fontWeight'] {
     return w === undefined || typeof w === 'string' ? w :
         ( w <= 100 ? '100'
         : w <= 200 ? '200'
