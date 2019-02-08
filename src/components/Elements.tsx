@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text as AtomText, TextCallbacks } from './Atoms';
+import { Text, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 import { TextProps } from './Atoms';
 
@@ -12,30 +12,30 @@ export const defaultStyle: TextProps['style'] = {
     fontSize: 26,
 };
 
-export const Text: Comp<TextProps, TextCallbacks> = props =>
-    <AtomText
+export const StyledText: Comp<TextProps, TextCallbacks> = props =>
+    <Text
         {...props}
         style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</AtomText>
+    >{props.children}</Text>
 
 export const Label: Comp<{ text: string }> = props =>
-    <Text>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
+    <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
 
 export const ParagraphText: Comp<{ text: string }> = props =>
-    <Text style={{
+    <StyledText style={{
         textAlign: 'justify',
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
-    }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</Text>;
+    }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
 
 export const LinkButton: Comp<{
     text: string,
 }, {
     onClick: void,
 }> = props =>
-        <Text
+        <StyledText
             style={{ cursor: 'pointer' }}
             onClick={props.onClick}
-        >{props.text}</Text>;
+        >{props.text}</StyledText>;
 
 export {
     Column, Row, ScreenLayout, ScrollView,

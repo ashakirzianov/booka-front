@@ -5,29 +5,29 @@ import {
     isParagraph, ActualBook, ErrorBook,
 } from '../model';
 import {
-    ParagraphText, Column, ActivityIndicator, Text, Row, Label,
+    ParagraphText, Column, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='center'>
-        <Text>{props.text}</Text>
+        <StyledText>{props.text}</StyledText>
     </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='center'>
-        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</Text>
+        <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
     </Row>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='flex-start'>
-        <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
+        <StyledText style={{ fontWeight: 'bold' }}>{props.text}</StyledText>
     </Row>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='center' width='100%'>
-        <Text style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</Text>
+        <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
 const ParagraphComp: Comp<{ p: Paragraph }> = props =>
