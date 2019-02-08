@@ -32,7 +32,7 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     </Row>
 );
 
-const BackButton = connected([], ['navigateBack'])(props =>
+const BackButton = connected(['navigateBack'])(props =>
     <LinkButton text='< Back' onClick={props.navigateBack} />
 );
 
@@ -45,7 +45,7 @@ const BookScreenLayout: Comp<{title: string}> = props => (
     </Column>
 );
 
-const LibraryScreenComp = connected([], ['navigateToScreen']) <LibraryScreen>(props =>
+const LibraryScreenComp = connected(['navigateToScreen']) <LibraryScreen>(props =>
     <LibraryComp {...props.library} openBook={
         bl => props.navigateToScreen && props.navigateToScreen(buildBookScreen(bl))
     } />
