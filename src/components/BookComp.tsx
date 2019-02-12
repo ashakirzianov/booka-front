@@ -47,7 +47,9 @@ const ChapterComp = comp<Chapter>(props =>
 );
 
 const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
-    isParagraph(props.node) ? <ParagraphComp p={props.node} />
+    isParagraph(props.node) ? <ParagraphComp p={props.node} onScrollVisible={() => {
+        console.log(props.node)
+    }} />
         : props.node.book === 'chapter' ? <ChapterComp {...props.node} />
             : assertNever(props.node as never, props.count.toString());
 

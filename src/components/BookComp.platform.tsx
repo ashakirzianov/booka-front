@@ -1,21 +1,12 @@
 import * as React from 'react';
 
-type Offset = number;
-// type Path = Array<number>;
-
 export function scrollableUnit<T>(C: React.ComponentType<T>) {
-    return class ScrollableUnit<T> extends React.Component<T> {
+    type ExtendedProps = T & { onScrollVisible: () => void };
+    return class ScrollableUnit extends React.Component<ExtendedProps> {
         readonly ref: React.RefObject<HTMLDivElement>;
-        constructor(props: T) {
+        constructor(props: ExtendedProps) {
             super(props);
             this.ref = React.createRef();
-        }
-    
-        ownOffset(): Offset | undefined {
-            return this.ref.current !== null
-                ? this.ref.current.offsetTop
-                : undefined
-                ;
         }
 
         componentDidMount() {
@@ -27,11 +18,28 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
         }
 
         handleScroll = () => {
-            const offset = windowOffset();
-            const own = this.ownOffset();
-            console.log("Offsets", offset, own); 
+            if (this.isPartiallyVisible()) {
+                this.props.onScrollVisible();
+            }
         }
-    
+
+        boundingClientRect() {
+            return this.ref && this.ref.current
+                && this.ref.current.getBoundingClientRect
+                && this.ref.current.getBoundingClientRect()
+                ;
+        }
+
+        isPartiallyVisible() {
+            const rect = this.boundingClientRect();
+            if (rect) {
+                const { top, height } = rect;
+                return top < 0 && top + height >= 0;
+            }
+
+            return false;
+        }
+
         render() {
             // TODO: investigate why 'as any'
             return <div ref={this.ref}>
@@ -39,8 +47,4 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
             </div>;
         }
     };
-}
-
-function windowOffset(): Offset | undefined {
-    return window.pageYOffset || document.documentElement.scrollTop || undefined;
 }
