@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Comp } from './comp-utils';
-import { number } from 'prop-types';
 
 type Offset = number;
 type Path = Array<number>;
@@ -101,4 +100,19 @@ export function scrollableContainer<T>(C: Comp<T>) {
             return path === undefined ? [] : path;
         }
     }
+}
+
+export type ScrollHandler = () => void;
+export function trackScroll<T>(Child: Comp<T>, handler: ScrollHandler) {
+    return class TrackScroll extends React.Component<T> {
+        constructor(props: T) { super(props, Child); }
+
+        componentDidMount() {
+            window.addEventListener('scroll', handler);
+        }
+
+        componentWillUnmount() {
+            window.removeEventListener('scroll', handler);
+        }
+    };
 }
