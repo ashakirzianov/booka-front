@@ -13,12 +13,6 @@ export function isScrollable(o: any): o is Scrollable {
 }
 
 class ScrollableBase<T> extends React.Component<T> {
-    readonly ref: React.RefObject<HTMLDivElement>;
-    constructor(props: T, readonly Child: Comp<T>) {
-        super(props);
-        this.ref = React.createRef();
-    }
-
     findScrollable<T>(f: (ch: Scrollable, idx: number) => T | undefined) {
         let currentIndex = 0;
         let result: T | undefined = undefined;
@@ -30,6 +24,27 @@ class ScrollableBase<T> extends React.Component<T> {
         });
 
         return result;
+    }
+
+    childrenPathForOffset(offset: Offset): Path | undefined {
+        const path = this.findScrollable((ch, idx) => {
+            const tailPath = ch.pathForOffset(offset);
+            if (tailPath) {
+                return [idx].concat(tailPath);
+            } else {
+                return undefined;
+            }
+        })
+
+        return path === undefined ? [] : path;
+    }
+}
+
+class ScrollableWithOffset<T> extends ScrollableBase<T> {
+    readonly ref: React.RefObject<HTMLDivElement>;
+    constructor(props: T, readonly Child: Comp<T>) {
+        super(props);
+        this.ref = React.createRef();
     }
 
     ownOffset(): Offset | undefined {
@@ -47,21 +62,26 @@ class ScrollableBase<T> extends React.Component<T> {
 };
 
 export function scrollableChild<T>(C: Comp<T>) {
-    return class ScrollableChild extends ScrollableBase<T> implements Scrollable {
+    return class ScrollableChild extends ScrollableWithOffset<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
         offsetForPath(path: Path) {
             return path.length === 0 ? this.ownOffset() : undefined;
         }
 
-        pathForOffset(offset: Offset) {
-            return undefined;
+        pathForOffset(offset: Offset): Path | undefined {
+            const own = this.ownOffset();
+            if (own && own > offset) {
+                return undefined;
+            } else {
+                return [];
+            }
         }
     };
 }
 
 export function scrollableContainer<T>(C: Comp<T>) {
-    return class ScrollableContainer extends ScrollableBase<T> implements Scrollable {
+    return class ScrollableContainer extends ScrollableWithOffset<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
         offsetForPath(path: Path) {
@@ -88,31 +108,38 @@ export function scrollableContainer<T>(C: Comp<T>) {
                 return undefined;
             }
 
-            const path = this.findScrollable((ch, idx) => {
-                const tailPath = ch.pathForOffset(offset);
-                if (tailPath) {
-                    return [idx].concat(tailPath);
-                } else {
-                    return undefined;
-                }
-            })
-
-            return path === undefined ? [] : path;
+            return this.childrenPathForOffset(offset);
         }
     }
 }
 
-export type ScrollHandler = () => void;
-export function trackScroll<T>(Child: Comp<T>, handler: ScrollHandler) {
-    return class TrackScroll extends React.Component<T> {
-        constructor(props: T) { super(props, Child); }
-
+export type ScrollableRootHandler = (path: Path) => void;
+export function scrollableRoot<T>(Child: Comp<T>, handler: ScrollableRootHandler) {
+    return class ScrollableRoot extends ScrollableBase<T> {
         componentDidMount() {
-            window.addEventListener('scroll', handler);
+            window.addEventListener('scroll', this.handleScroll);
         }
 
         componentWillUnmount() {
-            window.removeEventListener('scroll', handler);
+            window.removeEventListener('scroll', this.handleScroll);
+        }
+
+        handleScroll() {
+            const offset = windowOffset();
+            if (offset !== undefined) {
+                const path = this.childrenPathForOffset(offset);
+                if (path) {
+                    handler(path);
+                }
+            }   
+        }
+
+        render() {
+            return <Child {...this.props} />;
         }
     };
+}
+
+function windowOffset(): Offset | undefined {
+    return window.pageYOffset || document.documentElement.scrollTop || undefined;
 }
