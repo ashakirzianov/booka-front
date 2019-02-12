@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Comp } from './comp-utils';
+import { number } from 'prop-types';
 
 type Offset = number;
 type Path = Array<number>;
@@ -51,6 +52,19 @@ export function scrollableContainer<T>(C: Comp<T>) {
     return class ScrollableContainer extends WithOffset<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
+        findScrollable<T>(f: (ch: Scrollable, idx: number) => T | undefined) {
+            let currentIndex = 0;
+            let result: T | undefined = undefined;
+            React.Children.forEach(this.props.children, ch => {
+                if (!result && isScrollable(ch)) {
+                    result = f(ch, currentIndex);
+                    currentIndex++;
+                }
+            });
+
+            return result;
+        }
+
         offsetForPath(path: Path) {
             if (path.length === 0) {
                 return this.ownOffset();
@@ -58,16 +72,14 @@ export function scrollableContainer<T>(C: Comp<T>) {
 
             const targetIndex = path[0];
             const remainingPath = path.slice(1);
-            let currentIndex = 0;
-            let offset: Offset | undefined = undefined;
-            React.Children.forEach(this.props.children, ch => {
-                if (isScrollable(ch)) {
-                    if (currentIndex === targetIndex) {
-                        offset = ch.offsetForPath(remainingPath);
-                    }
-                    currentIndex++;
+            const offset = this.findScrollable((ch, idx) => {
+                if (idx === targetIndex) {
+                    return  ch.offsetForPath(remainingPath);
+                } else {
+                    return undefined;
                 }
             });
+
             return offset;
         }
 
@@ -77,19 +89,14 @@ export function scrollableContainer<T>(C: Comp<T>) {
                 return undefined;
             }
 
-            let currentIndex = 0;
-            let path: Path | undefined = undefined;
-            React.Children.forEach(this.props.children, ch => {
-                if (isScrollable(ch)) {
-                    if (!path) {
-                        const tailPath = ch.pathForOffset(offset);
-                        if (tailPath) {
-                            path = [currentIndex].concat(tailPath);
-                        }
-                    }
-                    currentIndex++;
+            const path = this.findScrollable((ch, idx) => {
+                const tailPath = ch.pathForOffset(offset);
+                if (tailPath) {
+                    return [idx].concat(tailPath);
+                } else {
+                    return undefined;
                 }
-            });
+            })
 
             return path === undefined ? [] : path;
         }
