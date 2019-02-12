@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp } from './comp-utils';
+import { Comp, comp } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, ActualBook, ErrorBook,
@@ -9,7 +9,7 @@ import {
     ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableChild, scrollableContainer, scrollableRoot } from './BookComp.platform';
+import { scrollableUnit } from './BookComp.platform';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='center'>
@@ -31,11 +31,11 @@ export const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-const ParagraphComp = scrollableChild<{ p: Paragraph }>(props =>
+const ParagraphComp = scrollableUnit<{ p: Paragraph }>(props =>
     <ParagraphText text={props.p} />
 );
 
-const ChapterComp = scrollableContainer<Chapter>(props =>
+const ChapterComp = comp<Chapter>(props =>
     <Column>
         {
             props.level === 0 ? <ChapterTitle text={props.title} />
@@ -51,18 +51,16 @@ const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
         : props.node.book === 'chapter' ? <ChapterComp {...props.node} />
             : assertNever(props.node as never, props.count.toString());
 
-const ActualBookComp = scrollableContainer<ActualBook>(props =>
+const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
         <BookTitle text={props.meta.title} />
         {buildNodes(props.content)}
     </ScrollView>
 );
 
-const ScrollableActualBook = scrollableRoot(ActualBookComp);
-
 export const BookComp: Comp<Book> = (props =>
     props.book === 'error' ? <ErrorBookComp {...props} />
-        : props.book === 'book' ? <ScrollableActualBook {...props} onScroll={path => ({})} />
+        : props.book === 'book' ? <ActualBookComp {...props} />
             : props.book === 'loading' ? <ActivityIndicator />
                 : assertNever(props)
 );
