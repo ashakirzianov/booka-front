@@ -12,11 +12,24 @@ export function isScrollable(o: any): o is Scrollable {
     return typeof o.offsetForPath === 'function';
 }
 
-class WithOffset<T> extends React.Component<T> {
+class ScrollableBase<T> extends React.Component<T> {
     readonly ref: React.RefObject<HTMLDivElement>;
     constructor(props: T, readonly Child: Comp<T>) {
         super(props);
         this.ref = React.createRef();
+    }
+
+    findScrollable<T>(f: (ch: Scrollable, idx: number) => T | undefined) {
+        let currentIndex = 0;
+        let result: T | undefined = undefined;
+        React.Children.forEach(this.props.children, ch => {
+            if (!result && isScrollable(ch)) {
+                result = f(ch, currentIndex);
+                currentIndex++;
+            }
+        });
+
+        return result;
     }
 
     ownOffset(): Offset | undefined {
@@ -34,7 +47,7 @@ class WithOffset<T> extends React.Component<T> {
 };
 
 export function scrollableChild<T>(C: Comp<T>) {
-    return class ScrollableChild extends WithOffset<T> implements Scrollable {
+    return class ScrollableChild extends ScrollableBase<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
         offsetForPath(path: Path) {
@@ -48,21 +61,8 @@ export function scrollableChild<T>(C: Comp<T>) {
 }
 
 export function scrollableContainer<T>(C: Comp<T>) {
-    return class ScrollableContainer extends WithOffset<T> implements Scrollable {
+    return class ScrollableContainer extends ScrollableBase<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
-
-        findScrollable<T>(f: (ch: Scrollable, idx: number) => T | undefined) {
-            let currentIndex = 0;
-            let result: T | undefined = undefined;
-            React.Children.forEach(this.props.children, ch => {
-                if (!result && isScrollable(ch)) {
-                    result = f(ch, currentIndex);
-                    currentIndex++;
-                }
-            });
-
-            return result;
-        }
 
         offsetForPath(path: Path) {
             if (path.length === 0) {
