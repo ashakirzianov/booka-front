@@ -9,9 +9,10 @@ export { SafeAreaView, ScrollView } from 'react-native';
 export type TextCallbacks = {
     onClick: any,
 };
+type FontWeight = 'normal' | 'bold' | number;
 export type TextProps = {
     style?: {
-        fontWeight?: 'normal' | 'bold' | number,
+        fontWeight?: FontWeight,
         fontFamily?: string,
         fontSize?: number,
         textAlign?: 'justify',
