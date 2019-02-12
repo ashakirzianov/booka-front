@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export function scrollableUnit<T>(C: React.ComponentType<T>) {
-    type ExtendedProps = T & { onScrollVisible: () => void };
+    type ExtendedProps = T & { onScrollVisible: (props: T) => void };
     return class ScrollableUnit extends React.Component<ExtendedProps> {
         readonly ref: React.RefObject<HTMLDivElement>;
         constructor(props: ExtendedProps) {
@@ -19,7 +19,7 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
 
         handleScroll = () => {
             if (this.isPartiallyVisible()) {
-                this.props.onScrollVisible();
+                this.props.onScrollVisible(this.props);
             }
         }
 

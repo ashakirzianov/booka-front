@@ -31,32 +31,35 @@ export const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-const ParagraphComp = scrollableUnit<{ p: Paragraph }>(props =>
+type Path = number[];
+type BookNodeProps<T> = T & { path: Path };
+
+const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
     <ParagraphText text={props.p} />
 );
 
-const ChapterComp = comp<Chapter>(props =>
+const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
     <Column>
         {
             props.level === 0 ? <ChapterTitle text={props.title} />
                 : props.level > 0 ? <PartTitle text={props.title} />
                     : <SubpartTitle text={props.title} />
         }
-        {buildNodes(props.content)}
+        {buildNodes(props.content, props.path)}
     </Column>
 );
 
-const BookNodeComp: Comp<{ node: BookNode, count: number }> = props =>
-    isParagraph(props.node) ? <ParagraphComp p={props.node} onScrollVisible={() => {
-        console.log(props.node)
+const BookNodeComp: Comp<BookNodeProps<{ node: BookNode }>> = props =>
+    isParagraph(props.node) ? <ParagraphComp path={props.path} p={props.node} onScrollVisible={() => {
+        console.log(props.path)
     }} />
-        : props.node.book === 'chapter' ? <ChapterComp {...props.node} />
-            : assertNever(props.node as never, props.count.toString());
+        : props.node.book === 'chapter' ? <ChapterComp path={props.path} {...props.node} />
+            : assertNever(props.node as never, props.path.toString());
 
 const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
         <BookTitle text={props.meta.title} />
-        {buildNodes(props.content)}
+        {buildNodes(props.content, [])}
     </ScrollView>
 );
 
@@ -70,6 +73,6 @@ export const BookComp: Comp<Book> = (props =>
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;
 
-function buildNodes(nodes: BookNode[]) {
-    return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} count={i} />);
+function buildNodes(nodes: BookNode[], headPath: Path) {
+    return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} path={headPath.concat(i)} />);
 }
