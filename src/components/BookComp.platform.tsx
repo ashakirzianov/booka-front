@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Comp } from './comp-utils';
 
 type Offset = number;
 type Path = Array<number>;
@@ -8,7 +7,7 @@ interface Scrollable {
     pathForOffset: (offset: Offset) => Path | undefined,
 };
 
-export function isScrollable(o: any): o is Scrollable {
+function isScrollable(o: any): o is Scrollable {
     return typeof o.offsetForPath === 'function';
 }
 
@@ -26,7 +25,7 @@ class ScrollableBase<T> extends React.Component<T> {
         return result;
     }
 
-    childrenPathForOffset(offset: Offset): Path | undefined {
+    public childrenPathForOffset(offset: Offset): Path | undefined {
         const path = this.findScrollable((ch, idx) => {
             const tailPath = ch.pathForOffset(offset);
             if (tailPath) {
@@ -42,7 +41,7 @@ class ScrollableBase<T> extends React.Component<T> {
 
 class ScrollableWithOffset<T> extends ScrollableBase<T> {
     readonly ref: React.RefObject<HTMLDivElement>;
-    constructor(props: T, readonly Child: Comp<T>) {
+    constructor(props: T, readonly Child: React.ComponentType<T>) {
         super(props);
         this.ref = React.createRef();
     }
@@ -61,7 +60,7 @@ class ScrollableWithOffset<T> extends ScrollableBase<T> {
     }
 };
 
-export function scrollableChild<T>(C: Comp<T>) {
+export function scrollableChild<T>(C: React.ComponentType<T>) {
     return class ScrollableChild extends ScrollableWithOffset<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
@@ -80,7 +79,7 @@ export function scrollableChild<T>(C: Comp<T>) {
     };
 }
 
-export function scrollableContainer<T>(C: Comp<T>) {
+export function scrollableContainer<T>(C: React.ComponentType<T>) {
     return class ScrollableContainer extends ScrollableWithOffset<T> implements Scrollable {
         constructor(props: T) { super(props, C); }
 
@@ -114,8 +113,13 @@ export function scrollableContainer<T>(C: Comp<T>) {
 }
 
 export type ScrollableRootHandler = (path: Path) => void;
-export function scrollableRoot<T>(Child: Comp<T>, handler: ScrollableRootHandler) {
-    return class ScrollableRoot extends ScrollableBase<T> {
+export function scrollableRoot<T>(Child: React.ComponentType<T>) {
+    type BaseProps = T & { onScroll: ScrollableRootHandler };
+    return class ScrollableRoot extends ScrollableBase<BaseProps> {
+        constructor(props: BaseProps) {
+            super(props);
+            this.handleScroll = this.handleScroll.bind(this);
+        }
         componentDidMount() {
             window.addEventListener('scroll', this.handleScroll);
         }
@@ -124,12 +128,12 @@ export function scrollableRoot<T>(Child: Comp<T>, handler: ScrollableRootHandler
             window.removeEventListener('scroll', this.handleScroll);
         }
 
-        handleScroll() {
+        handleScroll = () => {
             const offset = windowOffset();
             if (offset !== undefined) {
                 const path = this.childrenPathForOffset(offset);
                 if (path) {
-                    handler(path);
+                    this.props.onScroll(path);
                 }
             }   
         }
