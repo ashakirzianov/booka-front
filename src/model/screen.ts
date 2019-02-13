@@ -4,6 +4,10 @@ import { Library } from './library';
 
 export type ScreenStack = Screen[];
 
+export function emptyStack(): ScreenStack {
+    return [];
+}
+
 export function popScreen(stack: ScreenStack): ScreenStack {
     return stack.length > 1 ? stack.slice(0, stack.length - 1) : stack;
 }

@@ -8,6 +8,10 @@ export function appendPath(head: number, tail: BookPath): BookPath {
     return [head].concat(tail);
 }
 
+export function emptyPath(): BookPath {
+    return [];
+}
+
 export type BookLocator = RemoteBookLocator;
 
 export function remoteBookLocator(name: string, path?: BookPath): RemoteBookLocator {
