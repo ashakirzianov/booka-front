@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { Middleware } from 'redux';
 import { dispatchNavigationEvent } from './urlNavigation';
-import { App, topScreen } from '../model';
+import { App, topScreen, BookPath } from '../model';
 import { assertNever } from '../utils';
 
 const history = createBrowserHistory();
@@ -29,10 +29,18 @@ function stateToUrl(state: App) {
         case 'library':
             return '/';
         case 'book':
-            return `/book/${top.bl.name}`;
+            const path = pathToString(state.currentBookPosition);
+            return `/book/${top.bl.name}${path}`;
         case 'blank':
             return '/';
         default:
             return assertNever(top);
     }
+}
+
+function pathToString(path: BookPath): string {
+    return path.length === 0 || (path.length === 1 && path[0] === 0)
+        ? ''
+        : `/${path.join('-')}`
+        ;
 }
