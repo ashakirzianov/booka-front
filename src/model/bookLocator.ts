@@ -12,6 +12,12 @@ export function emptyPath(): BookPath {
     return [];
 }
 
+export function samePath(p1: BookPath, p2: BookPath) {
+    return p1.length === p2.length
+        && p1.every((p1c, idx) => p1c === p2[idx])
+        ;
+}
+
 export type BookLocator = RemoteBookLocator;
 
 export function remoteBookLocator(name: string, path?: BookPath): RemoteBookLocator {

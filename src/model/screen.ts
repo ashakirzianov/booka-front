@@ -34,21 +34,29 @@ export function topScreen(stack: ScreenStack): Screen {
         ;
 }
 
-type ForScreenMap = {
-    book?: (screen: BookScreen) => Screen,
-    library?: (screen: LibraryScreen) => Screen,
-    blank?: (screen: BlankScreen) => Screen,
+type ForScreenMap<T> = {
+    book?: (screen: BookScreen) => T,
+    library?: (screen: LibraryScreen) => T,
+    blank?: (screen: BlankScreen) => T,
 };
 
-export function forScreen(stack: ScreenStack, map: ForScreenMap): ScreenStack {
+export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
     const top = topScreen(stack);
-    const f = map[top.screen];
+    const next = forScreen(top, map);
+
+    return top === next || next === undefined
+        ? stack
+        : replaceScreen(stack, next);
+}
+
+export function forScreen<T>(screen: Screen, map: ForScreenMap<T>): T | undefined {
+    const f = map[screen.screen];
     if (f !== undefined) {
-        const updatedScreen = f(top as any); // TODO: try to remove 'as any'
-        return replaceScreen(stack, updatedScreen);
+        const result = f(screen as any); // TODO: try to remove 'as any'
+        return result;
     }
 
-    return stack;
+    return undefined;
 }
 
 export type Screen = BookScreen | LibraryScreen | BlankScreen;

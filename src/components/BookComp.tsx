@@ -9,7 +9,7 @@ import {
     ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit } from './BookComp.platform';
+import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row justifyContent='center'>
@@ -49,13 +49,21 @@ const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
     </Column>
 );
 
-const BookNodeComp = connected('updateCurrentBookPosition')<BookNodeProps<{ node: BookNode }>>(props =>
-    isParagraph(props.node) ? <ParagraphComp path={props.path} p={props.node} onScrollVisible={paragraphProps => {
-        props.updateCurrentBookPosition(paragraphProps.path);
-    }} />
-        : props.node.book === 'chapter' ? <ChapterComp path={props.path} {...props.node} />
-            : assertNever(props.node as never, props.path.toString())
-);
+const BookNodeComp = connected('updateCurrentBookPosition')<BookNodeProps<{ node: BookNode }>>(props => {
+    if(isParagraph(props.node)) {
+    return <ParagraphComp
+        path={props.path}
+        p={props.node}
+        onScrollVisible={() => {
+            props.updateCurrentBookPosition(props.path);
+        }}
+    />
+    } else if(props.node.book === 'chapter') {
+        return <ChapterComp path={props.path} {...props.node} />;
+    } else {
+        return assertNever(props.node as never, props.path.toString());
+    }
+});
 
 const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
@@ -64,12 +72,29 @@ const ActualBookComp = comp<ActualBook>(props =>
     </ScrollView>
 );
 
-export const BookComp: Comp<Book> = (props =>
-    props.book === 'error' ? <ErrorBookComp {...props} />
-        : props.book === 'book' ? <ActualBookComp {...props} />
-            : props.book === 'loading' ? <ActivityIndicator />
-                : assertNever(props)
+const BookComp = didUpdateHook<Book>(props => {
+    switch(props.book) {
+        case 'error':
+            return <ErrorBookComp {...props} />;
+        case 'book':
+            return <ActualBookComp {...props} />;
+        case 'loading':
+            return <ActivityIndicator />;
+        default:
+            return assertNever(props);
+    }
+});
+
+const ConnectedBookComp = connected('positionToNavigate', 'didNavigateToPath')<Book>(props =>
+    <BookComp {...props} didUpdate={() => {
+        if (props.positionToNavigate) {
+            scrollToPath(props.positionToNavigate);
+            props.didNavigateToPath();
+        }
+    }} />
 );
+
+export { ConnectedBookComp as BookComp };
 
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;

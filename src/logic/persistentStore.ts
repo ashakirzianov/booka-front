@@ -22,5 +22,6 @@ function createNewState(): App {
     return {
         screenStack: emptyStack(),
         currentBookPosition: emptyPath(),
+        positionToNavigate: null,
     };
 }
