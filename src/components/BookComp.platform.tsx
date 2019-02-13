@@ -37,7 +37,7 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
         const rect = this.boundingClientRect();
         if (rect) {
             const { top, height } = rect;
-            return top < 0 && top + height >= 0;
+            return top <= 0 && top + height >= 0;
         }
 
         return false;
