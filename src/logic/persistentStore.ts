@@ -21,5 +21,6 @@ function validateState(restored: object | undefined): App | undefined {
 function createNewState(): App {
     return {
         screenStack: [],
+        currentBookPosition: [],
     };
 }

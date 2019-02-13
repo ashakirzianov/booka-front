@@ -24,6 +24,9 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             fulfilled: (s, p) => forScreen(s, {
                 library: l => libraryScreen(p),
             }),
-        }
+        },
     },
+    currentBookPosition: {
+        updateCurrentBookPosition: (cur, path) => path,
+    }
 });

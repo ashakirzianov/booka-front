@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Comp, comp } from './comp-utils';
+import { Comp, comp, connected } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, ActualBook, ErrorBook,
@@ -49,12 +49,13 @@ const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
     </Column>
 );
 
-const BookNodeComp: Comp<BookNodeProps<{ node: BookNode }>> = props =>
-    isParagraph(props.node) ? <ParagraphComp path={props.path} p={props.node} onScrollVisible={() => {
-        console.log(props.path)
+const BookNodeComp = connected('updateCurrentBookPosition')<BookNodeProps<{ node: BookNode }>>(props =>
+    isParagraph(props.node) ? <ParagraphComp path={props.path} p={props.node} onScrollVisible={paragraphProps => {
+        props.updateCurrentBookPosition(paragraphProps.path);
     }} />
         : props.node.book === 'chapter' ? <ChapterComp path={props.path} {...props.node} />
-            : assertNever(props.node as never, props.path.toString());
+            : assertNever(props.node as never, props.path.toString())
+);
 
 const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>

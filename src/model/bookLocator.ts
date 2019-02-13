@@ -10,11 +10,11 @@ export function appendPath(head: number, tail: BookPath): BookPath {
 
 export type BookLocator = RemoteBookLocator;
 
-export function remoteBookLocator(name: string): RemoteBookLocator {
+export function remoteBookLocator(name: string, path?: BookPath): RemoteBookLocator {
     return {
         bl: 'remote-book',
         name: name,
-        path: [],
+        path: path || [],
     };
 }
 
