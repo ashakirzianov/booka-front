@@ -33,6 +33,5 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         navigateToScreen: (path, screen) => forScreen(screen, {
             book: bs => bs.bl.path,
         }) || null,
-        didNavigateToPath: () => null,
     },
 });

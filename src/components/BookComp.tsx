@@ -85,11 +85,10 @@ const BookComp = didUpdateHook<Book>(props => {
     }
 });
 
-const ConnectedBookComp = connected('positionToNavigate', 'didNavigateToPath')<Book>(props =>
+const ConnectedBookComp = connected('positionToNavigate')<Book>(props =>
     <BookComp {...props} didUpdate={() => {
         if (props.positionToNavigate) {
             scrollToPath(props.positionToNavigate);
-            props.didNavigateToPath();
         }
     }} />
 );

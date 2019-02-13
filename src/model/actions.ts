@@ -15,6 +15,5 @@ export const actionsTemplate = {
     loadBook: def<Promise<LoadBookDesc>>(),
     loadLibrary: def<Promise<Library>>(),
     updateCurrentBookPosition: def<BookPath>(),
-    didNavigateToPath: def(),
 };
 export type ActionsTemplate = typeof actionsTemplate;
