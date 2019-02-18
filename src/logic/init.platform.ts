@@ -1,6 +1,6 @@
 import { createBrowserHistory } from 'history';
 import { Middleware } from 'redux';
-import { dispatchNavigationEvent } from './urlNavigation';
+import { dispatchNavigationEvent, dispatchNavigateBackEvent } from './urlNavigation';
 import { App, topScreen, blToString, pointToSameBook } from '../model';
 import { assertNever } from '../utils';
 
@@ -8,8 +8,8 @@ const history = createBrowserHistory();
 export function onInit() {
     dispatchNavigationEvent(history.location.pathname);
     history.listen((location, action) => {
-        if (action !== 'REPLACE') {
-            dispatchNavigationEvent(location.pathname);
+        if (action === 'POP') {
+            dispatchNavigateBackEvent();
         }
     });
 }

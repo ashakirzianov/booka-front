@@ -14,6 +14,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
                         return {
                             ...bs,
                             book: p.book,
+                            loading: false,
                         };
                     }
                     return bs;

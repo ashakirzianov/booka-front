@@ -53,3 +53,7 @@ export function dispatchNavigationEvent(dest: Destination) {
     const actions = destinationToActions(dest);
     actions.forEach(a => dispatchAction(a));
 }
+
+export function dispatchNavigateBackEvent() {
+    dispatchAction(actionCreators.navigateBack());
+}
