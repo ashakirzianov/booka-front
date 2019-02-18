@@ -1,9 +1,12 @@
-import { readValue, storeValue } from './persistentStore.platform';
+import {
+    readValue,
+    // storeValue,
+} from './persistentStore.platform';
 import { App, emptyStack } from "../model";
 
 const storeKey = 'state';
 export function storeState(state: App) {
-    storeValue(storeKey, state);
+    // storeValue(storeKey, state);
 }
 
 export function initialState(): App {
