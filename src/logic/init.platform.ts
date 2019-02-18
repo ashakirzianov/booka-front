@@ -29,7 +29,7 @@ function stateToUrl(state: App) {
         case 'library':
             return '/';
         case 'book':
-            const path = pathToString(state.currentBookPosition);
+            const path = pathToString(top.bl.path);
             return `/book/${top.bl.name}${path}`;
         case 'blank':
             return '/';

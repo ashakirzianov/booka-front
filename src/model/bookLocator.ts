@@ -31,3 +31,10 @@ export function remoteBookLocator(name: string, path?: BookPath): RemoteBookLoca
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
     return bl1.bl === bl2.bl && bl1.name === bl2.name;
 }
+
+export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
+    return {
+        ...bl,
+        path: path,
+    };
+}

@@ -1,5 +1,5 @@
 import { readValue, storeValue } from './persistentStore.platform';
-import { App, emptyPath, emptyStack } from "../model";
+import { App, emptyStack } from "../model";
 
 const storeKey = 'state';
 export function storeState(state: App) {
@@ -21,7 +21,6 @@ function validateState(restored: object | undefined): App | undefined {
 function createNewState(): App {
     return {
         screenStack: emptyStack(),
-        currentBookPosition: emptyPath(),
         positionToNavigate: null,
     };
 }

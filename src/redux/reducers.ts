@@ -1,5 +1,5 @@
 import {
-    ActionsTemplate, App, pushScreen, popScreen, pointToSameBook, stackForScreen, libraryScreen, forScreen,
+    ActionsTemplate, App, pushScreen, popScreen, pointToSameBook, stackForScreen, libraryScreen, forScreen, updatePath,
 } from "../model";
 import { buildPartialReducers } from "./redux-utils";
 
@@ -25,9 +25,12 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
                 library: l => libraryScreen(p),
             }),
         },
-    },
-    currentBookPosition: {
-        updateCurrentBookPosition: (cur, path) => path,
+        updateCurrentBookPosition: (s, bp) => stackForScreen(s, {
+            book: bs => ({
+                ...bs,
+                bl: updatePath(bs.bl, bp),
+            }),
+        }),
     },
     positionToNavigate: {
         navigateToScreen: (path, screen) => forScreen(screen, {
