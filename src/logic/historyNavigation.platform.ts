@@ -5,7 +5,7 @@ import { assertNever } from '../utils';
 import { Middleware } from 'redux';
 
 const history = createBrowserHistory();
-export function onInit() {
+export function wireHistoryNavigation() {
     dispatchNavigationEvent(history.location.pathname);
     history.listen((location, action) => {
         if (action !== 'REPLACE') {

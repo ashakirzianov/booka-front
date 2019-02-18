@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import { Comp, comp } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
-import { navigateBack } from '../logic/init.platform';
+import { navigateBack } from '../logic/historyNavigation.platform';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />

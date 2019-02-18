@@ -1,4 +1,4 @@
-export { onInit, updateHistoryMiddleware } from './init.platform';
+export { wireHistoryNavigation as onInit, updateHistoryMiddleware } from './historyNavigation.platform';
 export * from './screenBuilders';
 export { initialState, storeState } from './persistentStore';
-export { navigateToBl } from './init.platform';
+export { navigateToBl } from './historyNavigation.platform';
