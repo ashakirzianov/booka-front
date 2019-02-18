@@ -4,9 +4,10 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, connected } from './comp-utils';
+import { Comp, comp } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
-import { buildBookScreen } from '../logic';
+import { navigateToBl } from '../logic';
+import { navigateBack } from '../logic/init.platform';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -32,8 +33,8 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     </Row>
 );
 
-const BackButton = connected([], ['navigateBack'])(props =>
-    <LinkButton text='< Back' onClick={props.navigateBack} />
+const BackButton = comp(props =>
+    <LinkButton text='< Back' onClick={() => navigateBack()} />
 );
 
 const BookScreenLayout: Comp<{title: string}> = props => (
@@ -45,9 +46,9 @@ const BookScreenLayout: Comp<{title: string}> = props => (
     </Column>
 );
 
-const LibraryScreenComp = connected([], ['navigateToScreen']) <LibraryScreen>(props =>
+const LibraryScreenComp = comp<LibraryScreen>(props =>
     <LibraryComp {...props.library} openBook={
-        bl => props.navigateToScreen && props.navigateToScreen(buildBookScreen(bl))
+        bl => navigateToBl(bl)
     } />
 );
 

@@ -2,7 +2,7 @@ import {
     readValue,
     // storeValue,
 } from './persistentStore.platform';
-import { App, emptyStack } from "../model";
+import { App, libraryScreen, library } from "../model";
 
 const storeKey = 'state';
 export function storeState(state: App) {
@@ -23,7 +23,7 @@ function validateState(restored: object | undefined): App | undefined {
 
 function createNewState(): App {
     return {
-        screenStack: emptyStack(),
+        screen: libraryScreen(library()),
         positionToNavigate: null,
     };
 }
