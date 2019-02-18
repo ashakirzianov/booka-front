@@ -18,7 +18,7 @@ export const updateHistoryMiddleware: Middleware<{}, App> = store => next => act
     const result = next(action);
     const url = stateToUrl(store.getState());
     if (history.location.pathname !== url) {
-        // history.push(url);
+        history.push(url);
     }
     return result;
 };
