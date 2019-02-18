@@ -1,4 +1,4 @@
-import { dispatchNavigationEvent } from './urlNavigation';
+import { dispatchNavigationEvent } from './routing';
 import { Middleware } from 'redux';
 
 export function onInit() {

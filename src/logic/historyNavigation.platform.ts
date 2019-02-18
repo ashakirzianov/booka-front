@@ -1,5 +1,5 @@
 import { createBrowserHistory } from 'history';
-import { dispatchNavigationEvent } from './urlNavigation';
+import { dispatchNavigationEvent } from './routing';
 import { App, blToString, BookLocator } from '../model';
 import { assertNever } from '../utils';
 import { Middleware } from 'redux';
