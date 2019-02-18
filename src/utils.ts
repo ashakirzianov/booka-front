@@ -54,7 +54,7 @@ export function pick<T, Keys extends keyof T>(obj: T, ...ks: Keys[]): Pick<T, Ke
 }
 
 export function def<T = void>() {
-    return null as any as T;
+    return {} as any as T;
 }
 
 export function defOpt<T>() {
@@ -114,4 +114,10 @@ export function caseSensitiveEq(left: string, right: string) {
 export function voidCallback(cb: Callback<void>): () => void;
 export function voidCallback(cb?: Callback<void>): (() => void) | undefined {
     return cb === undefined ? undefined : () => cb();
+}
+
+export function bite(from: string, prefix: string): string | undefined {
+    return from.startsWith(prefix)
+        ? from.substring(prefix.length)
+        : undefined;
 }

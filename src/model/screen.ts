@@ -4,6 +4,10 @@ import { Library } from './library';
 
 export type ScreenStack = Screen[];
 
+export function emptyStack(): ScreenStack {
+    return [];
+}
+
 export function popScreen(stack: ScreenStack): ScreenStack {
     return stack.length > 1 ? stack.slice(0, stack.length - 1) : stack;
 }
@@ -23,28 +27,36 @@ export function replaceScreen(stack: ScreenStack, screen: Screen) {
     return newStack;
 }
 
-export function topScreen(stack: ScreenStack): Screen {
+export function topScreen(stack: ScreenStack): Screen | undefined {
     return stack.length > 0
         ? stack[stack.length - 1]
-        : blankScreen()
+        : undefined
         ;
 }
 
-type ForScreenMap = {
-    book?: (screen: BookScreen) => Screen,
-    library?: (screen: LibraryScreen) => Screen,
-    blank?: (screen: BlankScreen) => Screen,
+type ForScreenMap<T> = {
+    book?: (screen: BookScreen) => T,
+    library?: (screen: LibraryScreen) => T,
+    blank?: (screen: BlankScreen) => T,
 };
 
-export function forScreen(stack: ScreenStack, map: ForScreenMap): ScreenStack {
+export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
     const top = topScreen(stack);
-    const f = map[top.screen];
+    const next = top && forScreen(top, map);
+
+    return top === next || next === undefined
+        ? stack
+        : replaceScreen(stack, next);
+}
+
+export function forScreen<T>(screen: Screen, map: ForScreenMap<T>): T | undefined {
+    const f = map[screen.screen];
     if (f !== undefined) {
-        const updatedScreen = f(top as any); // TODO: try to remove 'as any'
-        return replaceScreen(stack, updatedScreen);
+        const result = f(screen as any); // TODO: try to remove 'as any'
+        return result;
     }
 
-    return stack;
+    return undefined;
 }
 
 export type Screen = BookScreen | LibraryScreen | BlankScreen;

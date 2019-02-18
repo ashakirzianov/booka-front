@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { Middleware } from 'redux';
 import { dispatchNavigationEvent } from './urlNavigation';
-import { App, topScreen } from '../model';
+import { App, topScreen, blToString } from '../model';
 import { assertNever } from '../utils';
 
 const history = createBrowserHistory();
@@ -25,11 +25,15 @@ export const updateHistoryMiddleware: Middleware<{}, App> = store => next => act
 
 function stateToUrl(state: App) {
     const top = topScreen(state.screenStack);
+    if (top === undefined) {
+        return '/';
+    }
+
     switch (top.screen) {
         case 'library':
             return '/';
         case 'book':
-            return `/book/${top.bl.name}`;
+            return `/book/${blToString(top.bl)}`;
         case 'blank':
             return '/';
         default:

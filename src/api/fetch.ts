@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
     Book, errorBook, BookLocator, Library,
 } from "../model";
-import { LibraryJson, BookJson } from './contracts';
+import * as Contracts from './contracts';
 import { throwExp } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
@@ -13,7 +13,7 @@ const jsonPath = 'json/';
 const libraryApi = 'library';
 
 export async function fetchLibrary(): Promise<Library> {
-    const lib = await fetchJson(backendBase + libraryApi) as LibraryJson;
+    const lib = await fetchJson(backendBase + libraryApi) as Contracts.Library;
     return {
         loading: false,
         books: lib,
@@ -32,7 +32,7 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
 
 export async function fetchBook(bookName: string): Promise<Book> {
     try {
-        const response = await fetchJson(backendBase + jsonPath + bookName) as BookJson;
+        const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
         return response;
     } catch (reason) {
         return errorBook("Can't find static book: " + bookName);

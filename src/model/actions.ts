@@ -1,7 +1,7 @@
 import { def } from "../utils";
 import { Screen } from './screen';
 import { Library } from './library';
-import { BookLocator } from './bookLocator';
+import { BookLocator, BookPath } from './bookLocator';
 import { Book } from './book';
 
 export type LoadBookDesc = {
@@ -14,5 +14,6 @@ export const actionsTemplate = {
     navigateBack: def(),
     loadBook: def<Promise<LoadBookDesc>>(),
     loadLibrary: def<Promise<Library>>(),
+    updateCurrentBookPosition: def<BookPath>(),
 };
 export type ActionsTemplate = typeof actionsTemplate;

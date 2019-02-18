@@ -6,25 +6,28 @@ import {
     buildActionCreators, ActionDispatcher,
 } from "./redux-utils";
 
-export function buildConnectRedux<S, AT>(at: AT) {
-    return function f<SK extends keyof S, AK extends Exclude<keyof AT, SK> = Exclude<keyof AT, SK>>(
-        ...kk: Array<SK | AK>
+export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
+    return function connectKeys<
+        StateKs extends keyof State,
+        ActionKs extends Exclude<keyof ActionsT, StateKs> = never>(
+        stateKs: Array<StateKs>,
+        actionKs: Array<ActionKs> = []
     ) {
-        type ComponentProps = Pick<S, SK> & {
-            [k in AK]: ActionDispatcher<AT[k]>;
+        type ComponentProps = Pick<State, StateKs> & {
+            [k in ActionKs]: ActionDispatcher<ActionsT[k]>;
         };
-        const ak: AK[] = kk
-            .filter(key =>
-                (at as any)[key] !== undefined) as AK[];
-        const sk: SK[] = kk
-            .filter(key =>
-                ak.find(a => a === key) === undefined) as SK[];
-        return function ff<P>(Comp: React.ComponentType<P & ComponentProps>): React.ComponentType<ExcludeKeys<P, SK | AK>> {
-            function mapStateToProps(store: S): Pick<S, SK> {
-                return pick(store, ...sk);
+        // const actionKs: ActionKs[] = allKeys
+        //     .filter(key =>
+        //         (actionsT as any)[key] !== undefined) as ActionKs[];
+        // const stateKs: StateKs[] = allKeys
+        //     .filter(key =>
+        //         actionKs.find(ak => ak === key) === undefined) as StateKs[];
+        return function connectComp<P>(Comp: React.ComponentType<P & ComponentProps>): React.ComponentType<ExcludeKeys<P, StateKs | ActionKs>> {
+            function mapStateToProps(store: State): Pick<State, StateKs> {
+                return pick(store, ...stateKs);
             }
 
-            const ac = buildActionCreators(pick(at, ...ak));
+            const ac = buildActionCreators(pick(actionsT, ...actionKs));
             function mapDispatchToProps(dispatch: Dispatch<Action<any>>) {
                 function buildCallbacks<T>(creators: ActionCreators<T>): ActionDispatchers<T> {
                     return mapObject(
