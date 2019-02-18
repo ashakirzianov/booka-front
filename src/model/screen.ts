@@ -27,10 +27,10 @@ export function replaceScreen(stack: ScreenStack, screen: Screen) {
     return newStack;
 }
 
-export function topScreen(stack: ScreenStack): Screen {
+export function topScreen(stack: ScreenStack): Screen | undefined {
     return stack.length > 0
         ? stack[stack.length - 1]
-        : blankScreen()
+        : undefined
         ;
 }
 
@@ -42,7 +42,7 @@ type ForScreenMap<T> = {
 
 export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
     const top = topScreen(stack);
-    const next = forScreen(top, map);
+    const next = top && forScreen(top, map);
 
     return top === next || next === undefined
         ? stack

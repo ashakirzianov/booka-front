@@ -4,9 +4,9 @@ import { AppComp } from './components';
 import registerServiceWorker from './registerServiceWorker';
 import { onInit } from './logic';
 
+onInit();
 ReactDOM.render(
   <AppComp />,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
-onInit();
