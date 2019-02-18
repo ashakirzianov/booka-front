@@ -49,7 +49,7 @@ const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
     </Column>
 );
 
-const BookNodeComp = connected('updateCurrentBookPosition')<BookNodeProps<{ node: BookNode }>>(props => {
+const BookNodeComp = connected([], ['updateCurrentBookPosition'])<BookNodeProps<{ node: BookNode }>>(props => {
     if(isParagraph(props.node)) {
     return <ParagraphComp
         path={props.path}
@@ -85,7 +85,7 @@ const BookComp = didUpdateHook<Book>(props => {
     }
 });
 
-const ConnectedBookComp = connected('positionToNavigate')<Book>(props =>
+const ConnectedBookComp = connected(['positionToNavigate'])<Book>(props =>
     <BookComp {...props} didUpdate={() => {
         if (props.positionToNavigate) {
             scrollToPath(props.positionToNavigate);

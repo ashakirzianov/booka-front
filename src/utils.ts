@@ -54,7 +54,7 @@ export function pick<T, Keys extends keyof T>(obj: T, ...ks: Keys[]): Pick<T, Ke
 }
 
 export function def<T = void>() {
-    return null as any as T;
+    return {} as any as T;
 }
 
 export function defOpt<T>() {
