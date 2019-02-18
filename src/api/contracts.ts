@@ -1,10 +1,10 @@
-export type LibraryJson = {
+export type Library = {
     [key: string]: {
         title: string,
         author?: string,
     } | undefined;
 };
-export type BookJson = {
+export type Book = {
     book: "book",
     meta: {
         title: string,
