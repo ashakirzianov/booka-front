@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import { Comp, comp } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
-import { navigateBack } from '../logic/historyNavigation.platform';
+import { navigateToLibrary } from '../logic/historyNavigation.platform';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -34,7 +34,9 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
 );
 
 const BackButton = comp(props =>
-    <LinkButton text='< Back' onClick={() => navigateBack()} />
+    <LinkButton text='< Back' onClick={() => {
+        navigateToLibrary();
+    }} />
 );
 
 const BookScreenLayout: Comp<{title: string}> = props => (

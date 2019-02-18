@@ -26,6 +26,10 @@ export function navigateBack() {
     history.goBack();
 }
 
+export function navigateToLibrary() {
+    navigateToUrl('/');
+}
+
 export const updateHistoryMiddleware: Middleware<{}, App> = store => next => action => {
     const result = next(action);
     const currState = store.getState();
