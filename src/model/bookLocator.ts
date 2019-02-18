@@ -38,3 +38,32 @@ export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
         path: path,
     };
 }
+
+export function stringToBL(str: string): BookLocator | undefined {
+    const matches = str.match(/([\w-]+)(\/((\d+-?)+))?/);
+    if (!matches) {
+        return undefined;
+    }
+    const bookName = matches[1];
+    const pathString = matches[3];
+    if (pathString) {
+        const path = pathString
+            .split('-')
+            .map(pc => parseInt(pc))
+            ;
+        return remoteBookLocator(bookName, path);
+    }
+
+    return remoteBookLocator(bookName);
+}
+
+export function blToString(bl: BookLocator): string {
+    return `${bl.name}${pathToString(bl.path)}`
+}
+
+function pathToString(path: BookPath): string {
+    return path.length === 0 || (path.length === 1 && path[0] === 0)
+        ? ''
+        : `/${path.join('-')}`
+        ;
+}

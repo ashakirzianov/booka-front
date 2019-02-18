@@ -115,3 +115,9 @@ export function voidCallback(cb: Callback<void>): () => void;
 export function voidCallback(cb?: Callback<void>): (() => void) | undefined {
     return cb === undefined ? undefined : () => cb();
 }
+
+export function bite(from: string, prefix: string): string | undefined {
+    return from.startsWith(prefix)
+        ? from.substring(prefix.length)
+        : undefined;
+}
