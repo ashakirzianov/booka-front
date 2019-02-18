@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { throttle } from 'lodash';
 
 type Path = number[];
 type ScrollableUnitProps = { 
@@ -20,11 +21,11 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    handleScroll = () => {
+    handleScroll = throttle(() => {
         if (this.isPartiallyVisible()) {
             this.props.onScrollVisible();
         }
-    }
+    }, 250)
 
     boundingClientRect() {
         return this.ref && this.ref.current
