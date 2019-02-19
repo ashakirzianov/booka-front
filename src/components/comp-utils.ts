@@ -1,10 +1,12 @@
 import * as React from "react";
 import Radium from "radium";
-import { KeyRestriction, ExcludeKeys, Callback } from "../utils";
+import { KeyRestriction, ExcludeKeys } from "../utils";
 import { buildConnectRedux } from '../redux';
 import { actionsTemplate, App } from "../model";
 import { platformValue } from '../platform';
 
+export type Callback<Argument> = (arg: Argument) => void;
+export type VoidCallback = () => void;
 export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
 };

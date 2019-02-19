@@ -25,5 +25,6 @@ function createNewState(): App {
     return {
         screen: libraryScreen(library()),
         positionToNavigate: null,
+        controlsVisible: true,
     };
 }

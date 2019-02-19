@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FlexStyle, View, ViewStyle } from 'react-native';
 import { Comp } from './comp-utils';
 import { platformValue } from '../platform';
+import { ClickResponder } from './Atoms.platform';
 
 export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView, ScrollView } from 'react-native';
@@ -28,15 +29,26 @@ export type LayoutProps = {
     style?: ViewStyle | {
         position?: ViewStyle['position'] | 'fixed',
     },
+    onClick?: () => void,
 };
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
 }
 export const Column: Comp<LayoutProps> = props =>
-    <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>{props.children}</View>;
+    <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
+        <ClickResponder onClick={props.onClick}>
+            {props.children}
+        </ClickResponder>
+    </View>;
 
 export const Row: Comp<LayoutProps> = props =>
-    <View style={{ ...convertStyle(props.style), flexDirection: 'row' }}>{props.children}</View>;
+    <View
+        style={{ ...convertStyle(props.style), flexDirection: 'row' }}
+    >
+        <ClickResponder onClick={props.onClick}>
+            {props.children}
+        </ClickResponder>
+    </View>;
 
 export const ScreenLayout: Comp<{
     color?: string,

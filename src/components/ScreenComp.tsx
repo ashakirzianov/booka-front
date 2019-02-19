@@ -4,7 +4,7 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, comp, relative } from './comp-utils';
+import { Comp, comp, relative, connected } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
@@ -17,8 +17,8 @@ export const ScreenComp: Comp<Screen> = (props =>
                 : assertNever(props)
 );
 
-const BookScreenComp: Comp<BookScreen> = (props =>
-    <BookScreenLayout>
+const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
+    <BookScreenLayout onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
         <BookComp {...props.book} />
     </BookScreenLayout>
 );
@@ -27,7 +27,6 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     <TopPanel>
         <Row style={{
         width: '100%', height: relative(5),
-        backgroundColor: 'black',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: relative(1),
@@ -49,14 +48,18 @@ const BackButton = comp(props =>
     }} />
 );
 
-const BookScreenLayout: Comp = props => (
+const BookScreenLayout: Comp<{ showControls: boolean }, { onContentClick: void }> = props => (
     <Column style={{ width: '100%', alignItems: 'center' }}>
-        <Header><BackButton /></Header>
+        { props.showControls ? <Header><BackButton /></Header> : null }
         <Row style={{
             alignItems: 'center',
             maxWidth: relative(50),
             margin: relative(2), marginTop: relative(5),
-        }}>
+        }}
+        onClick={() => {
+            props.onContentClick && props.onContentClick();
+        }}
+        >
             {props.children}
         </Row>
     </Column>

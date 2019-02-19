@@ -1,10 +1,11 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject, Callback, Func } from "../utils";
+import { mapObject, Func } from "../utils";
 import { PromisePlus } from '../promisePlus';
 import { combineReducers, Reducer as ReducerRedux } from "redux";
 
 // Actions:
 
+type Callback<T> = (arg: T) => void;
 export type ActionType<Type extends PropertyKey, Payload> = {
     type: Type,
     payload: Payload,
