@@ -24,11 +24,14 @@ const BookScreenComp: Comp<BookScreen> = (props =>
 
 const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     <Row style={{
-        width: '100%', height: '3%',
+        width: '100%',
+        backgroundColor: 'black',
         justifyContent: 'space-between',
-        paddingHorizontal: relative(1),
+        padding: relative(1),
+        marginBottom: relative(20),
         position: 'fixed',
         top: 0,
+        zIndex: 999,
         }}>
         {/* Left */}
         <Row>{props.children}</Row>
