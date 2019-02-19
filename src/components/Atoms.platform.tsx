@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextProps, TextCallbacks } from './Atoms';
-import { Comp } from './comp-utils';
+import { Comp, VoidCallback } from './comp-utils';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <span
@@ -9,6 +9,12 @@ export const Text: Comp<TextProps, TextCallbacks> = props =>
     >
         {props.children}
     </span>;
+
+export const ClickResponder: Comp<{ onClick?: VoidCallback }> = (props =>
+    <div onClick={props.onClick}>
+        {props.children}
+    </div>
+);
 
 export function showAlert(message: string) {
     alert(message);

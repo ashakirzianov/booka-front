@@ -14,5 +14,6 @@ export const actionsTemplate = {
     loadBook: def<Promise<LoadBookDesc>>(),
     loadLibrary: def<Promise<Library>>(),
     updateCurrentBookPosition: def<BookPath>(),
+    toggleControls: def(),
 };
 export type ActionsTemplate = typeof actionsTemplate;

@@ -1,10 +1,12 @@
 import * as React from "react";
 import Radium from "radium";
-import { KeyRestriction, ExcludeKeys, Callback } from "../utils";
+import { KeyRestriction, ExcludeKeys } from "../utils";
 import { buildConnectRedux } from '../redux';
 import { actionsTemplate, App } from "../model";
 import { platformValue } from '../platform';
 
+export type Callback<Argument> = (arg: Argument) => void;
+export type VoidCallback = () => void;
 export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
 };
@@ -15,14 +17,15 @@ export function comp<P ={}, A = {}>(c: Comp<P, A>) {
     return c;
 }
 
-export function size(s: number | undefined) {
-    return s === undefined
-        ? undefined
-        : platformValue({
-            web: `${s}em`,
-            mobile: s * 10, // TODO: rethink this
-        })
-        ;
+export function relative(size: number) {
+    return platformValue({
+        web: `${size}em`,
+        mobile: `${size}%`,
+    });
+}
+
+export function absolute(size: number) {
+    return `${size}`;
 }
 
 export const connected = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);

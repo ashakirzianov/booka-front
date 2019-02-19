@@ -4,10 +4,10 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, comp } from './comp-utils';
-import { Label, Column, Row, LinkButton } from './Elements';
+import { Comp, comp, connected } from './comp-utils';
+import { Label, } from './Elements';
 import { navigateToBl } from '../logic';
-import { navigateToLibrary } from '../logic/historyNavigation.platform';
+import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -16,42 +16,16 @@ export const ScreenComp: Comp<Screen> = (props =>
                 : assertNever(props)
 );
 
-const BookScreenComp: Comp<BookScreen> = (props =>
-    <BookScreenLayout title={props.book.book === 'book' ? props.book.meta.title : ''}>
+const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
+    <BookScreenLayout onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
         <BookComp {...props.book} />
     </BookScreenLayout>
 );
 
-const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
-    <Row width='100%' height='3%' justifyContent='space-between' marginHorizontal={30}>
-        {/* Left */}
-        <Row>{props.children}</Row>
-        {/* Center */}
-        <Row>{ props.title !== undefined ? <Label text={props.title}/> : undefined }</Row>
-        {/* Right */}
-        <Row>{props.right}</Row>
-    </Row>
-);
-
-const BackButton = comp(props =>
-    <LinkButton text='< Back' onClick={() => {
-        navigateToLibrary();
-    }} />
-);
-
-const BookScreenLayout: Comp<{title: string}> = props => (
-    <Column width='100%' align='center'>
-        <Header title={props.title}><BackButton /></Header>
-        <Row maxWidth={50} align='center' margin={2}>
-            {props.children}
-        </Row>
-    </Column>
-);
-
 const LibraryScreenComp = comp<LibraryScreen>(props =>
-    <LibraryComp {...props.library} openBook={
-        bl => navigateToBl(bl)
-    } />
+    <LibraryScreenLayout>
+        <LibraryComp {...props.library} openBook={bl => navigateToBl(bl)} />
+    </LibraryScreenLayout>
 );
 
 const BlankScreenComp: Comp = (props =>

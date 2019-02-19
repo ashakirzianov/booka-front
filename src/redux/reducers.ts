@@ -37,4 +37,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             book: bs => bs.bl.path,
         }) || null,
     },
+    controlsVisible: {
+        toggleControls: (current, _) => !current,
+    },
 });
