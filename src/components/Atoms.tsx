@@ -66,12 +66,12 @@ export const ScreenLayout: Comp<{
 );
 
 export const TopPanel: Comp = (props =>
-    <Row style={{
+    <Column style={{
         width: '100%',
         position: 'fixed',
         top: 0,
         zIndex: 999,
     }}>
         {props.children}
-    </Row>
+    </Column>
 );

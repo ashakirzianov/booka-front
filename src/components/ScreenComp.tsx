@@ -30,6 +30,7 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: relative(1),
+        backgroundColor: 'black',
     }}>
         {/* Left */}
         <Row>{props.children}</Row>
