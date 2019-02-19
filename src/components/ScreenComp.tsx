@@ -4,11 +4,11 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, comp, relative, connected } from './comp-utils';
-import { Label, Column, Row, LinkButton } from './Elements';
+import { Comp, comp, relative, connected, VoidCallback } from './comp-utils';
+import { Label, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
-import { TopPanel } from './Atoms';
+import { TopPanel, ReactContent, ClickResponder, Column } from './Atoms';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -23,47 +23,20 @@ const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookSc
     </BookScreenLayout>
 );
 
-const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
-    <TopPanel>
-        <Row style={{
-        width: '100%', height: relative(5),
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: relative(1),
-        backgroundColor: 'black',
-    }}>
-        {/* Left */}
-        <Row>{props.children}</Row>
-        {/* Center */}
-        <Row>{props.title !== undefined ? <Label text={props.title} /> : undefined}</Row>
-        {/* Right */}
-        <Row>{props.right}</Row>
-    </Row>
-    </TopPanel>
-    
-);
-
-const BackButton = comp(props =>
-    <LinkButton text='< Back' onClick={() => {
-        navigateToLibrary();
-    }} />
-);
-
-const BookScreenLayout: Comp<{ showControls: boolean }, { onContentClick: void }> = props => (
-    <Column style={{ width: '100%', alignItems: 'center' }}>
-        { props.showControls ? <Header><BackButton /></Header> : null }
+const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback }> = (props =>
+    <ScreenLayout
+        header={props.showControls ? <Header><BackButton /></Header> : null}
+        onContentClick={() => props.onContentClick()}
+        >
         <Row style={{
             alignItems: 'center',
             maxWidth: relative(50),
             margin: relative(2), marginTop: relative(5),
         }}
-        onClick={() => {
-            props.onContentClick && props.onContentClick();
-        }}
         >
             {props.children}
         </Row>
-    </Column>
+    </ScreenLayout>
 );
 
 const LibraryScreenComp = comp<LibraryScreen>(props =>
@@ -75,3 +48,45 @@ const LibraryScreenComp = comp<LibraryScreen>(props =>
 const BlankScreenComp: Comp = (props =>
     <Label text='Nothing here. This screen should never be visible' />
 );
+
+// Layout 
+
+
+
+const Header: Comp<{ title?: string, right?: ReactContent }> = (props =>
+    <TopPanel>
+        <Row style={{
+            width: '100%', height: relative(5),
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: relative(1),
+            backgroundColor: 'black',
+        }}>
+            {/* Left */}
+            <Row>{props.children}</Row>
+            {/* Center */}
+            <Row>{props.title !== undefined ? <Label text={props.title} /> : undefined}</Row>
+            {/* Right */}
+            <Row>{props.right}</Row>
+        </Row>
+    </TopPanel>
+
+);
+
+const BackButton = comp(props =>
+    <LinkButton text='< Back' onClick={() => {
+        navigateToLibrary();
+    }} />
+);
+
+const ScreenLayout: Comp<{
+    header?: ReactContent,
+    onContentClick?: VoidCallback,
+}> = (props =>
+    <Column style={{ width: '100%', alignItems: 'center' }}>
+        {props.header || null}
+        <ClickResponder onClick={props.onContentClick}>
+            {props.children}
+        </ClickResponder>
+    </Column>
+    );

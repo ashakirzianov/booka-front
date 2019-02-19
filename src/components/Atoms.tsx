@@ -29,28 +29,23 @@ export type LayoutProps = {
     style?: ViewStyle | {
         position?: ViewStyle['position'] | 'fixed',
     },
-    onClick?: () => void,
 };
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
 }
 export const Column: Comp<LayoutProps> = props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
-        <ClickResponder onClick={props.onClick}>
-            {props.children}
-        </ClickResponder>
+        {props.children}
     </View>;
 
 export const Row: Comp<LayoutProps> = props =>
     <View
         style={{ ...convertStyle(props.style), flexDirection: 'row' }}
     >
-        <ClickResponder onClick={props.onClick}>
-            {props.children}
-        </ClickResponder>
+        {props.children}
     </View>;
 
-export const ScreenLayout: Comp<{
+export const FullScreen: Comp<{
     color?: string,
 }> = props => (
     <View style={{
@@ -75,3 +70,6 @@ export const TopPanel: Comp = (props =>
         {props.children}
     </Column>
 );
+
+export type ReactContent = React.ReactNode;
+export { ClickResponder };
