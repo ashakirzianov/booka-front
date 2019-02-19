@@ -8,6 +8,7 @@ import { Comp, comp, relative } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
+import { TopPanel } from './Atoms';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -23,15 +24,13 @@ const BookScreenComp: Comp<BookScreen> = (props =>
 );
 
 const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
-    <Row style={{
+    <TopPanel>
+        <Row style={{
         width: '100%', height: relative(5),
         backgroundColor: 'black',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: relative(1),
-        position: 'fixed',
-        top: 0,
-        zIndex: 999,
     }}>
         {/* Left */}
         <Row>{props.children}</Row>
@@ -40,6 +39,8 @@ const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
         {/* Right */}
         <Row>{props.right}</Row>
     </Row>
+    </TopPanel>
+    
 );
 
 const BackButton = comp(props =>

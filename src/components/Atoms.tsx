@@ -52,3 +52,14 @@ export const ScreenLayout: Comp<{
         {props.children}
     </View>
 );
+
+export const TopPanel: Comp = (props =>
+    <Row style={{
+        width: '100%',
+        position: 'fixed',
+        top: 0,
+        zIndex: 999,
+    }}>
+        {props.children}
+    </Row>
+);
