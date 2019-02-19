@@ -15,14 +15,15 @@ export function comp<P ={}, A = {}>(c: Comp<P, A>) {
     return c;
 }
 
-export function size(s: number | undefined) {
-    return s === undefined
-        ? undefined
-        : platformValue({
-            web: `${s}em`,
-            mobile: s * 10, // TODO: rethink this
-        })
-        ;
+export function relative(size: number) {
+    return platformValue({
+        web: `${size}em`,
+        mobile: `${size}%`,
+    });
+}
+
+export function absolute(size: number) {
+    return `${size}`;
 }
 
 export const connected = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);

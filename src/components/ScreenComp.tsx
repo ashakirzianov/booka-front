@@ -4,7 +4,7 @@ import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, comp } from './comp-utils';
+import { Comp, comp, relative, absolute } from './comp-utils';
 import { Label, Column, Row, LinkButton } from './Elements';
 import { navigateToBl } from '../logic';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
@@ -23,7 +23,7 @@ const BookScreenComp: Comp<BookScreen> = (props =>
 );
 
 const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
-    <Row style={{ width: '100%', height: '3%', justifyContent: 'space-between', marginHorizontal: 30 }}>
+    <Row style={{ width: '100%', height: '3%', justifyContent: 'space-between' }}>
         {/* Left */}
         <Row>{props.children}</Row>
         {/* Center */}
@@ -40,9 +40,9 @@ const BackButton = comp(props =>
 );
 
 const BookScreenLayout: Comp<{title: string}> = props => (
-    <Column style={{width: '100%', align: 'center'}}>
+    <Column style={{width: '100%', alignItems: 'center'}}>
         <Header title={props.title}><BackButton /></Header>
-        <Row style={{maxWidth: 50, align: 'center', margin: 2}}>
+        <Row style={{maxWidth: relative(50), alignItems: 'center', margin: absolute(2)}}>
             {props.children}
         </Row>
     </Column>

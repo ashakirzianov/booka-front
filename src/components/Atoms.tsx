@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FlexStyle, View, ViewStyle } from 'react-native';
-import { Comp, size } from './comp-utils';
+import { Comp } from './comp-utils';
 import { platformValue } from '../platform';
 
 export { Text, showAlert } from './Atoms.platform';
@@ -25,30 +25,10 @@ export type Align = FlexStyle['alignItems'];
 export type JustifyContent = FlexStyle['justifyContent'];
 export type WidthHeight = string;
 export type LayoutProps = {
-    style?: {
-        justifyContent?: JustifyContent,
-        width?: WidthHeight,
-        height?: WidthHeight,
-        maxWidth?: number,
-        maxHeight?: number,
-        margin?: number,
-        marginHorizontal?: number,
-        align?: Align,
-        backgroundColor?: string,
-    }
+    style?: ViewStyle,
 };
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
-    return style && {
-        width: style.width,
-        height: style.height,
-        maxWidth: size(style.maxWidth),
-        maxHeight: size(style.maxHeight),
-        alignItems: style.align,
-        backgroundColor: style.backgroundColor,
-        margin: size(style.margin),
-        justifyContent: style.justifyContent,
-        marginHorizontal: size(style.marginHorizontal),
-    };
+    return style;
 }
 export const Column: Comp<LayoutProps> = props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>{props.children}</View>;
