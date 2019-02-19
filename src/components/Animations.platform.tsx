@@ -3,6 +3,7 @@ import * as React from 'react';
 import posed, {
     PoseGroup,
 } from 'react-pose';
+import { Comp } from './comp-utils';
 
 const PopFromBottomDiv = posed.div({
     enter: {
@@ -16,7 +17,7 @@ const PopFromBottomDiv = posed.div({
     }
 });
 
-type AnimationChildren = React.ComponentType<any>; 
+type AnimationChildren = React.ComponentType<any>;
 class EntranceAnimation extends React.Component<{
     Animation: AnimationChildren,
 }> {
@@ -33,13 +34,13 @@ class EntranceAnimation extends React.Component<{
     render() {
         const { isVisible } = this.state;
         const { children, Animation } = this.props;
-    
+
         return (
-          <PoseGroup>
-            { isVisible && <Animation key='animation'>{children}</Animation> }
-          </PoseGroup>
+            <PoseGroup>
+                {isVisible && <Animation key='animation'>{children}</Animation>}
+            </PoseGroup>
         );
-      }
+    }
 }
 
 function animateEntrance(A: AnimationChildren): React.ComponentType {
@@ -47,3 +48,24 @@ function animateEntrance(A: AnimationChildren): React.ComponentType {
 }
 
 export const PopFromBottom = animateEntrance(PopFromBottomDiv);
+
+const VisibilityDiv = posed.div({
+    visible: {
+        opacity: 1,
+        transition: {
+            duration: 400,
+        },
+    },
+    hidden: {
+        opacity: 0,
+        transition: {
+            duration: 400,
+        },
+    },
+});
+
+export const AnimatedVisibility: Comp<{ visible: boolean }> = (props =>
+    <VisibilityDiv pose={props.visible ? 'visible' : 'hidden'}>
+        {props.children}
+    </VisibilityDiv>
+);

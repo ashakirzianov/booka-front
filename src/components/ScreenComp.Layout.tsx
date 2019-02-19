@@ -4,11 +4,11 @@ import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
-import { PopFromBottom } from './Animations.platform';
+import { PopFromBottom, AnimatedVisibility } from './Animations.platform';
 
 export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback }> = (props =>
     <ScreenLayout
-        header={props.showControls ? <Header><BackButton /></Header> : null}
+        header={<Header visible={props.showControls}><BackButton /></Header>}
         onContentClick={() => props.onContentClick()}
     >
         <Row style={{
@@ -24,14 +24,19 @@ export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: Voi
 
 export const LibraryScreenLayout: Comp = (props =>
     <ScreenLayout
-        header={<Header title='Library' />}
+        header={<Header title='Library' visible />}
     >
         <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
     </ScreenLayout>
 );
 
-const Header: Comp<{ title?: string, right?: ReactContent }> = (props =>
+const Header = comp<{
+        title?: string,
+        right?: ReactContent,
+        visible: boolean,
+    }>(props =>
     <TopPanel>
+        <AnimatedVisibility visible={props.visible}>
         <Row style={{
             width: '100%', height: relative(5),
             justifyContent: 'space-between',
@@ -42,12 +47,12 @@ const Header: Comp<{ title?: string, right?: ReactContent }> = (props =>
             {/* Left */}
             <Row>{props.children}</Row>
             {/* Center */}
-            <Row>{props.title !== undefined ? <Label text={props.title} /> : undefined}</Row>
+            <Row><Label text={props.title || ''} /></Row>
             {/* Right */}
             <Row>{props.right}</Row>
         </Row>
+        </AnimatedVisibility>
     </TopPanel>
-
 );
 
 const BackButton = comp(props =>
@@ -60,7 +65,6 @@ const ScreenLayout: Comp<{
     header?: ReactContent,
     onContentClick?: VoidCallback,
 }> = (props =>
-
     <Column style={{ width: '100%', alignItems: 'center' }}>
         {props.header || null}
         <ClickResponder onClick={props.onContentClick}>
