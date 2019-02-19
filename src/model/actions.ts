@@ -11,7 +11,6 @@ export type LoadBookDesc = {
 
 export const actionsTemplate = {
     navigateToScreen: def<Screen>(),
-    navigateBack: def(),
     loadBook: def<Promise<LoadBookDesc>>(),
     loadLibrary: def<Promise<Library>>(),
     updateCurrentBookPosition: def<BookPath>(),

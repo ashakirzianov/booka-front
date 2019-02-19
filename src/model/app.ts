@@ -1,7 +1,7 @@
-import { ScreenStack } from './screen';
+import { Screen } from './screen';
 import { BookPath } from './bookLocator';
 
 export type App = {
-    screenStack: ScreenStack,
+    screen: Screen,
     positionToNavigate: BookPath | null,
 };

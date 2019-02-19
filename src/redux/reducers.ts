@@ -1,36 +1,36 @@
 import {
-    ActionsTemplate, App, pushScreen, popScreen, pointToSameBook, stackForScreen, libraryScreen, forScreen, updatePath,
+    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath,
 } from "../model";
 import { buildPartialReducers } from "./redux-utils";
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    screenStack: {
-        navigateToScreen: (s, p) => pushScreen(s, p),
-        navigateBack: (s, _) => popScreen(s),
+    screen: {
+        navigateToScreen: (s, p) => p,
         loadBook: {
-            fulfilled: (s, p) => stackForScreen(s, {
+            fulfilled: (screen, book) => forScreen<Screen>(screen, {
                 book: bs => {
-                    if (pointToSameBook(bs.bl, p.locator)) {
+                    if (pointToSameBook(bs.bl, book.locator)) {
                         return {
                             ...bs,
-                            book: p.book,
+                            book: book.book,
+                            loading: false,
                         };
                     }
                     return bs;
                 },
-            }),
+            }) || screen,
         },
         loadLibrary: {
-            fulfilled: (s, p) => stackForScreen(s, {
+            fulfilled: (screen, p) => forScreen(screen, {
                 library: l => libraryScreen(p),
-            }),
+            }) || screen,
         },
-        updateCurrentBookPosition: (s, bp) => stackForScreen(s, {
+        updateCurrentBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
                 bl: updatePath(bs.bl, bp),
             }),
-        }),
+        }) || screen,
     },
     positionToNavigate: {
         navigateToScreen: (path, screen) => forScreen(screen, {
