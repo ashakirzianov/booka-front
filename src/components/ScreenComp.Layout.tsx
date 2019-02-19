@@ -4,12 +4,13 @@ import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
+import { PopFromBottom } from './Animations.platform';
 
 export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback }> = (props =>
     <ScreenLayout
         header={props.showControls ? <Header><BackButton /></Header> : null}
         onContentClick={() => props.onContentClick()}
-        >
+    >
         <Row style={{
             alignItems: 'center',
             maxWidth: relative(50),
@@ -24,8 +25,8 @@ export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: Voi
 export const LibraryScreenLayout: Comp = (props =>
     <ScreenLayout
         header={<Header title='Library' />}
-        >
-        <Row style={{ marginTop: relative(5)}}>{props.children}</Row>
+    >
+        <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
     </ScreenLayout>
 );
 
@@ -59,10 +60,13 @@ const ScreenLayout: Comp<{
     header?: ReactContent,
     onContentClick?: VoidCallback,
 }> = (props =>
+
     <Column style={{ width: '100%', alignItems: 'center' }}>
         {props.header || null}
         <ClickResponder onClick={props.onContentClick}>
-            {props.children}
+            <PopFromBottom>
+                {props.children}
+            </PopFromBottom>
         </ClickResponder>
     </Column>
     );
