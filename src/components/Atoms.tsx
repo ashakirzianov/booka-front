@@ -25,10 +25,12 @@ export type Align = FlexStyle['alignItems'];
 export type JustifyContent = FlexStyle['justifyContent'];
 export type WidthHeight = string;
 export type LayoutProps = {
-    style?: ViewStyle,
+    style?: ViewStyle | {
+        position?: ViewStyle['position'] | 'fixed',
+    },
 };
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
-    return style;
+    return style as ViewStyle;
 }
 export const Column: Comp<LayoutProps> = props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>{props.children}</View>;
