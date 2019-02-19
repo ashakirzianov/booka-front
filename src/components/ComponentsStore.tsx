@@ -19,7 +19,7 @@ export const ElementsStore: React.SFC = props => (
                 <Label text='R 3 C 2' />
             </Column>
         </Row>
-        <Column align='center'>
+        <Column style={{align: 'center'}}>
             <Row>
                 <Label text='R 1 C 1' />
                 <Label text='R 1 C 2' />

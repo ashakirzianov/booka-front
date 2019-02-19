@@ -23,7 +23,7 @@ const BookScreenComp: Comp<BookScreen> = (props =>
 );
 
 const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
-    <Row width='100%' height='3%' justifyContent='space-between' marginHorizontal={30}>
+    <Row style={{ width: '100%', height: '3%', justifyContent: 'space-between', marginHorizontal: 30 }}>
         {/* Left */}
         <Row>{props.children}</Row>
         {/* Center */}
@@ -40,9 +40,9 @@ const BackButton = comp(props =>
 );
 
 const BookScreenLayout: Comp<{title: string}> = props => (
-    <Column width='100%' align='center'>
+    <Column style={{width: '100%', align: 'center'}}>
         <Header title={props.title}><BackButton /></Header>
-        <Row maxWidth={50} align='center' margin={2}>
+        <Row style={{maxWidth: 50, align: 'center', margin: 2}}>
             {props.children}
         </Row>
     </Column>

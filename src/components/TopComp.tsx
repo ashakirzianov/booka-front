@@ -6,7 +6,7 @@ import { connected } from './comp-utils';
 
 export const TopComp = connected(['screen'])((props) =>
     <ScreenLayout color='black'>
-        <Column align='center'>
+        <Column style={{align: 'center'}}>
             { <ScreenComp {...props.screen} /> }
         </Column>
     </ScreenLayout>

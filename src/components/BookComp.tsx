@@ -12,22 +12,22 @@ import { assertNever } from '../utils';
 import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
-    <Row justifyContent='center'>
+    <Row style={{justifyContent: 'center'}}>
         <StyledText>{props.text}</StyledText>
     </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
-    <Row justifyContent='center'>
+    <Row style={{justifyContent: 'center' }}>
         <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
     </Row>;
 
 export const SubpartTitle: Comp<{ text?: string }> = props =>
-    <Row justifyContent='flex-start'>
+    <Row style={{ justifyContent: 'flex-start' }}>
         <StyledText style={{ fontWeight: 'bold' }}>{props.text}</StyledText>
     </Row>;
 
 export const BookTitle: Comp<{ text?: string }> = props =>
-    <Row justifyContent='center' width='100%'>
+    <Row style={{ justifyContent: 'center', width: '100%' }}>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 

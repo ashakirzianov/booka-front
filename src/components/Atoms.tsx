@@ -25,46 +25,48 @@ export type Align = FlexStyle['alignItems'];
 export type JustifyContent = FlexStyle['justifyContent'];
 export type WidthHeight = string;
 export type LayoutProps = {
-    justifyContent?: JustifyContent,
-    width?: WidthHeight,
-    height?: WidthHeight,
-    maxWidth?: number,
-    maxHeight?: number,
-    margin?: number,
-    marginHorizontal?: number,
-    align?: Align,
-    backgroundColor?: string,
+    style?: {
+        justifyContent?: JustifyContent,
+        width?: WidthHeight,
+        height?: WidthHeight,
+        maxWidth?: number,
+        maxHeight?: number,
+        margin?: number,
+        marginHorizontal?: number,
+        align?: Align,
+        backgroundColor?: string,
+    }
 };
-function styleFromProps(props: LayoutProps): ViewStyle {
-    return {
-        width: props.width,
-        height: props.height,
-        maxWidth: size(props.maxWidth),
-        maxHeight: size(props.maxHeight),
-        alignItems: props.align,
-        backgroundColor: props.backgroundColor,
-        margin: size(props.margin),
-        justifyContent: props.justifyContent,
-        marginHorizontal: size(props.marginHorizontal),
+function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
+    return style && {
+        width: style.width,
+        height: style.height,
+        maxWidth: size(style.maxWidth),
+        maxHeight: size(style.maxHeight),
+        alignItems: style.align,
+        backgroundColor: style.backgroundColor,
+        margin: size(style.margin),
+        justifyContent: style.justifyContent,
+        marginHorizontal: size(style.marginHorizontal),
     };
 }
 export const Column: Comp<LayoutProps> = props =>
-        <View style={{...styleFromProps(props), flexDirection: 'column'}}>{props.children}</View>;
+    <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>{props.children}</View>;
 
 export const Row: Comp<LayoutProps> = props =>
-    <View style={{...styleFromProps(props), flexDirection: 'row'}}>{props.children}</View>;
+    <View style={{ ...convertStyle(props.style), flexDirection: 'row' }}>{props.children}</View>;
 
 export const ScreenLayout: Comp<{
     color?: string,
 }> = props => (
-        <View style={{
-            position: 'absolute',
-            minHeight: '100%',
-            minWidth: '100%',
-            width: platformValue({ mobile: '100%' }),
-            height: platformValue({ mobile: '100%' }),
-            backgroundColor: props.color,
-        }}>
-            {props.children}
-        </View>
+    <View style={{
+        position: 'absolute',
+        minHeight: '100%',
+        minWidth: '100%',
+        width: platformValue({ mobile: '100%' }),
+        height: platformValue({ mobile: '100%' }),
+        backgroundColor: props.color,
+    }}>
+        {props.children}
+    </View>
 );
