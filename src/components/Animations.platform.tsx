@@ -8,12 +8,10 @@ import { Comp } from './comp-utils';
 const PopFromBottomDiv = posed.div({
     enter: {
         y: 0,
-        opacity: 1,
         delay: 300,
     },
     exit: {
-        y: 200,
-        opacity: 0,
+        y: -200,
     }
 });
 
