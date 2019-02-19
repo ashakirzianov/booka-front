@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import { Comp, comp, connected } from './comp-utils';
 import { Label, } from './Elements';
 import { navigateToBl } from '../logic';
-import { BookScreenLayout } from './ScreenComp.Layout';
+import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
@@ -23,9 +23,9 @@ const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookSc
 );
 
 const LibraryScreenComp = comp<LibraryScreen>(props =>
-    <LibraryComp {...props.library} openBook={
-        bl => navigateToBl(bl)
-    } />
+    <LibraryScreenLayout>
+        <LibraryComp {...props.library} openBook={bl => navigateToBl(bl)} />
+    </LibraryScreenLayout>
 );
 
 const BlankScreenComp: Comp = (props =>

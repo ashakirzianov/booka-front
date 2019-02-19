@@ -1,9 +1,9 @@
+import * as React from 'react';
+
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
 import { navigateToLibrary } from '../logic/historyNavigation.platform';
-
-
 
 export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback }> = (props =>
     <ScreenLayout
@@ -18,6 +18,14 @@ export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: Voi
         >
             {props.children}
         </Row>
+    </ScreenLayout>
+);
+
+export const LibraryScreenLayout: Comp = (props =>
+    <ScreenLayout
+        header={<Header title='Library' />}
+        >
+        <Row style={{ marginTop: relative(5)}}>{props.children}</Row>
     </ScreenLayout>
 );
 
