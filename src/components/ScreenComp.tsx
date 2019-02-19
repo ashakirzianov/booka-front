@@ -17,28 +17,28 @@ export const ScreenComp: Comp<Screen> = (props =>
 );
 
 const BookScreenComp: Comp<BookScreen> = (props =>
-    <BookScreenLayout title={props.book.book === 'book' ? props.book.meta.title : ''}>
+    <BookScreenLayout>
         <BookComp {...props.book} />
     </BookScreenLayout>
 );
 
 const Header: Comp<{ title?: string, right?: React.ReactNode }> = (props =>
     <Row style={{
-        width: '100%',
+        width: '100%', height: relative(5),
         backgroundColor: 'black',
         justifyContent: 'space-between',
+        alignItems: 'center',
         padding: relative(1),
-        marginBottom: relative(20),
         position: 'fixed',
         top: 0,
         zIndex: 999,
-        }}>
+    }}>
         {/* Left */}
         <Row>{props.children}</Row>
         {/* Center */}
-        <Row>{ props.title !== undefined ? <Label text={props.title}/> : undefined }</Row>
+        <Row>{props.title !== undefined ? <Label text={props.title} /> : undefined}</Row>
         {/* Right */}
-        <Row>{props.right}<Label text='Right' /></Row>
+        <Row>{props.right}</Row>
     </Row>
 );
 
@@ -48,10 +48,14 @@ const BackButton = comp(props =>
     }} />
 );
 
-const BookScreenLayout: Comp<{title: string}> = props => (
-    <Column style={{width: '100%', alignItems: 'center'}}>
-        <Header title={props.title}><BackButton /></Header>
-        <Row style={{maxWidth: relative(50), alignItems: 'center', margin: relative(2)}}>
+const BookScreenLayout: Comp = props => (
+    <Column style={{ width: '100%', alignItems: 'center' }}>
+        <Header><BackButton /></Header>
+        <Row style={{
+            alignItems: 'center',
+            maxWidth: relative(50),
+            margin: relative(2), marginTop: relative(5),
+        }}>
             {props.children}
         </Row>
     </Column>
