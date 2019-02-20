@@ -48,3 +48,7 @@ export function errorBook(error: string): ErrorBook {
 export function isParagraph(bn: BookNode): bn is Paragraph {
     return typeof bn === 'string';
 }
+
+export function isChapter(bn: BookNode): bn is Chapter {
+    return typeof bn === 'object' && bn.book === 'chapter';
+}
