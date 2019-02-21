@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
-import { assertNever } from '../utils';
+import { assertNever, throwExp } from '../utils';
 import { Comp, comp, connected } from './comp-utils';
 import { navigateToBl } from '../logic';
 import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
@@ -11,6 +11,7 @@ import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
+            : props.screen === 'toc' ? throwExp('Not implemented')
                 : assertNever(props)
 );
 
