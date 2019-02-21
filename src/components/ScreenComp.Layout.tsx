@@ -30,27 +30,37 @@ export const LibraryScreenLayout: Comp = (props =>
     </ScreenLayout>
 );
 
+export const TocScreenLayout: Comp = (props =>
+    <ScreenLayout
+        header={
+            <Header title='Table of Contents' visible><BackButton /></Header>
+        }
+    >
+        <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
+    </ScreenLayout>
+);
+
 const Header = comp<{
-        title?: string,
-        right?: ReactContent,
-        visible: boolean,
-    }>(props =>
+    title?: string,
+    right?: ReactContent,
+    visible: boolean,
+}>(props =>
     <TopPanel>
         <AnimatedVisibility visible={props.visible}>
-        <Row style={{
-            width: '100%', height: relative(5),
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: relative(1),
-            backgroundColor: 'black',
-        }}>
-            {/* Left */}
-            <Row>{props.children}</Row>
-            {/* Center */}
-            <Row><Label text={props.title || ''} /></Row>
-            {/* Right */}
-            <Row>{props.right}</Row>
-        </Row>
+            <Row style={{
+                width: '100%', height: relative(5),
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: relative(1),
+                backgroundColor: 'black',
+            }}>
+                {/* Left */}
+                <Row>{props.children}</Row>
+                {/* Center */}
+                <Row><Label text={props.title || ''} /></Row>
+                {/* Right */}
+                <Row>{props.right}</Row>
+            </Row>
         </AnimatedVisibility>
     </TopPanel>
 );
