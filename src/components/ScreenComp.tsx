@@ -5,14 +5,12 @@ import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, comp, connected } from './comp-utils';
-import { Label, } from './Elements';
 import { navigateToBl } from '../logic';
 import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
-            : props.screen === 'blank' ? <BlankScreenComp />
                 : assertNever(props)
 );
 
@@ -26,8 +24,4 @@ const LibraryScreenComp = comp<LibraryScreen>(props =>
     <LibraryScreenLayout>
         <LibraryComp {...props.library} openBook={bl => navigateToBl(bl)} />
     </LibraryScreenLayout>
-);
-
-const BlankScreenComp: Comp = (props =>
-    <Label text='Nothing here. This screen should never be visible' />
 );

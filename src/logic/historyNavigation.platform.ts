@@ -48,8 +48,6 @@ export function stateToUrl(state: App) {
             return '/';
         case 'book':
             return `/book/${blToString(current.bl)}`;
-        case 'blank':
-            return '/';
         default:
             return assertNever(current);
     }
