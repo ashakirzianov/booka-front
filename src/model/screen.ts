@@ -61,11 +61,9 @@ export function forScreen<T>(screen: Screen, map: ForScreenMap<T>): T | undefine
 export type Screen = BookScreen | LibraryScreen;
 export type BookScreen = 
     | ReturnType<typeof bookScreen>
-    //| ReturnType<typeof loadBookScreen>
     ;
 export type LibraryScreen =
     | ReturnType<typeof libraryScreen>
-    //| ReturnType<typeof loadingLibraryScreen>
     ;
 
 export function bookScreen(book: Book, bl: BookLocator) {
@@ -73,15 +71,6 @@ export function bookScreen(book: Book, bl: BookLocator) {
         screen: 'book' as 'book',
         book: book,
         bl: bl,
-        loading: false as false,
-    };
-}
-
-export function loadBookScreen(bl: BookLocator) {
-    return {
-        screen: 'book' as 'book',
-        bl: bl,
-        loading: true as true,
     };
 }
 
@@ -89,13 +78,5 @@ export function libraryScreen(library: Library) {
     return {
         screen: 'library' as 'library',
         library: library,
-        loading: false as false,
-    };
-}
-
-export function loadingLibraryScreen() {
-    return {
-        screen: 'library' as 'library',
-        loading: true as true,
     };
 }
