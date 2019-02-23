@@ -1,6 +1,6 @@
 import { stringToBL } from '../model';
 import { actionCreators, dispatchAction } from '../redux';
-import { buildBookScreen, buildLibraryScreen } from './screenBuilders';
+import { buildBookScreen, buildLibraryScreen, buildTocScreen } from './screenBuilders';
 import { Action } from '../redux/store';
 import { bite } from '../utils';
 
@@ -16,6 +16,17 @@ export function destinationToActions(dest: Destination): Action[] {
                 return [
                     actionCreators.navigateToScreen(buildBookScreen(bl)),
                     actionCreators.updateCurrentBookPosition(bl.path),
+                ];
+            } else {
+                // TODO: handle incorrect bl
+                return [];
+            }
+        },
+        toc: tocString => {
+            const bl = stringToBL(tocString);
+            if (bl) {
+                return [
+                    actionCreators.navigateToScreen(buildTocScreen(bl)),
                 ];
             } else {
                 // TODO: handle incorrect bl

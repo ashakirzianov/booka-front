@@ -1,12 +1,15 @@
+import * as React from 'react';
+
 import { Comp } from './comp-utils';
 import { Row, StyledText } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
 import { Column } from './Atoms';
+import { BookPath } from '../model';
 
 const TocHeader: Comp<{ text: string }> = props =>
-    <Row style={{justifyContent: 'center', fontSize: 30 }}>
-        <StyledText>{props.text}</StyledText>
+    <Row style={{justifyContent: 'center'}}>
+        <StyledText style={{fontSize: 30}}>{props.text}</StyledText>
     </Row>;
 
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
@@ -19,7 +22,11 @@ export const TableOfContentsComp: Comp<TableOfContents> = (props =>
     <ScrollView>
         <Column>
             <TocHeader text={props.title} />
-            {props.items.map(i => <TocItemComp {...i} />)}
+            {props.items.map(i => <TocItemComp key={pathToString(i.path)} {...i} />)}
         </Column>
     </ScrollView>
 );
+
+function pathToString(path: BookPath): string {
+    return path.join('-');
+}
