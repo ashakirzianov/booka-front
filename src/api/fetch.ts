@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
-    Book, errorBook, BookLocator, Library,
-} from "../model";
+    Book, errorBook, Library, BookId,
+} from '../model';
 import * as Contracts from './contracts';
 import { throwExp } from '../utils';
 
@@ -20,20 +20,26 @@ export async function fetchLibrary(): Promise<Library> {
     };
 }
 
-export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
-    switch (bookLocator.bl) {
+export async function fetchBI(bookId: BookId): Promise<Book> {
+    switch (bookId.bi) {
         case 'remote-book':
-            const backendBook = fetchBook(bookLocator.name);
+            const backendBook = fetchBook(bookId.name);
             return backendBook;
         default:
-            return throwExp(`Unsupported book locator: ${bookLocator}`);
+            return throwExp(`Unsupported book id: ${bookId.bi}`);
     }
 }
 
 export async function fetchBook(bookName: string): Promise<Book> {
     try {
         const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
-        return response;
+        return {
+            ...response,
+            id: {
+                bi: 'remote-book',
+                name: bookName,
+            },
+        };
     } catch (reason) {
         return errorBook("Can't find static book: " + bookName);
     }

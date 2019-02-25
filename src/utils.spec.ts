@@ -1,6 +1,6 @@
-import { combineFs, trimEnd, trimStart } from "./utils";
+import { combineFs, trimEnd, trimStart } from './utils';
 
-describe("Utils", () => {
+describe('Utils', () => {
     it('combineFs last-to-first order', () => {
         expect(combineFs<number>(
             x => x * x,
@@ -9,7 +9,7 @@ describe("Utils", () => {
     });
 
     it('trim', () => {
-        expect(trimStart("   hey ", " hy")).toBe("ey ");
-        expect(trimEnd("   hey ", " hy")).toBe("   he");
+        expect(trimStart('   hey ', ' hy')).toBe('ey ');
+        expect(trimEnd('   hey ', ' hy')).toBe('   he');
     });
 });

@@ -2,7 +2,7 @@ import {
     readValue,
     // storeValue,
 } from './persistentStore.platform';
-import { App, libraryScreen, library } from "../model";
+import { App, libraryScreen, library } from '../model';
 
 const storeKey = 'state';
 export function storeState(state: App) {

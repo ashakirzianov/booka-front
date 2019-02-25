@@ -16,6 +16,10 @@ export const ClickResponder: Comp<{ onClick?: VoidCallback }> = (props =>
     </div>
 );
 
+export const Tab: Comp = (props =>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+);
+
 export function showAlert(message: string) {
     alert(message);
 }

@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { Library, BookInfo, BookLocator, remoteBookLocator } from '../model';
+import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
 import { SafeAreaView } from './Atoms';
+import { navigateToBl } from '../logic';
 
-const BookMetaComp: Comp<{ meta: BookInfo, id: string }, { openBook: BookLocator }> = (props =>
+const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>
         <LinkButton
             text={props.meta.title}
-            onClick={
-                () => props.openBook && props.openBook(remoteBookLocator(props.id))
+            onClick={() =>
+                navigateToBl(bookLocator(remoteBookId(props.id)))
             }
         />
     </Row>
 );
 
-export const LibraryComp: Comp<Library, { openBook: BookLocator }> = (props =>
+export const LibraryComp: Comp<Library> = (props =>
     <SafeAreaView>
         <Column>
             {
@@ -23,7 +24,6 @@ export const LibraryComp: Comp<Library, { openBook: BookLocator }> = (props =>
                     : Object.keys(props.books).map(
                         id => <BookMetaComp
                             key={id} meta={props.books[id]!} id={id}
-                            openBook={props.openBook}
                         />)
             }
         </Column>

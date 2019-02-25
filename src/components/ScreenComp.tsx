@@ -1,33 +1,34 @@
 import * as React from 'react';
 
-import { Screen, BookScreen, LibraryScreen } from '../model';
+import { Screen, BookScreen, LibraryScreen, TocScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, comp, connected } from './comp-utils';
-import { Label, } from './Elements';
-import { navigateToBl } from '../logic';
-import { BookScreenLayout, LibraryScreenLayout } from './ScreenComp.Layout';
+import { BookScreenLayout, LibraryScreenLayout, TocScreenLayout } from './ScreenComp.Layout';
+import { TableOfContentsComp } from './TableOfContentsComp';
 
 export const ScreenComp: Comp<Screen> = (props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
-            : props.screen === 'blank' ? <BlankScreenComp />
+            : props.screen === 'toc' ? <TocScreenComp {...props} />
                 : assertNever(props)
 );
 
 const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
-    <BookScreenLayout onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
+    <BookScreenLayout bi={props.book.id} onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
         <BookComp {...props.book} />
-    </BookScreenLayout>
+    </BookScreenLayout>,
 );
 
 const LibraryScreenComp = comp<LibraryScreen>(props =>
     <LibraryScreenLayout>
-        <LibraryComp {...props.library} openBook={bl => navigateToBl(bl)} />
-    </LibraryScreenLayout>
+        <LibraryComp {...props.library} />
+    </LibraryScreenLayout>,
 );
 
-const BlankScreenComp: Comp = (props =>
-    <Label text='Nothing here. This screen should never be visible' />
+const TocScreenComp = comp<TocScreen>(props =>
+    <TocScreenLayout>
+        <TableOfContentsComp {...props.toc} />
+    </TocScreenLayout>,
 );

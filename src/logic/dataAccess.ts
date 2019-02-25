@@ -1,40 +1,36 @@
 import {
-    BookLocator, loadingBook, Book, Library, LoadBookDesc, pointToSameBook, library,
+    loadingBook, Book, Library, library, BookId, sameId,
 } from '../model';
 import { dispatchAction, actionCreators } from '../redux';
-import { fetchBL, fetchLibrary } from '../api';
+import { fetchBI, fetchLibrary } from '../api';
 
-type BookStore = Array<LoadBookDesc>;
+type BookStore = Book[];
 const bookStore: BookStore = [];
-function bookFromStore(store: BookStore, bl: BookLocator): Book | undefined {
-    const desc = store.find(d => pointToSameBook(d.locator, bl));
+function bookFromStore(store: BookStore, bi: BookId): Book | undefined {
+    const book = store.find(b => sameId(b.id, bi));
 
-    return desc && desc.book;
+    return book;
 }
 
-function storeBook(store: BookStore, desc: LoadBookDesc) {
-    const index = store.findIndex(d => pointToSameBook(d.locator, desc.locator));
+function storeBook(store: BookStore, book: Book) {
+    const index = store.findIndex(b => sameId(b.id, book.id));
 
     if (index >= 0) {
-        store[index] = desc;
+        store[index] = book;
     } else {
-        store.push(desc);
+        store.push(book);
     }
 }
 
-export function bookForLocator(bl: BookLocator): Book {
-    const book = bookFromStore(bookStore, bl);
+export function bookForId(bi: BookId): Book {
+    const book = bookFromStore(bookStore, bi);
     if (book) {
         return book;
     }
 
-    const desc = fetchBL(bl).then(b => {
-        const d = {
-            locator: bl,
-            book: b,
-        }
-        storeBook(bookStore, d);
-        return d;
+    const desc = fetchBI(bi).then(b => {
+        storeBook(bookStore, b);
+        return b;
     });
     dispatchAction(actionCreators.loadBook(desc));
 

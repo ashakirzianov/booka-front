@@ -1,18 +1,18 @@
-import { connect } from "react-redux";
-import { Dispatch, Action } from "redux";
-import { mapObject, pick, ExcludeKeys } from "../utils";
+import { connect } from 'react-redux';
+import { Dispatch, Action } from 'redux';
+import { mapObject, pick, ExcludeKeys } from '../utils';
 import {
     ActionDispatchers, ActionCreators,
     buildActionCreators, ActionDispatcher,
-} from "./redux-utils";
+} from './redux-utils';
 
 export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
     return function connectKeys<
         StateKs extends keyof State,
         ActionKs extends Exclude<keyof ActionsT, StateKs> = never>(
-        stateKs: Array<StateKs>,
-        actionKs: Array<ActionKs> = []
-    ) {
+            stateKs: StateKs[],
+            actionKs: ActionKs[] = [],
+        ) {
         type ComponentProps = Pick<State, StateKs> & {
             [k in ActionKs]: ActionDispatcher<ActionsT[k]>;
         };
@@ -33,8 +33,8 @@ export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
                     return mapObject(
                         creators,
                         (key, value) =>
-                            ((x: any) => { dispatch(value(x)); }) as any // TODO: try to remove this last cast
-                            );
+                            ((x: any) => { dispatch(value(x)); }) as any, // TODO: try to remove this last cast
+                    );
                 }
 
                 const callbacks = buildCallbacks(ac);

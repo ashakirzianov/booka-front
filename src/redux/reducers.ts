@@ -1,23 +1,20 @@
 import {
-    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath,
-} from "../model";
-import { buildPartialReducers } from "./redux-utils";
+    ActionsTemplate, App, Screen, libraryScreen, forScreen, updateRangeStart, tocScreen, bookScreen, sameId,
+} from '../model';
+import { buildPartialReducers } from './redux-utils';
+import { tocFromBook } from '../model/tableOfContent';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
     screen: {
         navigateToScreen: (s, p) => p,
         loadBook: {
             fulfilled: (screen, book) => forScreen<Screen>(screen, {
-                book: bs => {
-                    if (pointToSameBook(bs.bl, book.locator)) {
-                        return {
-                            ...bs,
-                            book: book.book,
-                            loading: false,
-                        };
-                    }
-                    return bs;
-                },
+                book: bs => sameId(bs.bl.id, book.id)
+                    ? bookScreen(book, bs.bl)
+                    : bs,
+                toc: ts => sameId(ts.bl.id, book.id)
+                    ? tocScreen(tocFromBook(book), ts.bl)
+                    : ts,
             }) || screen,
         },
         loadLibrary: {
@@ -28,13 +25,13 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         updateCurrentBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
-                bl: updatePath(bs.bl, bp),
+                bl: updateRangeStart(bs.bl, bp),
             }),
         }) || screen,
     },
     positionToNavigate: {
         navigateToScreen: (path, screen) => forScreen(screen, {
-            book: bs => bs.bl.path,
+            book: bs => bs.bl.range.start,
         }) || null,
     },
     controlsVisible: {

@@ -1,7 +1,7 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
-import { mapObject, Func } from "../utils";
+import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
-import { combineReducers, Reducer as ReducerRedux } from "redux";
+import { combineReducers, Reducer as ReducerRedux } from 'redux';
 
 // Actions:
 
@@ -101,7 +101,7 @@ function findReducerT<State, Template, Key extends keyof Template>(
     if (actionKeyPair) {
         const promiseReducerTemplate = promiseTemplate[actionKeyPair.action];
         const promiseReducer = promiseReducerTemplate && promiseReducerTemplate[actionKeyPair.key];
-    
+
         if (promiseReducer) {
             return promiseReducer;
         }
@@ -115,14 +115,14 @@ function parsePromiseActionName(actionName: string) {
         key: 'pending' as 'pending',
         action,
     }))
-    || stringEndCondition(actionName, '_REJECTED', action => ({
-        key: 'rejected' as 'rejected',
-        action,
-    }))
-    || stringEndCondition(actionName, '_FULFILLED', action => ({
-        key: 'fulfilled' as 'fulfilled',
-        action,
-    }))
+        || stringEndCondition(actionName, '_REJECTED', action => ({
+            key: 'rejected' as 'rejected',
+            action,
+        }))
+        || stringEndCondition(actionName, '_FULFILLED', action => ({
+            key: 'fulfilled' as 'fulfilled',
+            action,
+        }));
 }
 
 function stringEndCondition<T>(str: string, toTrim: string, f: (trimmed: string) => T): T | undefined {

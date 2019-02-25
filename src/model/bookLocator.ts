@@ -1,9 +1,36 @@
-export type RemoteBookLocator = {
-    bl: 'remote-book',
+export type RemoteBookId = {
+    bi: 'remote-book',
     name: string,
-    path: BookPath,
 };
+export type NotABookId = {
+    bi: 'not-book',
+};
+export type BookId = RemoteBookId | NotABookId;
+export function sameId(bi1: BookId, bi2: BookId): boolean {
+    return bi1.bi === 'remote-book'
+        ? bi2.bi === 'remote-book' && bi2.name === bi1.name
+        : false;
+}
+
+export function remoteBookId(name: string): RemoteBookId {
+    return {
+        bi: 'remote-book',
+        name: name,
+    };
+}
+
 export type BookPath = number[];
+export type BookRange = {
+    start: BookPath,
+    end?: BookPath,
+};
+
+export function range(start?: BookPath, end?: BookPath): BookRange {
+    return {
+        start: start || [],
+        end: end,
+    };
+}
 export function appendPath(head: number, tail: BookPath): BookPath {
     return [head].concat(tail);
 }
@@ -18,24 +45,29 @@ export function samePath(p1: BookPath, p2: BookPath) {
         ;
 }
 
-export type BookLocator = RemoteBookLocator;
+export type BookLocator = {
+    id: BookId,
+    range: BookRange,
+};
 
-export function remoteBookLocator(name: string, path?: BookPath): RemoteBookLocator {
+export function bookLocator(id: BookId, start?: BookPath, end?: BookPath): BookLocator {
     return {
-        bl: 'remote-book',
-        name: name,
-        path: path || [],
+        id: id,
+        range: range(start, end),
     };
 }
 
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
-    return bl1.bl === bl2.bl && bl1.name === bl2.name;
+    return sameId(bl1.id, bl2.id);
 }
 
-export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
+export function updateRangeStart(bl: BookLocator, path: BookPath): BookLocator {
     return {
         ...bl,
-        path: path,
+        range: {
+            ...bl.range,
+            start: path,
+        },
     };
 }
 
@@ -49,16 +81,26 @@ export function stringToBL(str: string): BookLocator | undefined {
     if (pathString) {
         const path = pathString
             .split('-')
-            .map(pc => parseInt(pc))
+            .map(pc => parseInt(pc, 10))
             ;
-        return remoteBookLocator(bookName, path);
+        return bookLocator(remoteBookId(bookName), path);
     }
 
-    return remoteBookLocator(bookName);
+    return bookLocator(remoteBookId(bookName));
 }
 
 export function blToString(bl: BookLocator): string {
-    return `${bl.name}${pathToString(bl.path)}`
+    return `${biToString(bl.id)}${rangeToString(bl.range)}`;
+}
+
+export function biToString(bi: BookId): string {
+    return bi.bi === 'remote-book'
+        ? bi.name
+        : '@not-a-book'; // TODO: better solution
+}
+
+export function rangeToString(br: BookRange): string {
+    return `${pathToString(br.start)}${br.end ? ':' + pathToString(br.end) : ''}`;
 }
 
 function pathToString(path: BookPath): string {

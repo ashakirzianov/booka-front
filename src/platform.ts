@@ -8,8 +8,7 @@ type PlatformValue<T> = {
     android?: T,
 };
 
-export function platformValue<T, U>(pv: { default: T } & PlatformValue<U>): T | U;
-export function platformValue<T, U>(pv: { web: T, mobile: U }): T | U;
+export function platformValue<T, U>(pv: { default: T } & PlatformValue<U> | { web: T, mobile: U }): T | U;
 export function platformValue<T, U, V>(pv: { web: T, ios: U, android: V }): T | U | V;
 export function platformValue<T>(pv: PlatformValue<T>): T | undefined;
 export function platformValue<T>(pv: PlatformValue<T>): T | undefined {

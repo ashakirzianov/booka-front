@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 import { TextProps } from './Atoms';
+import { Tab } from './Atoms.platform';
 
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
@@ -16,7 +17,7 @@ export const StyledText: Comp<TextProps, TextCallbacks> = props =>
     <Text
         {...props}
         style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</Text>
+    >{props.children}</Text>;
 
 export const Label: Comp<{ text: string }> = props =>
     <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
@@ -25,7 +26,7 @@ export const ParagraphText: Comp<{ text: string }> = props =>
     <StyledText style={{
         textAlign: 'justify',
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
-    }}>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
+    }}><Tab />{props.text}</StyledText>;
 
 export const LinkButton: Comp<{
     text: string,

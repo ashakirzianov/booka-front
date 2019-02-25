@@ -1,6 +1,6 @@
 import { createBrowserHistory } from 'history';
 import { dispatchNavigationEvent } from './routing';
-import { App, blToString, BookLocator } from '../model';
+import { App, blToString, BookLocator, biToString, BookId } from '../model';
 import { assertNever } from '../utils';
 import { Middleware } from 'redux';
 
@@ -30,6 +30,10 @@ export function navigateToLibrary() {
     navigateToUrl('/');
 }
 
+export function navigateToToc(bi: BookId) {
+    navigateToUrl('/toc/' + biToString(bi));
+}
+
 export const updateHistoryMiddleware: Middleware<{}, App> = store => next => action => {
     const result = next(action);
     const currState = store.getState();
@@ -48,8 +52,8 @@ export function stateToUrl(state: App) {
             return '/';
         case 'book':
             return `/book/${blToString(current.bl)}`;
-        case 'blank':
-            return '/';
+        case 'toc':
+            return `/toc/${blToString(current.bl)}`;
         default:
             return assertNever(current);
     }

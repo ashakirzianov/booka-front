@@ -1,1 +1,1 @@
-export { fetchBL, fetchLibrary } from './fetch';
+export { fetchBI, fetchLibrary } from './fetch';
