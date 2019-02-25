@@ -16,7 +16,7 @@ export const ScreenComp: Comp<Screen> = (props =>
 );
 
 const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
-    <BookScreenLayout onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
+    <BookScreenLayout bi={props.book.id} onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
         <BookComp {...props.book} />
     </BookScreenLayout>,
 );

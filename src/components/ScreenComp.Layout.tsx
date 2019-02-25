@@ -3,12 +3,17 @@ import * as React from 'react';
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
-import { navigateToLibrary } from '../logic/historyNavigation.platform';
+import { navigateToLibrary, navigateToToc } from '../logic/historyNavigation.platform';
 import { PopFromBottom, AnimatedVisibility } from './Animations.platform';
+import { BookId } from '../model';
 
-export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback }> = (props =>
+export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback, bi: BookId }> = (props =>
     <ScreenLayout
-        header={<Header visible={props.showControls}><BackButton /></Header>}
+        header={
+            <Header visible={props.showControls}>
+                <BackButton />
+                <OpenTocButton bi={props.bi} />
+            </Header>}
         onContentClick={() => props.onContentClick()}
     >
         <Row style={{
@@ -33,7 +38,9 @@ export const LibraryScreenLayout: Comp = (props =>
 export const TocScreenLayout: Comp = (props =>
     <ScreenLayout
         header={
-            <Header title='Table of Contents' visible><BackButton /></Header>
+            <Header title='Table of Contents' visible>
+                <BackButton />
+            </Header>
         }
     >
         <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
@@ -69,6 +76,10 @@ const BackButton = comp(props =>
     <LinkButton text='< Back' onClick={() => {
         navigateToLibrary();
     }} />,
+);
+
+const OpenTocButton: Comp<{ bi: BookId }> = (props =>
+    <LinkButton text='ToC' onClick={() => navigateToToc(props.bi)} />
 );
 
 const ScreenLayout: Comp<{
