@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Library, BookInfo, BookLocator, remoteBookLocator } from '../model';
+import { Library, BookInfo, BookLocator, bookLocator, remoteBookId } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
 import { SafeAreaView } from './Atoms';
@@ -9,7 +9,7 @@ const BookMetaComp: Comp<{ meta: BookInfo, id: string }, { openBook: BookLocator
         <LinkButton
             text={props.meta.title}
             onClick={
-                () => props.openBook && props.openBook(remoteBookLocator(props.id))
+                () => props.openBook && props.openBook(bookLocator(remoteBookId(props.id)))
             }
         />
     </Row>

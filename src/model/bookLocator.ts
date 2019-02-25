@@ -12,6 +12,13 @@ export function sameId(bi1: BookId, bi2: BookId): boolean {
         : false;
 }
 
+export function remoteBookId(name: string): RemoteBookId {
+    return {
+        bl: 'remote-book',
+        name: name,
+    };
+}
+
 export type BookPath = number[];
 export type BookRange = {
     start: BookPath,
@@ -50,21 +57,11 @@ export function bookLocator(id: BookId, start?: BookPath, end?: BookPath): BookL
     };
 }
 
-export function remoteBookLocator(name: string, path?: BookPath): BookLocator {
-    return {
-        id: {
-            bl: 'remote-book',
-            name: name,
-        },
-        range: range(path),
-    };
-}
-
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
     return sameId(bl1.id, bl2.id);
 }
 
-export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
+export function updateRangeStart(bl: BookLocator, path: BookPath): BookLocator {
     return {
         ...bl,
         range: {
@@ -86,10 +83,10 @@ export function stringToBL(str: string): BookLocator | undefined {
             .split('-')
             .map(pc => parseInt(pc, 10))
             ;
-        return remoteBookLocator(bookName, path);
+        return bookLocator(remoteBookId(bookName), path);
     }
 
-    return remoteBookLocator(bookName);
+    return bookLocator(remoteBookId(bookName));
 }
 
 export function blToString(bl: BookLocator): string {

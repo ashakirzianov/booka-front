@@ -1,5 +1,5 @@
 import {
-    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath, tocScreen, bookScreen,
+    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updateRangeStart, tocScreen, bookScreen,
 } from '../model';
 import { buildPartialReducers } from './redux-utils';
 import { tocFromBook } from '../model/tableOfContent';
@@ -25,7 +25,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         updateCurrentBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
-                bl: updatePath(bs.bl, bp),
+                bl: updateRangeStart(bs.bl, bp),
             }),
         }) || screen,
     },
