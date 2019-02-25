@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-    Book, errorBook, BookLocator, Library,
+    Book, errorBook, Library, BookId,
 } from '../model';
 import * as Contracts from './contracts';
 import { throwExp } from '../utils';
@@ -20,13 +20,13 @@ export async function fetchLibrary(): Promise<Library> {
     };
 }
 
-export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
-    switch (bookLocator.id.bi) {
+export async function fetchBI(bookId: BookId): Promise<Book> {
+    switch (bookId.bi) {
         case 'remote-book':
-            const backendBook = fetchBook(bookLocator.id.name);
+            const backendBook = fetchBook(bookId.name);
             return backendBook;
         default:
-            return throwExp(`Unsupported book locator: ${bookLocator}`);
+            return throwExp(`Unsupported book id: ${bookId.bi}`);
     }
 }
 

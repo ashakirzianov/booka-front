@@ -1,11 +1,11 @@
 import {
     BookLocator, BookScreen, bookScreen, LibraryScreen, libraryScreen, ScreenStack, topScreen, Screen, TocScreen, tocScreen,
 } from '../model';
-import { bookForLocator, currentLibrary } from './dataAccess';
+import { bookForId, currentLibrary } from './dataAccess';
 import { tocFromBook } from '../model/tableOfContent';
 
 export function buildBookScreen(bl: BookLocator): BookScreen {
-    const screen = bookScreen(bookForLocator(bl), bl);
+    const screen = bookScreen(bookForId(bl.id), bl);
 
     return screen;
 }
@@ -17,7 +17,7 @@ export function buildLibraryScreen(): LibraryScreen {
 }
 
 export function buildTocScreen(bl: BookLocator): TocScreen {
-    const book = bookForLocator(bl);
+    const book = bookForId(bl.id);
     const toc = tocFromBook(book);
     const screen = tocScreen(toc, bl);
 

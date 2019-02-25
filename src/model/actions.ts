@@ -1,17 +1,12 @@
 import { def } from '../utils';
 import { Screen } from './screen';
 import { Library } from './library';
-import { BookLocator, BookPath } from './bookLocator';
+import { BookPath } from './bookLocator';
 import { Book } from './book';
-
-export type LoadBookDesc = {
-    locator: BookLocator,
-    book: Book,
-};
 
 export const actionsTemplate = {
     navigateToScreen: def<Screen>(),
-    loadBook: def<Promise<LoadBookDesc>>(),
+    loadBook: def<Promise<Book>>(),
     loadLibrary: def<Promise<Library>>(),
     updateCurrentBookPosition: def<BookPath>(),
     toggleControls: def(),
