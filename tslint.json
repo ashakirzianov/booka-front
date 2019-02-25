@@ -1,6 +1,25 @@
 {
-  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
   "rules": {
+    "eofline": true,
+    "no-consecutive-blank-lines": true,
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "semicolon": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always"
+      }
+    ],
+    "whitespace": true,
     "object-literal-sort-keys": false,
     "object-literal-shorthand": false,
     "interface-over-type-literal": false,
