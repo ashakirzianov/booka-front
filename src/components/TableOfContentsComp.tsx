@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import { Comp } from './comp-utils';
-import { Row, StyledText } from './Elements';
+import { Row, StyledText, LinkButton } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
 import { Column } from './Atoms';
 import { rangeToString } from '../model';
+import { navigateToBl } from '../logic';
 
 const TocHeader: Comp<{ text: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -14,7 +15,7 @@ const TocHeader: Comp<{ text: string }> = props =>
 
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
-        <StyledText>{props.title}</StyledText>
+        <LinkButton text={props.title} onClick={() => navigateToBl(props.locator)} />
     </Row>
 );
 
