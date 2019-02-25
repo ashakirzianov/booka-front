@@ -22,6 +22,7 @@
     "store": "^2.0.12"
   },
   "scripts": {
+    "lint": "tslint -c tslint.json -p tsconfig.json",
     "postinstall": "npm run build",
     "start": "serve -s build",
     "debug": "react-scripts start",
@@ -46,6 +47,9 @@
     "babel-preset-expo": "^5.0.0",
     "expo": "32.0.0",
     "schedule": "^0.4.0",
+    "tslint": "^5.13.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^3.6.0",
     "typescript": "^3.3.1"
   },
   "browserslist": [
