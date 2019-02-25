@@ -5,7 +5,6 @@ import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, comp, connected } from './comp-utils';
-import { navigateToBl } from '../logic';
 import { BookScreenLayout, LibraryScreenLayout, TocScreenLayout } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
 
@@ -24,7 +23,7 @@ const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookSc
 
 const LibraryScreenComp = comp<LibraryScreen>(props =>
     <LibraryScreenLayout>
-        <LibraryComp {...props.library} openBook={navigateToBl} />
+        <LibraryComp {...props.library} />
     </LibraryScreenLayout>,
 );
 

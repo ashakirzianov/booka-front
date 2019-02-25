@@ -38,7 +38,7 @@ const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
     <ParagraphText text={props.p} />,
 );
 
-const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
+const ChapterComp = scrollableUnit<BookNodeProps<Chapter>>(props =>
     <Column>
         {
             props.level === 0 ? <ChapterTitle text={props.title} />

@@ -3,14 +3,14 @@ import { throttle } from 'lodash';
 
 type Path = number[];
 type ScrollableUnitProps = {
-    onScrollVisible: () => void,
+    onScrollVisible?: () => void,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     public readonly ref: React.RefObject<HTMLDivElement>;
 
     public handleScroll = throttle(() => {
-        if (this.isPartiallyVisible()) {
+        if (this.props.onScrollVisible && this.isPartiallyVisible()) {
             this.props.onScrollVisible();
         }
     }, 250);
@@ -83,6 +83,10 @@ export function didUpdateHook<T>(C: React.ComponentType<T>) {
     type Props = T & { didUpdate: () => void };
     return class WithOnDisplay extends React.Component<Props> {
         public componentDidUpdate() {
+            this.props.didUpdate();
+        }
+
+        public componentDidMount() {
             this.props.didUpdate();
         }
 
