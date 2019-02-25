@@ -7,6 +7,8 @@ import { ScrollView } from 'react-native';
 import { Column } from './Atoms';
 import { rangeToString } from '../model';
 import { navigateToBl } from '../logic';
+import { nums } from '../utils';
+import { Tab } from './Atoms.platform';
 
 const TocHeader: Comp<{ text: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -15,6 +17,7 @@ const TocHeader: Comp<{ text: string }> = props =>
 
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
+        {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
         <LinkButton text={props.title} onClick={() => navigateToBl(props.locator)} />
     </Row>
 );

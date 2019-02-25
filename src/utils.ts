@@ -2,10 +2,10 @@
 export type KeyRestriction<T, U extends PropertyKey> = {
     [k in U]?: never;
 } & {
-    [k in U]?: undefined;
-} & {
-    [k in keyof T]: T[k];
-};
+        [k in U]?: undefined;
+    } & {
+        [k in keyof T]: T[k];
+    };
 
 export type PromiseType<T> = T extends Promise<infer U> ? U : any;
 
@@ -113,4 +113,12 @@ export function bite(from: string, prefix: string): string | undefined {
     return from.startsWith(prefix)
         ? from.substring(prefix.length)
         : undefined;
+}
+
+export function nums(start: number, end: number): number[] {
+    const result = [];
+    for (let i = start; i < end; i++) {
+        result.push(i);
+    }
+    return result;
 }
