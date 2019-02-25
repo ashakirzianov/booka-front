@@ -1,13 +1,10 @@
 import { def } from '../utils';
 import { Screen } from './screen';
-import { Library } from './library';
 import { BookPath } from './bookLocator';
-import { Book } from './book';
+import { OptimisticPromise } from '../promisePlus';
 
 export const actionsTemplate = {
-    navigateToScreen: def<Screen>(),
-    loadBook: def<Promise<Book>>(),
-    loadLibrary: def<Promise<Library>>(),
+    navigateToScreen: def<OptimisticPromise<Screen>>(),
     updateCurrentBookPosition: def<BookPath>(),
     toggleControls: def(),
 };

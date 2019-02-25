@@ -54,6 +54,8 @@ export function stateToUrl(state: App) {
             return `/book/${blToString(current.bl)}`;
         case 'toc':
             return `/toc/${blToString(current.bl)}`;
+        case 'loading':
+            return '/notImplemented'; // TODO: implement
         default:
             return assertNever(current);
     }

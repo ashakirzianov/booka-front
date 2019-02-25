@@ -1,7 +1,6 @@
 import {
-    loadingBook, Book, Library, library, BookId, sameId,
+    Book, Library, library, BookId, sameId,
 } from '../model';
-import { dispatchAction, actionCreators } from '../redux';
 import { fetchBI, fetchLibrary } from '../api';
 
 type BookStore = Book[];
@@ -22,29 +21,31 @@ function storeBook(store: BookStore, book: Book) {
     }
 }
 
-export function bookForId(bi: BookId): Book {
+export async function bookForId(bi: BookId): Promise<Book> {
     const book = bookFromStore(bookStore, bi);
     if (book) {
         return book;
     }
 
-    const desc = fetchBI(bi).then(b => {
+    const bookPromise = fetchBI(bi).then(b => {
         storeBook(bookStore, b);
         return b;
     });
-    dispatchAction(actionCreators.loadBook(desc));
 
-    return loadingBook();
+    return bookPromise;
 }
 
-let cachedLibrary = library();
-export function currentLibrary(): Library {
+let libraryCache = library();
+export async function currentLibrary(): Promise<Library> {
     const lib = fetchLibrary()
         .then(l => {
-            cachedLibrary = l;
+            libraryCache = l;
             return l;
         });
 
-    dispatchAction(actionCreators.loadLibrary(lib));
-    return cachedLibrary;
+    return lib;
+}
+
+export function cachedLibrary(): Library {
+    return libraryCache;
 }
