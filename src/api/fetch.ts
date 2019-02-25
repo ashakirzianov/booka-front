@@ -21,9 +21,9 @@ export async function fetchLibrary(): Promise<Library> {
 }
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
-    switch (bookLocator.bl) {
+    switch (bookLocator.id.bl) {
         case 'remote-book':
-            const backendBook = fetchBook(bookLocator.name);
+            const backendBook = fetchBook(bookLocator.id.name);
             return backendBook;
         default:
             return throwExp(`Unsupported book locator: ${bookLocator}`);
@@ -33,7 +33,13 @@ export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
 export async function fetchBook(bookName: string): Promise<Book> {
     try {
         const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
-        return response;
+        return {
+            ...response,
+            id: {
+                bl: 'remote-book',
+                name: bookName,
+            },
+        };
     } catch (reason) {
         return errorBook("Can't find static book: " + bookName);
     }

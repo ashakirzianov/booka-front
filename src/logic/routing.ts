@@ -15,7 +15,7 @@ export function destinationToActions(dest: Destination): Action[] {
             if (bl) {
                 return [
                     actionCreators.navigateToScreen(buildBookScreen(bl)),
-                    actionCreators.updateCurrentBookPosition(bl.path),
+                    actionCreators.updateCurrentBookPosition(bl.range.start),
                 ];
             } else {
                 // TODO: handle incorrect bl

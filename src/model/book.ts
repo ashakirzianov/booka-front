@@ -1,3 +1,5 @@
+import { BookId } from './bookLocator';
+
 export type BookMeta = {
     title: string,
     author?: string,
@@ -15,17 +17,20 @@ export type BookNode = Chapter | Paragraph;
 
 export type ActualBook = {
     book: 'book',
+    id: BookId,
     meta: BookMeta,
     content: BookNode[],
 };
 
 export type ErrorBook = {
     book: 'error',
+    id: BookId,
     error: string,
 };
 
 export type LoadingBook = {
     book: 'loading',
+    id: BookId,
 };
 
 export type Book = ActualBook | ErrorBook | LoadingBook;
@@ -33,12 +38,14 @@ export type Book = ActualBook | ErrorBook | LoadingBook;
 export function loadingBook(): LoadingBook {
     return {
         book: 'loading',
+        id: { bl: 'not-book' },
     };
 }
 
 export function errorBook(error: string): ErrorBook {
     return {
         book: 'error',
+        id: { bl: 'not-book' },
         error: error,
     };
 }
