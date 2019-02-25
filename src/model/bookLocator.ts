@@ -1,20 +1,20 @@
 export type RemoteBookId = {
-    bl: 'remote-book',
+    bi: 'remote-book',
     name: string,
 };
 export type NotABookId = {
-    bl: 'not-book',
+    bi: 'not-book',
 };
 export type BookId = RemoteBookId | NotABookId;
 export function sameId(bi1: BookId, bi2: BookId): boolean {
-    return bi1.bl === 'remote-book'
-        ? bi2.bl === 'remote-book' && bi2.name === bi1.name
+    return bi1.bi === 'remote-book'
+        ? bi2.bi === 'remote-book' && bi2.name === bi1.name
         : false;
 }
 
 export function remoteBookId(name: string): RemoteBookId {
     return {
-        bl: 'remote-book',
+        bi: 'remote-book',
         name: name,
     };
 }
@@ -94,7 +94,7 @@ export function blToString(bl: BookLocator): string {
 }
 
 export function biToString(bi: BookId): string {
-    return bi.bl === 'remote-book'
+    return bi.bi === 'remote-book'
         ? bi.name
         : '@not-a-book'; // TODO: better solution
 }

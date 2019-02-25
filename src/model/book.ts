@@ -38,14 +38,14 @@ export type Book = ActualBook | ErrorBook | LoadingBook;
 export function loadingBook(): LoadingBook {
     return {
         book: 'loading',
-        id: { bl: 'not-book' },
+        id: { bi: 'not-book' },
     };
 }
 
 export function errorBook(error: string): ErrorBook {
     return {
         book: 'error',
-        id: { bl: 'not-book' },
+        id: { bi: 'not-book' },
         error: error,
     };
 }

@@ -21,7 +21,7 @@ export async function fetchLibrary(): Promise<Library> {
 }
 
 export async function fetchBL(bookLocator: BookLocator): Promise<Book> {
-    switch (bookLocator.id.bl) {
+    switch (bookLocator.id.bi) {
         case 'remote-book':
             const backendBook = fetchBook(bookLocator.id.name);
             return backendBook;
@@ -36,7 +36,7 @@ export async function fetchBook(bookName: string): Promise<Book> {
         return {
             ...response,
             id: {
-                bl: 'remote-book',
+                bi: 'remote-book',
                 name: bookName,
             },
         };
