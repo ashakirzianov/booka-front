@@ -6,6 +6,8 @@
   ],
   "rules": {
     "eofline": true,
+    "jsx-no-lambda": false,
+    "max-classes-per-file": false,
     "no-consecutive-blank-lines": true,
     "quotemark": [
       true,

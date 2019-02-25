@@ -19,6 +19,7 @@
         "booka",
         "browserslist",
         "onstatechange",
+        "onupdatefound",
         "precached",
         "timeouted"
     ]
