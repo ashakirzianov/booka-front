@@ -4,6 +4,7 @@
         "**/node_modules/**": true
     },
     "tslint.autoFixOnSave": true,
+    "editor.formatOnSave": true,
     "cSpell.words": [
         "Hoverable",
         "Kapital",
