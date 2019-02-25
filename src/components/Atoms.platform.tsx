@@ -20,6 +20,16 @@ export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 );
 
+export const Link: Comp<TextProps & {
+    text: string,
+    to: string,
+}> = (props =>
+    <a href={props.to} style={{
+        textDecoration: 'none',
+        ...props.style,
+    }}>{props.text}</a>
+    );
+
 export function showAlert(message: string) {
     alert(message);
 }

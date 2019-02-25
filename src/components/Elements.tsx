@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, TextCallbacks } from './Atoms';
 import { Comp } from './comp-utils';
 import { TextProps } from './Atoms';
-import { Tab } from './Atoms.platform';
+import { Tab, Link } from './Atoms.platform';
 
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
@@ -30,13 +30,13 @@ export const ParagraphText: Comp<{ text: string }> = props =>
 
 export const LinkButton: Comp<{
     text: string,
-}, {
-    onClick: void,
+    link: string,
 }> = props =>
-        <StyledText
-            style={{ cursor: 'pointer' }}
-            onClick={props.onClick}
-        >{props.text}</StyledText>;
+        <Link
+            text={props.text}
+            to={props.link}
+            style={defaultStyle}
+        />;
 
 export {
     Column, Row, FullScreen as ScreenLayout, ScrollView,

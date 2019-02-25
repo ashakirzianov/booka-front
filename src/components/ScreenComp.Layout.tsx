@@ -3,9 +3,9 @@ import * as React from 'react';
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
-import { navigateToLibrary, navigateToToc } from '../logic/historyNavigation.platform';
 import { PopFromBottom, AnimatedVisibility } from './Animations.platform';
 import { BookId } from '../model';
+import { linkForToc, linkForLib } from '../logic/routing';
 
 export const BookScreenLayout: Comp<{ showControls: boolean, onContentClick: VoidCallback, bi: BookId }> = (props =>
     <ScreenLayout
@@ -73,13 +73,11 @@ const Header = comp<{
 );
 
 const BackButton = comp(props =>
-    <LinkButton text='< Back' onClick={() => {
-        navigateToLibrary();
-    }} />,
+    <LinkButton text='< Lib' link={linkForLib()} />,
 );
 
 const OpenTocButton: Comp<{ bi: BookId }> = (props =>
-    <LinkButton text='ToC' onClick={() => navigateToToc(props.bi)} />
+    <LinkButton text='ToC' link={linkForToc(props.bi)} />
 );
 
 const ScreenLayout: Comp<{

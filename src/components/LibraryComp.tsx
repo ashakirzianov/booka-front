@@ -3,15 +3,13 @@ import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
 import { Comp } from './comp-utils';
 import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
 import { SafeAreaView } from './Atoms';
-import { navigateToBl } from '../logic';
+import { linkForBook } from '../logic/routing';
 
 const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>
         <LinkButton
             text={props.meta.title}
-            onClick={() =>
-                navigateToBl(bookLocator(remoteBookId(props.id)))
-            }
+            link={linkForBook(bookLocator(remoteBookId(props.id)))}
         />
     </Row>
 );
