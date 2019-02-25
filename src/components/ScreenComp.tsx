@@ -19,17 +19,17 @@ export const ScreenComp: Comp<Screen> = (props =>
 const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
     <BookScreenLayout onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
         <BookComp {...props.book} />
-    </BookScreenLayout>
+    </BookScreenLayout>,
 );
 
 const LibraryScreenComp = comp<LibraryScreen>(props =>
     <LibraryScreenLayout>
-        <LibraryComp {...props.library} openBook={bl => navigateToBl(bl)} />
-    </LibraryScreenLayout>
+        <LibraryComp {...props.library} openBook={navigateToBl} />
+    </LibraryScreenLayout>,
 );
 
 const TocScreenComp = comp<TocScreen>(props =>
     <TocScreenLayout>
         <TableOfContentsComp {...props.toc} />
-    </TocScreenLayout>
+    </TocScreenLayout>,
 );

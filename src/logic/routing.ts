@@ -32,9 +32,9 @@ export function destinationToActions(dest: Destination): Action[] {
                 // TODO: handle incorrect bl
                 return [];
             }
-        }
-    })
-    
+        },
+    });
+
     return actions;
 }
 
@@ -43,10 +43,10 @@ type RouteHandler = (route: string) => Action[];
 type Router = {
     [rootHandler]: RouteHandler,
     [key: string]: RouteHandler;
-}
+};
 
 function doRouting(dest: Destination, handlers: Router) {
-    for (let key in handlers) {
+    for (const key in handlers) {
         if (key !== rootHandler) {
             let rest = bite(dest, '/' + key);
             if (rest) {
@@ -56,7 +56,7 @@ function doRouting(dest: Destination, handlers: Router) {
             }
         }
     }
-    
+
     return handlers[rootHandler](dest);
 }
 

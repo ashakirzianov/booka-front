@@ -16,7 +16,7 @@ export const StyledText: Comp<TextProps, TextCallbacks> = props =>
     <Text
         {...props}
         style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</Text>
+    >{props.children}</Text>;
 
 export const Label: Comp<{ text: string }> = props =>
     <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;

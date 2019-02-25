@@ -7,6 +7,6 @@ import { onInit } from './logic';
 onInit();
 ReactDOM.render(
   <AppComp />,
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 registerServiceWorker();

@@ -12,12 +12,12 @@ import { assertNever } from '../utils';
 import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
 
 export const ChapterTitle: Comp<{ text?: string }> = props =>
-    <Row style={{justifyContent: 'center'}}>
+    <Row style={{ justifyContent: 'center' }}>
         <StyledText>{props.text}</StyledText>
     </Row>;
 
 export const PartTitle: Comp<{ text?: string }> = props =>
-    <Row style={{justifyContent: 'center' }}>
+    <Row style={{ justifyContent: 'center' }}>
         <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
     </Row>;
 
@@ -35,7 +35,7 @@ type Path = number[];
 type BookNodeProps<T> = T & { path: Path };
 
 const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
-    <ParagraphText text={props.p} />
+    <ParagraphText text={props.p} />,
 );
 
 const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
@@ -46,19 +46,19 @@ const ChapterComp = comp<BookNodeProps<Chapter>>(props =>
                     : <SubpartTitle text={props.title} />
         }
         {buildNodes(props.content, props.path)}
-    </Column>
+    </Column>,
 );
 
 const BookNodeComp = connected([], ['updateCurrentBookPosition'])<BookNodeProps<{ node: BookNode }>>(props => {
-    if(isParagraph(props.node)) {
-    return <ParagraphComp
-        path={props.path}
-        p={props.node}
-        onScrollVisible={() => {
-            props.updateCurrentBookPosition(props.path);
-        }}
-    />
-    } else if(props.node.book === 'chapter') {
+    if (isParagraph(props.node)) {
+        return <ParagraphComp
+            path={props.path}
+            p={props.node}
+            onScrollVisible={() => {
+                props.updateCurrentBookPosition(props.path);
+            }}
+        />;
+    } else if (props.node.book === 'chapter') {
         return <ChapterComp path={props.path} {...props.node} />;
     } else {
         return assertNever(props.node as never, props.path.toString());
@@ -69,11 +69,11 @@ const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
         <BookTitle text={props.meta.title} />
         {buildNodes(props.content, [])}
-    </ScrollView>
+    </ScrollView>,
 );
 
 const BookComp = didUpdateHook<Book>(props => {
-    switch(props.book) {
+    switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
@@ -90,7 +90,7 @@ const ConnectedBookComp = connected(['positionToNavigate'])<Book>(props =>
         if (props.positionToNavigate) {
             scrollToPath(props.positionToNavigate);
         }
-    }} />
+    }} />,
 );
 
 export { ConnectedBookComp as BookComp };

@@ -12,16 +12,16 @@ const PopFromBottomDiv = posed.div({
     },
     exit: {
         y: -200,
-    }
+    },
 });
 
 type AnimationChildren = React.ComponentType<any>;
 class EntranceAnimation extends React.Component<{
     Animation: AnimationChildren,
 }> {
-    state = { isVisible: false };
+    public state = { isVisible: false };
 
-    componentDidMount() {
+    public componentDidMount() {
         setTimeout(() => {
             this.setState({
                 isVisible: true,
@@ -29,7 +29,7 @@ class EntranceAnimation extends React.Component<{
         }, 0);
     }
 
-    render() {
+    public render() {
         const { isVisible } = this.state;
         const { children, Animation } = this.props;
 

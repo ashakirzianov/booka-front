@@ -1,7 +1,7 @@
 import {
     ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath,
-} from "../model";
-import { buildPartialReducers } from "./redux-utils";
+} from '../model';
+import { buildPartialReducers } from './redux-utils';
 import { tocFromBook } from '../model/tableOfContent';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({

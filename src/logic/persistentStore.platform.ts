@@ -1,4 +1,4 @@
-import * as store from "store";
+import * as store from 'store';
 
 export function storeValue(key: string, value: object) {
     store.set(key, value);

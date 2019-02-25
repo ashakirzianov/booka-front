@@ -1,4 +1,4 @@
-import { def } from "../utils";
+import { def } from '../utils';
 import { Screen } from './screen';
 import { Library } from './library';
 import { BookLocator, BookPath } from './bookLocator';

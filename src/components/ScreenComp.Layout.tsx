@@ -62,13 +62,13 @@ const Header = comp<{
                 <Row>{props.right}</Row>
             </Row>
         </AnimatedVisibility>
-    </TopPanel>
+    </TopPanel>,
 );
 
 const BackButton = comp(props =>
     <LinkButton text='< Back' onClick={() => {
         navigateToLibrary();
-    }} />
+    }} />,
 );
 
 const ScreenLayout: Comp<{

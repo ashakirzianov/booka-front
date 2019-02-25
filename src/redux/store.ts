@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { throttle } from "lodash";
-import { reducer } from "./reducers";
+import { throttle } from 'lodash';
+import { reducer } from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
 import { buildActionCreators, ActionsType } from './redux-utils';
 import { actionsTemplate } from '../model';

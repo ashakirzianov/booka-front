@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
     Book, errorBook, BookLocator, Library,
-} from "../model";
+} from '../model';
 import * as Contracts from './contracts';
 import { throwExp } from '../utils';
 

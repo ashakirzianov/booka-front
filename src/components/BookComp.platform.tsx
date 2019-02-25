@@ -2,39 +2,39 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 
 type Path = number[];
-type ScrollableUnitProps = { 
+type ScrollableUnitProps = {
     onScrollVisible: () => void,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
-    readonly ref: React.RefObject<HTMLDivElement>;
+    public readonly ref: React.RefObject<HTMLDivElement>;
+
+    public handleScroll = throttle(() => {
+        if (this.isPartiallyVisible()) {
+            this.props.onScrollVisible();
+        }
+    }, 250);
     constructor(props: ScrollableUnitProps) {
         super(props);
         this.ref = React.createRef();
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    handleScroll = throttle(() => {
-        if (this.isPartiallyVisible()) {
-            this.props.onScrollVisible();
-        }
-    }, 250)
-
-    boundingClientRect() {
+    public boundingClientRect() {
         return this.ref && this.ref.current
             && this.ref.current.getBoundingClientRect
             && this.ref.current.getBoundingClientRect()
             ;
     }
 
-    isPartiallyVisible() {
+    public isPartiallyVisible() {
         const rect = this.boundingClientRect();
         if (rect) {
             const { top, height } = rect;
@@ -44,7 +44,7 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
         return false;
     }
 
-    render() {
+    public render() {
         return <div ref={this.ref} id={keyForPath(this.props.path)}>
             {this.props.children}
         </div>;
@@ -57,7 +57,7 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
         <ScrollableUnit
             onScrollVisible={props.onScrollVisible}
             path={props.path}
-        ><C {...props}/></ScrollableUnit>;
+        ><C {...props} /></ScrollableUnit>;
 }
 
 function keyForPath(path: Path) {
@@ -82,12 +82,12 @@ export function scrollToPath(path: Path) {
 export function didUpdateHook<T>(C: React.ComponentType<T>) {
     type Props = T & { didUpdate: () => void };
     return class WithOnDisplay extends React.Component<Props> {
-        componentDidUpdate() {
+        public componentDidUpdate() {
             this.props.didUpdate();
         }
 
-        render() {
-            return <C {...this.props } />;
+        public render() {
+            return <C {...this.props} />;
         }
     };
 }

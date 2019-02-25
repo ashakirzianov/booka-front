@@ -49,7 +49,7 @@ export function stringToBL(str: string): BookLocator | undefined {
     if (pathString) {
         const path = pathString
             .split('-')
-            .map(pc => parseInt(pc))
+            .map(pc => parseInt(pc, 10))
             ;
         return remoteBookLocator(bookName, path);
     }
@@ -58,7 +58,7 @@ export function stringToBL(str: string): BookLocator | undefined {
 }
 
 export function blToString(bl: BookLocator): string {
-    return `${bl.name}${pathToString(bl.path)}`
+    return `${bl.name}${pathToString(bl.path)}`;
 }
 
 function pathToString(path: BookPath): string {

@@ -1,7 +1,7 @@
 export type PromisePlus<T, Data = undefined> = {
     promise: Promise<T>,
     data: Data,
-}
+};
 
 export type OptimisticPromise<T> = PromisePlus<T, T>;
 

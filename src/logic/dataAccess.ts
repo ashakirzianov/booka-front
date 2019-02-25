@@ -4,7 +4,7 @@ import {
 import { dispatchAction, actionCreators } from '../redux';
 import { fetchBL, fetchLibrary } from '../api';
 
-type BookStore = Array<LoadBookDesc>;
+type BookStore = LoadBookDesc[];
 const bookStore: BookStore = [];
 function bookFromStore(store: BookStore, bl: BookLocator): Book | undefined {
     const desc = store.find(d => pointToSameBook(d.locator, bl));
@@ -32,7 +32,7 @@ export function bookForLocator(bl: BookLocator): Book {
         const d = {
             locator: bl,
             book: b,
-        }
+        };
         storeBook(bookStore, d);
         return d;
     });

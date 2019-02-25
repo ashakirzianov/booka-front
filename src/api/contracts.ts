@@ -5,7 +5,7 @@ export type Library = {
     } | undefined;
 };
 export type Book = {
-    book: "book",
+    book: 'book',
     meta: {
         title: string,
         author?: string,
@@ -15,7 +15,7 @@ export type Book = {
 
 type Paragraph = string;
 type Chapter = {
-    book: "chapter",
+    book: 'chapter',
     level: number,
     title?: string,
     content: BookNode[],
