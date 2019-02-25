@@ -1,5 +1,5 @@
 import {
-    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath,
+    ActionsTemplate, App, Screen, pointToSameBook, libraryScreen, forScreen, updatePath, tocScreen, bookScreen,
 } from '../model';
 import { buildPartialReducers } from './redux-utils';
 import { tocFromBook } from '../model/tableOfContent';
@@ -9,24 +9,12 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         navigateToScreen: (s, p) => p,
         loadBook: {
             fulfilled: (screen, book) => forScreen<Screen>(screen, {
-                book: bs => {
-                    if (pointToSameBook(bs.bl, book.locator)) {
-                        return {
-                            ...bs,
-                            book: book.book,
-                        };
-                    }
-                    return bs;
-                },
-                toc: ts => {
-                    if (pointToSameBook(ts.bl, book.locator)) {
-                        return {
-                            ...ts,
-                            toc: tocFromBook(book.book),
-                        };
-                    }
-                    return ts;
-                },
+                book: bs => pointToSameBook(bs.bl, book.locator)
+                    ? bookScreen(book.book, bs.bl)
+                    : bs,
+                toc: ts => pointToSameBook(ts.bl, book.locator)
+                    ? tocScreen(tocFromBook(book.book), ts.bl)
+                    : ts,
             }) || screen,
         },
         loadLibrary: {
