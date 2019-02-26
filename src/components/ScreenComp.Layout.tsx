@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ClickResponder, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
-import { PopFromBottom, AnimatedVisibility } from './Animations.platform';
+import { AnimatedVisibility, FadeIn } from './Animations.platform';
 import { BookId } from '../model';
 import { linkForToc, linkForLib } from '../logic/routing';
 
@@ -87,9 +87,9 @@ const ScreenLayout: Comp<{
     <Column style={{ width: '100%', alignItems: 'center' }}>
         {props.header || null}
         <ClickResponder onClick={props.onContentClick}>
-            <PopFromBottom>
+            <FadeIn>
                 {props.children}
-            </PopFromBottom>
+            </FadeIn>
         </ClickResponder>
     </Column>
     );

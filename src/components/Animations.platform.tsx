@@ -5,7 +5,7 @@ import posed, {
 } from 'react-pose';
 import { Comp } from './comp-utils';
 
-const PopFromBottomDiv = posed.div({
+export const PopFromBottom = animateEntrance(posed.div({
     enter: {
         y: 0,
         delay: 300,
@@ -13,7 +13,16 @@ const PopFromBottomDiv = posed.div({
     exit: {
         y: -200,
     },
-});
+}));
+
+export const FadeIn = animateEntrance(posed.div({
+    enter: {
+        opacity: 1,
+    },
+    exit: {
+        opacity: 0,
+    },
+}));
 
 type AnimationChildren = React.ComponentType<any>;
 class EntranceAnimation extends React.Component<{
@@ -44,8 +53,6 @@ class EntranceAnimation extends React.Component<{
 function animateEntrance(A: AnimationChildren): React.ComponentType {
     return props => <EntranceAnimation Animation={A}>{props.children}</EntranceAnimation>;
 }
-
-export const PopFromBottom = animateEntrance(PopFromBottomDiv);
 
 const VisibilityDiv = posed.div({
     visible: {
