@@ -4,31 +4,63 @@ import { Screen, BookScreen, LibraryScreen, TocScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
-import { Comp, comp, connected } from './comp-utils';
-import { BookScreenLayout, LibraryScreenLayout, TocScreenLayout } from './ScreenComp.Layout';
+import { Comp, comp, connected, relative } from './comp-utils';
+import { ScreenLayout, BackButton, OpenTocButton } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
+import { Row } from './Elements';
+import { ClickResponder } from './Atoms';
 
-export const ScreenComp: Comp<Screen> = (props =>
-    props.screen === 'book' ? <BookScreenComp {...props} />
-        : props.screen === 'library' ? <LibraryScreenComp {...props} />
-            : props.screen === 'toc' ? <TocScreenComp {...props} />
+export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
+    <ScreenLayout
+        headerVisible={props.screen !== 'book' || props.controlsVisible}
+        headerTitle={screenTitle(props)}
+        header={<ScreenHeader {...props} />}
+    >
+        <ScreenContentComp {...props} />
+    </ScreenLayout>
+);
+
+const ScreenContentComp: Comp<Screen> = (props =>
+    props.screen === 'book' ? <BookScreenCont {...props} />
+        : props.screen === 'library' ? <LibraryScreenCont {...props} />
+            : props.screen === 'toc' ? <TocScreenCont {...props} />
                 : assertNever(props)
 );
 
-const BookScreenComp = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
-    <BookScreenLayout bi={props.book.id} onContentClick={() => props.toggleControls()} showControls={props.controlsVisible}>
-        <BookComp {...props.book} />
-    </BookScreenLayout>,
+const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
+    <Row style={{
+        alignItems: 'center',
+        maxWidth: relative(50),
+        margin: relative(2),
+    }}
+    >
+        <ClickResponder onClick={() => props.toggleControls()}>
+            <BookComp {...props.book} />
+        </ClickResponder>
+    </Row>
+
 );
 
-const LibraryScreenComp = comp<LibraryScreen>(props =>
-    <LibraryScreenLayout>
-        <LibraryComp {...props.library} />
-    </LibraryScreenLayout>,
+const LibraryScreenCont = comp<LibraryScreen>(props =>
+    <LibraryComp {...props.library} />
 );
 
-const TocScreenComp = comp<TocScreen>(props =>
-    <TocScreenLayout>
-        <TableOfContentsComp {...props.toc} />
-    </TocScreenLayout>,
+const TocScreenCont = comp<TocScreen>(props =>
+    <TableOfContentsComp {...props.toc} />
 );
+
+const ScreenHeader: Comp<Screen> = (props =>
+    <Row>{
+        props.screen === 'library' ? null
+            : props.screen === 'toc' ? <BackButton />
+                : props.screen === 'book' ? [<BackButton />, <OpenTocButton bi={props.book.id} />]
+                    : assertNever(props)
+    }</Row>
+);
+
+function screenTitle(screen: Screen) {
+    return screen.screen === 'toc' ? 'Table of Contents'
+        : screen.screen === 'library' ? 'Library'
+            : screen.screen === 'book' ? undefined
+                : assertNever(screen);
+}
