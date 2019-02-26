@@ -1,29 +1,38 @@
 import {
-    BookLocator, bookScreen, libraryScreen, Screen, tocScreen, loadingScreen,
+    BookLocator, bookScreen, libraryScreen, Screen, tocScreen, BookId, Book, Library, loadingBook,
 } from '../model';
 import { bookForId, currentLibrary, cachedLibrary } from './dataAccess';
 import { tocFromBook } from '../model/tableOfContent';
-import { OptimisticPromise, optimisticPromise } from '../promisePlus';
+import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
+
+function optimisticBook(id: BookId): OptimisticPromise<Book> {
+    const guess = loadingBook(id);
+    const promise = bookForId(id);
+
+    return optimisticPromise<Book>(guess, promise);
+}
+
+function optimisticLibrary(): OptimisticPromise<Library> {
+    const guess = cachedLibrary();
+    const promise = currentLibrary();
+
+    return optimisticPromise<Library>(guess, promise);
+}
 
 export function buildBookScreen(bl: BookLocator): OptimisticPromise<Screen> {
-    const guess = loadingScreen();
-    const promise = bookForId(bl.id)
-        .then(book => bookScreen(book, bl));
+    const promise = optimisticBook(bl.id);
 
-    return optimisticPromise<Screen>(guess, promise);
+    return then(promise, book => bookScreen(book, bl));
 }
 
 export function buildLibraryScreen(): OptimisticPromise<Screen> {
-    const guess = libraryScreen(cachedLibrary());
-    const promise = currentLibrary().then(libraryScreen);
+    const promise = optimisticLibrary();
 
-    return optimisticPromise<Screen>(guess, promise);
+    return then(promise, lib => libraryScreen(lib));
 }
 
 export function buildTocScreen(bl: BookLocator): OptimisticPromise<Screen> {
-    const guess = loadingScreen();
-    const promise = bookForId(bl.id)
-        .then(book => tocScreen(tocFromBook(book), bl));
+    const promise = optimisticBook(bl.id);
 
-    return optimisticPromise<Screen>(guess, promise);
+    return then(promise, book => tocScreen(tocFromBook(book), bl));
 }

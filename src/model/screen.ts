@@ -39,7 +39,6 @@ type ForScreenMap<T> = {
     book?: (screen: BookScreen) => T,
     library?: (screen: LibraryScreen) => T,
     toc?: (screen: TocScreen) => T,
-    loading?: (screen: LoadingScreen) => T,
 };
 
 export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
@@ -61,11 +60,12 @@ export function forScreen<T>(screen: Screen, map: ForScreenMap<T>): T | undefine
     return undefined;
 }
 
-export type Screen = BookScreen | LibraryScreen | TocScreen | LoadingScreen;
+export type Screen =
+    | BookScreen | LibraryScreen | TocScreen
+    ;
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
 export type TocScreen = ReturnType<typeof tocScreen>;
-export type LoadingScreen = ReturnType<typeof loadingScreen>;
 
 export function bookScreen(book: Book, bl: BookLocator) {
     return {
@@ -87,11 +87,5 @@ export function tocScreen(toc: TableOfContents, bl: BookLocator) {
         screen: 'toc' as 'toc',
         toc: toc,
         bl: bl,
-    };
-}
-
-export function loadingScreen() {
-    return {
-        screen: 'loading' as 'loading',
     };
 }
