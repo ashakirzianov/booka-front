@@ -14,16 +14,26 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
                 ...bs,
                 bl: updateRangeStart(bs.bl, bp),
             }),
-        }) || screen,
+            default: () => screen,
+        }),
     },
     positionToNavigate: {
         navigateToScreen: {
             fulfilled: (path, screen) => forScreen(screen, {
                 book: bs => bs.bl.range.start,
-            }) || null,
+                default: () => null,
+            }),
         },
     },
     controlsVisible: {
         toggleControls: (current, _) => !current,
+        navigateToScreen: {
+            pending: (_, screen) => forScreen(screen, {
+                book: bs => {
+                    return false;
+                },
+                default: () => true,
+            }),
+        },
     },
 });

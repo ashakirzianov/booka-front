@@ -12,12 +12,12 @@ import { ClickResponder } from './Atoms';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
-        headerVisible={props.screen !== 'book' || props.controlsVisible}
+        headerVisible={props.controlsVisible}
         headerTitle={screenTitle(props)}
         header={<ScreenHeader {...props} />}
     >
         <ScreenContentComp {...props} />
-    </ScreenLayout>
+    </ScreenLayout>,
 );
 
 const ScreenContentComp: Comp<Screen> = (props =>
@@ -37,16 +37,16 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
         <ClickResponder onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
         </ClickResponder>
-    </Row>
+    </Row>,
 
 );
 
 const LibraryScreenCont = comp<LibraryScreen>(props =>
-    <LibraryComp {...props.library} />
+    <LibraryComp {...props.library} />,
 );
 
 const TocScreenCont = comp<TocScreen>(props =>
-    <TableOfContentsComp {...props.toc} />
+    <TableOfContentsComp {...props.toc} />,
 );
 
 const ScreenHeader: Comp<Screen> = (props =>
