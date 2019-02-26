@@ -41,3 +41,31 @@ export const LinkButton: Comp<{
 export {
     Column, Row, FullScreen as ScreenLayout, ScrollView,
 } from './Atoms';
+
+export class IncrementalLoadChildren extends React.Component<{}, { count: number }> {
+    public state = { count: 10 };
+
+    public componentWillMount() {
+        this.handleIncrement();
+    }
+
+    public handleIncrement() {
+        const { children } = this.props;
+        const childrenCount = Array.isArray(children) ? children.length : 0;
+        if (this.state.count < childrenCount) {
+            this.setState({
+                count: this.state.count + 10,
+            });
+            setTimeout(() => this.handleIncrement(), 500);
+        }
+    }
+
+    public render() {
+        const { children } = this.props;
+        if (Array.isArray(children) && children.length > this.state.count) {
+            return children.slice(0, this.state.count);
+        } else {
+            return children;
+        }
+    }
+}
