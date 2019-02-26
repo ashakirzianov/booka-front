@@ -49,7 +49,9 @@ type DefaultScreen<T> = {
 export function forScreen<T>(screen: Screen, map: ForScreenMap<T> | DefaultScreen<T> & Partial<ForScreenMap<T>>): T;
 export function forScreen<T>(screen: Screen, map: Partial<ForScreenMap<T>>): T | undefined;
 export function forScreen<T>(screen: Screen, map: Partial<DefaultScreen<T> & ForScreenMap<T>>): T | undefined {
-    const funcOrValue = map[screen.screen] || map.default;
+    const funcOrValue = map[screen.screen] !== undefined
+        ? map[screen.screen]
+        : map.default;
     if (funcOrValue !== undefined) {
         if (typeof funcOrValue === 'function') {
             const func = funcOrValue as any; // TODO: try to remove 'as any'

@@ -53,7 +53,10 @@ const ScreenHeader: Comp<Screen> = (props =>
     <Row>{
         props.screen === 'library' ? null
             : props.screen === 'toc' ? <BackButton />
-                : props.screen === 'book' ? [<BackButton />, <OpenTocButton bi={props.book.id} />]
+                : props.screen === 'book' ? [
+                    <BackButton key='back' />,
+                    <OpenTocButton key='toc' bi={props.book.id} />,
+                ]
                     : assertNever(props)
     }</Row>
 );
