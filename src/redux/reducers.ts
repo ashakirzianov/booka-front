@@ -29,10 +29,8 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         toggleControls: (current, _) => !current,
         navigateToScreen: {
             pending: (_, screen) => forScreen(screen, {
-                book: bs => {
-                    return false;
-                },
-                default: () => true,
+                book: false,
+                default: true,
             }),
         },
     },
