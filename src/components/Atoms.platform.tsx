@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TextProps, TextCallbacks } from './Atoms';
-import { Comp, VoidCallback } from './comp-utils';
+import { Comp, VoidCallback, isOpenNewTabEvent } from './comp-utils';
+import { navigateToUrl } from '../logic';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <span
@@ -24,10 +25,19 @@ export const Link: Comp<TextProps & {
     text: string,
     to: string,
 }> = (props =>
-    <a href={props.to} style={{
-        textDecoration: 'none',
-        ...props.style,
-    }}>{props.text}</a>
+    <a
+        href={props.to}
+        style={{
+            textDecoration: 'none',
+            ...props.style,
+        }}
+        onClick={e => {
+            if (!isOpenNewTabEvent(e)) {
+                e.preventDefault();
+                navigateToUrl(props.to);
+            }
+        }}
+    >{props.text}</a>
     );
 
 export function showAlert(message: string) {

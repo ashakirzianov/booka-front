@@ -45,3 +45,5 @@ export function partial<T>(Cmp: React.SFC<T>) {
 export function hoverable<T>(Cmp: React.SFC<T>): React.SFC<T> {
     return Radium(Cmp);
 }
+
+export { isOpenNewTabEvent } from './comp-utils.platform';

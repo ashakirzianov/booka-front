@@ -7,15 +7,11 @@ import { Middleware } from 'redux';
 const history = createBrowserHistory();
 export function wireHistoryNavigation() {
     dispatchNavigationEvent(history.location.pathname);
-    history.listen((location, action) => {
-        if (action !== 'REPLACE') {
-            dispatchNavigationEvent(location.pathname);
-        }
-    });
 }
 
-function navigateToUrl(url: string) {
+export function navigateToUrl(url: string) {
     history.push(url);
+    dispatchNavigationEvent(url);
 }
 
 export function navigateToBl(bl: BookLocator) {
