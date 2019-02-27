@@ -7,6 +7,7 @@ import {
 import {
     ParagraphText, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
+    IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
 import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
@@ -50,7 +51,9 @@ const ChapterHeader = scrollableUnit<BookNodeProps<Chapter>>(props =>
 
 const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
-        {buildBook(props)}
+        <IncrementalLoad increment={50}>
+            {buildBook(props)}
+        </IncrementalLoad>
     </ScrollView>,
 );
 
