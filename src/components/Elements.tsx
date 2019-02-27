@@ -42,8 +42,13 @@ export {
     Column, Row, FullScreen as ScreenLayout, ScrollView,
 } from './Atoms';
 
-export class IncrementalLoadChildren extends React.Component<{}, { count: number }> {
-    public state = { count: 10 };
+export class IncrementalLoad extends React.Component<{
+    increment: number,
+    timeout?: number,
+}, {
+    count: number,
+}> {
+    public state = { count: this.props.increment };
 
     public componentWillMount() {
         this.handleIncrement();
@@ -54,9 +59,9 @@ export class IncrementalLoadChildren extends React.Component<{}, { count: number
         const childrenCount = Array.isArray(children) ? children.length : 0;
         if (this.state.count < childrenCount) {
             this.setState({
-                count: this.state.count + 10,
+                count: this.state.count + (this.props.increment),
             });
-            setTimeout(() => this.handleIncrement(), 500);
+            setTimeout(() => this.handleIncrement(), (this.props.timeout || 500));
         }
     }
 
