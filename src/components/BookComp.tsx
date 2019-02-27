@@ -5,7 +5,7 @@ import {
     isParagraph, ActualBook, ErrorBook,
 } from '../model';
 import {
-    ParagraphText, Column, ActivityIndicator, StyledText, Row, Label,
+    ParagraphText, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
 } from './Elements';
 import { assertNever } from '../utils';
@@ -38,37 +38,15 @@ const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
     <ParagraphText text={props.p} />,
 );
 
-const ChapterComp = scrollableUnit<BookNodeProps<Chapter>>(props =>
-    <Column>
-        {
-            props.level === 0 ? <ChapterTitle text={props.title} />
-                : props.level > 0 ? <PartTitle text={props.title} />
-                    : <SubpartTitle text={props.title} />
-        }
-        {buildNodes(props.content, props.path)}
-    </Column>,
+const ChapterHeader = scrollableUnit<BookNodeProps<Chapter>>(props =>
+    props.level === 0 ? <ChapterTitle text={props.title} />
+        : props.level > 0 ? <PartTitle text={props.title} />
+            : <SubpartTitle text={props.title} />,
 );
-
-const BookNodeComp = connected([], ['updateCurrentBookPosition'])<BookNodeProps<{ node: BookNode }>>(props => {
-    if (isParagraph(props.node)) {
-        return <ParagraphComp
-            path={props.path}
-            p={props.node}
-            onScrollVisible={() => {
-                props.updateCurrentBookPosition(props.path);
-            }}
-        />;
-    } else if (props.node.book === 'chapter') {
-        return <ChapterComp path={props.path} {...props.node} />;
-    } else {
-        return assertNever(props.node as never, props.path.toString());
-    }
-});
 
 const ActualBookComp = comp<ActualBook>(props =>
     <ScrollView>
-        <BookTitle text={props.meta.title} />
-        {buildNodes(props.content, [])}
+        {buildBook(props)}
     </ScrollView>,
 );
 
@@ -98,6 +76,33 @@ export { ConnectedBookComp as BookComp };
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;
 
-function buildNodes(nodes: BookNode[], headPath: Path) {
-    return nodes.map((bn, i) => <BookNodeComp key={i} node={bn} path={headPath.concat(i)} />);
+function buildNodes(nodes: BookNode[], headPath: Path): JSX.Element[] {
+    return nodes
+        .map((bn, i) => buildNode(bn, headPath.concat([i])))
+        .reduce((acc, arr) => acc.concat(arr))
+        ;
+}
+
+function buildNode(node: BookNode, path: Path) {
+    if (isParagraph(node)) {
+        return buildParagraph(node, path);
+    } else if (node.book === 'chapter') {
+        return buildChapter(node, path);
+    } else {
+        return assertNever(node as never, path.toString()); // TODO: why need to cast to never ?
+    }
+}
+
+function buildParagraph(paragraph: Paragraph, path: Path) {
+    return [<ParagraphComp p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+}
+
+function buildChapter(chapter: Chapter, path: Path) {
+    return [<ChapterHeader path={path} {...chapter} />]
+        .concat(buildNodes(chapter.content, path));
+}
+
+function buildBook(book: ActualBook) {
+    return [<BookTitle text={book.meta.title} />]
+        .concat(buildNodes(book.content, []));
 }
