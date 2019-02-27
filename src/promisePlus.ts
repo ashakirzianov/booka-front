@@ -12,6 +12,10 @@ export function promisePlus<T, D>(promise: Promise<T>, data: D): PromisePlus<T, 
     };
 }
 
-export function optimisticPromise<T>(promise: Promise<T>, guess: T): OptimisticPromise<T> {
+export function optimisticPromise<T>(guess: T, promise: Promise<T>): OptimisticPromise<T> {
     return promisePlus(promise, guess);
+}
+
+export function then<T, U>(promise: OptimisticPromise<T>, thenF: (x: T) => U): OptimisticPromise<U> {
+    return optimisticPromise<U>(thenF(promise.data), promise.promise.then(thenF));
 }

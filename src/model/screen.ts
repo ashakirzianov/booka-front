@@ -35,11 +35,35 @@ export function topScreen(stack: ScreenStack): Screen | undefined {
         ;
 }
 
+type MapValue<S extends Screen, T> = T | ((screen: S) => T);
 type ForScreenMap<T> = {
-    book?: (screen: BookScreen) => T,
-    library?: (screen: LibraryScreen) => T,
-    toc?: (screen: TocScreen) => T,
+    default: MapValue<Screen, T>,
+    book: MapValue<BookScreen, T>,
+    library: MapValue<LibraryScreen, T>,
+    toc: MapValue<TocScreen, T>,
 };
+type DefaultScreen<T> = {
+    default: MapValue<Screen, T>,
+};
+
+export function forScreen<T>(screen: Screen, map: ForScreenMap<T> | DefaultScreen<T> & Partial<ForScreenMap<T>>): T;
+export function forScreen<T>(screen: Screen, map: Partial<ForScreenMap<T>>): T | undefined;
+export function forScreen<T>(screen: Screen, map: Partial<DefaultScreen<T> & ForScreenMap<T>>): T | undefined {
+    const funcOrValue = map[screen.screen] !== undefined
+        ? map[screen.screen]
+        : map.default;
+    if (funcOrValue !== undefined) {
+        if (typeof funcOrValue === 'function') {
+            const func = funcOrValue as any; // TODO: try to remove 'as any'
+            const result = func(screen);
+            return result;
+        } else {
+            return funcOrValue;
+        }
+    }
+
+    return undefined;
+}
 
 export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
     const top = topScreen(stack);
@@ -50,17 +74,9 @@ export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): S
         : replaceScreen(stack, next);
 }
 
-export function forScreen<T>(screen: Screen, map: ForScreenMap<T>): T | undefined {
-    const f = map[screen.screen];
-    if (f !== undefined) {
-        const result = f(screen as any); // TODO: try to remove 'as any'
-        return result;
-    }
-
-    return undefined;
-}
-
-export type Screen = BookScreen | LibraryScreen | TocScreen;
+export type Screen =
+    | BookScreen | LibraryScreen | TocScreen
+    ;
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
 export type TocScreen = ReturnType<typeof tocScreen>;

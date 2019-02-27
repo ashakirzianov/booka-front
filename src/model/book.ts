@@ -35,10 +35,10 @@ export type LoadingBook = {
 
 export type Book = ActualBook | ErrorBook | LoadingBook;
 
-export function loadingBook(): LoadingBook {
+export function loadingBook(id: BookId): LoadingBook {
     return {
         book: 'loading',
-        id: { bi: 'not-book' },
+        id,
     };
 }
 

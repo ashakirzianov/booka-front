@@ -1,31 +1,38 @@
 import {
-    BookLocator, BookScreen, bookScreen, LibraryScreen, libraryScreen, ScreenStack, topScreen, Screen, TocScreen, tocScreen,
+    BookLocator, bookScreen, libraryScreen, Screen, tocScreen, BookId, Book, Library, loadingBook,
 } from '../model';
-import { bookForId, currentLibrary } from './dataAccess';
+import { bookForId, currentLibrary, cachedLibrary } from './dataAccess';
 import { tocFromBook } from '../model/tableOfContent';
+import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
 
-export function buildBookScreen(bl: BookLocator): BookScreen {
-    const screen = bookScreen(bookForId(bl.id), bl);
+function optimisticBook(id: BookId): OptimisticPromise<Book> {
+    const guess = loadingBook(id);
+    const promise = bookForId(id);
 
-    return screen;
+    return optimisticPromise<Book>(guess, promise);
 }
 
-export function buildLibraryScreen(): LibraryScreen {
-    const screen = libraryScreen(currentLibrary());
+function optimisticLibrary(): OptimisticPromise<Library> {
+    const guess = cachedLibrary();
+    const promise = currentLibrary();
 
-    return screen;
+    return optimisticPromise<Library>(guess, promise);
 }
 
-export function buildTocScreen(bl: BookLocator): TocScreen {
-    const book = bookForId(bl.id);
-    const toc = tocFromBook(book);
-    const screen = tocScreen(toc, bl);
+export function buildBookScreen(bl: BookLocator): OptimisticPromise<Screen> {
+    const promise = optimisticBook(bl.id);
 
-    return screen;
+    return then(promise, book => bookScreen(book, bl));
 }
 
-export function buildTopScreen(stack: ScreenStack): Screen {
-    const top = topScreen(stack);
+export function buildLibraryScreen(): OptimisticPromise<Screen> {
+    const promise = optimisticLibrary();
 
-    return top || buildLibraryScreen();
+    return then(promise, lib => libraryScreen(lib));
+}
+
+export function buildTocScreen(bl: BookLocator): OptimisticPromise<Screen> {
+    const promise = optimisticBook(bl.id);
+
+    return then(promise, book => tocScreen(tocFromBook(book), bl));
 }

@@ -1,4 +1,4 @@
-import { stringToBL } from '../model';
+import { stringToBL, BookLocator, blToString, BookId, biToString } from '../model';
 import { actionCreators, dispatchAction } from '../redux';
 import { buildBookScreen, buildLibraryScreen, buildTocScreen } from './screenBuilders';
 import { Action } from '../redux/store';
@@ -63,4 +63,16 @@ function doRouting(dest: Destination, handlers: Router) {
 export function dispatchNavigationEvent(dest: Destination) {
     const actions = destinationToActions(dest);
     actions.forEach(a => dispatchAction(a));
+}
+
+export function linkForBook(bl: BookLocator): Destination {
+    return `/book/${blToString(bl)}`;
+}
+
+export function linkForToc(bi: BookId): Destination {
+    return `/toc/${biToString(bi)}`;
+}
+
+export function linkForLib(): Destination {
+    return '/';
 }
