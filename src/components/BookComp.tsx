@@ -94,15 +94,19 @@ function buildNode(node: BookNode, path: Path) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ParagraphComp p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path) {
-    return [<ChapterHeader path={path} {...chapter} />]
+    return [<ChapterHeader key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         .concat(buildNodes(chapter.content, path));
 }
 
 function buildBook(book: ActualBook) {
-    return [<BookTitle text={book.meta.title} />]
+    return [<BookTitle key={`bt`} text={book.meta.title} />]
         .concat(buildNodes(book.content, []));
+}
+
+function pathToString(path: Path): string {
+    return path.join('-');
 }
