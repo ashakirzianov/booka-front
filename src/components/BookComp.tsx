@@ -38,6 +38,10 @@ const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
     <ParagraphText text={props.p} />,
 );
 
+const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<BookNodeProps<{ p: Paragraph }>>(props =>
+    <ParagraphComp {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
+);
+
 const ChapterHeader = scrollableUnit<BookNodeProps<Chapter>>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
@@ -94,7 +98,7 @@ function buildNode(node: BookNode, path: Path) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path) {
