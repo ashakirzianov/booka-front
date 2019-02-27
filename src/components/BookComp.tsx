@@ -34,11 +34,12 @@ const BookTitle: Comp<{ text?: string }> = props =>
 
 type Path = number[];
 
-const ParagraphContent = scrollableUnit<Paragraph>(props =>
-    <ParagraphText text={props} />,
+type ParagraphProps = { p: Paragraph, path: Path };
+const ParagraphContent = scrollableUnit<ParagraphProps>(props =>
+    <ParagraphText text={props.p} />,
 );
 
-const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<Paragraph & { path: Path }>(props =>
+const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<ParagraphProps>(props =>
     <ParagraphContent {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
 );
 
@@ -100,7 +101,7 @@ function buildNode(node: BookNode, path: Path) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ConnectedParagraph key={`p-${pathToString(path)}`} {...paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path) {
