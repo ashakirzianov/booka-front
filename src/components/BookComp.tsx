@@ -12,38 +12,37 @@ import {
 import { assertNever } from '../utils';
 import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
 
-export const ChapterTitle: Comp<{ text?: string }> = props =>
+const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
         <StyledText>{props.text}</StyledText>
     </Row>;
 
-export const PartTitle: Comp<{ text?: string }> = props =>
+const PartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
         <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
     </Row>;
 
-export const SubpartTitle: Comp<{ text?: string }> = props =>
+const SubpartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'flex-start' }}>
         <StyledText style={{ fontWeight: 'bold' }}>{props.text}</StyledText>
     </Row>;
 
-export const BookTitle: Comp<{ text?: string }> = props =>
+const BookTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
 type Path = number[];
-type BookNodeProps<T> = T & { path: Path };
 
-const ParagraphComp = scrollableUnit<BookNodeProps<{ p: Paragraph }>>(props =>
-    <ParagraphText text={props.p} />,
+const ParagraphContent = scrollableUnit<Paragraph>(props =>
+    <ParagraphText text={props} />,
 );
 
-const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<BookNodeProps<{ p: Paragraph }>>(props =>
-    <ParagraphComp {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
+const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<Paragraph & { path: Path }>(props =>
+    <ParagraphContent {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
 );
 
-const ChapterHeader = scrollableUnit<BookNodeProps<Chapter>>(props =>
+const ChapterHeader = scrollableUnit<Chapter>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
@@ -101,7 +100,7 @@ function buildNode(node: BookNode, path: Path) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+    return [<ConnectedParagraph key={`p-${pathToString(path)}`} {...paragraph} path={path} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path) {
