@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Comp, comp, connected } from './comp-utils';
+import { Comp, connected } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, ActualBook, ErrorBook,
+    isParagraph, ActualBook, ErrorBook, isChapter,
 } from '../model';
 import {
     ParagraphText, ActivityIndicator, StyledText, Row, Label,
@@ -49,36 +49,33 @@ const ChapterHeader = scrollableUnit<Chapter>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
-const ActualBookComp = comp<ActualBook>(props =>
+const ActualBookComp = didUpdateHook<ActualBook & { path: Path | null }>(props =>
     <ScrollView>
-        <IncrementalLoad increment={50}>
+        <IncrementalLoad
+            increment={250}
+            initial={props.path ? countToPath(props.content, props.path) : 50}
+        >
             {buildBook(props)}
         </IncrementalLoad>
     </ScrollView>,
 );
 
-const BookComp = didUpdateHook<Book>(props => {
+export const BookComp = connected(['positionToNavigate'])<Book>(props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
-            return <ActualBookComp {...props} />;
+            return <ActualBookComp {...props} path={props.positionToNavigate} didUpdate={() => {
+                if (props.positionToNavigate) {
+                    scrollToPath(props.positionToNavigate);
+                }
+            }} />;
         case 'loading':
             return <ActivityIndicator />;
         default:
             return assertNever(props);
     }
 });
-
-const ConnectedBookComp = connected(['positionToNavigate'])<Book>(props =>
-    <BookComp {...props} didUpdate={() => {
-        if (props.positionToNavigate) {
-            scrollToPath(props.positionToNavigate);
-        }
-    }} />,
-);
-
-export { ConnectedBookComp as BookComp };
 
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;
@@ -93,10 +90,10 @@ function buildNodes(nodes: BookNode[], headPath: Path): JSX.Element[] {
 function buildNode(node: BookNode, path: Path) {
     if (isParagraph(node)) {
         return buildParagraph(node, path);
-    } else if (node.book === 'chapter') {
+    } else if (isChapter(node)) {
         return buildChapter(node, path);
     } else {
-        return assertNever(node as never, path.toString()); // TODO: why need to cast to never ?
+        return assertNever(node, path.toString());
     }
 }
 
@@ -116,4 +113,35 @@ function buildBook(book: ActualBook) {
 
 function pathToString(path: Path): string {
     return path.join('-');
+}
+
+export function countToPath(nodes: BookNode[], path: Path): number {
+    if (path.length > 0) {
+        const head = path[0];
+        const countFront = nodes
+            .slice(0, head)
+            .map(n => countElements(n))
+            .reduce((total, curr) => total + curr, 0);
+
+        const nextNode = nodes[head];
+        if (isChapter(nextNode)) {
+            return countFront + countToPath(nextNode.content, path.slice(1));
+        } else {
+            return countFront;
+        }
+    } else {
+        return 1;
+    }
+}
+
+function countElements(node: BookNode): number {
+    if (isParagraph(node)) {
+        return 1;
+    } else if (isChapter(node)) {
+        return 1 + node.content
+            .map(n => countElements(n))
+            .reduce((total, curr) => total + curr);
+    } else {
+        return assertNever(node);
+    }
 }
