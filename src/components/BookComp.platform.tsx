@@ -3,7 +3,7 @@ import { throttle } from 'lodash';
 
 type Path = number[];
 type ScrollableUnitProps = {
-    onScrollVisible?: () => void,
+    onScrollVisible?: (path: Path) => void,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
@@ -11,7 +11,7 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
 
     public handleScroll = throttle(() => {
         if (this.props.onScrollVisible && this.isPartiallyVisible()) {
-            this.props.onScrollVisible();
+            this.props.onScrollVisible(this.props.path);
         }
     }, 250);
     constructor(props: ScrollableUnitProps) {
