@@ -45,6 +45,9 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     public render() {
         return <div ref={ref => {
             this.ref = ref;
+            if (ref && this.props.onRefAssigned) {
+                this.props.onRefAssigned(ref, this.props.path);
+            }
         }} id={keyForPath(this.props.path)}>
             {this.props.children}
         </div>;
@@ -78,21 +81,4 @@ export function scrollToPath(path: Path) {
         const { top } = element.getBoundingClientRect();
         window.scrollTo(0, top);
     }
-}
-
-export function didUpdateHook<T>(C: React.ComponentType<T>) {
-    type Props = T & { didUpdate: () => void };
-    return class WithOnDisplay extends React.Component<Props> {
-        public componentDidUpdate() {
-            this.props.didUpdate();
-        }
-
-        public componentDidMount() {
-            this.props.didUpdate();
-        }
-
-        public render() {
-            return <C {...this.props} />;
-        }
-    };
 }

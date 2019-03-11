@@ -10,7 +10,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
+import { scrollableUnit, scrollToPath } from './BookComp.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -49,27 +49,44 @@ const ChapterHeader = scrollableUnit<Chapter>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
-const ActualBookComp = didUpdateHook<ActualBook & { path: Path | null }>(props =>
-    <ScrollView>
-        <IncrementalLoad
-            increment={250}
-            initial={props.path ? countToPath(props.content, props.path) : 50}
-        >
-            {buildBook(props)}
-        </IncrementalLoad>
-    </ScrollView>,
-);
+class ActualBookComp extends React.Component<ActualBook & {
+    pathToNavigate: Path | null,
+}> {
+
+    public scrollToPosition() {
+        const { pathToNavigate } = this.props;
+        if (pathToNavigate) {
+            scrollToPath(pathToNavigate);
+        }
+    }
+
+    public componentDidMount() {
+        this.scrollToPosition();
+    }
+
+    public componentDidUpdate() {
+        this.scrollToPosition();
+    }
+
+    public render() {
+        const props = this.props;
+        return <ScrollView>
+            <IncrementalLoad
+                increment={250}
+                initial={props.pathToNavigate ? countToPath(props.content, props.pathToNavigate) : 50}
+            >
+                {buildBook(props)}
+            </IncrementalLoad>
+        </ScrollView>;
+    }
+}
 
 export const BookComp = connected(['positionToNavigate'])<Book>(props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
-            return <ActualBookComp {...props} path={props.positionToNavigate} didUpdate={() => {
-                if (props.positionToNavigate) {
-                    scrollToPath(props.positionToNavigate);
-                }
-            }} />;
+            return <ActualBookComp {...props} pathToNavigate={props.positionToNavigate} />;
         case 'loading':
             return <ActivityIndicator />;
         default:
