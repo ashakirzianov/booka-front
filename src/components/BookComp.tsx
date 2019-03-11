@@ -10,7 +10,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, scrollToPath } from './BookComp.platform';
+import { scrollableUnit, scrollToPath, RefHandler, RefType } from './BookComp.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -34,13 +34,16 @@ const BookTitle: Comp<{ text?: string }> = props =>
 
 type Path = number[];
 
-type ParagraphProps = { p: Paragraph, path: Path };
+type ParagraphProps = { p: Paragraph, path: Path, refHandler: RefHandler };
 const ParagraphContent = scrollableUnit<ParagraphProps>(props =>
     <ParagraphText text={props.p} />,
 );
 
 const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<ParagraphProps>(props =>
-    <ParagraphContent {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
+    <ParagraphContent {...props}
+        onScrollVisible={path => props.updateCurrentBookPosition(path)}
+        onRefAssigned={props.refHandler}
+    />,
 );
 
 const ChapterHeader = scrollableUnit<Chapter>(props =>
@@ -52,7 +55,7 @@ const ChapterHeader = scrollableUnit<Chapter>(props =>
 class ActualBookComp extends React.Component<ActualBook & {
     pathToNavigate: Path | null,
 }> {
-
+    public pathToRefMap: { [k in string]?: RefType } = {};
     public scrollToPosition() {
         const { pathToNavigate } = this.props;
         if (pathToNavigate) {
@@ -75,7 +78,12 @@ class ActualBookComp extends React.Component<ActualBook & {
                 increment={250}
                 initial={props.pathToNavigate ? countToPath(props.content, props.pathToNavigate) : 50}
             >
-                {buildBook(props)}
+                {buildBook(props, (ref, path) => {
+                    this.pathToRefMap = {
+                        ...this.pathToRefMap,
+                        [pathToString(path)]: ref,
+                    };
+                })}
             </IncrementalLoad>
         </ScrollView>;
     }
@@ -97,35 +105,35 @@ export const BookComp = connected(['positionToNavigate'])<Book>(props => {
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;
 
-function buildNodes(nodes: BookNode[], headPath: Path): JSX.Element[] {
+function buildNodes(nodes: BookNode[], headPath: Path, refHandler: RefHandler): JSX.Element[] {
     return nodes
-        .map((bn, i) => buildNode(bn, headPath.concat([i])))
+        .map((bn, i) => buildNode(bn, headPath.concat([i]), refHandler))
         .reduce((acc, arr) => acc.concat(arr))
         ;
 }
 
-function buildNode(node: BookNode, path: Path) {
+function buildNode(node: BookNode, path: Path, refHandler: RefHandler) {
     if (isParagraph(node)) {
-        return buildParagraph(node, path);
+        return buildParagraph(node, path, refHandler);
     } else if (isChapter(node)) {
-        return buildChapter(node, path);
+        return buildChapter(node, path, refHandler);
     } else {
         return assertNever(node, path.toString());
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+function buildParagraph(paragraph: Paragraph, path: Path, refHandler: RefHandler) {
+    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} refHandler={refHandler} />]; // TODO: add 'onScrollVisible'
 }
 
-function buildChapter(chapter: Chapter, path: Path) {
+function buildChapter(chapter: Chapter, path: Path, refHandler: RefHandler) {
     return [<ChapterHeader key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
-        .concat(buildNodes(chapter.content, path));
+        .concat(buildNodes(chapter.content, path, refHandler));
 }
 
-function buildBook(book: ActualBook) {
+function buildBook(book: ActualBook, refHandler: RefHandler) {
     return [<BookTitle key={`bt`} text={book.meta.title} />]
-        .concat(buildNodes(book.content, []));
+        .concat(buildNodes(book.content, [], refHandler));
 }
 
 function pathToString(path: Path): string {

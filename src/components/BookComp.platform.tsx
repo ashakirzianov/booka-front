@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
 
-type Path = number[];
-type RefType = HTMLDivElement;
+export type Path = number[];
+export type RefType = HTMLDivElement;
+export type RefHandler = (ref: RefType, path: Path) => void;
 type ScrollableUnitProps = {
     onScrollVisible?: (path: Path) => void,
-    onRefAssigned?: (ref: RefType, path: Path) => void,
+    onRefAssigned?: RefHandler,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
