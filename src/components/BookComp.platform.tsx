@@ -49,7 +49,7 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
             if (ref && this.props.onRefAssigned) {
                 this.props.onRefAssigned(ref, this.props.path);
             }
-        }} id={keyForPath(this.props.path)}>
+        }}>
             {this.props.children}
         </div>;
     }
@@ -65,21 +65,7 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
         ><C {...props} /></ScrollableUnit>;
 }
 
-function keyForPath(path: Path) {
-    return path.join('-');
-}
-
-function elementForPath(path: Path) {
-    const key = keyForPath(path);
-    const element = document.getElementById(key);
-
-    return element;
-}
-
-export function scrollToPath(path: Path) {
-    const element = elementForPath(path);
-    if (element) {
-        const { top } = element.getBoundingClientRect();
-        window.scrollTo(0, top);
-    }
+export function scrollToRef(ref: RefType) {
+    const { top } = ref.getBoundingClientRect();
+    window.scrollTo(0, top);
 }

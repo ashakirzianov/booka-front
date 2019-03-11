@@ -10,7 +10,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, scrollToPath, RefHandler, RefType } from './BookComp.platform';
+import { scrollableUnit, RefHandler, RefType, scrollToRef } from './BookComp.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -59,7 +59,10 @@ class ActualBookComp extends React.Component<ActualBook & {
     public scrollToPosition() {
         const { pathToNavigate } = this.props;
         if (pathToNavigate) {
-            scrollToPath(pathToNavigate);
+            const refToNavigate = this.pathToRefMap[pathToString(pathToNavigate)];
+            if (refToNavigate) {
+                scrollToRef(refToNavigate);
+            }
         }
     }
 
