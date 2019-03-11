@@ -2,22 +2,20 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 
 type Path = number[];
+type RefType = HTMLDivElement;
 type ScrollableUnitProps = {
     onScrollVisible?: (path: Path) => void,
+    onRefAssigned?: (ref: RefType, path: Path) => void,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
-    public readonly ref: React.RefObject<HTMLDivElement>;
+    public ref: RefType | null = null;
 
     public handleScroll = throttle(() => {
         if (this.props.onScrollVisible && this.isPartiallyVisible()) {
             this.props.onScrollVisible(this.props.path);
         }
     }, 250);
-    constructor(props: ScrollableUnitProps) {
-        super(props);
-        this.ref = React.createRef();
-    }
 
     public componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
@@ -28,9 +26,9 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     }
 
     public boundingClientRect() {
-        return this.ref && this.ref.current
-            && this.ref.current.getBoundingClientRect
-            && this.ref.current.getBoundingClientRect()
+        return this.ref
+            && this.ref.getBoundingClientRect
+            && this.ref.getBoundingClientRect()
             ;
     }
 
@@ -45,7 +43,9 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     }
 
     public render() {
-        return <div ref={this.ref} id={keyForPath(this.props.path)}>
+        return <div ref={ref => {
+            this.ref = ref;
+        }} id={keyForPath(this.props.path)}>
             {this.props.children}
         </div>;
     }
@@ -56,6 +56,7 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
     return (props: ExtendedProps) =>
         <ScrollableUnit
             onScrollVisible={props.onScrollVisible}
+            onRefAssigned={props.onRefAssigned}
             path={props.path}
         ><C {...props} /></ScrollableUnit>;
 }
