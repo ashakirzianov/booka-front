@@ -10,7 +10,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, RefHandler, RefType, scrollToRef } from './BookComp.platform';
+import { scrollableUnit, RefHandler, RefType, scrollToRef } from './Scroll.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
