@@ -87,6 +87,10 @@ export function scrollToBottom() {
     });
 }
 
+export function scrollToTop() {
+    window.scrollTo(0, 0);
+}
+
 function scrollHeight() {
     const element = document.scrollingElement || document.body;
     return element.scrollHeight;
