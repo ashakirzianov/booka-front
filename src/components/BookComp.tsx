@@ -1,17 +1,36 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Comp, connected, Callback } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, ActualBook, ErrorBook, isChapter,
 } from '../model';
+import { assertNever } from '../utils';
+import { Comp, connected, Callback } from './comp-utils';
 import {
     ParagraphText, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
     IncrementalLoad,
 } from './Elements';
-import { assertNever } from '../utils';
 import { refable, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
+
+export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
+    switch (props.book) {
+        case 'error':
+            return <ErrorBookComp {...props} />;
+        case 'book':
+            return <ActualBookComp
+                pathToNavigate={props.positionToNavigate}
+                updateCurrentBookPosition={props.updateCurrentBookPosition}
+                {...props} />;
+        case 'loading':
+            return <ActivityIndicator />;
+        default:
+            return assertNever(props);
+    }
+});
+
+const ErrorBookComp: Comp<ErrorBook> = props =>
+    <Label text={'Error: ' + props.error} />;
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -98,25 +117,6 @@ class ActualBookComp extends React.Component<ActualBook & {
         </ScrollView>;
     }
 }
-
-export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
-    switch (props.book) {
-        case 'error':
-            return <ErrorBookComp {...props} />;
-        case 'book':
-            return <ActualBookComp
-                pathToNavigate={props.positionToNavigate}
-                updateCurrentBookPosition={props.updateCurrentBookPosition}
-                {...props} />;
-        case 'loading':
-            return <ActivityIndicator />;
-        default:
-            return assertNever(props);
-    }
-});
-
-const ErrorBookComp: Comp<ErrorBook> = props =>
-    <Label text={'Error: ' + props.error} />;
 
 type NodeRefHandler = (ref: RefType, path: Path) => void;
 function buildNodes(nodes: BookNode[], headPath: Path, refHandler: NodeRefHandler): JSX.Element[] {
