@@ -57,7 +57,7 @@ export class IncrementalLoad extends React.Component<{
         };
     }
 
-    public componentWillMount() {
+    public componentDidMount() {
         this.handleIncrement();
     }
 
