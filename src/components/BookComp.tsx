@@ -81,10 +81,6 @@ class ActualBookComp extends React.Component<ActualBook & {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    public componentDidUpdate() {
-        this.scrollToCurrentPath();
-    }
-
     public render() {
         const props = this.props;
         return <ScrollView>
@@ -141,7 +137,7 @@ function buildNode(node: BookNode, path: Path, refHandler: NodeRefHandler) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path, refHandler: NodeRefHandler) {
-    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />]; // TODO: add 'onScrollVisible'
+    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />];
 }
 
 function buildChapter(chapter: Chapter, path: Path, refHandler: NodeRefHandler) {
