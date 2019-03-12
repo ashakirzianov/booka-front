@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { throttle } from 'lodash';
 
 export type Path = number[];
 export type RefType = React.RefObject<HTMLDivElement>;
@@ -12,44 +11,12 @@ type ScrollableUnitProps = {
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     public ref: RefType | null = null;
 
-    public handleScroll = throttle(() => {
-        if (this.props.onScrollVisible && this.isPartiallyVisible()) {
-            this.props.onScrollVisible(this.props.path);
-        }
-    }, 250);
-
     constructor(props: ScrollableUnitProps) {
         super(props);
         this.ref = React.createRef();
         if (props.onRefAssigned) {
             props.onRefAssigned(this.ref, props.path);
         }
-    }
-
-    public componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-    }
-
-    public componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-    }
-
-    public boundingClientRect() {
-        const current = currentObject(this.ref);
-        return current
-            && current.getBoundingClientRect
-            && current.getBoundingClientRect()
-            ;
-    }
-
-    public isPartiallyVisible() {
-        const rect = this.boundingClientRect();
-        if (rect) {
-            const { top, height } = rect;
-            return top <= 0 && top + height >= 0;
-        }
-
-        return false;
     }
 
     public render() {
@@ -67,6 +34,26 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
             onRefAssigned={props.onRefAssigned}
             path={props.path}
         ><C {...props} /></ScrollableUnit>;
+}
+
+export function isPartiallyVisible(ref?: RefType) {
+    if (ref) {
+        const rect = boundingClientRect(ref);
+        if (rect) {
+            const { top, height } = rect;
+            return top <= 0 && top + height >= 0;
+        }
+    }
+
+    return false;
+}
+
+export function boundingClientRect(ref?: RefType) {
+    const current = currentObject(ref);
+    return current
+        && current.getBoundingClientRect
+        && current.getBoundingClientRect()
+        ;
 }
 
 export function scrollToRef(ref: RefType | undefined) {
@@ -96,6 +83,6 @@ function scrollHeight() {
     return element.scrollHeight;
 }
 
-function currentObject(ref: RefType | null) {
+function currentObject(ref: RefType | null | undefined) {
     return ref && ref.current;
 }

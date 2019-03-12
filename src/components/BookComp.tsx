@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Comp, connected } from './comp-utils';
+import { throttle } from 'lodash';
+import { Comp, connected, Callback } from './comp-utils';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, ActualBook, ErrorBook, isChapter,
@@ -10,7 +11,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, RefHandler, RefType, scrollToRef } from './Scroll.platform';
+import { scrollableUnit, RefHandler, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -55,25 +56,41 @@ const ChapterHeader = scrollableUnit<Chapter>(props =>
 type RefMap = { [k in string]?: RefType };
 class ActualBookComp extends React.Component<ActualBook & {
     pathToNavigate: Path | null,
+    updateCurrentBookPosition: Callback<Path>,
 }> {
     public refMap: RefMap = {};
-    public scrollToPosition() {
+
+    public handleScroll = throttle(() => {
+        const newCurrentPath = Object.entries(this.refMap)
+            .reduce<Path | undefined>((path, [key, ref]) =>
+                path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
+        if (newCurrentPath) {
+            this.props.updateCurrentBookPosition(newCurrentPath);
+        }
+    }, 250);
+
+    public scrollToCurrentPath = () => {
         const props = this.props;
         const refMap = this.refMap;
         if (props && props.pathToNavigate) {
             const refToNavigate = refMap[pathToString(props.pathToNavigate)];
             if (!scrollToRef(refToNavigate)) {
-                setTimeout(this.scrollToPosition.bind(this), 500);
+                setTimeout(this.scrollToCurrentPath.bind(this), 500);
             }
         }
     }
 
     public componentDidMount() {
-        this.scrollToPosition();
+        window.addEventListener('scroll', this.handleScroll);
+        this.scrollToCurrentPath();
+    }
+
+    public componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 
     public componentDidUpdate() {
-        this.scrollToPosition();
+        this.scrollToCurrentPath();
     }
 
     public render() {
@@ -94,12 +111,15 @@ class ActualBookComp extends React.Component<ActualBook & {
     }
 }
 
-export const BookComp = connected(['positionToNavigate'])<Book>(props => {
+export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
-            return <ActualBookComp {...props} pathToNavigate={props.positionToNavigate} />;
+            return <ActualBookComp
+                pathToNavigate={props.positionToNavigate}
+                updateCurrentBookPosition={props.updateCurrentBookPosition}
+                {...props} />;
         case 'loading':
             return <ActivityIndicator />;
         default:
@@ -143,6 +163,13 @@ function buildBook(book: ActualBook, refHandler: RefHandler) {
 
 function pathToString(path: Path): string {
     return path.join('-');
+}
+
+function stringToPath(str: string): Path {
+    const path = str.split('-')
+        .map(p => parseInt(p, 10));
+
+    return path;
 }
 
 export function countToPath(nodes: BookNode[], path: Path): number {
