@@ -1,16 +1,36 @@
 import * as React from 'react';
-import { Comp, connected } from './comp-utils';
+import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
     isParagraph, ActualBook, ErrorBook, isChapter,
 } from '../model';
+import { assertNever } from '../utils';
+import { Comp, connected, Callback } from './comp-utils';
 import {
     ParagraphText, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
     IncrementalLoad,
 } from './Elements';
-import { assertNever } from '../utils';
-import { scrollableUnit, didUpdateHook, scrollToPath } from './BookComp.platform';
+import { refable, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
+
+export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
+    switch (props.book) {
+        case 'error':
+            return <ErrorBookComp {...props} />;
+        case 'book':
+            return <ActualBookComp
+                pathToNavigate={props.positionToNavigate}
+                updateCurrentBookPosition={props.updateCurrentBookPosition}
+                {...props} />;
+        case 'loading':
+            return <ActivityIndicator />;
+        default:
+            return assertNever(props);
+    }
+});
+
+const ErrorBookComp: Comp<ErrorBook> = props =>
+    <Label text={'Error: ' + props.error} />;
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -34,85 +54,111 @@ const BookTitle: Comp<{ text?: string }> = props =>
 
 type Path = number[];
 
-type ParagraphProps = { p: Paragraph, path: Path };
-const ParagraphContent = scrollableUnit<ParagraphProps>(props =>
+const ParagraphComp = refable<{ p: Paragraph, path: Path }>(props =>
     <ParagraphText text={props.p} />,
 );
 
-const ConnectedParagraph = connected([], ['updateCurrentBookPosition'])<ParagraphProps>(props =>
-    <ParagraphContent {...props} onScrollVisible={path => props.updateCurrentBookPosition(path)} />,
-);
-
-const ChapterHeader = scrollableUnit<Chapter>(props =>
+const ChapterHeader = refable<Chapter & { path: Path }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
 );
 
-const ActualBookComp = didUpdateHook<ActualBook & { path: Path | null }>(props =>
-    <ScrollView>
-        <IncrementalLoad
-            increment={250}
-            initial={props.path ? countToPath(props.content, props.path) : 50}
-        >
-            {buildBook(props)}
-        </IncrementalLoad>
-    </ScrollView>,
-);
+type RefMap = { [k in string]?: RefType };
+class ActualBookComp extends React.Component<ActualBook & {
+    pathToNavigate: Path | null,
+    updateCurrentBookPosition: Callback<Path>,
+}> {
+    public refMap: RefMap = {};
 
-export const BookComp = connected(['positionToNavigate'])<Book>(props => {
-    switch (props.book) {
-        case 'error':
-            return <ErrorBookComp {...props} />;
-        case 'book':
-            return <ActualBookComp {...props} path={props.positionToNavigate} didUpdate={() => {
-                if (props.positionToNavigate) {
-                    scrollToPath(props.positionToNavigate);
-                }
-            }} />;
-        case 'loading':
-            return <ActivityIndicator />;
-        default:
-            return assertNever(props);
+    public handleScroll = throttle(() => {
+        const newCurrentPath = Object.entries(this.refMap)
+            .reduce<Path | undefined>((path, [key, ref]) =>
+                path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
+        if (newCurrentPath) {
+            this.props.updateCurrentBookPosition(newCurrentPath);
+        }
+    }, 250);
+
+    public scrollToCurrentPath = () => {
+        const props = this.props;
+        const refMap = this.refMap;
+        if (props && props.pathToNavigate) {
+            const refToNavigate = refMap[pathToString(props.pathToNavigate)];
+            if (!scrollToRef(refToNavigate)) {
+                setTimeout(this.scrollToCurrentPath.bind(this), 500);
+            }
+        }
     }
-});
 
-const ErrorBookComp: Comp<ErrorBook> = props =>
-    <Label text={'Error: ' + props.error} />;
+    public componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll);
+        this.scrollToCurrentPath();
+    }
 
-function buildNodes(nodes: BookNode[], headPath: Path): JSX.Element[] {
+    public componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    public render() {
+        const props = this.props;
+        return <ScrollView>
+            <IncrementalLoad
+                increment={250}
+                initial={props.pathToNavigate ? countToPath(props.content, props.pathToNavigate) : 50}
+            >
+                {buildBook(props, (ref, path) => {
+                    this.refMap = {
+                        ...this.refMap,
+                        [pathToString(path)]: ref,
+                    };
+                })}
+            </IncrementalLoad>
+        </ScrollView>;
+    }
+}
+
+type NodeRefHandler = (ref: RefType, path: Path) => void;
+function buildNodes(nodes: BookNode[], headPath: Path, refHandler: NodeRefHandler): JSX.Element[] {
     return nodes
-        .map((bn, i) => buildNode(bn, headPath.concat([i])))
+        .map((bn, i) => buildNode(bn, headPath.concat([i]), refHandler))
         .reduce((acc, arr) => acc.concat(arr))
         ;
 }
 
-function buildNode(node: BookNode, path: Path) {
+function buildNode(node: BookNode, path: Path, refHandler: NodeRefHandler) {
     if (isParagraph(node)) {
-        return buildParagraph(node, path);
+        return buildParagraph(node, path, refHandler);
     } else if (isChapter(node)) {
-        return buildChapter(node, path);
+        return buildChapter(node, path, refHandler);
     } else {
         return assertNever(node, path.toString());
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: Path) {
-    return [<ConnectedParagraph key={`p-${pathToString(path)}`} p={paragraph} path={path} />]; // TODO: add 'onScrollVisible'
+function buildParagraph(paragraph: Paragraph, path: Path, refHandler: NodeRefHandler) {
+    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />];
 }
 
-function buildChapter(chapter: Chapter, path: Path) {
-    return [<ChapterHeader key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
-        .concat(buildNodes(chapter.content, path));
+function buildChapter(chapter: Chapter, path: Path, refHandler: NodeRefHandler) {
+    return [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+        .concat(buildNodes(chapter.content, path, refHandler));
 }
 
-function buildBook(book: ActualBook) {
+function buildBook(book: ActualBook, refHandler: NodeRefHandler) {
     return [<BookTitle key={`bt`} text={book.meta.title} />]
-        .concat(buildNodes(book.content, []));
+        .concat(buildNodes(book.content, [], refHandler));
 }
 
 function pathToString(path: Path): string {
     return path.join('-');
+}
+
+function stringToPath(str: string): Path {
+    const path = str.split('-')
+        .map(p => parseInt(p, 10));
+
+    return path;
 }
 
 export function countToPath(nodes: BookNode[], path: Path): number {

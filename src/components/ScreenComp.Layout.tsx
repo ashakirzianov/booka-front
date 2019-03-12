@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ReactContent } from './Atoms';
 import { Label, LinkButton } from './Elements';
-import { AnimatedVisibility, FadeIn } from './Animations.platform';
+import { AnimatedVisibility } from './Animations.platform';
 import { BookId } from '../model';
 import { linkForToc, linkForLib } from '../logic/routing';
 
@@ -50,8 +50,6 @@ export const ScreenLayout: Comp<{
         <Header title={props.headerTitle} visible={props.headerVisible}>
             {props.header || null}
         </Header>
-        <FadeIn>
-            <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
-        </FadeIn>
+        <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
     </Column>
     );
