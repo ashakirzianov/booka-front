@@ -1,37 +1,18 @@
 import * as React from 'react';
 
 export type Path = number[];
-export type RefType = React.RefObject<HTMLDivElement>;
+export type RefType = HTMLDivElement;
 export type RefHandler = (ref: RefType, path: Path) => void;
-type ScrollableUnitProps = {
-    onRefAssigned: RefHandler,
+type RefableProps = {
+    reff: RefHandler,
     path: Path,
 };
-class ScrollableUnit extends React.Component<ScrollableUnitProps> {
-    public ref: RefType | null = null;
-
-    constructor(props: ScrollableUnitProps) {
-        super(props);
-        this.ref = React.createRef();
-        if (props.onRefAssigned) {
-            props.onRefAssigned(this.ref, props.path);
-        }
-    }
-
-    public render() {
-        return <div ref={this.ref}>
-            {this.props.children}
-        </div>;
-    }
-}
-
-export function scrollableUnit<T>(C: React.ComponentType<T>) {
-    type ExtendedProps = T & ScrollableUnitProps;
+export function refable<T>(C: React.ComponentType<T>) {
+    type ExtendedProps = T & RefableProps;
     return (props: ExtendedProps) =>
-        <ScrollableUnit
-            onRefAssigned={props.onRefAssigned}
-            path={props.path}
-        ><C {...props} /></ScrollableUnit>;
+        <div ref={ref => ref && props.reff(ref, props.path)}>
+            <C {...props} />
+        </div>;
 }
 
 export function isPartiallyVisible(ref?: RefType) {
@@ -85,5 +66,5 @@ function scrollHeight() {
 }
 
 function currentObject(ref: RefType | null | undefined) {
-    return ref && ref.current;
+    return ref;
 }

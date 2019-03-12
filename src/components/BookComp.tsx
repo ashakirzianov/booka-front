@@ -11,7 +11,7 @@ import {
     IncrementalLoad,
 } from './Elements';
 import { assertNever } from '../utils';
-import { scrollableUnit, RefHandler, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
+import { refable, RefHandler, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -36,11 +36,11 @@ const BookTitle: Comp<{ text?: string }> = props =>
 type Path = number[];
 
 type ParagraphProps = { p: Paragraph };
-const ParagraphComp = scrollableUnit<ParagraphProps>(props =>
+const ParagraphComp = refable<ParagraphProps>(props =>
     <ParagraphText text={props.p} />,
 );
 
-const ChapterHeader = scrollableUnit<Chapter>(props =>
+const ChapterHeader = refable<Chapter>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
@@ -141,11 +141,11 @@ function buildNode(node: BookNode, path: Path, refHandler: RefHandler) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path, refHandler: RefHandler) {
-    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} onRefAssigned={refHandler} />]; // TODO: add 'onScrollVisible'
+    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} reff={refHandler} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path, refHandler: RefHandler) {
-    return [<ChapterHeader onRefAssigned={refHandler} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+    return [<ChapterHeader reff={refHandler} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         .concat(buildNodes(chapter.content, path, refHandler));
 }
 
