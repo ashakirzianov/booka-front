@@ -4,8 +4,7 @@ export type Path = number[];
 export type RefType = React.RefObject<HTMLDivElement>;
 export type RefHandler = (ref: RefType, path: Path) => void;
 type ScrollableUnitProps = {
-    onScrollVisible?: (path: Path) => void,
-    onRefAssigned?: RefHandler,
+    onRefAssigned: RefHandler,
     path: Path,
 };
 class ScrollableUnit extends React.Component<ScrollableUnitProps> {
@@ -30,7 +29,6 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
     type ExtendedProps = T & ScrollableUnitProps;
     return (props: ExtendedProps) =>
         <ScrollableUnit
-            onScrollVisible={props.onScrollVisible}
             onRefAssigned={props.onRefAssigned}
             path={props.path}
         ><C {...props} /></ScrollableUnit>;
@@ -41,7 +39,10 @@ export function isPartiallyVisible(ref?: RefType) {
         const rect = boundingClientRect(ref);
         if (rect) {
             const { top, height } = rect;
-            return top <= 0 && top + height >= 0;
+            const result = top <= 0 && top + height >= 0;
+            if (result) {
+                return result;
+            }
         }
     }
 
