@@ -141,11 +141,11 @@ function buildNode(node: BookNode, path: Path, refHandler: NodeRefHandler) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: Path, refHandler: NodeRefHandler) {
-    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} reff={ref => refHandler(ref, path)} />]; // TODO: add 'onScrollVisible'
+    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />]; // TODO: add 'onScrollVisible'
 }
 
 function buildChapter(chapter: Chapter, path: Path, refHandler: NodeRefHandler) {
-    return [<ChapterHeader reff={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+    return [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         .concat(buildNodes(chapter.content, path, refHandler));
 }
 

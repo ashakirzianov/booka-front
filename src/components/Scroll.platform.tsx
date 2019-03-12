@@ -3,15 +3,11 @@ import * as React from 'react';
 export type Path = number[];
 export type RefType = HTMLDivElement | null;
 export type RefHandler = (ref: RefType) => void;
-type RefableProps = {
-    reff: RefHandler,
-};
 export function refable<T>(C: React.ComponentType<T>) {
-    type ExtendedProps = T & RefableProps;
-    return (props: ExtendedProps) =>
-        <div ref={props.reff}>
+    return React.forwardRef((props: T, ref: React.Ref<HTMLDivElement>) =>
+        <div ref={ref}>
             <C {...props} />
-        </div>;
+        </div>);
 }
 
 export function isPartiallyVisible(ref?: RefType) {
