@@ -1,16 +1,15 @@
 import * as React from 'react';
 
 export type Path = number[];
-export type RefType = HTMLDivElement;
-export type RefHandler = (ref: RefType, path: Path) => void;
+export type RefType = HTMLDivElement | null;
+export type RefHandler = (ref: RefType) => void;
 type RefableProps = {
     reff: RefHandler,
-    path: Path,
 };
 export function refable<T>(C: React.ComponentType<T>) {
     type ExtendedProps = T & RefableProps;
     return (props: ExtendedProps) =>
-        <div ref={ref => ref && props.reff(ref, props.path)}>
+        <div ref={props.reff}>
             <C {...props} />
         </div>;
 }
