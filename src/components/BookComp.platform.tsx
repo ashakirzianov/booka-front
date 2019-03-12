@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 
 export type Path = number[];
-export type RefType = HTMLDivElement;
+export type RefType = React.RefObject<HTMLDivElement>;
 export type RefHandler = (ref: RefType, path: Path) => void;
 type ScrollableUnitProps = {
     onScrollVisible?: (path: Path) => void,
@@ -18,6 +18,14 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
         }
     }, 250);
 
+    constructor(props: ScrollableUnitProps) {
+        super(props);
+        this.ref = React.createRef();
+        if (props.onRefAssigned) {
+            props.onRefAssigned(this.ref, props.path);
+        }
+    }
+
     public componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
@@ -27,9 +35,10 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     }
 
     public boundingClientRect() {
-        return this.ref
-            && this.ref.getBoundingClientRect
-            && this.ref.getBoundingClientRect()
+        const current = currentObject(this.ref);
+        return current
+            && current.getBoundingClientRect
+            && current.getBoundingClientRect()
             ;
     }
 
@@ -44,12 +53,7 @@ class ScrollableUnit extends React.Component<ScrollableUnitProps> {
     }
 
     public render() {
-        return <div ref={ref => {
-            this.ref = ref;
-            if (ref && this.props.onRefAssigned) {
-                this.props.onRefAssigned(ref, this.props.path);
-            }
-        }}>
+        return <div ref={this.ref}>
             {this.props.children}
         </div>;
     }
@@ -65,7 +69,34 @@ export function scrollableUnit<T>(C: React.ComponentType<T>) {
         ><C {...props} /></ScrollableUnit>;
 }
 
-export function scrollToRef(ref: RefType) {
-    const { top } = ref.getBoundingClientRect();
-    window.scrollTo(0, top);
+export function scrollToRef(ref: RefType | undefined) {
+    if (ref) {
+        const current = currentObject(ref);
+        if (current) {
+            // const rect = current.getBoundingClientRect();
+            // const top = rect.top;
+            const top = current.offsetTop + 112; // TODO: what is 112???
+            window.scrollTo({
+                top: top,
+            });
+            return true;
+        }
+    }
+    return false;
+}
+
+export function scrollToBottom() {
+    window.scrollTo({
+        behavior: 'smooth',
+        top: scrollHeight(),
+    });
+}
+
+function scrollHeight() {
+    const element = document.scrollingElement || document.body;
+    return element.scrollHeight;
+}
+
+function currentObject(ref: RefType | null) {
+    return ref && ref.current;
 }

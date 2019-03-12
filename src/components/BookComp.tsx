@@ -52,16 +52,18 @@ const ChapterHeader = scrollableUnit<Chapter>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
+type RefMap = { [k in string]?: RefType };
 class ActualBookComp extends React.Component<ActualBook & {
     pathToNavigate: Path | null,
 }> {
-    public pathToRefMap: { [k in string]?: RefType } = {};
+    public refMap: RefMap = {};
     public scrollToPosition() {
-        const { pathToNavigate } = this.props;
-        if (pathToNavigate) {
-            const refToNavigate = this.pathToRefMap[pathToString(pathToNavigate)];
-            if (refToNavigate) {
-                scrollToRef(refToNavigate);
+        const props = this.props;
+        const refMap = this.refMap;
+        if (props && props.pathToNavigate) {
+            const refToNavigate = refMap[pathToString(props.pathToNavigate)];
+            if (!scrollToRef(refToNavigate)) {
+                setTimeout(this.scrollToPosition.bind(this), 500);
             }
         }
     }
@@ -82,8 +84,8 @@ class ActualBookComp extends React.Component<ActualBook & {
                 initial={props.pathToNavigate ? countToPath(props.content, props.pathToNavigate) : 50}
             >
                 {buildBook(props, (ref, path) => {
-                    this.pathToRefMap = {
-                        ...this.pathToRefMap,
+                    this.refMap = {
+                        ...this.refMap,
                         [pathToString(path)]: ref,
                     };
                 })}
@@ -130,7 +132,7 @@ function buildParagraph(paragraph: Paragraph, path: Path, refHandler: RefHandler
 }
 
 function buildChapter(chapter: Chapter, path: Path, refHandler: RefHandler) {
-    return [<ChapterHeader key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+    return [<ChapterHeader onRefAssigned={refHandler} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         .concat(buildNodes(chapter.content, path, refHandler));
 }
 
