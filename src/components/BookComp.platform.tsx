@@ -73,12 +73,7 @@ export function scrollToRef(ref: RefType | undefined) {
     if (ref) {
         const current = currentObject(ref);
         if (current) {
-            // const rect = current.getBoundingClientRect();
-            // const top = rect.top;
-            const top = current.offsetTop + 112; // TODO: what is 112???
-            window.scrollTo({
-                top: top,
-            });
+            current.scrollIntoView();
             return true;
         }
     }
