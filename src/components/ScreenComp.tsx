@@ -1,14 +1,15 @@
 import * as React from 'react';
 
-import { Screen, BookScreen, LibraryScreen, TocScreen } from '../model';
+import { Screen, BookScreen, LibraryScreen, TocScreen, BookId, BookLocator } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, comp, connected, relative } from './comp-utils';
-import { ScreenLayout, BackButton, OpenTocButton } from './ScreenComp.Layout';
+import { ScreenLayout } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { Row } from './Elements';
+import { Row, LinkButton } from './Elements';
 import { ClickResponder } from './Atoms';
+import { linkForLib, linkForToc, linkForBook } from '../logic';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
@@ -52,13 +53,25 @@ const TocScreenCont = comp<TocScreen>(props =>
 const ScreenHeader: Comp<Screen> = (props =>
     <Row>{
         props.screen === 'library' ? null
-            : props.screen === 'toc' ? <BackButton />
+            : props.screen === 'toc' ? <BookButton bl={props.bl} />
                 : props.screen === 'book' ? [
-                    <BackButton key='back' />,
-                    <OpenTocButton key='toc' bi={props.book.id} />,
+                    <LibButton key='back' />,
+                    <TocButton key='toc' bi={props.book.id} />,
                 ]
                     : assertNever(props)
     }</Row>
+);
+
+const LibButton = comp(props =>
+    <LinkButton text='< Lib' link={linkForLib()} />,
+);
+
+const TocButton: Comp<{ bi: BookId }> = (props =>
+    <LinkButton text='...' link={linkForToc(props.bi)} />
+);
+
+const BookButton: Comp<{ bl: BookLocator }> = (props =>
+    <LinkButton text='X' link={linkForBook(props.bl)} />
 );
 
 function screenTitle(screen: Screen) {

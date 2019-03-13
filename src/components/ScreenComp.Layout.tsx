@@ -2,10 +2,8 @@ import * as React from 'react';
 
 import { Comp, comp, VoidCallback, relative } from './comp-utils';
 import { Row, TopPanel, Column, ReactContent } from './Atoms';
-import { Label, LinkButton } from './Elements';
+import { Label } from './Elements';
 import { AnimatedVisibility } from './Animations.platform';
-import { BookId } from '../model';
-import { linkForToc, linkForLib } from '../logic/routing';
 
 const Header = comp<{
     title?: string,
@@ -30,14 +28,6 @@ const Header = comp<{
             </Row>
         </AnimatedVisibility>
     </TopPanel>,
-);
-
-export const BackButton = comp(props =>
-    <LinkButton text='< Lib' link={linkForLib()} />,
-);
-
-export const OpenTocButton: Comp<{ bi: BookId }> = (props =>
-    <LinkButton text='ToC' link={linkForToc(props.bi)} />
 );
 
 export const ScreenLayout: Comp<{
