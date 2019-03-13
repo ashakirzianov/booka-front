@@ -7,6 +7,11 @@ import { Middleware } from 'redux';
 const history = createBrowserHistory();
 export function wireHistoryNavigation() {
     dispatchNavigationEvent(history.location.pathname);
+    history.listen((l, e) => {
+        if (e === 'POP') {
+            dispatchNavigationEvent(l.pathname);
+        }
+    });
 }
 
 export function navigateToUrl(url: string) {
