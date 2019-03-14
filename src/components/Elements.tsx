@@ -39,7 +39,7 @@ export const LinkButton: Comp<{
         />;
 
 export {
-    Column, Row, FullScreen as ScreenLayout, ScrollView,
+    Column, Row, FullScreen, ScrollView,
 } from './Atoms';
 
 export class IncrementalLoad extends React.Component<{
