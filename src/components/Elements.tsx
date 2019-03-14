@@ -2,6 +2,10 @@ import * as React from 'react';
 import * as Atoms from './Atoms';
 import { Comp, Callback } from './comp-utils';
 
+export {
+    Column, Row, FullScreen, ScrollView, ModalBox,
+} from './Atoms';
+
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
 
@@ -45,10 +49,6 @@ export const ActionButton: Comp<{
             onClick={props.onClick}
             style={defaultStyle}
         />;
-
-export {
-    Column, Row, FullScreen, ScrollView,
-} from './Atoms';
 
 export class IncrementalLoad extends React.Component<{
     increment?: number,

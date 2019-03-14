@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Comp, comp, VoidCallback, relative } from './comp-utils';
-import { Row, TopPanel, Column, ReactContent } from './Atoms';
+import { Comp, comp, VoidCallback, relative, ReactContent } from './comp-utils';
+import { Row, TopPanel, Column } from './Atoms';
 import { Label } from './Elements';
 import { AnimatedVisibility } from './Animations.platform';
 

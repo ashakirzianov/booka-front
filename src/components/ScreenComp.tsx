@@ -11,7 +11,7 @@ import { Row, LinkButton, ActionButton, Label } from './Elements';
 import { ClickResponder, Column } from './Atoms';
 import { linkForLib } from '../logic';
 import { tocFromBook } from '../model/tableOfContent';
-import { View } from 'react-native';
+import { ModalBox } from './Atoms.platform';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
@@ -45,17 +45,7 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
 );
 
 export const TableOfContentsCont = comp<BookScreen>(props =>
-    <View style={{
-        position: 'absolute',
-        x: 0,
-        y: 0,
-        minHeight: '100%',
-        minWidth: '100%',
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'grey',
-        overflow: 'scroll',
-    }}>
+    <ModalBox color='gray' heightPerc={85} maxWidth={60}>
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
             <CloseTocButton />
             <Label text='Table of Contents' />
@@ -64,7 +54,7 @@ export const TableOfContentsCont = comp<BookScreen>(props =>
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...tocFromBook(props.book)} />
         </Row>
-    </View>,
+    </ModalBox>,
 );
 
 const LibraryScreenCont = comp<LibraryScreen>(props =>

@@ -65,11 +65,10 @@ export const TopPanel: Comp = (props =>
         width: '100%',
         position: 'fixed',
         top: 0,
-        zIndex: 999,
+        zIndex: 1,
     }}>
         {props.children}
     </Column>
 );
 
-export type ReactContent = React.ReactNode;
-export { ClickResponder, Link, ActionButton, Tab } from './Atoms.platform';
+export { ClickResponder, Link, ActionButton, Tab, ModalBox } from './Atoms.platform';
