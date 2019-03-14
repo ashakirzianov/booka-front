@@ -6,7 +6,7 @@ import { actionsTemplate, App } from '../model';
 import { platformValue } from '../platform';
 
 export type ReactContent = React.ReactNode;
-export type Callback<Argument = any> = (arg: Argument) => void;
+export type Callback<Argument> = (arg: Argument) => void;
 export type VoidCallback = () => void;
 export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;

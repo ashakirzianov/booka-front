@@ -66,7 +66,7 @@ export const ModalBox: Comp<{
     color?: string,
     heightPerc?: number,
     maxWidth?: number,
-    onExternalClick?: Callback,
+    onExternalClick?: Callback<void>,
 }> = (props =>
     <div style={{
         position: 'fixed',
@@ -76,7 +76,14 @@ export const ModalBox: Comp<{
         right: 0,
         backgroundColor: 'rgba(0,0,0,0.7)',
         paddingTop: props.heightPerc && `${(100 - props.heightPerc) / 4}%`,
-    }} onClick={props.onExternalClick}>
+        zIndex: 10,
+    }} onClick={e => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (props.onExternalClick) {
+            props.onExternalClick();
+        }
+    }}>
         <div style={{
             backgroundColor: props.color,
             borderRadius: 5,

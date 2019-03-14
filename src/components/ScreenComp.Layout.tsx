@@ -12,20 +12,24 @@ export const Header = comp<{
 }>(props =>
     <TopPanel>
         <AnimatedVisibility visible={props.visible}>
-            <Row style={{
-                width: '100%', height: relative(5),
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: relative(1),
-                backgroundColor: 'black',
-            }}>
-                {/* Left */}
-                <Row>{props.children}</Row>
-                {/* Center */}
-                <Row><Label text={props.title || ''} /></Row>
-                {/* Right */}
-                <Row>{props.right}</Row>
-            </Row>
+            {
+                props.visible ?
+                    <Row style={{
+                        width: '100%', height: relative(5),
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: relative(1),
+                        backgroundColor: 'black',
+                    }}>
+                        {/* Left */}
+                        <Row>{props.children}</Row>
+                        {/* Center */}
+                        <Row><Label text={props.title || ''} /></Row>
+                        {/* Right */}
+                        <Row>{props.right}</Row>
+                    </Row>
+                    : null
+            }
         </AnimatedVisibility>
     </TopPanel>,
 );
