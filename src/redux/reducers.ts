@@ -16,6 +16,13 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             }),
             default: () => screen,
         }),
+        toggleToc: screen => forScreen(screen, {
+            book: bs => ({
+                ...bs,
+                tocOpen: !bs.tocOpen,
+            }),
+            default: () => screen,
+        }),
     },
     positionToNavigate: {
         navigateToScreen: {

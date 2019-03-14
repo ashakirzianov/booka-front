@@ -7,5 +7,6 @@ export const actionsTemplate = {
     navigateToScreen: def<OptimisticPromise<Screen>>(),
     updateCurrentBookPosition: def<BookPath>(),
     toggleControls: def(),
+    toggleToc: def(),
 };
 export type ActionsTemplate = typeof actionsTemplate;
