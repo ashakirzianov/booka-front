@@ -85,7 +85,7 @@ export function bookScreen(book: Book, bl: BookLocator) {
     return {
         screen: 'book' as 'book',
         book: book,
-        tocOpen: false,
+        tocOpen: true,
         bl: bl,
     };
 }

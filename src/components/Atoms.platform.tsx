@@ -66,6 +66,7 @@ export const ModalBox: Comp<{
     color?: string,
     heightPerc?: number,
     maxWidth?: number,
+    onExternalClick?: Callback,
 }> = (props =>
     <div style={{
         position: 'fixed',
@@ -74,18 +75,34 @@ export const ModalBox: Comp<{
         left: 0,
         right: 0,
         backgroundColor: 'rgba(0,0,0,0.7)',
-        paddingTop: props.heightPerc && `${(100 - props.heightPerc) / 2}%`,
-    }}>
+        paddingTop: props.heightPerc && `${(100 - props.heightPerc) / 4}%`,
+    }} onClick={props.onExternalClick}>
         <div style={{
             backgroundColor: props.color,
             borderRadius: 5,
+            height: props.heightPerc ? `${props.heightPerc}%` : '100%',
             width: '100%',
             maxWidth: props.maxWidth && `${props.maxWidth}em`,
-            height: props.heightPerc ? `${props.heightPerc}%` : '100%',
             margin: '0 auto',
-            overflowY: 'scroll',
-        }}>
-            {props.children}
+            zIndex: 10,
+        }}
+            onClick={e => e.stopPropagation()}
+        >
+            {
+                props.header
+                    ? <div style={{
+                        height: '10%',
+                    }}>
+                        {props.header}
+                    </div>
+                    : null
+            }
+            <div style={{
+                overflowY: 'scroll',
+                height: props.header ? '90%' : '100%',
+            }}>
+                {props.children}
+            </div>
         </div>
     </div>
     );

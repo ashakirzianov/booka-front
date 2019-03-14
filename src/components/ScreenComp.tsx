@@ -44,13 +44,17 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
 
 );
 
-export const TableOfContentsCont = comp<BookScreen>(props =>
-    <ModalBox color='gray' heightPerc={85} maxWidth={60}>
+export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(props =>
+    <ModalBox color='gray' heightPerc={70} maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <CloseTocButton />
+            <ActionButton text='X' onClick={props.toggleToc} />
             <Label text='Table of Contents' />
             <Column />
         </Row>
+    }
+        onExternalClick={props.toggleToc}
+    >
+
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...tocFromBook(props.book)} />
         </Row>
@@ -83,10 +87,6 @@ const LibButton = comp(props =>
 
 const OpenTocButton = connected([], ['toggleToc'])(props =>
     <ActionButton text='...' onClick={props.toggleToc} />,
-);
-
-const CloseTocButton = connected([], ['toggleToc'])(props =>
-    <ActionButton text='X' onClick={props.toggleToc} />,
 );
 
 function screenTitle(screen: Screen) {
