@@ -19,15 +19,16 @@ export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
         headerTitle={screenTitle(props)}
         header={<ScreenHeader {...props} />}
     >
-        <ScreenContentComp {...props} />
+        {
+            props.screen === 'book' ? [
+                <BookScreenCont key='book' {...props} />,
+                <TableOfContentsCont key='toc' {...props} />,
+            ]
+                : props.screen === 'library' ? <LibraryScreenCont {...props} />
+                    : props.screen === 'toc' ? <TocScreenCont {...props} />
+                        : assertNever(props)
+        }
     </ScreenLayout>,
-);
-
-const ScreenContentComp: Comp<Screen> = (props =>
-    props.screen === 'book' ? <BookScreenCont {...props} />
-        : props.screen === 'library' ? <LibraryScreenCont {...props} />
-            : props.screen === 'toc' ? <TocScreenCont {...props} />
-                : assertNever(props)
 );
 
 const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookScreen>(props =>
@@ -39,26 +40,26 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
         <ClickResponder key='book' onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
         </ClickResponder>
-        {props.tocOpen && <TableOfContentsCont {...props} />}
     </Row>,
 
 );
 
 export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(props =>
-    <ModalBox color='gray' heightPerc={70} maxWidth={60} header={
-        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <ActionButton text='X' onClick={props.toggleToc} />
-            <Label text='Table of Contents' />
-            <Column />
-        </Row>
-    }
-        onExternalClick={props.toggleToc}
-    >
+    !props.tocOpen ? null :
+        <ModalBox color='gray' heightPerc={90} maxWidth={60} header={
+            <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
+                <ActionButton text='X' onClick={props.toggleToc} />
+                <Label text='Table of Contents' />
+                <Column />
+            </Row>
+        }
+            onExternalClick={props.toggleToc}
+        >
 
-        <Row style={{ overflow: 'scroll' }}>
-            <TableOfContentsComp {...tocFromBook(props.book)} />
-        </Row>
-    </ModalBox>,
+            <Row style={{ overflow: 'scroll' }}>
+                <TableOfContentsComp {...tocFromBook(props.book)} />
+            </Row>
+        </ModalBox>,
 );
 
 const LibraryScreenCont = comp<LibraryScreen>(props =>

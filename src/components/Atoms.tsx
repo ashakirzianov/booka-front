@@ -60,15 +60,4 @@ export const FullScreen: Comp<{
     </View>
 );
 
-export const TopPanel: Comp = (props =>
-    <Column style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 1,
-    }}>
-        {props.children}
-    </Column>
-);
-
-export { ClickResponder, Link, ActionButton, Tab, ModalBox } from './Atoms.platform';
+export { ClickResponder, Link, ActionButton, Tab, ModalBox, TopPanel } from './Atoms.platform';

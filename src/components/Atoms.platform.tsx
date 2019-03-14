@@ -61,6 +61,17 @@ export function showAlert(message: string) {
     alert(message);
 }
 
+export const TopPanel: Comp = (props =>
+    <div style={{
+        width: '100%',
+        position: 'fixed',
+        top: 0,
+        zIndex: 5,
+    }}>
+        {props.children}
+    </div>
+);
+
 export const ModalBox: Comp<{
     header?: ReactContent,
     color?: string,
@@ -75,7 +86,7 @@ export const ModalBox: Comp<{
         left: 0,
         right: 0,
         backgroundColor: 'rgba(0,0,0,0.7)',
-        paddingTop: props.heightPerc && `${(100 - props.heightPerc) / 4}%`,
+        padding: '2em',
         zIndex: 10,
     }} onClick={props.onExternalClick}>
         <div style={{

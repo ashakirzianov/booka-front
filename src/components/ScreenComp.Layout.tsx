@@ -44,6 +44,6 @@ export const ScreenLayout: Comp<{
         <Header title={props.headerTitle} visible={props.headerVisible}>
             {props.header || null}
         </Header>
-        <Row style={{ marginTop: relative(5) }}>{props.children}</Row>
+        {props.children}
     </Column>
     );
