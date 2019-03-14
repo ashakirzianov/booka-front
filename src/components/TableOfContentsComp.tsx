@@ -9,7 +9,6 @@ import { rangeToString } from '../model';
 import { nums } from '../utils';
 import { Tab } from './Atoms.platform';
 import { linkForBook } from '../logic/routing';
-import { scrollToTop } from './Scroll.platform';
 
 const TocHeader: Comp<{ text: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -24,10 +23,6 @@ const TocItemComp: Comp<TableOfContentsItem> = (props =>
 );
 
 export class TableOfContentsComp extends React.Component<TableOfContents> {
-    public componentDidMount() {
-        scrollToTop();
-    }
-
     public render() {
         const props = this.props;
         return <ScrollView>

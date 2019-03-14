@@ -5,7 +5,7 @@ import { Row, TopPanel, Column, ReactContent } from './Atoms';
 import { Label } from './Elements';
 import { AnimatedVisibility } from './Animations.platform';
 
-const Header = comp<{
+export const Header = comp<{
     title?: string,
     right?: ReactContent,
     visible: boolean,

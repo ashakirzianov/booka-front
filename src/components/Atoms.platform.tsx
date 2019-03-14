@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextProps, TextCallbacks } from './Atoms';
-import { Comp, VoidCallback, isOpenNewTabEvent } from './comp-utils';
+import { Comp, VoidCallback, isOpenNewTabEvent, Callback } from './comp-utils';
 import { navigateToUrl } from '../logic';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
@@ -29,6 +29,7 @@ export const Link: Comp<TextProps & {
         href={props.to}
         style={{
             textDecoration: 'none',
+            cursor: 'pointer',
             ...props.style,
         }}
         onClick={e => {
@@ -36,6 +37,22 @@ export const Link: Comp<TextProps & {
                 e.preventDefault();
                 navigateToUrl(props.to);
             }
+        }}
+    >{props.text}</a>
+    );
+
+export const ActionButton: Comp<TextProps & {
+    text: string,
+    onClick: Callback<void>,
+}> = (props =>
+    <a
+        style={{
+            textDecoration: 'none',
+            cursor: 'pointer',
+            ...props.style,
+        }}
+        onClick={() => {
+            props.onClick();
         }}
     >{props.text}</a>
     );

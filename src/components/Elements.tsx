@@ -1,23 +1,21 @@
 import * as React from 'react';
-import { Text, TextCallbacks } from './Atoms';
-import { Comp } from './comp-utils';
-import { TextProps } from './Atoms';
-import { Tab, Link } from './Atoms.platform';
+import * as Atoms from './Atoms';
+import { Comp, Callback } from './comp-utils';
 
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
 
-export const defaultStyle: TextProps['style'] = {
+export const defaultStyle: Atoms.TextProps['style'] = {
     fontFamily: 'Georgia',
     color: '#999999',
     fontSize: 26,
 };
 
-export const StyledText: Comp<TextProps, TextCallbacks> = props =>
-    <Text
+export const StyledText: Comp<Atoms.TextProps, Atoms.TextCallbacks> = props =>
+    <Atoms.Text
         {...props}
         style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</Text>;
+    >{props.children}</Atoms.Text>;
 
 export const Label: Comp<{ text: string }> = props =>
     <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
@@ -26,15 +24,25 @@ export const ParagraphText: Comp<{ text: string }> = props =>
     <StyledText style={{
         textAlign: 'justify',
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
-    }}><Tab />{props.text}</StyledText>;
+    }}><Atoms.Tab />{props.text}</StyledText>;
 
 export const LinkButton: Comp<{
     text: string,
     link: string,
 }> = props =>
-        <Link
+        <Atoms.Link
             text={props.text}
             to={props.link}
+            style={defaultStyle}
+        />;
+
+export const ActionButton: Comp<{
+    text: string,
+    onClick: Callback<void>,
+}> = props =>
+        <Atoms.ActionButton
+            text={props.text}
+            onClick={props.onClick}
             style={defaultStyle}
         />;
 

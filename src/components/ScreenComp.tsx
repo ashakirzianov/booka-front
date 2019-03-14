@@ -1,15 +1,17 @@
 import * as React from 'react';
 
-import { Screen, BookScreen, LibraryScreen, TocScreen, BookId, BookLocator } from '../model';
+import { Screen, BookScreen, LibraryScreen, TocScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
 import { Comp, comp, connected, relative } from './comp-utils';
 import { ScreenLayout } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { Row, LinkButton } from './Elements';
-import { ClickResponder } from './Atoms';
-import { linkForLib, linkForToc, linkForBook } from '../logic';
+import { Row, LinkButton, ActionButton, Label } from './Elements';
+import { ClickResponder, Column } from './Atoms';
+import { linkForLib } from '../logic';
+import { tocFromBook } from '../model/tableOfContent';
+import { View } from 'react-native';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
@@ -32,14 +34,37 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
-        margin: relative(2),
     }}
     >
-        <ClickResponder onClick={() => props.toggleControls()}>
+        <ClickResponder key='book' onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
         </ClickResponder>
+        {props.tocOpen && <TableOfContentsCont {...props} />}
     </Row>,
 
+);
+
+export const TableOfContentsCont = comp<BookScreen>(props =>
+    <View style={{
+        position: 'absolute',
+        x: 0,
+        y: 0,
+        minHeight: '100%',
+        minWidth: '100%',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'grey',
+        overflow: 'scroll',
+    }}>
+        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
+            <CloseTocButton />
+            <Label text='Table of Contents' />
+            <Column />
+        </Row>
+        <Row style={{ overflow: 'scroll' }}>
+            <TableOfContentsComp {...tocFromBook(props.book)} />
+        </Row>
+    </View>,
 );
 
 const LibraryScreenCont = comp<LibraryScreen>(props =>
@@ -53,10 +78,10 @@ const TocScreenCont = comp<TocScreen>(props =>
 const ScreenHeader: Comp<Screen> = (props =>
     <Row>{
         props.screen === 'library' ? null
-            : props.screen === 'toc' ? <BookButton bl={props.bl} />
+            : props.screen === 'toc' ? null
                 : props.screen === 'book' ? [
                     <LibButton key='back' />,
-                    <TocButton key='toc' bi={props.book.id} />,
+                    <OpenTocButton key='toc' />,
                 ]
                     : assertNever(props)
     }</Row>
@@ -66,12 +91,12 @@ const LibButton = comp(props =>
     <LinkButton text='< Lib' link={linkForLib()} />,
 );
 
-const TocButton: Comp<{ bi: BookId }> = (props =>
-    <LinkButton text='...' link={linkForToc(props.bi)} />
+const OpenTocButton = connected([], ['toggleToc'])(props =>
+    <ActionButton text='...' onClick={props.toggleToc} />,
 );
 
-const BookButton: Comp<{ bl: BookLocator }> = (props =>
-    <LinkButton text='X' link={linkForBook(props.bl)} />
+const CloseTocButton = connected([], ['toggleToc'])(props =>
+    <ActionButton text='X' onClick={props.toggleToc} />,
 );
 
 function screenTitle(screen: Screen) {

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { FlexStyle, View, ViewStyle } from 'react-native';
 import { Comp } from './comp-utils';
 import { platformValue } from '../platform';
-import { ClickResponder } from './Atoms.platform';
 
 export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView, ScrollView } from 'react-native';
@@ -55,6 +54,7 @@ export const FullScreen: Comp<{
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
         backgroundColor: props.color,
+        opaque: 1,
     }}>
         {props.children}
     </View>
@@ -72,4 +72,4 @@ export const TopPanel: Comp = (props =>
 );
 
 export type ReactContent = React.ReactNode;
-export { ClickResponder };
+export { ClickResponder, Link, ActionButton, Tab } from './Atoms.platform';
