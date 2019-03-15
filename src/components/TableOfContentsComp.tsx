@@ -18,7 +18,7 @@ const TocHeader: Comp<{ text: string }> = props =>
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
         {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
-        <LinkButton text={props.title} link={linkForBook(props.locator)} />
+        <LinkButton text={props.title + '........' + props.percentage} link={linkForBook(props.locator)} />
     </Row>
 );
 
