@@ -1,18 +1,24 @@
 import { BookPath, BookLocator, BookId, bookLocator } from './bookLocator';
-import { Book, BookNode, isParagraph, isChapter } from './book';
 import { assertNever } from '../utils';
+import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 
 export type TableOfContentsItem = {
     toc: 'item',
     title: string,
     level: number,
     locator: BookLocator,
+    percentage: number,
 };
 
 export type TableOfContents = {
     toc: 'toc',
     title: string,
     items: TableOfContentsItem[],
+};
+
+type Info = {
+    id: BookId,
+    length: number,
 };
 
 export function tableOfContents(title: string, items: TableOfContentsItem[]): TableOfContents {
@@ -22,35 +28,62 @@ export function tableOfContents(title: string, items: TableOfContentsItem[]): Ta
     };
 }
 
-export function tocFromBook(book: Book): TableOfContents {
-    if (book.book === 'book') {
-        const items = book.content
-            .map((n, idx) => itemsFromBookNode(n, [idx], book.id))
-            .reduce((acc, arr) => acc.concat(arr));
+export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
+    if (bookContent.book === 'book') {
+        const info = {
+            id,
+            length: lengthOfBook(bookContent),
+        };
+        const items = itemsFromBookNodes(bookContent.content, [], info, 0);
 
-        return tableOfContents(book.meta.title, items);
+        return tableOfContents(bookContent.meta.title, items);
     }
 
     return tableOfContents('', []); // TODO: better error handling?
 }
 
-function itemsFromBookNode(node: BookNode, path: BookPath, id: BookId): TableOfContentsItem[] {
+function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = node.title ? [{
             toc: 'item' as 'item',
             title: node.title,
             level: path.length,
-            locator: bookLocator(id, path),
+            locator: bookLocator(info.id, path),
+            percentage: Math.floor(percentage * 1000) / 10,
         }]
             : [];
 
-        const childrenItems = node.content
-            .map((bn, idx) => itemsFromBookNode(bn, path.concat([idx]), id))
-            .reduce((acc, arr) => acc.concat(arr));
-
-        return head.concat(childrenItems);
+        const children = itemsFromBookNodes(node.content, path, info, percentage);
+        return head.concat(children);
     } else if (isParagraph(node)) {
         return [];
+    } else {
+        return assertNever(node);
+    }
+}
+
+function itemsFromBookNodes(nodes: BookNode[], path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
+    let result: TableOfContentsItem[] = [];
+    let currPercentage = percentage;
+    for (let idx = 0; idx < nodes.length; idx++) {
+        const bn = nodes[idx];
+        const toAdd = itemsFromBookNode(bn, path.concat([idx]), info, currPercentage);
+        result = result.concat(toAdd);
+        currPercentage += lengthOfNode(bn) / info.length;
+    }
+
+    return result;
+}
+
+function lengthOfBook(book: BookContent): number {
+    return book.content.reduce((len, n) => lengthOfNode(n) + len, 0);
+}
+
+function lengthOfNode(node: BookNode): number {
+    if (isParagraph(node)) {
+        return node.length;
+    } else if (isChapter(node)) {
+        return node.content.reduce((len, n) => len + lengthOfNode(n), 0);
     } else {
         return assertNever(node);
     }

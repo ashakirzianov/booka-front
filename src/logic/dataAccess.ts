@@ -2,6 +2,7 @@ import {
     Book, Library, library, BookId, sameId,
 } from '../model';
 import { fetchBI, fetchLibrary } from '../api';
+import { convertBook, convertLibrary } from '../api/converters';
 
 type BookStore = Book[];
 const bookStore: BookStore = [];
@@ -28,8 +29,9 @@ export async function bookForId(bi: BookId): Promise<Book> {
     }
 
     const bookPromise = fetchBI(bi).then(b => {
-        storeBook(bookStore, b);
-        return b;
+        const converted = convertBook(b, bi);
+        storeBook(bookStore, converted);
+        return converted;
     });
 
     return bookPromise;
@@ -39,8 +41,9 @@ let libraryCache = library();
 export async function currentLibrary(): Promise<Library> {
     const lib = fetchLibrary()
         .then(l => {
-            libraryCache = l;
-            return l;
+            const converted = convertLibrary(l);
+            libraryCache = converted;
+            return converted;
         });
 
     return lib;

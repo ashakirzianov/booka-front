@@ -2,7 +2,6 @@ import * as React from 'react';
 import { FlexStyle, View, ViewStyle } from 'react-native';
 import { Comp } from './comp-utils';
 import { platformValue } from '../platform';
-import { ClickResponder } from './Atoms.platform';
 
 export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView, ScrollView } from 'react-native';
@@ -19,6 +18,8 @@ export type TextProps = {
         textAlign?: 'justify',
         color?: string,
         cursor?: 'pointer',
+        border?: string,
+        margin?: string,
     },
 };
 
@@ -60,16 +61,11 @@ export const FullScreen: Comp<{
     </View>
 );
 
-export const TopPanel: Comp = (props =>
-    <Column style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 999,
-    }}>
-        {props.children}
-    </Column>
+export const DottedLine: Comp = (props =>
+    <View style={{
+        flex: 1,
+        borderBottom: 'dotted 0.2em',
+    }} />
 );
 
-export type ReactContent = React.ReactNode;
-export { ClickResponder };
+export { ClickResponder, Link, Tab, ModalBox, TopPanel } from './Atoms.platform';

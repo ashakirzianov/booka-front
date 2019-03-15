@@ -1,46 +1,46 @@
 import * as React from 'react';
-import { Text, TextCallbacks } from './Atoms';
-import { Comp } from './comp-utils';
-import { TextProps } from './Atoms';
-import { Tab, Link } from './Atoms.platform';
+import * as Atoms from './Atoms';
+import { Comp, Callback } from './comp-utils';
+
+export {
+    Column, Row, FullScreen, ScrollView, ModalBox,
+} from './Atoms';
 
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
 
-export const defaultStyle: TextProps['style'] = {
+export const defaultStyle: Atoms.TextProps['style'] = {
     fontFamily: 'Georgia',
     color: '#999999',
     fontSize: 26,
 };
 
-export const StyledText: Comp<TextProps, TextCallbacks> = props =>
-    <Text
+export const StyledText: Comp<Atoms.TextProps, Atoms.TextCallbacks> = props =>
+    <Atoms.Text
         {...props}
         style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</Text>;
+    >{props.children}</Atoms.Text>;
 
-export const Label: Comp<{ text: string }> = props =>
-    <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
+export const Label: Comp<{ text: string, margin?: string }> = props =>
+    <StyledText style={{ margin: props.margin }}>{props.text}</StyledText>;
 
 export const ParagraphText: Comp<{ text: string }> = props =>
     <StyledText style={{
         textAlign: 'justify',
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
-    }}><Tab />{props.text}</StyledText>;
+    }}><Atoms.Tab />{props.text}</StyledText>;
 
-export const LinkButton: Comp<{
-    text: string,
-    link: string,
+export const LinkButton: Comp<Atoms.TextProps & {
+    text?: string,
+    onClick?: Callback<void>,
+    link?: string,
 }> = props =>
-        <Link
+        <Atoms.Link
             text={props.text}
             to={props.link}
-            style={defaultStyle}
-        />;
-
-export {
-    Column, Row, FullScreen as ScreenLayout, ScrollView,
-} from './Atoms';
+            onClick={props.onClick}
+            style={{ ...defaultStyle, ...props.style }}
+        >{props.children}</Atoms.Link>;
 
 export class IncrementalLoad extends React.Component<{
     increment?: number,
@@ -58,17 +58,19 @@ export class IncrementalLoad extends React.Component<{
     }
 
     public componentDidMount() {
+        this.setState(this.initialState());
         this.handleIncrement();
     }
 
     public handleIncrement() {
-        const { children } = this.props;
+        const { children, increment, timeout } = this.props;
+        const { count } = this.state;
         const childrenCount = Array.isArray(children) ? children.length : 0;
-        if (this.state.count < childrenCount) {
+        if (count < childrenCount) {
             this.setState({
-                count: this.state.count + (this.props.increment || 10),
+                count: count + (increment || 10),
             });
-            setTimeout(() => this.handleIncrement(), (this.props.timeout || 500));
+            setTimeout(() => this.handleIncrement(), (timeout || 500));
         }
     }
 

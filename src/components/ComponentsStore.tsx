@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
-    Label, ParagraphText, Row, Column, ScreenLayout,
+    Label, ParagraphText, Row, Column, FullScreen,
 } from './Elements';
 
 export const ElementsStore: React.SFC = props => (
-    <ScreenLayout color='green'>
+    <FullScreen color='green'>
         <ParagraphText text='Paragraph' />
         <Row>
             <Column>
@@ -30,5 +30,5 @@ export const ElementsStore: React.SFC = props => (
                 <Label text='R 2 C 3' />
             </Row>
         </Column>
-    </ScreenLayout>
+    </FullScreen>
 );

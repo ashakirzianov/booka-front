@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {
-    Book, errorBook, Library, BookId,
-} from '../model';
+import { BookId } from '../model';
 import * as Contracts from './contracts';
 import { throwExp } from '../utils';
 
@@ -12,15 +10,12 @@ const backendBase = process.env.NODE_ENV === 'production' ?
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
-export async function fetchLibrary(): Promise<Library> {
+export async function fetchLibrary(): Promise<Contracts.Library> {
     const lib = await fetchJson(backendBase + libraryApi) as Contracts.Library;
-    return {
-        loading: false,
-        books: lib,
-    };
+    return lib;
 }
 
-export async function fetchBI(bookId: BookId): Promise<Book> {
+export async function fetchBI(bookId: BookId): Promise<Contracts.Book> {
     switch (bookId.bi) {
         case 'remote-book':
             const backendBook = fetchBook(bookId.name);
@@ -30,19 +25,9 @@ export async function fetchBI(bookId: BookId): Promise<Book> {
     }
 }
 
-export async function fetchBook(bookName: string): Promise<Book> {
-    try {
-        const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
-        return {
-            ...response,
-            id: {
-                bi: 'remote-book',
-                name: bookName,
-            },
-        };
-    } catch (reason) {
-        return errorBook("Can't find static book: " + bookName);
-    }
+export async function fetchBook(bookName: string): Promise<Contracts.Book> {
+    const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
+    return response;
 }
 
 export async function fetchJson(url: string): Promise<object> {

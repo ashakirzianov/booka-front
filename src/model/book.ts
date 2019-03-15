@@ -1,26 +1,6 @@
 import { BookId } from './bookLocator';
-
-export type BookMeta = {
-    title: string,
-    author?: string,
-};
-
-export type Paragraph = string;
-export type Chapter = {
-    book: 'chapter',
-    level: number,
-    title?: string,
-    content: BookNode[],
-};
-
-export type BookNode = Chapter | Paragraph;
-
-export type ActualBook = {
-    book: 'book',
-    id: BookId,
-    meta: BookMeta,
-    content: BookNode[],
-};
+import { BookContent } from './bookContent';
+import { TableOfContents } from './tableOfContent';
 
 export type ErrorBook = {
     book: 'error',
@@ -33,7 +13,14 @@ export type LoadingBook = {
     id: BookId,
 };
 
-export type Book = ActualBook | ErrorBook | LoadingBook;
+export type LoadedBook = {
+    book: 'book',
+    id: BookId,
+    toc: TableOfContents,
+    content: BookContent,
+};
+
+export type Book = LoadedBook | ErrorBook | LoadingBook;
 
 export function loadingBook(id: BookId): LoadingBook {
     return {
@@ -48,14 +35,4 @@ export function errorBook(error: string): ErrorBook {
         id: { bi: 'not-book' },
         error: error,
     };
-}
-
-// Type guards:
-
-export function isParagraph(bn: BookNode): bn is Paragraph {
-    return typeof bn === 'string';
-}
-
-export function isChapter(bn: BookNode): bn is Chapter {
-    return typeof bn === 'object' && bn.book === 'chapter';
 }

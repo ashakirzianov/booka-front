@@ -1,11 +1,11 @@
-import { Book, Library, BookId } from '../model';
+import { BookId } from '../model';
 import { timeouted } from '../utils';
+import * as Contracts from './contracts';
 
 export const fetchBL = timeouted(fetchBIStatic);
-function fetchBIStatic(bookId: BookId): Book {
+function fetchBIStatic(bookId: BookId): Contracts.Book {
     return {
         book: 'book',
-        id: bookId,
         meta: {
             title: bookId.bi === 'remote-book' ? bookId.name : bookId.bi,
         },
@@ -17,13 +17,10 @@ function fetchBIStatic(bookId: BookId): Book {
 }
 
 export const fetchLibrary = timeouted(fetchLibraryStatic);
-function fetchLibraryStatic(): Library {
+function fetchLibraryStatic(): Contracts.Library {
     return {
-        loading: false,
-        books: {
-            fake1: { title: 'I am not a book' },
-            fake2: { title: 'Neither am I' },
-            fake3: { title: 'We are all fake' },
-        },
+        fake1: { title: 'I am not a book' },
+        fake2: { title: 'Neither am I' },
+        fake3: { title: 'We are all fake' },
     };
 }

@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import { Comp } from './comp-utils';
-import { Row, StyledText, LinkButton } from './Elements';
+import { Comp, relative } from './comp-utils';
+import { Row, StyledText, LinkButton, Label } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
-import { Column } from './Atoms';
+import { Column, DottedLine } from './Atoms';
 import { rangeToString } from '../model';
 import { nums } from '../utils';
 import { Tab } from './Atoms.platform';
 import { linkForBook } from '../logic/routing';
-import { scrollToTop } from './Scroll.platform';
 
 const TocHeader: Comp<{ text: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -18,20 +17,20 @@ const TocHeader: Comp<{ text: string }> = props =>
 
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
-        {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
-        <LinkButton text={props.title} link={linkForBook(props.locator)} />
+        {nums(0, props.level - 1).map(i => <Tab key={i.toString()} />)}
+        <LinkButton link={linkForBook(props.locator)} style={{ margin: relative(0.1) }}>
+            <Label text={props.title} margin={relative(0.1)} />
+            <DottedLine />
+            <Label text={props.percentage.toString()} margin={relative(0.1)} />
+        </LinkButton>
     </Row>
 );
 
 export class TableOfContentsComp extends React.Component<TableOfContents> {
-    public componentDidMount() {
-        scrollToTop();
-    }
-
     public render() {
         const props = this.props;
         return <ScrollView>
-            <Column>
+            <Column style={{ margin: relative(2) }}>
                 <TocHeader text={props.title} />
                 {props.items.map(i => <TocItemComp key={rangeToString(i.locator.range)} {...i} />)}
             </Column>
