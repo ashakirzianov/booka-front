@@ -19,6 +19,7 @@ export type TextProps = {
         color?: string,
         cursor?: 'pointer',
         border?: string,
+        margin?: string,
     },
 };
 

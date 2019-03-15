@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Comp } from './comp-utils';
+import { Comp, relative } from './comp-utils';
 import { Row, StyledText, LinkButton, Label } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
@@ -17,11 +17,11 @@ const TocHeader: Comp<{ text: string }> = props =>
 
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
-        {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
-        <LinkButton link={linkForBook(props.locator)} >
-            <Label text={props.title} />
+        {nums(0, props.level - 1).map(i => <Tab key={i.toString()} />)}
+        <LinkButton link={linkForBook(props.locator)} style={{ margin: relative(0.1) }}>
+            <Label text={props.title} margin={relative(0.1)} />
             <DottedLine />
-            <Label text={props.percentage.toString()} />
+            <Label text={props.percentage.toString()} margin={relative(0.1)} />
         </LinkButton>
     </Row>
 );
@@ -30,7 +30,7 @@ export class TableOfContentsComp extends React.Component<TableOfContents> {
     public render() {
         const props = this.props;
         return <ScrollView>
-            <Column>
+            <Column style={{ margin: relative(2) }}>
                 <TocHeader text={props.title} />
                 {props.items.map(i => <TocItemComp key={rangeToString(i.locator.range)} {...i} />)}
             </Column>

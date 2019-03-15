@@ -21,8 +21,8 @@ export const StyledText: Comp<Atoms.TextProps, Atoms.TextCallbacks> = props =>
         style={{ ...defaultStyle, ...props.style }}
     >{props.children}</Atoms.Text>;
 
-export const Label: Comp<{ text: string }> = props =>
-    <StyledText>{props.text}</StyledText>;
+export const Label: Comp<{ text: string, margin?: string }> = props =>
+    <StyledText style={{ margin: props.margin }}>{props.text}</StyledText>;
 
 export const ParagraphText: Comp<{ text: string }> = props =>
     <StyledText style={{
@@ -30,14 +30,14 @@ export const ParagraphText: Comp<{ text: string }> = props =>
         foo: 'foo', // TODO: why excessive property check doesn't work here ?
     }}><Atoms.Tab />{props.text}</StyledText>;
 
-export const LinkButton: Comp<{
+export const LinkButton: Comp<Atoms.TextProps & {
     text?: string,
     link: string,
 }> = props =>
         <Atoms.Link
             text={props.text}
             to={props.link}
-            style={defaultStyle}
+            style={{ ...defaultStyle, ...props.style }}
         >{props.children}</Atoms.Link>;
 
 export const ActionButton: Comp<{
