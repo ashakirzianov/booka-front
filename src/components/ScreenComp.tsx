@@ -10,7 +10,6 @@ import { TableOfContentsComp } from './TableOfContentsComp';
 import { Row, LinkButton, ActionButton, Label } from './Elements';
 import { ClickResponder, Column } from './Atoms';
 import { linkForLib } from '../logic';
-import { tocFromBook } from '../model/tableOfContent';
 import { ModalBox } from './Atoms.platform';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
@@ -44,7 +43,7 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
 );
 
 export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(props =>
-    !props.tocOpen ? null :
+    !props.tocOpen || props.book.book !== 'book' ? null :
         <ModalBox color='gray' heightPerc={90} maxWidth={60} header={
             <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
                 <ActionButton text='X' onClick={props.toggleToc} />
@@ -56,7 +55,7 @@ export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(prop
         >
 
             <Row style={{ overflow: 'scroll' }}>
-                <TableOfContentsComp {...tocFromBook(props.book)} />
+                <TableOfContentsComp {...props.book.toc} />
             </Row>
         </ModalBox>,
 );

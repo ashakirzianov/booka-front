@@ -1,6 +1,6 @@
 import { BookPath, BookLocator, BookId, bookLocator } from './bookLocator';
-import { Book, BookNode, isParagraph, isChapter } from './book';
 import { assertNever } from '../utils';
+import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -22,13 +22,13 @@ export function tableOfContents(title: string, items: TableOfContentsItem[]): Ta
     };
 }
 
-export function tocFromBook(book: Book): TableOfContents {
-    if (book.book === 'book') {
-        const items = book.content
-            .map((n, idx) => itemsFromBookNode(n, [idx], book.id))
+export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
+    if (bookContent.book === 'book') {
+        const items = bookContent.content
+            .map((n, idx) => itemsFromBookNode(n, [idx], id))
             .reduce((acc, arr) => acc.concat(arr));
 
-        return tableOfContents(book.meta.title, items);
+        return tableOfContents(bookContent.meta.title, items);
     }
 
     return tableOfContents('', []); // TODO: better error handling?

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, ActualBook, ErrorBook, isChapter,
+    isParagraph, LoadedBook, ErrorBook, isChapter,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -65,7 +65,7 @@ const ChapterHeader = refable<Chapter & { path: Path }>(props =>
 );
 
 type RefMap = { [k in string]?: RefType };
-type ActualBookCompProps = ActualBook & {
+type ActualBookCompProps = LoadedBook & {
     pathToNavigate: Path | null,
     updateCurrentBookPosition: Callback<Path>,
 };
@@ -146,9 +146,9 @@ function buildChapter(chapter: Chapter, path: Path, refHandler: NodeRefHandler) 
         .concat(buildNodes(chapter.content, path, refHandler));
 }
 
-function buildBook(book: ActualBook, refHandler: NodeRefHandler) {
-    return [<BookTitle key={`bt`} text={book.meta.title} />]
-        .concat(buildNodes(book.content, [], refHandler));
+function buildBook(book: LoadedBook, refHandler: NodeRefHandler) {
+    return [<BookTitle key={`bt`} text={book.content.meta.title} />]
+        .concat(buildNodes(book.content.content, [], refHandler));
 }
 
 function pathToString(path: Path): string {
