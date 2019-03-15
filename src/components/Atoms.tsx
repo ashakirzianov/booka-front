@@ -54,7 +54,6 @@ export const FullScreen: Comp<{
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
         backgroundColor: props.color,
-        opaque: 1,
     }}>
         {props.children}
     </View>

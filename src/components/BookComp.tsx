@@ -65,10 +65,11 @@ const ChapterHeader = refable<Chapter & { path: Path }>(props =>
 );
 
 type RefMap = { [k in string]?: RefType };
-class ActualBookComp extends React.Component<ActualBook & {
+type ActualBookCompProps = ActualBook & {
     pathToNavigate: Path | null,
     updateCurrentBookPosition: Callback<Path>,
-}> {
+};
+class ActualBookComp extends React.Component<ActualBookCompProps> {
     public refMap: RefMap = {};
 
     public handleScroll = throttle(() => {
@@ -105,7 +106,7 @@ class ActualBookComp extends React.Component<ActualBook & {
         return <ScrollView>
             <IncrementalLoad
                 increment={250}
-                initial={props.pathToNavigate ? countToPath(props.content, props.pathToNavigate) : 50}
+                initial={50}
             >
                 {buildBook(props, (ref, path) => {
                     this.refMap = {

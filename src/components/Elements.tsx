@@ -66,17 +66,19 @@ export class IncrementalLoad extends React.Component<{
     }
 
     public componentDidMount() {
+        this.setState(this.initialState());
         this.handleIncrement();
     }
 
     public handleIncrement() {
-        const { children } = this.props;
+        const { children, increment, timeout } = this.props;
+        const { count } = this.state;
         const childrenCount = Array.isArray(children) ? children.length : 0;
-        if (this.state.count < childrenCount) {
+        if (count < childrenCount) {
             this.setState({
-                count: this.state.count + (this.props.increment || 10),
+                count: count + (increment || 10),
             });
-            setTimeout(() => this.handleIncrement(), (this.props.timeout || 500));
+            setTimeout(() => this.handleIncrement(), (timeout || 500));
         }
     }
 
