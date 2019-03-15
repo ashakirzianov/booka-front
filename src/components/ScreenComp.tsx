@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import { Comp, comp, connected, relative } from './comp-utils';
 import { ScreenLayout } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { Row, LinkButton, ActionButton, Label } from './Elements';
+import { Row, LinkButton, Label } from './Elements';
 import { ClickResponder, Column } from './Atoms';
 import { linkForLib } from '../logic';
 import { ModalBox } from './Atoms.platform';
@@ -46,7 +46,7 @@ export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(prop
     !props.tocOpen || props.book.book !== 'book' ? null :
         <ModalBox color='gray' heightPerc={90} maxWidth={60} header={
             <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-                <ActionButton text='X' onClick={props.toggleToc} />
+                <LinkButton text='X' onClick={props.toggleToc} />
                 <Label text='Table of Contents' />
                 <Column />
             </Row>
@@ -76,11 +76,11 @@ const ScreenHeader: Comp<Screen> = (props =>
 );
 
 const LibButton = comp(props =>
-    <LinkButton text='< Lib ' link={linkForLib()} />,
+    <LinkButton text='<' link={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])(props =>
-    <ActionButton text=' ... ' onClick={props.toggleToc} />,
+    <LinkButton text='...' onClick={props.toggleToc} />,
 );
 
 function screenTitle(screen: Screen) {

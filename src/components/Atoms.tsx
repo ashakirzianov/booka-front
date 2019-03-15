@@ -68,4 +68,4 @@ export const DottedLine: Comp = (props =>
     }} />
 );
 
-export { ClickResponder, Link, ActionButton, Tab, ModalBox, TopPanel } from './Atoms.platform';
+export { ClickResponder, Link, Tab, ModalBox, TopPanel } from './Atoms.platform';

@@ -32,23 +32,15 @@ export const ParagraphText: Comp<{ text: string }> = props =>
 
 export const LinkButton: Comp<Atoms.TextProps & {
     text?: string,
-    link: string,
+    onClick?: Callback<void>,
+    link?: string,
 }> = props =>
         <Atoms.Link
             text={props.text}
             to={props.link}
+            onClick={props.onClick}
             style={{ ...defaultStyle, ...props.style }}
         >{props.children}</Atoms.Link>;
-
-export const ActionButton: Comp<{
-    text: string,
-    onClick: Callback<void>,
-}> = props =>
-        <Atoms.ActionButton
-            text={props.text}
-            onClick={props.onClick}
-            style={defaultStyle}
-        />;
 
 export class IncrementalLoad extends React.Component<{
     increment?: number,

@@ -24,7 +24,8 @@ export const Tab: Comp = (props =>
 
 export const Link: Comp<TextProps & {
     text?: string,
-    to: string,
+    onClick?: Callback<void>,
+    to?: string,
 }> = (props =>
     <View style={{ flex: 1 }}>
         <a
@@ -32,12 +33,18 @@ export const Link: Comp<TextProps & {
             style={{
                 textDecoration: 'none',
                 cursor: 'pointer',
+                width: 'auto',
+                alignSelf: 'stretch',
                 ...props.style,
             }}
             onClick={e => {
                 if (!isOpenNewTabEvent(e)) {
                     e.preventDefault();
-                    navigateToUrl(props.to);
+                    if (props.onClick) {
+                        props.onClick();
+                    } else if (props.to) {
+                        navigateToUrl(props.to);
+                    }
                 }
             }}
         >
@@ -49,22 +56,6 @@ export const Link: Comp<TextProps & {
             </div>
         </a>
     </View>
-    );
-
-export const ActionButton: Comp<TextProps & {
-    text: string,
-    onClick: Callback<void>,
-}> = (props =>
-    <a
-        style={{
-            textDecoration: 'none',
-            cursor: 'pointer',
-            ...props.style,
-        }}
-        onClick={() => {
-            props.onClick();
-        }}
-    >{props.text}</a>
     );
 
 export function showAlert(message: string) {
