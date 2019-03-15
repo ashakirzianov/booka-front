@@ -18,6 +18,7 @@ export type TextProps = {
         textAlign?: 'justify',
         color?: string,
         cursor?: 'pointer',
+        border?: string,
     },
 };
 
@@ -57,6 +58,13 @@ export const FullScreen: Comp<{
     }}>
         {props.children}
     </View>
+);
+
+export const DottedLine: Comp = (props =>
+    <View style={{
+        flex: 1,
+        borderBottom: 'dotted 0.2em',
+    }} />
 );
 
 export { ClickResponder, Link, ActionButton, Tab, ModalBox, TopPanel } from './Atoms.platform';

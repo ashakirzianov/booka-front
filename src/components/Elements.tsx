@@ -22,7 +22,7 @@ export const StyledText: Comp<Atoms.TextProps, Atoms.TextCallbacks> = props =>
     >{props.children}</Atoms.Text>;
 
 export const Label: Comp<{ text: string }> = props =>
-    <StyledText>&nbsp;&nbsp;&nbsp;&nbsp;{props.text}</StyledText>;
+    <StyledText>{props.text}</StyledText>;
 
 export const ParagraphText: Comp<{ text: string }> = props =>
     <StyledText style={{

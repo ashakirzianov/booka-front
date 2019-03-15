@@ -4,7 +4,7 @@ import { Comp } from './comp-utils';
 import { Row, StyledText, LinkButton, Label } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
-import { Column } from './Atoms';
+import { Column, DottedLine } from './Atoms';
 import { rangeToString } from '../model';
 import { nums } from '../utils';
 import { Tab } from './Atoms.platform';
@@ -20,7 +20,7 @@ const TocItemComp: Comp<TableOfContentsItem> = (props =>
         {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
         <LinkButton link={linkForBook(props.locator)} >
             <Label text={props.title} />
-            <Label text='...' />
+            <DottedLine />
             <Label text={props.percentage.toString()} />
         </LinkButton>
     </Row>
