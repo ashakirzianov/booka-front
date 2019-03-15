@@ -87,7 +87,6 @@ export const ModalBox: Comp<{
         left: 0,
         right: 0,
         backgroundColor: 'rgba(0,0,0,0.7)',
-        padding: '2em',
         zIndex: 10,
     }} onClick={props.onExternalClick}>
         <div style={{

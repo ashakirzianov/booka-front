@@ -43,7 +43,7 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
 
 export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(props =>
     !props.tocOpen || props.book.book !== 'book' ? null :
-        <ModalBox color='gray' heightPerc={90} maxWidth={60} header={
+        <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
             <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
                 <LinkButton text='X' onClick={props.toggleToc} />
                 <Label text='Table of Contents' />
