@@ -31,14 +31,14 @@ export const ParagraphText: Comp<{ text: string }> = props =>
     }}><Atoms.Tab />{props.text}</StyledText>;
 
 export const LinkButton: Comp<{
-    text: string,
+    text?: string,
     link: string,
 }> = props =>
         <Atoms.Link
             text={props.text}
             to={props.link}
             style={defaultStyle}
-        />;
+        >{props.children}</Atoms.Link>;
 
 export const ActionButton: Comp<{
     text: string,

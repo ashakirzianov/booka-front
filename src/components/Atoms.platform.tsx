@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TextProps, TextCallbacks } from './Atoms';
 import { Comp, VoidCallback, isOpenNewTabEvent, Callback, ReactContent } from './comp-utils';
 import { navigateToUrl } from '../logic';
+import { View } from 'react-native';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <span
@@ -22,23 +23,32 @@ export const Tab: Comp = (props =>
 );
 
 export const Link: Comp<TextProps & {
-    text: string,
+    text?: string,
     to: string,
 }> = (props =>
-    <a
-        href={props.to}
-        style={{
-            textDecoration: 'none',
-            cursor: 'pointer',
-            ...props.style,
-        }}
-        onClick={e => {
-            if (!isOpenNewTabEvent(e)) {
-                e.preventDefault();
-                navigateToUrl(props.to);
-            }
-        }}
-    >{props.text}</a>
+    <View style={{ flex: 1 }}>
+        <a
+            href={props.to}
+            style={{
+                textDecoration: 'none',
+                cursor: 'pointer',
+                ...props.style,
+            }}
+            onClick={e => {
+                if (!isOpenNewTabEvent(e)) {
+                    e.preventDefault();
+                    navigateToUrl(props.to);
+                }
+            }}
+        >
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+            }}>
+                {props.text || null}{props.children}
+            </div>
+        </a>
+    </View>
     );
 
 export const ActionButton: Comp<TextProps & {

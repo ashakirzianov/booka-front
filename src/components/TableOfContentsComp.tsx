@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Comp } from './comp-utils';
-import { Row, StyledText, LinkButton } from './Elements';
+import { Row, StyledText, LinkButton, Label } from './Elements';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { ScrollView } from 'react-native';
 import { Column } from './Atoms';
@@ -18,7 +18,11 @@ const TocHeader: Comp<{ text: string }> = props =>
 const TocItemComp: Comp<TableOfContentsItem> = (props =>
     <Row>
         {nums(0, props.level).map(i => <Tab key={i.toString()} />)}
-        <LinkButton text={props.title + '........' + props.percentage} link={linkForBook(props.locator)} />
+        <LinkButton link={linkForBook(props.locator)} >
+            <Label text={props.title} />
+            <Label text='...' />
+            <Label text={props.percentage.toString()} />
+        </LinkButton>
     </Row>
 );
 
