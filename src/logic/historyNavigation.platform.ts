@@ -52,9 +52,8 @@ export function stateToUrl(state: App) {
         case 'library':
             return '/';
         case 'book':
-            return `/book/${blToString(current.bl)}`;
-        case 'toc':
-            return `/toc/${blToString(current.bl)}`;
+            const prefix = current.tocOpen ? 'toc' : 'book';
+            return `/${prefix}/${blToString(current.bl)}`;
         default:
             return assertNever(current);
     }

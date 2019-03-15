@@ -1,7 +1,6 @@
 import { Book } from './book';
 import { BookLocator } from './bookLocator';
 import { Library } from './library';
-import { TableOfContents } from './tableOfContent';
 
 export type ScreenStack = Screen[];
 
@@ -40,7 +39,6 @@ type ForScreenMap<T> = {
     default: MapValue<Screen, T>,
     book: MapValue<BookScreen, T>,
     library: MapValue<LibraryScreen, T>,
-    toc: MapValue<TocScreen, T>,
 };
 type DefaultScreen<T> = {
     default: MapValue<Screen, T>,
@@ -75,17 +73,16 @@ export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): S
 }
 
 export type Screen =
-    | BookScreen | LibraryScreen | TocScreen
+    | BookScreen | LibraryScreen
     ;
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
-export type TocScreen = ReturnType<typeof tocScreen>;
 
-export function bookScreen(book: Book, bl: BookLocator) {
+export function bookScreen(book: Book, bl: BookLocator, tocOpen?: boolean) {
     return {
         screen: 'book' as 'book',
         book: book,
-        tocOpen: false,
+        tocOpen: tocOpen ? true : false,
         bl: bl,
     };
 }
@@ -94,13 +91,5 @@ export function libraryScreen(library: Library) {
     return {
         screen: 'library' as 'library',
         library: library,
-    };
-}
-
-export function tocScreen(toc: TableOfContents, bl: BookLocator) {
-    return {
-        screen: 'toc' as 'toc',
-        toc: toc,
-        bl: bl,
     };
 }

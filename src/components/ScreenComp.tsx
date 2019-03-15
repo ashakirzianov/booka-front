@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Screen, BookScreen, LibraryScreen, TocScreen } from '../model';
+import { Screen, BookScreen, LibraryScreen } from '../model';
 import { BookComp } from './BookComp';
 import { LibraryComp } from './LibraryComp';
 import { assertNever } from '../utils';
@@ -25,8 +25,7 @@ export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
                 <TableOfContentsCont key='toc' {...props} />,
             ]
                 : props.screen === 'library' ? <LibraryScreenCont {...props} />
-                    : props.screen === 'toc' ? <TocScreenCont {...props} />
-                        : assertNever(props)
+                    : assertNever(props)
         }
     </ScreenLayout>,
 );
@@ -66,33 +65,27 @@ const LibraryScreenCont = comp<LibraryScreen>(props =>
     <LibraryComp {...props.library} />,
 );
 
-const TocScreenCont = comp<TocScreen>(props =>
-    <TableOfContentsComp {...props.toc} />,
-);
-
 const ScreenHeader: Comp<Screen> = (props =>
     <Row>{
         props.screen === 'library' ? null
-            : props.screen === 'toc' ? null
-                : props.screen === 'book' ? [
-                    <LibButton key='back' />,
-                    <OpenTocButton key='toc' />,
-                ]
-                    : assertNever(props)
+            : props.screen === 'book' ? [
+                <LibButton key='back' />,
+                <OpenTocButton key='toc' />,
+            ]
+                : assertNever(props)
     }</Row>
 );
 
 const LibButton = comp(props =>
-    <LinkButton text='< Lib' link={linkForLib()} />,
+    <LinkButton text='< Lib ' link={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])(props =>
-    <ActionButton text='...' onClick={props.toggleToc} />,
+    <ActionButton text=' ... ' onClick={props.toggleToc} />,
 );
 
 function screenTitle(screen: Screen) {
-    return screen.screen === 'toc' ? 'Table of Contents'
-        : screen.screen === 'library' ? 'Library'
-            : screen.screen === 'book' ? undefined
-                : assertNever(screen);
+    return screen.screen === 'library' ? 'Library'
+        : screen.screen === 'book' ? undefined
+            : assertNever(screen);
 }

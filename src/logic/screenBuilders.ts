@@ -1,8 +1,7 @@
 import {
-    BookLocator, bookScreen, libraryScreen, Screen, tocScreen, BookId, Book, Library, loadingBook,
+    BookLocator, bookScreen, libraryScreen, Screen, BookId, Book, Library, loadingBook,
 } from '../model';
 import { bookForId, currentLibrary, cachedLibrary } from './dataAccess';
-import { tocFromBook } from '../model/tableOfContent';
 import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
 
 function optimisticBook(id: BookId): OptimisticPromise<Book> {
@@ -19,20 +18,14 @@ function optimisticLibrary(): OptimisticPromise<Library> {
     return optimisticPromise<Library>(guess, promise);
 }
 
-export function buildBookScreen(bl: BookLocator): OptimisticPromise<Screen> {
+export function buildBookScreen(bl: BookLocator, tocOpen?: boolean): OptimisticPromise<Screen> {
     const promise = optimisticBook(bl.id);
 
-    return then(promise, book => bookScreen(book, bl));
+    return then(promise, book => bookScreen(book, bl, tocOpen));
 }
 
 export function buildLibraryScreen(): OptimisticPromise<Screen> {
     const promise = optimisticLibrary();
 
     return then(promise, lib => libraryScreen(lib));
-}
-
-export function buildTocScreen(bl: BookLocator): OptimisticPromise<Screen> {
-    const promise = optimisticBook(bl.id);
-
-    return then(promise, book => tocScreen(tocFromBook(book), bl));
 }
