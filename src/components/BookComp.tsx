@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -52,13 +52,11 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-type Path = number[];
-
-const ParagraphComp = refable<{ p: Paragraph, path: Path }>(props =>
+const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
     <ParagraphText text={props.p} />,
 );
 
-const ChapterHeader = refable<Chapter & { path: Path }>(props =>
+const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
@@ -66,15 +64,15 @@ const ChapterHeader = refable<Chapter & { path: Path }>(props =>
 
 type RefMap = { [k in string]?: RefType };
 type ActualBookCompProps = LoadedBook & {
-    pathToNavigate: Path | null,
-    updateCurrentBookPosition: Callback<Path>,
+    pathToNavigate: BookPath | null,
+    updateCurrentBookPosition: Callback<BookPath>,
 };
 class ActualBookComp extends React.Component<ActualBookCompProps> {
     public refMap: RefMap = {};
 
     public handleScroll = throttle(() => {
         const newCurrentPath = Object.entries(this.refMap)
-            .reduce<Path | undefined>((path, [key, ref]) =>
+            .reduce<BookPath | undefined>((path, [key, ref]) =>
                 path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
         if (newCurrentPath) {
             this.props.updateCurrentBookPosition(newCurrentPath);
@@ -119,15 +117,15 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
     }
 }
 
-type NodeRefHandler = (ref: RefType, path: Path) => void;
-function buildNodes(nodes: BookNode[], headPath: Path, refHandler: NodeRefHandler): JSX.Element[] {
+type NodeRefHandler = (ref: RefType, path: BookPath) => void;
+function buildNodes(nodes: BookNode[], headPath: BookPath, refHandler: NodeRefHandler): JSX.Element[] {
     return nodes
         .map((bn, i) => buildNode(bn, headPath.concat([i]), refHandler))
         .reduce((acc, arr) => acc.concat(arr))
         ;
 }
 
-function buildNode(node: BookNode, path: Path, refHandler: NodeRefHandler) {
+function buildNode(node: BookNode, path: BookPath, refHandler: NodeRefHandler) {
     if (isParagraph(node)) {
         return buildParagraph(node, path, refHandler);
     } else if (isChapter(node)) {
@@ -137,11 +135,11 @@ function buildNode(node: BookNode, path: Path, refHandler: NodeRefHandler) {
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: Path, refHandler: NodeRefHandler) {
+function buildParagraph(paragraph: Paragraph, path: BookPath, refHandler: NodeRefHandler) {
     return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />];
 }
 
-function buildChapter(chapter: Chapter, path: Path, refHandler: NodeRefHandler) {
+function buildChapter(chapter: Chapter, path: BookPath, refHandler: NodeRefHandler) {
     return [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         .concat(buildNodes(chapter.content, path, refHandler));
 }
@@ -151,18 +149,18 @@ function buildBook(book: LoadedBook, refHandler: NodeRefHandler) {
         .concat(buildNodes(book.content.content, [], refHandler));
 }
 
-function pathToString(path: Path): string {
+function pathToString(path: BookPath): string {
     return path.join('-');
 }
 
-function stringToPath(str: string): Path {
+function stringToPath(str: string): BookPath {
     const path = str.split('-')
         .map(p => parseInt(p, 10));
 
     return path;
 }
 
-export function countToPath(nodes: BookNode[], path: Path): number {
+export function countToPath(nodes: BookNode[], path: BookPath): number {
     if (path.length > 0) {
         const head = path[0];
         const countFront = nodes
