@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, pathLessThan, emptyPath,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, pathLessThan, emptyPath, BookId, bookLocator,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -10,18 +10,25 @@ import {
     ParagraphText, ActivityIndicator, StyledText, Row, Label,
     ScrollView,
     IncrementalLoad,
+    LinkButton,
 } from './Elements';
 import { refable, RefType, scrollToRef, isPartiallyVisible } from './Scroll.platform';
+import { TableOfContents } from '../model/tableOfContent';
+import { linkForBook } from '../logic';
 
 export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
+            const position = props.positionToNavigate || emptyPath();
+            const paths = buildPaths(position, props.toc);
             return <ActualBookComp
                 pathToNavigate={props.positionToNavigate}
                 updateCurrentBookPosition={props.updateCurrentBookPosition}
-                range={computeRangeForPath(props.content, props.positionToNavigate || emptyPath())}
+                range={bookRange(paths.current, paths.next)}
+                prevPath={paths.prev}
+                nextPath={paths.next}
                 {...props} />;
         case 'loading':
             return <ActivityIndicator />;
@@ -63,11 +70,20 @@ const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
+const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
+    <LinkButton link={linkForBook(bookLocator(props.id, props.path))}>
+        <Label text={props.text} />
+    </LinkButton>
+);
+
 type RefMap = { [k in string]?: RefType };
 type ActualBookCompProps = LoadedBook & {
     pathToNavigate: BookPath | null,
     updateCurrentBookPosition: Callback<BookPath>,
     range: BookRange,
+    prevPath?: BookPath,
+    nextPath?: BookPath,
+    id: BookId,
 };
 class ActualBookComp extends React.Component<ActualBookCompProps> {
     public refMap: RefMap = {};
@@ -104,6 +120,7 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
     public render() {
         const props = this.props;
         return <ScrollView>
+            {props.prevPath && <PathLink path={props.prevPath} id={props.id} text='Previous chapter' />}
             <IncrementalLoad
                 increment={250}
                 initial={50}
@@ -115,6 +132,7 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
                     };
                 })}
             </IncrementalLoad>
+            {props.nextPath && <PathLink path={props.nextPath} id={props.id} text='Next chapter' />}
         </ScrollView>;
     }
 }
@@ -215,7 +233,7 @@ function countElements(node: BookNode): number {
     }
 }
 
-function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
+export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);
     const chapter = findChapterLevel(iterator);
 
@@ -238,4 +256,30 @@ function findChapterLevel(i: OptBookIterator): OptBookIterator {
     } else {
         return findChapterLevel(i.parent());
     }
+}
+
+function buildPaths(path: BookPath, toc: TableOfContents): {
+    prev?: BookPath,
+    current: BookPath,
+    next?: BookPath,
+} {
+    let current = emptyPath();
+    let prev: BookPath | undefined;
+    let skipFirst = false;
+
+    for (const item of toc.items.filter(i => i.level === 0)) {
+        if (skipFirst) {
+            const next = item.path;
+
+            if (inRange(path, bookRange(current, next))) {
+                return { prev, current, next };
+            }
+
+            prev = current;
+            current = next;
+        }
+        skipFirst = true;
+    }
+
+    return { prev, current };
 }

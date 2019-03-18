@@ -38,6 +38,7 @@ export const Link: Comp<TextProps & {
                 ...props.style,
             }}
             onClick={e => {
+                e.stopPropagation();
                 if (!isOpenNewTabEvent(e)) {
                     e.preventDefault();
                     if (props.onClick) {
