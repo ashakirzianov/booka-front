@@ -25,7 +25,7 @@ export function bookIterator(book: BookContent): RootIterator {
 
 export function iterateToPath(iterator: RootIterator, path: BookPath): OptBookIterator {
     const head = pathHead(path);
-    if (!head) {
+    if (head === undefined) {
         return isBookIterator(iterator) ? iterator : undefined;
     } else {
         const next = nthSibling(iterator.firstChildren(), head);

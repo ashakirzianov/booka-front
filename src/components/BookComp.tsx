@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, leadPath, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, leadPath, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, pathLessThan,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -128,12 +128,12 @@ function buildNodes(nodes: BookNode[], range: BookRange, headPath: BookPath, ref
 }
 
 function buildNode(node: BookNode, range: BookRange, path: BookPath, refHandler: NodeRefHandler) {
-    if (!inRange(path, range)) {
+    if (!subpathCouldBeInRange(path, range)) {
         return [];
     }
 
     if (isParagraph(node)) {
-        return buildParagraph(node, path, refHandler);
+        return buildParagraph(node, range, path, refHandler);
     } else if (isChapter(node)) {
         return buildChapter(node, range, path, refHandler);
     } else {
@@ -141,18 +141,33 @@ function buildNode(node: BookNode, range: BookRange, path: BookPath, refHandler:
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: BookPath, refHandler: NodeRefHandler) {
-    return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />];
+function buildParagraph(paragraph: Paragraph, range: BookRange, path: BookPath, refHandler: NodeRefHandler) {
+    return inRange(path, range)
+        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />]
+        : [];
 }
 
 function buildChapter(chapter: Chapter, range: BookRange, path: BookPath, refHandler: NodeRefHandler) {
-    return [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+    const head = inRange(path, range)
+        ? [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+        : [];
+    return head
         .concat(buildNodes(chapter.content, range, path, refHandler));
 }
 
 function buildBook(book: LoadedBook, range: BookRange, refHandler: NodeRefHandler) {
     return [<BookTitle key={`bt`} text={book.content.meta.title} />]
         .concat(buildNodes(book.content.content, range, [], refHandler));
+}
+
+function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean {
+    if (range.end && !pathLessThan(path, range.end)) {
+        return false;
+    }
+
+    const part = range.start.slice(0, path.length);
+    const could = !pathLessThan(path, part);
+    return could;
 }
 
 function pathToString(path: BookPath): string {

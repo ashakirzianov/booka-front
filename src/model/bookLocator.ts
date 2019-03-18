@@ -69,7 +69,14 @@ export function bookRange(start?: BookPath, end?: BookPath): BookRange {
 }
 
 export function inRange(path: BookPath, range: BookRange): boolean {
-    return !pathLessThan(path, range.start) && !(range.end && pathLessThan(range.end, path));
+    if (pathLessThan(path, range.start)) {
+        return false;
+    }
+    if (range.end && !pathLessThan(path, range.end)) {
+        return false;
+    }
+
+    return true;
 }
 
 export type BookLocator = {
