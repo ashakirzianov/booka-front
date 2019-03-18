@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, leadPath, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -21,7 +21,7 @@ export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPos
             return <ActualBookComp
                 pathToNavigate={props.positionToNavigate}
                 updateCurrentBookPosition={props.updateCurrentBookPosition}
-                range={bookRange([])}
+                range={computeRangeForPath(props.content, props.positionToNavigate || leadPath())}
                 {...props} />;
         case 'loading':
             return <ActivityIndicator />;
@@ -194,5 +194,30 @@ function countElements(node: BookNode): number {
             .reduce((total, curr) => total + curr);
     } else {
         return assertNever(node);
+    }
+}
+
+function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
+    const iterator = iterateToPath(bookIterator(book), path);
+    const chapter = findChapterLevel(iterator);
+
+    const nextChapter = nextIterator(chapter);
+
+    const range = bookRange(
+        buildPath(chapter),
+        nextChapter && buildPath(nextChapter),
+    );
+
+    return range;
+}
+
+function findChapterLevel(i: OptBookIterator): OptBookIterator {
+    if (!i) {
+        return undefined;
+    }
+    if (isChapter(i.node) && i.node.level === 0) {
+        return i;
+    } else {
+        return findChapterLevel(i.parent());
     }
 }
