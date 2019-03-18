@@ -25,8 +25,16 @@ export function emptyPath(): BookPath {
     return [];
 }
 
-export function appendPath(head: number, tail: BookPath): BookPath {
-    return [head].concat(tail);
+export function pathHead(path: BookPath): number | undefined {
+    return path[0];
+}
+
+export function pathTail(path: BookPath) {
+    return path.slice(1);
+}
+
+export function appendPath(path: BookPath, last: number): BookPath {
+    return path.concat([last]);
 }
 
 export function samePath(p1: BookPath, p2: BookPath) {

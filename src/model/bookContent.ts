@@ -18,6 +18,10 @@ export type BookContent = {
     content: BookNode[],
 };
 
+export function children(node: BookNode) {
+    return isChapter(node) ? node.content : [];
+}
+
 // Type guards:
 
 export function isParagraph(bn: BookNode): bn is Paragraph {
