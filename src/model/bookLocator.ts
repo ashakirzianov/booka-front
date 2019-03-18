@@ -20,29 +20,48 @@ export function remoteBookId(name: string): RemoteBookId {
 }
 
 export type BookPath = number[];
-export type BookRange = {
-    start: BookPath,
-    end?: BookPath,
-};
-
-export function range(start?: BookPath, end?: BookPath): BookRange {
-    return {
-        start: start || [],
-        end: end,
-    };
-}
-export function appendPath(head: number, tail: BookPath): BookPath {
-    return [head].concat(tail);
-}
 
 export function emptyPath(): BookPath {
     return [];
+}
+
+export function appendPath(head: number, tail: BookPath): BookPath {
+    return [head].concat(tail);
 }
 
 export function samePath(p1: BookPath, p2: BookPath) {
     return p1.length === p2.length
         && p1.every((p1c, idx) => p1c === p2[idx])
         ;
+}
+
+export function pathLessThan(left: BookPath, right: BookPath): boolean {
+    const longerLength = Math.max(left.length, right.length);
+    for (let idx = 0; idx < longerLength; idx++) {
+        const leftElement = left[idx] || 0;
+        const rightElement = right[idx] || 0;
+        if (leftElement !== rightElement) {
+            return leftElement < rightElement;
+        }
+    }
+
+    return false;
+}
+
+export type BookRange = {
+    start: BookPath,
+    end?: BookPath,
+};
+
+export function bookRange(start?: BookPath, end?: BookPath): BookRange {
+    return {
+        start: start || [],
+        end: end,
+    };
+}
+
+export function inRange(path: BookPath, range: BookRange): boolean {
+    return !pathLessThan(path, range.start) && !(range.end && pathLessThan(range.end, path));
 }
 
 export type BookLocator = {
@@ -53,7 +72,7 @@ export type BookLocator = {
 export function bookLocator(id: BookId, start?: BookPath, end?: BookPath): BookLocator {
     return {
         id: id,
-        range: range(start, end),
+        range: bookRange(start, end),
     };
 }
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -21,6 +21,7 @@ export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPos
             return <ActualBookComp
                 pathToNavigate={props.positionToNavigate}
                 updateCurrentBookPosition={props.updateCurrentBookPosition}
+                range={bookRange([])}
                 {...props} />;
         case 'loading':
             return <ActivityIndicator />;
@@ -66,6 +67,7 @@ type RefMap = { [k in string]?: RefType };
 type ActualBookCompProps = LoadedBook & {
     pathToNavigate: BookPath | null,
     updateCurrentBookPosition: Callback<BookPath>,
+    range: BookRange,
 };
 class ActualBookComp extends React.Component<ActualBookCompProps> {
     public refMap: RefMap = {};
@@ -85,7 +87,7 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
         if (props && props.pathToNavigate) {
             const refToNavigate = refMap[pathToString(props.pathToNavigate)];
             if (!scrollToRef(refToNavigate)) {
-                setTimeout(this.scrollToCurrentPath.bind(this), 500);
+                setTimeout(this.scrollToCurrentPath.bind(this), 250);
             }
         }
     }
@@ -106,7 +108,7 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
                 increment={250}
                 initial={50}
             >
-                {buildBook(props, (ref, path) => {
+                {buildBook(props, props.range, (ref, path) => {
                     this.refMap = {
                         ...this.refMap,
                         [pathToString(path)]: ref,
@@ -118,18 +120,22 @@ class ActualBookComp extends React.Component<ActualBookCompProps> {
 }
 
 type NodeRefHandler = (ref: RefType, path: BookPath) => void;
-function buildNodes(nodes: BookNode[], headPath: BookPath, refHandler: NodeRefHandler): JSX.Element[] {
+function buildNodes(nodes: BookNode[], range: BookRange, headPath: BookPath, refHandler: NodeRefHandler): JSX.Element[] {
     return nodes
-        .map((bn, i) => buildNode(bn, headPath.concat([i]), refHandler))
+        .map((bn, i) => buildNode(bn, range, headPath.concat([i]), refHandler))
         .reduce((acc, arr) => acc.concat(arr))
         ;
 }
 
-function buildNode(node: BookNode, path: BookPath, refHandler: NodeRefHandler) {
+function buildNode(node: BookNode, range: BookRange, path: BookPath, refHandler: NodeRefHandler) {
+    if (!inRange(path, range)) {
+        return [];
+    }
+
     if (isParagraph(node)) {
         return buildParagraph(node, path, refHandler);
     } else if (isChapter(node)) {
-        return buildChapter(node, path, refHandler);
+        return buildChapter(node, range, path, refHandler);
     } else {
         return assertNever(node, path.toString());
     }
@@ -139,14 +145,14 @@ function buildParagraph(paragraph: Paragraph, path: BookPath, refHandler: NodeRe
     return [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => refHandler(ref, path)} />];
 }
 
-function buildChapter(chapter: Chapter, path: BookPath, refHandler: NodeRefHandler) {
+function buildChapter(chapter: Chapter, range: BookRange, path: BookPath, refHandler: NodeRefHandler) {
     return [<ChapterHeader ref={ref => refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
-        .concat(buildNodes(chapter.content, path, refHandler));
+        .concat(buildNodes(chapter.content, range, path, refHandler));
 }
 
-function buildBook(book: LoadedBook, refHandler: NodeRefHandler) {
+function buildBook(book: LoadedBook, range: BookRange, refHandler: NodeRefHandler) {
     return [<BookTitle key={`bt`} text={book.content.meta.title} />]
-        .concat(buildNodes(book.content.content, [], refHandler));
+        .concat(buildNodes(book.content.content, range, [], refHandler));
 }
 
 function pathToString(path: BookPath): string {
