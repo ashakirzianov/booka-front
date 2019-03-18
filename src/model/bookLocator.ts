@@ -44,10 +44,12 @@ export function samePath(p1: BookPath, p2: BookPath) {
 }
 
 export function pathLessThan(left: BookPath, right: BookPath): boolean {
-    const longerLength = Math.max(left.length, right.length);
-    for (let idx = 0; idx < longerLength; idx++) {
-        const leftElement = left[idx] || 0;
-        const rightElement = right[idx] || 0;
+    for (let idx = 0; idx < right.length; idx++) {
+        const leftElement = left[idx];
+        if (leftElement === undefined) {
+            return true;
+        }
+        const rightElement = right[idx];
         if (leftElement !== rightElement) {
             return leftElement < rightElement;
         }

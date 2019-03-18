@@ -2,7 +2,7 @@ import * as React from 'react';
 import { throttle } from 'lodash';
 import {
     Book, BookNode, Chapter, Paragraph,
-    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, leadPath, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, pathLessThan,
+    isParagraph, LoadedBook, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent, iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, pathLessThan, emptyPath,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, Callback } from './comp-utils';
@@ -21,7 +21,7 @@ export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPos
             return <ActualBookComp
                 pathToNavigate={props.positionToNavigate}
                 updateCurrentBookPosition={props.updateCurrentBookPosition}
-                range={computeRangeForPath(props.content, props.positionToNavigate || leadPath())}
+                range={computeRangeForPath(props.content, props.positionToNavigate || emptyPath())}
                 {...props} />;
         case 'loading':
             return <ActivityIndicator />;
@@ -156,7 +156,10 @@ function buildChapter(chapter: Chapter, range: BookRange, path: BookPath, refHan
 }
 
 function buildBook(book: LoadedBook, range: BookRange, refHandler: NodeRefHandler) {
-    return [<BookTitle key={`bt`} text={book.content.meta.title} />]
+    const head = range.start.length === 0
+        ? [<BookTitle key={`bt`} text={book.content.meta.title} />]
+        : [];
+    return head
         .concat(buildNodes(book.content.content, range, [], refHandler));
 }
 
