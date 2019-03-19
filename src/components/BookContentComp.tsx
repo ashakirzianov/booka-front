@@ -3,7 +3,7 @@ import { throttle } from 'lodash';
 import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
-import { Comp, Callback } from './comp-utils';
+import { Comp, Callback, relative } from './comp-utils';
 import { Row, StyledText, ParagraphText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
 
@@ -38,9 +38,14 @@ const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
 );
 
 const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
-    <LinkButton link={linkForBook(bookLocator(props.id, props.path))}>
-        <Label text={props.text} />
-    </LinkButton>
+    <Row style={{
+        justifyContent: 'center',
+        margin: relative(2),
+    }}>
+        <LinkButton borders link={linkForBook(bookLocator(props.id, props.path))}>
+            <Label text={props.text} />
+        </LinkButton>
+    </Row>
 );
 
 type RefMap = { [k in string]?: RefType };
@@ -96,14 +101,14 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
             },
         };
         return <ScrollView>
-            {prevPath && <PathLink path={prevPath} id={id} text='Previous chapter' />}
+            {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
             <IncrementalLoad
                 increment={250}
                 initial={50}
             >
                 {buildBook(content, params)}
             </IncrementalLoad>
-            {nextPath && <PathLink path={nextPath} id={id} text='Next chapter' />}
+            {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
         </ScrollView>;
     }
 }

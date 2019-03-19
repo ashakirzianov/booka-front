@@ -18,7 +18,10 @@ const TocHeader: Comp<{ text: string }> = props =>
 const TocItemComp: Comp<TableOfContentsItem & { tabs: number }> = (props =>
     <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <LinkButton link={linkForBook(bookLocator(props.id, props.path))} style={{ margin: relative(0.1) }}>
+        <LinkButton stretch
+            link={linkForBook(bookLocator(props.id, props.path))}
+            style={{ margin: relative(0.1) }}
+        >
             <Label text={props.title} margin={relative(0.1)} />
             <DottedLine />
             <Label text={props.percentage.toString()} margin={relative(0.1)} />

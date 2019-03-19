@@ -26,15 +26,14 @@ export const Link: Comp<TextProps & {
     text?: string,
     onClick?: Callback<void>,
     to?: string,
+    stretch?: boolean,
 }> = (props =>
-    <View style={{ flex: 1 }}>
+    <View style={props.stretch && { flex: 1 }}>
         <a
             href={props.to}
             style={{
                 textDecoration: 'none',
                 cursor: 'pointer',
-                width: 'auto',
-                alignSelf: 'stretch',
                 ...props.style,
             }}
             onClick={e => {
@@ -50,8 +49,11 @@ export const Link: Comp<TextProps & {
             }}
         >
             <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
+                ...(props.stretch && {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }),
+                margin: '0.3em',
             }}>
                 {props.text || null}{props.children}
             </div>

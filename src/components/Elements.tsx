@@ -34,12 +34,23 @@ export const LinkButton: Comp<Atoms.TextProps & {
     text?: string,
     onClick?: Callback<void>,
     link?: string,
+    stretch?: boolean,
+    borders?: boolean,
 }> = props =>
         <Atoms.Link
             text={props.text}
             to={props.link}
             onClick={props.onClick}
-            style={{ ...defaultStyle, ...props.style }}
+            style={{
+                ...defaultStyle,
+                ...props.style,
+                ...(props.borders && {
+                    border: 'solid',
+                    borderColor: defaultStyle.color,
+                    borderRadius: 9,
+                }),
+            }}
+            stretch={props.stretch}
         >{props.children}</Atoms.Link>;
 
 export class IncrementalLoad extends React.Component<{
