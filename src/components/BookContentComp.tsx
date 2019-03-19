@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange } from '../model';
+import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, isReachParagraph, ReachParagraph } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
@@ -142,9 +142,17 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
         return buildParagraph(node, path, params);
     } else if (isChapter(node)) {
         return buildChapter(node, path, params);
+    } else if (isReachParagraph(node)) {
+        return buildReachParagraph(node, path, params);
     } else {
         return assertNever(node, path.toString());
     }
+}
+
+function buildReachParagraph(reach: ReachParagraph, path: BookPath, params: Params) {
+    // TODO: properly implement
+    const allText = reach.content.reduce((text, s) => text + s.text, '');
+    return buildParagraph(allText, path, params);
 }
 
 function buildParagraph(paragraph: Paragraph, path: BookPath, params: Params) {

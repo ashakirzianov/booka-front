@@ -1,6 +1,6 @@
 import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
+import { BookNode, isChapter, isParagraph, BookContent, isReachParagraph } from './bookContent';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -57,7 +57,7 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
 
         const children = itemsFromBookNodes(node.content, path, info, percentage);
         return head.concat(children);
-    } else if (isParagraph(node)) {
+    } else if (isParagraph(node) || isReachParagraph(node)) {
         return [];
     } else {
         return assertNever(node);
@@ -84,6 +84,8 @@ function lengthOfBook(book: BookContent): number {
 function lengthOfNode(node: BookNode): number {
     if (isParagraph(node)) {
         return node.length;
+    } else if (isReachParagraph(node)) {
+        return node.content.reduce((l, s) => l + s.text.length, 0);
     } else if (isChapter(node)) {
         return node.content.reduce((len, n) => len + lengthOfNode(n), 0);
     } else {
