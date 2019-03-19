@@ -81,6 +81,16 @@ export function inRange(path: BookPath, range: BookRange): boolean {
     return true;
 }
 
+export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean {
+    if (range.end && !pathLessThan(path, range.end)) {
+        return false;
+    }
+
+    const part = range.start.slice(0, path.length);
+    const could = !pathLessThan(path, part);
+    return could;
+}
+
 export type BookLocator = {
     id: BookId,
     range: BookRange,
