@@ -24,14 +24,14 @@ export const BookComp = comp<Book>(props => {
     }
 });
 
-const LoadedBookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<LoadedBook>(props => {
+const LoadedBookComp = connected(['pathToOpen'], ['updateCurrentBookPosition'])<LoadedBook>(props => {
     const {
-        positionToNavigate, updateCurrentBookPosition,
+        pathToOpen, updateCurrentBookPosition,
         content, id, toc,
     } = props;
-    const { prev, current, next } = buildPaths(positionToNavigate || emptyPath(), toc);
+    const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
     return <BookContentComp
-        pathToNavigate={positionToNavigate}
+        pathToNavigate={pathToOpen}
         updateCurrentBookPosition={updateCurrentBookPosition}
         range={bookRange(current, next)}
         prevPath={prev}

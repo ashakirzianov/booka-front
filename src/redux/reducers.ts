@@ -24,7 +24,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             default: () => screen,
         }),
     },
-    positionToNavigate: {
+    pathToOpen: {
         navigateToScreen: {
             fulfilled: (path, screen) => forScreen(screen, {
                 book: bs => bs.bl.range.start,
