@@ -1,35 +1,44 @@
 import * as React from 'react';
 import {
-    Book, ErrorBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent,
+    Book, ErrorBook, LoadedBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent,
     iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, emptyPath,
 } from '../model';
 import { assertNever } from '../utils';
-import { Comp, connected } from './comp-utils';
+import { Comp, connected, comp } from './comp-utils';
 import {
     ActivityIndicator, Label,
 } from './Elements';
 import { TableOfContents } from '../model/tableOfContent';
 import { BookContentComp } from './BookContentComp';
 
-export const BookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<Book>(props => {
+export const BookComp = comp<Book>(props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
         case 'book':
-            const position = props.positionToNavigate || emptyPath();
-            const paths = buildPaths(position, props.toc);
-            return <BookContentComp
-                pathToNavigate={props.positionToNavigate}
-                updateCurrentBookPosition={props.updateCurrentBookPosition}
-                range={bookRange(paths.current, paths.next)}
-                prevPath={paths.prev}
-                nextPath={paths.next}
-                {...props} />;
+            return <LoadedBookComp {...props} />;
         case 'loading':
             return <ActivityIndicator />;
         default:
             return assertNever(props);
     }
+});
+
+const LoadedBookComp = connected(['positionToNavigate'], ['updateCurrentBookPosition'])<LoadedBook>(props => {
+    const {
+        positionToNavigate, updateCurrentBookPosition,
+        content, id, toc,
+    } = props;
+    const { prev, current, next } = buildPaths(positionToNavigate || emptyPath(), toc);
+    return <BookContentComp
+        pathToNavigate={positionToNavigate}
+        updateCurrentBookPosition={updateCurrentBookPosition}
+        range={bookRange(current, next)}
+        prevPath={prev}
+        nextPath={next}
+        content={content}
+        id={id}
+    />;
 });
 
 const ErrorBookComp: Comp<ErrorBook> = props =>

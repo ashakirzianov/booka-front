@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, LoadedBook, BookRange, BookNode, isParagraph, isChapter, inRange, pathLessThan } from '../model';
+import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, pathLessThan, BookContent } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback } from './comp-utils';
@@ -44,7 +44,8 @@ const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
 );
 
 type RefMap = { [k in string]?: RefType };
-type BookContentCompProps = LoadedBook & {
+type BookContentCompProps = {
+    content: BookContent,
     pathToNavigate: BookPath | null,
     updateCurrentBookPosition: Callback<BookPath>,
     range: BookRange,
@@ -92,7 +93,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
                 increment={250}
                 initial={50}
             >
-                {buildBook(props, props.range, (ref, path) => {
+                {buildBook(props.content, props.range, (ref, path) => {
                     this.refMap = {
                         ...this.refMap,
                         [pathToString(path)]: ref,
@@ -140,12 +141,12 @@ function buildChapter(chapter: Chapter, range: BookRange, path: BookPath, refHan
         .concat(buildNodes(chapter.content, range, path, refHandler));
 }
 
-function buildBook(book: LoadedBook, range: BookRange, refHandler: NodeRefHandler) {
+function buildBook(book: BookContent, range: BookRange, refHandler: NodeRefHandler) {
     const head = range.start.length === 0
-        ? [<BookTitle key={`bt`} text={book.content.meta.title} />]
+        ? [<BookTitle key={`bt`} text={book.meta.title} />]
         : [];
     return head
-        .concat(buildNodes(book.content.content, range, [], refHandler));
+        .concat(buildNodes(book.content, range, [], refHandler));
 }
 
 function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean {
