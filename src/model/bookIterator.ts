@@ -2,31 +2,34 @@ import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookLocat
 import { BookNode, BookContent, children } from './bookContent';
 
 export type RootIterator = {
+    node: undefined,
     firstChildren: BookIteratorHandler,
 };
-export type BookIterator = RootIterator & {
+export type BookIterator = {
     node: BookNode,
     index: number,
-    parent: BookIteratorHandler,
+    parent: ParentIterator,
     prevSibling: BookIteratorHandler,
     nextSibling: BookIteratorHandler,
+    firstChildren: BookIteratorHandler,
 };
 export type OptBookIterator = BookIterator | undefined;
+type ParentIterator = RootIterator | BookIterator;
 type BookIteratorHandler = () => OptBookIterator;
-function isBookIterator(i: RootIterator): i is BookIterator {
-    return (i as any).node !== undefined;
-}
 
 export function bookIterator(book: BookContent): RootIterator {
-    return {
-        firstChildren: siblingIterator(undefined, book.content, 0),
+    const p = {
+        node: undefined,
+        firstChildren: undefined as any,
     };
+    p.firstChildren = siblingIterator(p, book.content, 0);
+    return p;
 }
 
-export function iterateToPath(iterator: RootIterator, path: BookPath): OptBookIterator {
+export function iterateToPath(iterator: ParentIterator, path: BookPath): OptBookIterator {
     const head = pathHead(path);
     if (head === undefined) {
-        return isBookIterator(iterator) ? iterator : undefined;
+        return iterator.node ? iterator : undefined;
     } else {
         const next = nthSibling(iterator.firstChildren(), head);
         const tail = pathTail(path);
@@ -44,17 +47,17 @@ export function nthSibling(iterator: OptBookIterator, n: number): OptBookIterato
     }
 }
 
-function siblingIterator(parent: OptBookIterator, siblings: BookNode[], idx: number): BookIteratorHandler {
+function siblingIterator(parent: ParentIterator, siblings: BookNode[], idx: number): BookIteratorHandler {
     return () => {
         if (idx < siblings.length && idx >= 0) {
             const node = siblings[idx];
             const iterator: BookIterator = {
                 node,
                 index: idx,
-                parent: () => parent,
+                parent: parent,
                 nextSibling: siblingIterator(parent, siblings, idx + 1),
                 prevSibling: siblingIterator(parent, siblings, idx - 1),
-                firstChildren: () => undefined, // TODO: implement
+                firstChildren: () => undefined,
             };
 
             const ch = children(node);
@@ -69,30 +72,30 @@ function siblingIterator(parent: OptBookIterator, siblings: BookNode[], idx: num
     };
 }
 
-export function nextIterator(i: OptBookIterator): OptBookIterator {
-    if (!i) {
-        return i;
+export function nextIterator(i: ParentIterator): OptBookIterator {
+    if (!i.node) {
+        return undefined;
     }
     const nextSibling = i.nextSibling();
     if (nextSibling) {
         return nextSibling;
     } else {
-        return nextIterator(i.parent());
+        return nextIterator(i.parent);
     }
 }
 
-export function prevIterator(i: OptBookIterator): OptBookIterator {
-    if (!i) {
-        return i;
+export function prevIterator(i: ParentIterator): OptBookIterator {
+    if (!i.node) {
+        return undefined;
     }
     const prevSibling = i.prevSibling();
     if (prevSibling) {
         return prevSibling;
     } else {
-        return prevIterator(i.parent());
+        return prevIterator(i.parent);
     }
 }
 
-export function buildPath(i: OptBookIterator): BookPath {
-    return i ? appendPath(buildPath(i.parent()), i.index) : emptyPath();
+export function buildPath(i: ParentIterator): BookPath {
+    return i.node ? appendPath(buildPath(i.parent), i.index) : emptyPath();
 }
