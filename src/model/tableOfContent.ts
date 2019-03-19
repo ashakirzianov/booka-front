@@ -1,6 +1,6 @@
 import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { BookNode, isChapter, isParagraph, BookContent, isReachParagraph } from './bookContent';
+import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -35,7 +35,7 @@ export function tocFromContent(bookContent: BookContent, id: BookId): TableOfCon
             id,
             length: lengthOfBook(bookContent),
         };
-        const items = itemsFromBookNodes(bookContent.content, [], info, 0);
+        const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
 
         return tableOfContents(bookContent.meta.title, items);
     }
@@ -55,9 +55,9 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
         }]
             : [];
 
-        const children = itemsFromBookNodes(node.content, path, info, percentage);
+        const children = itemsFromBookNodes(node.nodes, path, info, percentage);
         return head.concat(children);
-    } else if (isParagraph(node) || isReachParagraph(node)) {
+    } else if (isParagraph(node)) {
         return [];
     } else {
         return assertNever(node);
@@ -78,16 +78,14 @@ function itemsFromBookNodes(nodes: BookNode[], path: BookPath, info: Info, perce
 }
 
 function lengthOfBook(book: BookContent): number {
-    return book.content.reduce((len, n) => lengthOfNode(n) + len, 0);
+    return book.nodes.reduce((len, n) => lengthOfNode(n) + len, 0);
 }
 
 function lengthOfNode(node: BookNode): number {
     if (isParagraph(node)) {
-        return node.length;
-    } else if (isReachParagraph(node)) {
-        return node.content.reduce((l, s) => l + s.text.length, 0);
+        return node.spans.reduce((l, s) => l + s.text.length, 0);
     } else if (isChapter(node)) {
-        return node.content.reduce((len, n) => len + lengthOfNode(n), 0);
+        return node.nodes.reduce((len, n) => len + lengthOfNode(n), 0);
     } else {
         return assertNever(node);
     }

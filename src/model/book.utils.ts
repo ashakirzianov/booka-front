@@ -1,4 +1,4 @@
-import { BookNode, isChapter, isParagraph, BookContent, isReachParagraph } from './bookContent';
+import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookLocator';
 import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
@@ -38,7 +38,7 @@ export function countToPath(nodes: BookNode[], path: BookPath): number {
 
         const nextNode = nodes[head];
         if (isChapter(nextNode)) {
-            return countFront + countToPath(nextNode.content, path.slice(1));
+            return countFront + countToPath(nextNode.nodes, path.slice(1));
         } else {
             return countFront;
         }
@@ -48,10 +48,10 @@ export function countToPath(nodes: BookNode[], path: BookPath): number {
 }
 
 function countElements(node: BookNode): number {
-    if (isParagraph(node) || isReachParagraph(node)) {
+    if (isParagraph(node)) {
         return 1;
     } else if (isChapter(node)) {
-        return 1 + node.content
+        return 1 + node.nodes
             .map(n => countElements(n))
             .reduce((total, curr) => total + curr);
     } else {

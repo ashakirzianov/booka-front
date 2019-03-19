@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, isReachParagraph, ReachParagraph } from '../model';
+import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
@@ -27,7 +27,7 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
+const ParagraphComp = refable<{ p: string, path: BookPath }>(props =>
     <ParagraphText text={props.p} />,
 );
 
@@ -123,7 +123,7 @@ function buildBook(book: BookContent, params: Params) {
         ? [<BookTitle key={`bt`} text={book.meta.title} />]
         : [];
     return head
-        .concat(buildNodes(book.content, [], params));
+        .concat(buildNodes(book.nodes, [], params));
 }
 
 function buildNodes(nodes: BookNode[], headPath: BookPath, params: Params): JSX.Element[] {
@@ -142,22 +142,15 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
         return buildParagraph(node, path, params);
     } else if (isChapter(node)) {
         return buildChapter(node, path, params);
-    } else if (isReachParagraph(node)) {
-        return buildReachParagraph(node, path, params);
     } else {
         return assertNever(node, path.toString());
     }
 }
 
-function buildReachParagraph(reach: ReachParagraph, path: BookPath, params: Params) {
-    // TODO: properly implement
-    const allText = reach.content.reduce((text, s) => text + s.text, '');
-    return buildParagraph(allText, path, params);
-}
-
 function buildParagraph(paragraph: Paragraph, path: BookPath, params: Params) {
+    const allText = paragraph.spans.reduce((t, s) => t + s.text, ''); // TODO: properly implement
     return inRange(path, params.range)
-        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => params.refHandler(ref, path)} />]
+        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={allText} path={path} ref={ref => params.refHandler(ref, path)} />]
         : [];
 }
 
@@ -166,7 +159,7 @@ function buildChapter(chapter: Chapter, path: BookPath, params: Params) {
         ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];
     return head
-        .concat(buildNodes(chapter.content, path, params));
+        .concat(buildNodes(chapter.nodes, path, params));
 }
 
 function pathToString(path: BookPath): string {

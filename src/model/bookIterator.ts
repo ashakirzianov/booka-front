@@ -23,7 +23,7 @@ export function bookIterator(book: BookContent): RootIterator {
         node: undefined,
         firstChildren: undefined as any,
     };
-    p.firstChildren = siblingIterator(p, book.content, 0);
+    p.firstChildren = siblingIterator(p, book.nodes, 0);
     return p;
 }
 

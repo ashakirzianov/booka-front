@@ -1,21 +1,20 @@
-export type Paragraph = string;
 export type SpanType<Key extends string> = {
     span: Key,
     text: string,
 };
 export type Span = SpanType<'italic'> | SpanType<'bold'> | SpanType<'normal'>;
-export type ReachParagraph = {
-    book: 'spans',
-    content: Span[],
+export type Paragraph = {
+    node: 'paragraph',
+    spans: Span[],
 };
 export type Chapter = {
-    book: 'chapter',
+    node: 'chapter',
     level: number,
     title?: string,
-    content: BookNode[],
+    nodes: BookNode[],
 };
 
-export type BookNode = Chapter | Paragraph | ReachParagraph;
+export type BookNode = Chapter | Paragraph;
 
 export type BookMeta = {
     title: string,
@@ -24,23 +23,19 @@ export type BookMeta = {
 export type BookContent = {
     book: 'book',
     meta: BookMeta,
-    content: BookNode[],
+    nodes: BookNode[],
 };
 
 export function children(node: BookNode) {
-    return isChapter(node) ? node.content : [];
+    return isChapter(node) ? node.nodes : [];
 }
 
 // Type guards:
 
 export function isParagraph(bn: BookNode): bn is Paragraph {
-    return typeof bn === 'string';
-}
-
-export function isReachParagraph(bn: BookNode): bn is ReachParagraph {
-    return typeof bn === 'object' && bn.book === 'spans';
+    return bn.node === 'paragraph';
 }
 
 export function isChapter(bn: BookNode): bn is Chapter {
-    return typeof bn === 'object' && bn.book === 'chapter';
+    return bn.node === 'chapter';
 }
