@@ -1,7 +1,7 @@
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookLocator';
 import { assertNever } from '../utils';
-import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator } from './bookIterator';
+import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
 
 export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);
@@ -17,14 +17,14 @@ export function computeRangeForPath(book: BookContent, path: BookPath): BookRang
     return range;
 }
 
-function findChapterLevel(i: OptBookIterator): OptBookIterator {
-    if (!i) {
+function findChapterLevel(i: OptParentIterator): OptBookIterator {
+    if (!i || !i.node) {
         return undefined;
     }
     if (isChapter(i.node) && i.node.level === 0) {
         return i;
     } else {
-        return findChapterLevel(i.parent());
+        return findChapterLevel(i.parent);
     }
 }
 
