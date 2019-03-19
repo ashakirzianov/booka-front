@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-    Book, ErrorBook, LoadedBook, isChapter, BookPath, BookRange, inRange, bookRange, BookContent,
-    iterateToPath, bookIterator, OptBookIterator, nextIterator, buildPath, emptyPath,
+    Book, ErrorBook, LoadedBook, BookPath,
+    inRange, bookRange, emptyPath,
 } from '../model';
 import { assertNever } from '../utils';
 import { Comp, connected, comp } from './comp-utils';
@@ -43,31 +43,6 @@ const LoadedBookComp = connected(['positionToNavigate'], ['updateCurrentBookPosi
 
 const ErrorBookComp: Comp<ErrorBook> = props =>
     <Label text={'Error: ' + props.error} />;
-
-export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
-    const iterator = iterateToPath(bookIterator(book), path);
-    const chapter = findChapterLevel(iterator);
-
-    const nextChapter = nextIterator(chapter);
-
-    const range = bookRange(
-        buildPath(chapter),
-        nextChapter && buildPath(nextChapter),
-    );
-
-    return range;
-}
-
-function findChapterLevel(i: OptBookIterator): OptBookIterator {
-    if (!i) {
-        return undefined;
-    }
-    if (isChapter(i.node) && i.node.level === 0) {
-        return i;
-    } else {
-        return findChapterLevel(i.parent());
-    }
-}
 
 function buildPaths(path: BookPath, toc: TableOfContents): {
     prev?: BookPath,
