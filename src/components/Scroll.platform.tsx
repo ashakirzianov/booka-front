@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-export type Path = number[];
 export type RefType = HTMLDivElement | null;
 export type RefHandler = (ref: RefType) => void;
 export function refable<T>(C: React.ComponentType<T>) {

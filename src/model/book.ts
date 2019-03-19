@@ -1,4 +1,4 @@
-import { BookId } from './bookLocator';
+import { BookId, BookPath } from './bookLocator';
 import { BookContent } from './bookContent';
 import { TableOfContents } from './tableOfContent';
 
@@ -35,4 +35,8 @@ export function errorBook(error: string): ErrorBook {
         id: { bi: 'not-book' },
         error: error,
     };
+}
+
+export function leadPath(): BookPath {
+    return [0];
 }

@@ -7,10 +7,9 @@ import { assertNever } from '../utils';
 import { Comp, comp, connected, relative } from './comp-utils';
 import { ScreenLayout } from './ScreenComp.Layout';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { Row, LinkButton, Label } from './Elements';
-import { ClickResponder, Column } from './Atoms';
+import { Row, LinkButton, Label, ModalBox } from './Elements';
+import { ClickResponder } from './Atoms';
 import { linkForLib } from '../logic';
-import { ModalBox } from './Atoms.platform';
 
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
@@ -44,11 +43,11 @@ const BookScreenCont = connected(['controlsVisible'], ['toggleControls'])<BookSc
 
 export const TableOfContentsCont = connected([], ['toggleToc'])<BookScreen>(props =>
     !props.tocOpen || props.book.book !== 'book' ? null :
-        <ModalBox color='gray' heightPerc={90} maxWidth={60} header={
+        <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
             <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
                 <LinkButton text='X' onClick={props.toggleToc} />
                 <Label text='Table of Contents' />
-                <Column />
+                <Row style={{ flex: 1 }} />
             </Row>
         }
             onExternalClick={props.toggleToc}

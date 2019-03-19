@@ -1,4 +1,4 @@
-import { BookPath, BookLocator, BookId, bookLocator } from './bookLocator';
+import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 
@@ -6,7 +6,8 @@ export type TableOfContentsItem = {
     toc: 'item',
     title: string,
     level: number,
-    locator: BookLocator,
+    path: BookPath,
+    id: BookId,
     percentage: number,
 };
 
@@ -47,8 +48,9 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
         const head: TableOfContentsItem[] = node.title ? [{
             toc: 'item' as 'item',
             title: node.title,
-            level: path.length,
-            locator: bookLocator(info.id, path),
+            level: node.level,
+            id: info.id,
+            path: path,
             percentage: Math.floor(percentage * 1000) / 10,
         }]
             : [];

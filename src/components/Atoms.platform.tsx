@@ -26,18 +26,18 @@ export const Link: Comp<TextProps & {
     text?: string,
     onClick?: Callback<void>,
     to?: string,
+    stretch?: boolean,
 }> = (props =>
-    <View style={{ flex: 1 }}>
+    <View style={props.stretch && { flex: 1 }}>
         <a
             href={props.to}
             style={{
                 textDecoration: 'none',
                 cursor: 'pointer',
-                width: 'auto',
-                alignSelf: 'stretch',
                 ...props.style,
             }}
             onClick={e => {
+                e.stopPropagation();
                 if (!isOpenNewTabEvent(e)) {
                     e.preventDefault();
                     if (props.onClick) {
@@ -49,8 +49,11 @@ export const Link: Comp<TextProps & {
             }}
         >
             <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
+                ...(props.stretch && {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }),
+                margin: '0.3em',
             }}>
                 {props.text || null}{props.children}
             </div>
@@ -87,7 +90,6 @@ export const ModalBox: Comp<{
         left: 0,
         right: 0,
         backgroundColor: 'rgba(0,0,0,0.7)',
-        padding: '2em',
         zIndex: 10,
     }} onClick={props.onExternalClick}>
         <div style={{

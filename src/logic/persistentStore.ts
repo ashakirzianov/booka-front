@@ -24,7 +24,7 @@ function validateState(restored: object | undefined): App | undefined {
 function createNewState(): App {
     return {
         screen: libraryScreen(library()),
-        positionToNavigate: null,
+        pathToOpen: null,
         controlsVisible: true,
     };
 }

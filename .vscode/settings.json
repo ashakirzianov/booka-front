@@ -25,6 +25,7 @@
         "onstatechange",
         "onupdatefound",
         "precached",
+        "subpath",
         "timeouted"
     ]
 }
