@@ -121,3 +121,7 @@ export const ModalBox: Comp<{
         </div>
     </div>
     );
+
+export const Div: Comp = (props =>
+    <div>{props.children}</div>
+);

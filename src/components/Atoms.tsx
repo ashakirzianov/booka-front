@@ -15,6 +15,7 @@ export type TextProps = {
         fontWeight?: FontWeight,
         fontFamily?: string,
         fontSize?: number,
+        fontStyle?: 'italic' | 'normal',
         textAlign?: 'justify',
         color?: string,
         cursor?: 'pointer',
@@ -68,4 +69,6 @@ export const DottedLine: Comp = (props =>
     }} />
 );
 
-export { ClickResponder, Link, Tab, ModalBox, TopPanel } from './Atoms.platform';
+export {
+    ClickResponder, Link, Tab, ModalBox, TopPanel, Div,
+} from './Atoms.platform';

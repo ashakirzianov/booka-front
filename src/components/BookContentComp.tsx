@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange } from '../model';
+import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, Span } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
-import { Row, StyledText, ParagraphText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
+import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
+import { Tab, Div } from './Atoms';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -27,8 +28,21 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-const ParagraphComp = refable<{ p: string, path: BookPath }>(props =>
-    <ParagraphText text={props.p} />,
+type SpanTextProps = { text: string };
+const SpanComp: Comp<Span> = (props =>
+    props.attrs.italic ? <ItalicText text={props.text} />
+        : <NormalText text={props.text} />
+);
+const ItalicText: Comp<SpanTextProps> = (props =>
+    <StyledText style={{ fontStyle: 'italic' }}>{props.text}</StyledText>
+);
+const NormalText: Comp<SpanTextProps> = (props =>
+    <StyledText>{props.text}</StyledText>
+);
+const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
+    <Div>
+        <Tab />{props.p.spans.map((s, idx) => <SpanComp key={`${idx}`} {...s} />)}
+    </Div>,
 );
 
 const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
@@ -148,9 +162,8 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
 }
 
 function buildParagraph(paragraph: Paragraph, path: BookPath, params: Params) {
-    const allText = paragraph.spans.reduce((t, s) => t + s.text, ''); // TODO: properly implement
     return inRange(path, params.range)
-        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={allText} path={path} ref={ref => params.refHandler(ref, path)} />]
+        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => params.refHandler(ref, path)} />]
         : [];
 }
 
