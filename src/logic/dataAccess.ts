@@ -1,5 +1,5 @@
 import {
-    Book, Library, library, BookId, sameId,
+    Book, Library, library, BookId, sameId, errorBook,
 } from '../model';
 import { fetchBI, fetchLibrary } from '../api';
 import { convertBook, convertLibrary } from '../api/converters';
@@ -29,9 +29,13 @@ export async function bookForId(bi: BookId): Promise<Book> {
     }
 
     const bookPromise = fetchBI(bi).then(b => {
-        const converted = convertBook(b, bi);
-        storeBook(bookStore, converted);
-        return converted;
+        if (b.book === 'book') {
+            const converted = convertBook(b, bi);
+            storeBook(bookStore, converted);
+            return converted;
+        } else {
+            return errorBook(b.error);
+        }
     });
 
     return bookPromise;

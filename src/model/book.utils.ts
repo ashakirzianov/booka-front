@@ -1,7 +1,7 @@
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookLocator';
 import { assertNever } from '../utils';
-import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator } from './bookIterator';
+import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
 
 export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);
@@ -17,14 +17,14 @@ export function computeRangeForPath(book: BookContent, path: BookPath): BookRang
     return range;
 }
 
-function findChapterLevel(i: OptBookIterator): OptBookIterator {
-    if (!i) {
+function findChapterLevel(i: OptParentIterator): OptBookIterator {
+    if (!i || !i.node) {
         return undefined;
     }
     if (isChapter(i.node) && i.node.level === 0) {
         return i;
     } else {
-        return findChapterLevel(i.parent());
+        return findChapterLevel(i.parent);
     }
 }
 
@@ -38,7 +38,7 @@ export function countToPath(nodes: BookNode[], path: BookPath): number {
 
         const nextNode = nodes[head];
         if (isChapter(nextNode)) {
-            return countFront + countToPath(nextNode.content, path.slice(1));
+            return countFront + countToPath(nextNode.nodes, path.slice(1));
         } else {
             return countFront;
         }
@@ -51,7 +51,7 @@ function countElements(node: BookNode): number {
     if (isParagraph(node)) {
         return 1;
     } else if (isChapter(node)) {
-        return 1 + node.content
+        return 1 + node.nodes
             .map(n => countElements(n))
             .reduce((total, curr) => total + curr);
     } else {

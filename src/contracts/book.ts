@@ -31,22 +31,27 @@ export type BookMeta = {
     title: string,
     author?: string,
 };
-export type BookContent = {
+
+export type ActualBook = {
     book: 'book',
     meta: BookMeta,
     nodes: BookNode[],
 };
 
-export function children(node: BookNode) {
-    return isChapter(node) ? node.nodes : [];
-}
+export type ErrorBook = {
+    book: 'error',
+    error: string,
+};
 
-// Type guards:
+export type Book = ActualBook | ErrorBook;
 
-export function isParagraph(bn: BookNode): bn is Paragraph {
-    return bn.node === 'paragraph';
-}
+export type Library = {
+    [key: string]: BookMeta | undefined;
+};
 
-export function isChapter(bn: BookNode): bn is Chapter {
-    return bn.node === 'chapter';
+export function errorBook(error: string): ErrorBook {
+    return {
+        book: 'error',
+        error: error,
+    };
 }
