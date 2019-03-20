@@ -1,8 +1,19 @@
-export type SpanType<Key extends string> = {
-    span: Key,
-    text: string,
+export type SpanAttributeName = 'italic';
+export type SpanAttrs = {
+    [k in SpanAttributeName]?: boolean;
 };
-export type Span = SpanType<'italic'> | SpanType<'bold'> | SpanType<'normal'>;
+export type Span = {
+    text: string,
+    attrs: SpanAttrs,
+};
+
+export function span(text: string, ...attributes: SpanAttributeName[]): Span {
+    const attrs = attributes
+        .reduce((as, a) =>
+            ({ ...as, [a]: true }), {} as SpanAttrs);
+    return { text, attrs };
+}
+
 export type Paragraph = {
     node: 'paragraph',
     spans: Span[],
