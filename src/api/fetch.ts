@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BookId } from '../model';
-import * as Contracts from './contracts';
+import * as Contracts from '../contracts';
 import { throwExp } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';

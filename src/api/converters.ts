@@ -1,4 +1,4 @@
-import * as Contracts from './contracts';
+import * as Contracts from '../contracts';
 import { Library, BookId, LoadedBook } from '../model';
 import { tocFromContent } from '../model/tableOfContent';
 

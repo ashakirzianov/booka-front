@@ -1,6 +1,6 @@
 import { BookId } from '../model';
 import { timeouted } from '../utils';
-import * as Contracts from './contracts';
+import * as Contracts from '../contracts';
 
 export const fetchBL = timeouted(fetchBIStatic);
 function fetchBIStatic(bookId: BookId): Contracts.Book {
