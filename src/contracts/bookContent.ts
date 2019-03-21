@@ -7,13 +7,6 @@ export type Span = {
     attrs: SpanAttrs,
 };
 
-export function span(text: string, ...attributes: SpanAttributeName[]): Span {
-    const attrs = attributes
-        .reduce((as, a) =>
-            ({ ...as, [a]: true }), {} as SpanAttrs);
-    return { text, attrs };
-}
-
 export type Paragraph = {
     node: 'paragraph',
     spans: Span[],
@@ -32,26 +25,32 @@ export type BookMeta = {
     author?: string,
 };
 
-export type ActualBook = {
+export type BookContent = {
     book: 'book',
     meta: BookMeta,
     nodes: BookNode[],
 };
 
-export type ErrorBook = {
-    book: 'error',
-    error: string,
-};
+// Helpers:
 
-export type Book = ActualBook | ErrorBook;
+export function isParagraph(bn: BookNode): bn is Paragraph {
+    return bn.node === 'paragraph';
+}
 
-export type Library = {
-    [key: string]: BookMeta | undefined;
-};
+export function isChapter(bn: BookNode): bn is Chapter {
+    return bn.node === 'chapter';
+}
 
-export function errorBook(error: string): ErrorBook {
+export function children(node: BookNode) {
+    return isChapter(node) ? node.nodes : [];
+}
+
+export function span(text: string, ...attributes: SpanAttributeName[]): Span {
+    const attrs = attributes
+        .reduce((as, a) =>
+            ({ ...as, [a]: true }), {} as SpanAttrs);
     return {
-        book: 'error',
-        error: error,
+        text: text,
+        attrs: attrs,
     };
 }
