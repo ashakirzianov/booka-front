@@ -1,6 +1,7 @@
 import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
+import { isAttributed, isSimple } from '../contracts';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -82,8 +83,10 @@ function lengthOfBook(book: BookContent): number {
 }
 
 function lengthOfNode(node: BookNode): number {
-    if (isParagraph(node)) {
-        return node.spans.reduce((l, s) => l + s.text.length, 0);
+    if (isSimple(node)) {
+        return node.length;
+    } else if (isAttributed(node)) {
+        return node.spans.reduce((l, s) => l + lengthOfNode(s), 0);
     } else if (isChapter(node)) {
         return node.nodes.reduce((len, n) => len + lengthOfNode(n), 0);
     } else {

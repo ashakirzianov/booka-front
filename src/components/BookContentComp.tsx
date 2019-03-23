@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, Span, SpanAttrs } from '../model';
+import {
+    Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph,
+    isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
+    SimpleParagraph, AttributedParagraph, attrs, isAttributed, isSimple,
+} from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
@@ -28,21 +32,32 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-const StyledWithAttributes: Comp<{ attrs: SpanAttrs }> = (props =>
+const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
     <Text style={{
         fontStyle: props.attrs.italic ? 'italic' : undefined,
     }}>
         {props.children}
     </Text>);
 
-const SpanComp: Comp<Span> = (props =>
-    <StyledWithAttributes attrs={props.attrs}>
-        {props.text}
+const SimpleParagraphComp: Comp<{ p: SimpleParagraph }> = (props =>
+    <StyledText>{props.p}</StyledText>
+);
+const AttributedParagraphComp: Comp<{ p: AttributedParagraph, path: BookPath }> = (props =>
+    <StyledWithAttributes attrs={attrs(props.p)}>
+        {
+            props.p.spans.map((childP, idx) =>
+                <ParagraphComp key={`${idx}`} p={childP} path={props.path} />)
+        }
     </StyledWithAttributes>
 );
 const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
     <Div>
-        <Tab />{props.p.spans.map((s, idx) => <SpanComp key={`${idx}`} {...s} />)}
+        <Tab />
+        {
+            isAttributed(props.p) ? <AttributedParagraphComp p={props.p} path={props.path} />
+                : isSimple(props.p) ? <SimpleParagraphComp p={props.p} />
+                    : assertNever(props.p)
+        }
     </Div>,
 );
 
