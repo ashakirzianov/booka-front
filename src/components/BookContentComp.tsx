@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, Span } from '../model';
+import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, Span, SpanAttrs } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Tab, Div } from './Atoms';
+import { Tab, Div, Text } from './Atoms';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -28,16 +28,17 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-type SpanTextProps = { text: string };
+const StyledWithAttributes: Comp<{ attrs: SpanAttrs }> = (props =>
+    <Text style={{
+        fontStyle: props.attrs.italic ? 'italic' : undefined,
+    }}>
+        {props.children}
+    </Text>);
+
 const SpanComp: Comp<Span> = (props =>
-    props.attrs.italic ? <ItalicText text={props.text} />
-        : <NormalText text={props.text} />
-);
-const ItalicText: Comp<SpanTextProps> = (props =>
-    <StyledText style={{ fontStyle: 'italic' }}>{props.text}</StyledText>
-);
-const NormalText: Comp<SpanTextProps> = (props =>
-    <StyledText>{props.text}</StyledText>
+    <StyledWithAttributes attrs={props.attrs}>
+        {props.text}
+    </StyledWithAttributes>
 );
 const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
     <Div>
