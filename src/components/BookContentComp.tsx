@@ -10,7 +10,7 @@ import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Tab, Div, Text } from './Atoms';
+import { Text, Div, Tab } from './Atoms';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -57,7 +57,7 @@ const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
             isAttributed(props.p) ? <AttributedParagraphComp p={props.p} path={props.path} />
                 : isSimple(props.p) ? <SimpleParagraphComp p={props.p} />
                     : assertNever(props.p)
-        }
+        },
     </Div>,
 );
 

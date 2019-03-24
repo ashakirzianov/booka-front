@@ -123,5 +123,5 @@ export const ModalBox: Comp<{
     );
 
 export const Div: Comp = (props =>
-    <div>{props.children}</div>
+    <div style={{ display: 'inline' }}>{props.children}</div>
 );
