@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
 import {
-    Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph,
+    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
     isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleParagraph, AttributedParagraph, attrs, isAttributed, isSimple,
+    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
@@ -39,29 +39,30 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
         {props.children}
     </Text>);
 
-const SimpleParagraphComp: Comp<{ p: SimpleParagraph }> = (props =>
+const SimpleSpanComp: Comp<{ p: SimpleSpan }> = (props =>
     <StyledText>{props.p}</StyledText>
 );
-const AttributedParagraphComp: Comp<{ p: AttributedParagraph, path: BookPath }> = (props =>
+const AttributedSpanComp: Comp<{ p: AttributedSpan }> = (props =>
     <StyledWithAttributes attrs={attrs(props.p)}>
         {
             props.p.spans.map((childP, idx) =>
-                <ParagraphComp key={`${idx}`} p={childP} path={props.path} />)
+                <SpanComp key={`${idx}`} span={childP} />)
         }
     </StyledWithAttributes>
 );
-const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
+const SpanComp: Comp<{ span: Span }> = (props =>
+    isAttributed(props.span) ? <AttributedSpanComp p={props.span} />
+        : isSimple(props.span) ? <SimpleSpanComp p={props.span} />
+            : assertNever(props.span)
+);
+
+const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
     <Div>
-        <Tab />
-        {
-            isAttributed(props.p) ? <AttributedParagraphComp p={props.p} path={props.path} />
-                : isSimple(props.p) ? <SimpleParagraphComp p={props.p} />
-                    : assertNever(props.p)
-        },
+        <Tab /><SpanComp span={props.p.span} />
     </Div>,
 );
 
-const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
+const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
@@ -177,13 +178,13 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: BookPath, params: Params) {
+function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
     return inRange(path, params.range)
         ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => params.refHandler(ref, path)} />]
         : [];
 }
 
-function buildChapter(chapter: Chapter, path: BookPath, params: Params) {
+function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
     const head = inRange(path, params.range)
         ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];
