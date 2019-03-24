@@ -15,7 +15,7 @@ export async function fetchLibrary(): Promise<Contracts.Library> {
     return lib;
 }
 
-export async function fetchBI(bookId: BookId): Promise<Contracts.Book> {
+export async function fetchBI(bookId: BookId): Promise<Contracts.BookContent> {
     switch (bookId.bi) {
         case 'remote-book':
             const backendBook = fetchBook(bookId.name);
@@ -25,8 +25,8 @@ export async function fetchBI(bookId: BookId): Promise<Contracts.Book> {
     }
 }
 
-export async function fetchBook(bookName: string): Promise<Contracts.Book> {
-    const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.Book;
+export async function fetchBook(bookName: string): Promise<Contracts.BookContent> {
+    const response = await fetchJson(backendBase + jsonPath + bookName) as Contracts.BookContent;
     return response;
 }
 

@@ -9,7 +9,7 @@ export function convertLibrary(lib: Contracts.Library): Library {
     };
 }
 
-export function convertBook(book: Contracts.ActualBook, id: BookId): LoadedBook {
+export function convertBook(book: Contracts.BookContent, id: BookId): LoadedBook {
     return {
         book: 'book',
         content: book,

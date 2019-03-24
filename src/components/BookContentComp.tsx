@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
-import { Paragraph, BookPath, Chapter, BookId, bookLocator, BookRange, BookNode, isParagraph, isChapter, inRange, BookContent, subpathCouldBeInRange, Span } from '../model';
+import {
+    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
+    isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
+    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
+} from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Tab, Div } from './Atoms';
+import { Text, Div, Tab, NewLine } from './Atoms';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -28,24 +32,42 @@ const BookTitle: Comp<{ text?: string }> = props =>
         <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
     </Row>;
 
-type SpanTextProps = { text: string };
-const SpanComp: Comp<Span> = (props =>
-    props.attrs.italic ? <ItalicText text={props.text} />
-        : <NormalText text={props.text} />
+const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
+    <Text style={{
+        fontStyle: props.attrs.italic ? 'italic' : undefined,
+    }}>
+        {props.children}
+        {
+            props.attrs.line
+                ? [<NewLine key='nl' />, <Tab key='tab' />]
+                : null
+        }
+    </Text>);
+
+const SimpleSpanComp: Comp<{ p: SimpleSpan }> = (props =>
+    <StyledText>{props.p}</StyledText>
 );
-const ItalicText: Comp<SpanTextProps> = (props =>
-    <StyledText style={{ fontStyle: 'italic' }}>{props.text}</StyledText>
+const AttributedSpanComp: Comp<{ p: AttributedSpan }> = (props =>
+    <StyledWithAttributes attrs={attrs(props.p)}>
+        {
+            props.p.spans.map((childP, idx) =>
+                <SpanComp key={`${idx}`} span={childP} />)
+        }
+    </StyledWithAttributes>
 );
-const NormalText: Comp<SpanTextProps> = (props =>
-    <StyledText>{props.text}</StyledText>
+const SpanComp: Comp<{ span: Span }> = (props =>
+    isAttributed(props.span) ? <AttributedSpanComp p={props.span} />
+        : isSimple(props.span) ? <SimpleSpanComp p={props.span} />
+            : assertNever(props.span)
 );
-const ParagraphComp = refable<{ p: Paragraph, path: BookPath }>(props =>
+
+const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
     <Div>
-        <Tab />{props.p.spans.map((s, idx) => <SpanComp key={`${idx}`} {...s} />)}
+        <Tab /><SpanComp span={props.p.span} />
     </Div>,
 );
 
-const ChapterHeader = refable<Chapter & { path: BookPath }>(props =>
+const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
             : <SubpartTitle text={props.title} />,
@@ -161,13 +183,13 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
     }
 }
 
-function buildParagraph(paragraph: Paragraph, path: BookPath, params: Params) {
+function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
     return inRange(path, params.range)
         ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => params.refHandler(ref, path)} />]
         : [];
 }
 
-function buildChapter(chapter: Chapter, path: BookPath, params: Params) {
+function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
     const head = inRange(path, params.range)
         ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];

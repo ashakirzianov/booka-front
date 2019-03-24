@@ -3,7 +3,6 @@ import { FlexStyle, View, ViewStyle } from 'react-native';
 import { Comp } from './comp-utils';
 import { platformValue } from '../platform';
 
-export { Text, showAlert } from './Atoms.platform';
 export { SafeAreaView, ScrollView } from 'react-native';
 
 export type TextCallbacks = {
@@ -71,4 +70,5 @@ export const DottedLine: Comp = (props =>
 
 export {
     ClickResponder, Link, Tab, ModalBox, TopPanel, Div,
+    Text, showAlert, NewLine,
 } from './Atoms.platform';

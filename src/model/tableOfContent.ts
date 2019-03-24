@@ -1,6 +1,7 @@
 import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
+import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
+import { isAttributed, isSimple } from '../contracts';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -30,17 +31,13 @@ export function tableOfContents(title: string, items: TableOfContentsItem[]): Ta
 }
 
 export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
-    if (bookContent.book === 'book') {
-        const info = {
-            id,
-            length: lengthOfBook(bookContent),
-        };
-        const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
+    const info = {
+        id,
+        length: lengthOfBook(bookContent),
+    };
+    const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
 
-        return tableOfContents(bookContent.meta.title, items);
-    }
-
-    return tableOfContents('', []); // TODO: better error handling?
+    return tableOfContents(bookContent.meta.title, items);
 }
 
 function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
@@ -82,11 +79,22 @@ function lengthOfBook(book: BookContent): number {
 }
 
 function lengthOfNode(node: BookNode): number {
-    if (isParagraph(node)) {
-        return node.spans.reduce((l, s) => l + s.text.length, 0);
-    } else if (isChapter(node)) {
+    if (isChapter(node)) {
         return node.nodes.reduce((len, n) => len + lengthOfNode(n), 0);
+    } else if (isParagraph(node)) {
+        return lengthOfSpan(node.span);
     } else {
         return assertNever(node);
+    }
+}
+
+function lengthOfSpan(span: Span): number {
+    if (isSimple(span)) {
+        return span.length;
+    } else if (isAttributed(span)) {
+        return span.spans.reduce((l, s) =>
+            l + lengthOfSpan(s), 0);
+    } else {
+        return assertNever(span);
     }
 }
