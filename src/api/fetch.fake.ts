@@ -5,7 +5,6 @@ import * as Contracts from '../contracts';
 export const fetchBL = timeouted(fetchBIStatic);
 function fetchBIStatic(bookId: BookId): Contracts.BookContent {
     return {
-        book: 'book',
         meta: {
             title: bookId.bi === 'remote-book' ? bookId.name : bookId.bi,
         },

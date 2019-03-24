@@ -31,17 +31,13 @@ export function tableOfContents(title: string, items: TableOfContentsItem[]): Ta
 }
 
 export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
-    if (bookContent.book === 'book') {
-        const info = {
-            id,
-            length: lengthOfBook(bookContent),
-        };
-        const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
+    const info = {
+        id,
+        length: lengthOfBook(bookContent),
+    };
+    const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
 
-        return tableOfContents(bookContent.meta.title, items);
-    }
-
-    return tableOfContents('', []); // TODO: better error handling?
+    return tableOfContents(bookContent.meta.title, items);
 }
 
 function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
