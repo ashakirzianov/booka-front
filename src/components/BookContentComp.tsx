@@ -10,7 +10,7 @@ import { assertNever } from '../utils';
 import { Comp, Callback, relative } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Text, Div, Tab } from './Atoms';
+import { Text, Div, Tab, NewLine } from './Atoms';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -37,6 +37,11 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
         fontStyle: props.attrs.italic ? 'italic' : undefined,
     }}>
         {props.children}
+        {
+            props.attrs.line
+                ? [<NewLine key='nl' />, <Tab key='tab' />]
+                : null
+        }
     </Text>);
 
 const SimpleSpanComp: Comp<{ p: SimpleSpan }> = (props =>
