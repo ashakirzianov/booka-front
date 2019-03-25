@@ -6,7 +6,10 @@ import { View } from 'react-native';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <span
-        style={props.style}
+        style={{
+            cursor: props.onClick ? 'pointer' : undefined,
+            ...props.style,
+        }}
         onClick={props.onClick}
     >
         {props.children}
@@ -95,7 +98,7 @@ export const ModalBox: Comp<{
         <div style={{
             backgroundColor: props.color,
             borderRadius: 5,
-            height: props.heightPerc ? `${props.heightPerc}%` : '100%',
+            height: props.heightPerc ? `${props.heightPerc}%` : undefined,
             width: '100%',
             maxWidth: props.maxWidth && `${props.maxWidth}em`,
             margin: '0 auto',

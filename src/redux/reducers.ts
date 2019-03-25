@@ -23,6 +23,13 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             }),
             default: () => screen,
         }),
+        openFootnote: (screen, fid) => forScreen(screen, {
+            book: bs => ({
+                ...bs,
+                footnoteId: fid,
+            }),
+            default: () => screen,
+        }),
     },
     pathToOpen: {
         navigateToScreen: {

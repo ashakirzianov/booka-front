@@ -1,7 +1,7 @@
 import { BookPath, BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
-import { isAttributed, isSimple } from '../contracts';
+import { isAttributed, isSimple, isFootnote } from '../contracts';
 
 export type TableOfContentsItem = {
     toc: 'item',
@@ -94,6 +94,8 @@ function lengthOfSpan(span: Span): number {
     } else if (isAttributed(span)) {
         return span.spans.reduce((l, s) =>
             l + lengthOfSpan(s), 0);
+    } else if (isFootnote(span)) {
+        return span.text ? span.text.length : 0;
     } else {
         return assertNever(span);
     }

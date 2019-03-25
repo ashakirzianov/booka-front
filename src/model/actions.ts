@@ -8,5 +8,6 @@ export const actionsTemplate = {
     updateCurrentBookPosition: def<BookPath>(),
     toggleControls: def(),
     toggleToc: def(),
+    openFootnote: def<string | null>(),
 };
 export type ActionsTemplate = typeof actionsTemplate;

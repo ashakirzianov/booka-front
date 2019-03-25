@@ -2,6 +2,12 @@ import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookLocator';
 import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
+import { Footnote } from '../contracts';
+
+export function footnoteForId(book: BookContent, id: string | null): Footnote | undefined {
+    return book.footnotes
+        .find(f => f.id === id);
+}
 
 export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);

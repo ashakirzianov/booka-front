@@ -3,11 +3,11 @@ import { throttle } from 'lodash';
 import {
     Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
     isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
+    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote, FootnoteSpan, bookRange,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
-import { Comp, Callback, relative } from './comp-utils';
+import { Comp, Callback, relative, connected } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
 import { Text, Div, Tab, NewLine } from './Atoms';
@@ -44,21 +44,27 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
         }
     </Text>);
 
-const SimpleSpanComp: Comp<{ p: SimpleSpan }> = (props =>
-    <StyledText>{props.p}</StyledText>
+const SimpleSpanComp: Comp<{ s: SimpleSpan }> = (props =>
+    <StyledText>{props.s}</StyledText>
 );
-const AttributedSpanComp: Comp<{ p: AttributedSpan }> = (props =>
-    <StyledWithAttributes attrs={attrs(props.p)}>
+const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
+    <StyledWithAttributes attrs={attrs(props.s)}>
         {
-            props.p.spans.map((childP, idx) =>
+            props.s.spans.map((childP, idx) =>
                 <SpanComp key={`${idx}`} span={childP} />)
         }
     </StyledWithAttributes>
 );
+const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
+    <StyledText onClick={() => props.openFootnote(props.s.id)}>
+        {props.s.text}
+    </StyledText>,
+);
 const SpanComp: Comp<{ span: Span }> = (props =>
-    isAttributed(props.span) ? <AttributedSpanComp p={props.span} />
-        : isSimple(props.span) ? <SimpleSpanComp p={props.span} />
-            : assertNever(props.span)
+    isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
+        : isSimple(props.span) ? <SimpleSpanComp s={props.span} />
+            : isFootnote(props.span) ? <FootnoteSpanComp s={props.span} />
+                : assertNever(props.span)
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
@@ -82,6 +88,17 @@ const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
             <Label text={props.text} />
         </LinkButton>
     </Row>
+);
+
+export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+    <>
+        {
+            buildNodes(props.nodes, [], {
+                refHandler: () => undefined,
+                range: bookRange(),
+            })
+        }
+    </>
 );
 
 type RefMap = { [k in string]?: RefType };
