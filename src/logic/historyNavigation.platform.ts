@@ -5,11 +5,17 @@ import { assertNever } from '../utils';
 import { Middleware } from 'redux';
 
 const history = createBrowserHistory();
+
+function fullUrl(location: typeof history['location']) {
+    const { pathname, search, hash } = location;
+    return pathname + search + hash;
+}
+
 export function wireHistoryNavigation() {
-    dispatchNavigationEvent(history.location.pathname);
+    dispatchNavigationEvent(fullUrl(history.location));
     history.listen((l, e) => {
         if (e === 'POP') {
-            dispatchNavigationEvent(l.pathname);
+            dispatchNavigationEvent(fullUrl(l));
         }
     });
 }
@@ -38,9 +44,10 @@ export function navigateToToc(bi: BookId) {
 export const updateHistoryMiddleware: Middleware<{}, App> = store => next => action => {
     const result = next(action);
     const currState = store.getState();
-    const url = stateToUrl(currState);
-    if (history.location.pathname !== url) {
-        history.replace(url);
+    const urlFromState = stateToUrl(currState);
+    const fullCurrentUrl = fullUrl(history.location);
+    if (fullCurrentUrl !== urlFromState) {
+        history.replace(urlFromState);
     }
     return result;
 };
