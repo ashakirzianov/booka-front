@@ -52,7 +52,11 @@ export function stateToUrl(state: App) {
         case 'library':
             return '/';
         case 'book':
-            const search = current.tocOpen ? '?toc' : '';
+            let search = '';
+            search += current.tocOpen ? 'toc' : '';
+            search += current.footnoteId ? `fid=${current.footnoteId}` : '';
+
+            search = search ? '?' + search : '';
             return `/book/${blToString(current.bl)}${search}`;
         default:
             return assertNever(current);

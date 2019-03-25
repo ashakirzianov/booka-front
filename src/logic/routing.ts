@@ -20,7 +20,10 @@ function* actionsForDest(dest: Destination) {
             // TODO: report bad BL
             if (bl) {
                 const tocOpen = url.search.toc !== undefined;
-                yield actionCreators.navigateToScreen(buildBookScreen(bl, tocOpen));
+                const footnoteId = url.search.fid !== undefined
+                    ? url.search.fid
+                    : undefined;
+                yield actionCreators.navigateToScreen(buildBookScreen(bl, tocOpen, footnoteId));
                 yield actionCreators.updateCurrentBookPosition(bl.range.start);
             }
             return;
@@ -42,6 +45,10 @@ export function linkForBook(bl: BookLocator): Destination {
 
 export function linkForToc(bi: BookId): Destination {
     return `/book/${biToString(bi)}?toc`;
+}
+
+export function linkForFootnote(bl: BookLocator, footnoteId: string): Destination {
+    return `/book/${blToString(bl)}?fid=${footnoteId}`;
 }
 
 export function linkForLib(): Destination {
