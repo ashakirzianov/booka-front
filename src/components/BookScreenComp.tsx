@@ -9,6 +9,8 @@ import { ClickResponder } from './Atoms';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib } from '../logic';
 import { BookNodesComp } from './BookContentComp';
+import { footnoteForId } from '../model/book.utils';
+import { letExp } from '../utils';
 
 export const BookScreenHeader: Comp = (props =>
     <>
@@ -34,8 +36,12 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
                 : null
         }
         {
-            false
-                ? <FootnoteBox footnote={null as any} />
+            props.book.book === 'book'
+                ? letExp(footnoteForId(props.book.content, props.footnoteId), fn =>
+                    fn
+                        ? <FootnoteBox footnote={fn} />
+                        : null,
+                )
                 : null
         }
     </>
@@ -74,14 +80,15 @@ const FootnoteComp: Comp<Footnote> = (props =>
     <BookNodesComp nodes={props.content} />
 );
 
-const FootnoteBox = connected([], [])<{ footnote: Footnote }>(props =>
-    <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
+const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
+    <ModalBox color='gray' maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <LinkButton text='X' />
+            <LinkButton text='X' onClick={() => props.openFootnote(null)} />
             <Label text={props.footnote.title || ''} />
             <Row style={{ flex: 1 }} />
         </Row>
     }
+        onExternalClick={() => props.openFootnote(null)}
     >
 
         <Row style={{ overflow: 'scroll' }}>
