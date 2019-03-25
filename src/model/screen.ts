@@ -82,7 +82,7 @@ export function bookScreen(book: Book, bl: BookLocator, tocOpen?: boolean, footn
     return {
         screen: 'book' as 'book',
         book: book,
-        footnoteId,
+        footnoteId: footnoteId || null,
         tocOpen: tocOpen ? true : false,
         bl: bl,
     };
