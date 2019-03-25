@@ -8,6 +8,7 @@ function fetchBIStatic(bookId: BookId): Contracts.BookContent {
         meta: {
             title: bookId.bi === 'remote-book' ? bookId.name : bookId.bi,
         },
+        footnotes: [],
         nodes: [
             {
                 node: 'paragraph',

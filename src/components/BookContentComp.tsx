@@ -3,7 +3,7 @@ import { throttle } from 'lodash';
 import {
     Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
     isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
+    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
@@ -58,7 +58,8 @@ const AttributedSpanComp: Comp<{ p: AttributedSpan }> = (props =>
 const SpanComp: Comp<{ span: Span }> = (props =>
     isAttributed(props.span) ? <AttributedSpanComp p={props.span} />
         : isSimple(props.span) ? <SimpleSpanComp p={props.span} />
-            : assertNever(props.span)
+            : isFootnote(props.span) ? null // TODO: render footnotes
+                : assertNever(props.span)
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
