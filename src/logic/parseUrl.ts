@@ -6,6 +6,9 @@ export type ParsedUrl = {
     search: SearchObject,
     hash?: string,
 };
+export function parsePartialUrl(urlString: string, base: string = 'http://localhost'): ParsedUrl {
+    return parseUrl(base + urlString);
+}
 export function parseUrl(urlString: string): ParsedUrl {
     const url = new URL(urlString);
 
@@ -17,8 +20,8 @@ export function parseUrl(urlString: string): ParsedUrl {
 }
 
 function parsePathname(pathname: string | undefined): string[] {
-    if (!pathname) {
-        return [];
+    if (!pathname || pathname === '/') {
+        return [''];
     }
 
     return pathname
