@@ -3,7 +3,7 @@ import { throttle } from 'lodash';
 import {
     Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
     isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote, FootnoteSpan,
+    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote, FootnoteSpan, bookRange,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
@@ -86,6 +86,17 @@ const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
             <Label text={props.text} />
         </LinkButton>
     </Row>
+);
+
+export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+    <>
+        {
+            buildNodes(props.nodes, [], {
+                refHandler: () => undefined,
+                range: bookRange(),
+            })
+        }
+    </>
 );
 
 type RefMap = { [k in string]?: RefType };
