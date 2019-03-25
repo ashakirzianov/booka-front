@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BookScreen, Book } from '../model';
+import { BookScreen, Book, Footnote } from '../model';
 import { BookComp } from './BookComp';
 import { Comp, connected, relative } from './comp-utils';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -8,6 +8,7 @@ import { Row, LinkButton, Label, ModalBox } from './Elements';
 import { ClickResponder } from './Atoms';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib } from '../logic';
+import { BookNodesComp } from './BookContentComp';
 
 export const BookScreenHeader: Comp = (props =>
     <>
@@ -30,6 +31,11 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         {
             props.tocOpen && props.book.book === 'book'
                 ? <TableOfContentsBox toc={props.book.toc} />
+                : null
+        }
+        {
+            false
+                ? <FootnoteBox footnote={null as any} />
                 : null
         }
     </>
@@ -60,6 +66,26 @@ const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }
 
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
+        </Row>
+    </ModalBox>,
+);
+
+const FootnoteComp: Comp<Footnote> = (props =>
+    <BookNodesComp nodes={props.content} />
+);
+
+const FootnoteBox = connected([], [])<{ footnote: Footnote }>(props =>
+    <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
+        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
+            <LinkButton text='X' />
+            <Label text={props.footnote.title || ''} />
+            <Row style={{ flex: 1 }} />
+        </Row>
+    }
+    >
+
+        <Row style={{ overflow: 'scroll' }}>
+            <FootnoteComp {...props.footnote} />
         </Row>
     </ModalBox>,
 );
