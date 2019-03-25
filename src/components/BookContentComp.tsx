@@ -7,7 +7,7 @@ import {
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
-import { Comp, Callback, relative } from './comp-utils';
+import { Comp, Callback, relative, connected } from './comp-utils';
 import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
 import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
 import { Text, Div, Tab, NewLine } from './Atoms';
@@ -55,8 +55,10 @@ const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
         }
     </StyledWithAttributes>
 );
-const FootnoteSpanComp: Comp<{ s: FootnoteSpan }> = (props =>
-    <StyledText>{props.s.text}</StyledText>
+const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
+    <StyledText onClick={() => props.openFootnote(props.s.id)}>
+        {props.s.text}
+    </StyledText>,
 );
 const SpanComp: Comp<{ span: Span }> = (props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />

@@ -6,7 +6,10 @@ import { View } from 'react-native';
 
 export const Text: Comp<TextProps, TextCallbacks> = props =>
     <span
-        style={props.style}
+        style={{
+            cursor: props.onClick ? 'pointer' : undefined,
+            ...props.style,
+        }}
         onClick={props.onClick}
     >
         {props.children}
