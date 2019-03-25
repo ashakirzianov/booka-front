@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { LibraryScreen } from '../model';
+import { Comp } from '../blocks';
 import { LibraryComp } from './LibraryComp';
-import { Comp } from './comp-utils';
 
 export const LibraryScreenHeader: Comp = (props => null);
 

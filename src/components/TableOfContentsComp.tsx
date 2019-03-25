@@ -1,13 +1,12 @@
 import * as React from 'react';
 
-import { Comp, relative } from './comp-utils';
-import { Row, StyledText, LinkButton, Label } from './Elements';
-import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
-import { ScrollView } from 'react-native';
-import { Column, DottedLine } from './Atoms';
+import {
+    Comp, Row, StyledText, Tab, LinkButton, relative, Label,
+    Column, DottedLine, ScrollView,
+} from '../blocks';
 import { bookLocator, pathToString } from '../model';
+import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { nums } from '../utils';
-import { Tab } from './Atoms.platform';
 import { linkForBook } from '../logic/routing';
 
 const TocHeader: Comp<{ text: string }> = props =>

@@ -1,9 +1,8 @@
 import * as React from 'react';
+
 import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
-import { Comp } from './comp-utils';
-import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
-import { SafeAreaView } from './Atoms';
 import { linkForBook } from '../logic/routing';
+import { Comp, Row, LinkButton, SafeAreaView, Column, ActivityIndicator } from '../blocks';
 
 const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>

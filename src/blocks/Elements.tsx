@@ -2,10 +2,6 @@ import * as React from 'react';
 import * as Atoms from './Atoms';
 import { Comp, Callback } from './comp-utils';
 
-export {
-    Column, Row, FullScreen, ScrollView, ModalBox,
-} from './Atoms';
-
 export const ActivityIndicator: Comp = props =>
     <Label text='Loading now...' />;
 

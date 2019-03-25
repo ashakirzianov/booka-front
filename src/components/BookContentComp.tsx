@@ -7,10 +7,11 @@ import {
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
-import { Comp, Callback, relative, connected } from './comp-utils';
-import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
-import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Text, Div, Tab, NewLine } from './Atoms';
+import {
+    Comp, Callback, relative, connected,
+    Row, StyledText, NewLine, Tab, Text, Div,
+    LinkButton, Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef,
+} from '../blocks';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>

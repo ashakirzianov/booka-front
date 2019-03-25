@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { Column, FullScreen } from './Elements';
+import { connected, Column, FullScreen } from '../blocks';
 import { ScreenComp } from './ScreenComp';
-import { connected } from './comp-utils';
 
 export const TopComp = connected(['screen'])((props) =>
     <FullScreen color='black'>

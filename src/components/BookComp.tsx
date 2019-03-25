@@ -1,13 +1,11 @@
 import * as React from 'react';
+
+import { comp, ActivityIndicator, connected, Comp, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
     inRange, bookRange, emptyPath,
 } from '../model';
 import { assertNever } from '../utils';
-import { Comp, connected, comp } from './comp-utils';
-import {
-    ActivityIndicator, Label,
-} from './Elements';
 import { TableOfContents } from '../model/tableOfContent';
 import { BookContentComp } from './BookContentComp';
 

@@ -1,9 +1,8 @@
 import * as React from 'react';
-
-import { Comp, comp, VoidCallback, relative, ReactContent } from './comp-utils';
-import { Row, TopPanel, Column } from './Atoms';
-import { Label } from './Elements';
-import { AnimatedVisibility } from './Animations.platform';
+import {
+    comp, ReactContent, TopPanel, AnimatedVisibility, Row,
+    relative, Label, Comp, VoidCallback, Column,
+} from '../blocks';
 
 export const Header = comp<{
     title?: string,

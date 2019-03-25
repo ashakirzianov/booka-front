@@ -1,10 +1,9 @@
 import * as React from 'react';
 
+import { connected, comp, Comp, Row } from '../blocks';
 import { Screen } from '../model';
 import { assertNever } from '../utils';
-import { Comp, comp, connected } from './comp-utils';
 import { ScreenLayout } from './ScreenComp.Layout';
-import { Row } from './Elements';
 import { BookScreenComp, BookScreenHeader } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 

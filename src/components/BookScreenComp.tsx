@@ -1,16 +1,17 @@
 import * as React from 'react';
 
+import {
+    Comp, LinkButton, connected, Row, relative, ClickResponder, ModalBox, Label,
+} from '../blocks';
 import { BookScreen, Book, Footnote } from '../model';
-import { BookComp } from './BookComp';
-import { Comp, connected, relative } from './comp-utils';
-import { TableOfContentsComp } from './TableOfContentsComp';
-import { Row, LinkButton, Label, ModalBox } from './Elements';
-import { ClickResponder } from './Atoms';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
 import { letExp } from '../utils';
+
+import { BookComp } from './BookComp';
+import { TableOfContentsComp } from './TableOfContentsComp';
 
 export const BookScreenHeader: Comp = (props =>
     <>

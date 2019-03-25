@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
-    Label, ParagraphText, Row, Column, FullScreen,
+    Label, ParagraphText,
 } from './Elements';
+import { FullScreen, Row, Column } from './Atoms';
 
 export const ElementsStore: React.SFC = props => (
     <FullScreen color='green'>
