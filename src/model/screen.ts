@@ -78,10 +78,11 @@ export type Screen =
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
 
-export function bookScreen(book: Book, bl: BookLocator, tocOpen?: boolean) {
+export function bookScreen(book: Book, bl: BookLocator, tocOpen?: boolean, footnoteId?: string) {
     return {
         screen: 'book' as 'book',
         book: book,
+        footnoteId,
         tocOpen: tocOpen ? true : false,
         bl: bl,
     };

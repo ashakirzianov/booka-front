@@ -18,10 +18,10 @@ function optimisticLibrary(): OptimisticPromise<Library> {
     return optimisticPromise<Library>(guess, promise);
 }
 
-export function buildBookScreen(bl: BookLocator, tocOpen?: boolean): OptimisticPromise<Screen> {
+export function buildBookScreen(bl: BookLocator, tocOpen?: boolean, footnoteId?: string): OptimisticPromise<Screen> {
     const promise = optimisticBook(bl.id);
 
-    return then(promise, book => bookScreen(book, bl, tocOpen));
+    return then(promise, book => bookScreen(book, bl, tocOpen, footnoteId));
 }
 
 export function buildLibraryScreen(): OptimisticPromise<Screen> {
