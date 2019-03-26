@@ -11,7 +11,7 @@ import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
     comp, Callback, relative, connected,
-    Row, NewLine, Tab, Div, Text,
+    Row, NewLine, Tab, Inline, Text,
     Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Button,
 } from '../blocks';
 
@@ -79,9 +79,9 @@ const SpanComp = comp<{ span: Span }>(props =>
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
-    <Div>
+    <Inline>
         <Tab /><SpanComp span={props.p.span} />
-    </Div>,
+    </Inline>,
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>

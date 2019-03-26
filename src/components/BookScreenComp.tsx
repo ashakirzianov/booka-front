@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, ClickResponder, ModalBox,
+    connected, Row, relative, Clickable, ModalBox,
     Label, PanelLink, PanelButton, comp,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
@@ -54,9 +54,9 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
         maxWidth: relative(50),
     }}
     >
-        <ClickResponder key='book' onClick={() => props.toggleControls()}>
+        <Clickable key='book' onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
-        </ClickResponder>
+        </Clickable>
     </Row>,
 
 );

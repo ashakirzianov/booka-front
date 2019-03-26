@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { ReactContent, Callback, themed, comp } from './comp-utils';
 
-// TODO: why do we need this ?
-export const Div = comp(props =>
+export const Inline = comp(props =>
     <div style={{ display: 'inline' }}>{props.children}</div>,
 );
 
@@ -13,7 +12,7 @@ export const Tab = comp(props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
 );
 
-export const ClickResponder = comp<{ onClick?: () => void }>(props =>
+export const Clickable = comp<{ onClick: () => void }>(props =>
     <div onClick={props.onClick}>
         {props.children}
     </div>,

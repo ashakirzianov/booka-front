@@ -5,6 +5,8 @@ import { buildConnectRedux } from '../redux';
 import { actionsTemplate, App, Theme } from '../model';
 import { platformValue } from '../platform';
 
+export * from './comp-utils.platform';
+
 export type ReactContent = React.ReactNode;
 export type Callback<Argument> = (arg: Argument) => void;
 export type VoidCallback = Callback<void>;
@@ -53,5 +55,3 @@ type ThemeableComp<T> = Comp<T & {
 export function themed<T = {}>(C: ThemeableComp<T>) {
     return connected(['theme'], [])(C);
 }
-
-export { isOpenNewTabEvent } from './comp-utils.platform';

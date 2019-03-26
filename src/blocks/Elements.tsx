@@ -52,7 +52,6 @@ export const DottedLine = themed(props =>
     }} />,
 );
 
-// TODO: do we really need this ?
 export const Label = comp<{ text: string, margin?: string }>(props =>
     <Text style={{ margin: props.margin }} size='normal'>
         {props.text}
@@ -68,7 +67,7 @@ export const PanelLink = comp<{
     action?: Callback<void>,
     text: string,
 }>(props =>
-    <Atoms.Link to={props.to}>
+    <Atoms.Link to={props.to} action={props.action}>
         <Text>{props.text}</Text>
     </Atoms.Link>,
 );
