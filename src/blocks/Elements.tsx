@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { comp } from './comp-utils';
-import { Text } from './Themeable';
+import { Text } from './ThemedAtoms';
 
 // TODO: do we really need this ?
 export const Label = comp<{ text: string, margin?: string }>(props =>
