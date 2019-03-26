@@ -21,9 +21,24 @@ function validateState(restored: object | undefined): App | undefined {
     return undefined; // TODO: implement
 }
 
-// TODO: remove
-const defaultTheme: Theme = {
+export const lightTheme: Theme = {
+    fontFamily: 'Georgia',
+    color: {
+        foreground: '#321',
+        background: '#fed',
+        secondBack: '#cba',
+        accent: '#654',
+        highlight: '#987',
+    },
+    fontSize: {
+        normal: 26,
+        large: 30,
+        largest: 36,
+    },
     fontScale: 1,
+    radius: 9,
+};
+export const darkTheme: Theme = {
     fontFamily: 'Georgia',
     color: {
         foreground: '#999',
@@ -37,8 +52,10 @@ const defaultTheme: Theme = {
         large: 30,
         largest: 36,
     },
+    fontScale: 1,
     radius: 9,
 };
+const defaultTheme: Theme = lightTheme;
 
 function createNewState(): App {
     return {
