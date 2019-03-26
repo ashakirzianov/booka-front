@@ -27,6 +27,9 @@ const defaultTheme: Theme = {
     color: {
         foreground: '#999999',
         background: '#000000',
+        secondBack: '#222222',
+        accent: '#9999DD',
+        highlight: '#DD99DD',
     },
     fontSize: {
         normal: 26,

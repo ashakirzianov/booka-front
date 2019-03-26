@@ -7,6 +7,9 @@ export type Theme = {
     color: {
         foreground: Color,
         background: Color,
+        secondBack: Color,
+        accent: Color,
+        highlight: Color,
     },
     fontSize: {
         normal: FontSize,

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
     comp, ReactContent, TopPanel, AnimatedVisibility, Row,
-    relative, Label, VoidCallback, Column,
+    relative, Label, VoidCallback, Column, themed,
 } from '../blocks';
 
-export const Header = comp<{
+export const Header = themed<{
     title?: string,
     right?: ReactContent,
     visible: boolean,
@@ -18,7 +18,7 @@ export const Header = comp<{
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: relative(1),
-                        backgroundColor: 'black',
+                        backgroundColor: props.theme.color.secondBack,
                     }}>
                         {/* Left */}
                         <Row>{props.children}</Row>

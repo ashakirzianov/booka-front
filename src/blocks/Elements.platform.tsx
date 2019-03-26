@@ -60,13 +60,13 @@ export const ModalBox = themed<ModalBoxProps>(props =>
         zIndex: 10,
     }} onClick={props.onExternalClick}>
         <div style={{
-            backgroundColor: props.theme.color.background, // TODO: add 'lightBackground' color
-            borderRadius: 5,
+            backgroundColor: props.theme.color.secondBack,
             height: props.heightPerc ? `${props.heightPerc}%` : undefined,
             width: '100%',
             maxWidth: props.maxWidth && `${props.maxWidth}em`,
             margin: '0 auto',
             zIndex: 10,
+            borderRadius: props.theme.radius,
         }}
             onClick={e => e.stopPropagation()}
         >
