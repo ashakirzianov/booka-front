@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import {
-    Comp, connected, Row, relative, ClickResponder, ModalBox, Label, PanelLink, PanelButton,
+    Comp, connected, Row, relative, ClickResponder, ModalBox,
+    Label, PanelLink, PanelButton, comp,
 } from '../blocks';
-import { BookScreen, Book, Footnote } from '../model';
+import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
-import { linkForLib } from '../logic';
+import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
 import { letExp } from '../utils';
@@ -13,19 +14,19 @@ import { letExp } from '../utils';
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 
-export const BookScreenHeader: Comp = (props =>
+export const BookScreenHeader = comp<BookScreen>(props =>
     <>
         <LibButton key='back' />
-        <OpenTocButton key='toc' />
-    </>
+        <OpenTocButton key='toc' bi={props.bl.id} />
+    </>,
 );
 
 const LibButton: Comp = (props =>
     <PanelLink text='<' to={linkForLib()} />
 );
 
-const OpenTocButton = connected([], ['toggleToc'])(props =>
-    <PanelButton text='...' onClick={props.toggleToc} />,
+const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
+    <PanelLink text='...' to={linkForToc(props.bi)} action={props.toggleToc} />,
 );
 
 export const BookScreenComp: Comp<BookScreen> = (props =>

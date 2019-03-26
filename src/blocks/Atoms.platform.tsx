@@ -28,6 +28,7 @@ export const Button: Comp<{
 
 export const Link: Comp<{
     to: string,
+    action?: Callback<void>,
 }> = (props =>
     <a
         href={props.to}
@@ -39,7 +40,11 @@ export const Link: Comp<{
             e.stopPropagation();
             if (!isOpenNewTabEvent(e)) {
                 e.preventDefault();
-                navigateToUrl(props.to);
+                if (props.action) {
+                    props.action();
+                } else {
+                    navigateToUrl(props.to);
+                }
             }
         }}
     >

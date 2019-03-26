@@ -29,18 +29,13 @@ export const Text = themed<TextProps>(props =>
     </Atoms.Text>,
 );
 
-export type LinkButtonProps = Atoms.TextProps & {
-    text?: string,
-    onClick?: Callback<void>,
-    link?: string,
-    stretch?: boolean,
-    borders?: boolean,
+export type PseudoLinkProps = {
+    to: string,
+    action?: Callback<void>,
 };
 
-export const LinkButton = themed<{
-    to: string,
-}>(props =>
-    <Atoms.Link to={props.to}>
+export const LinkButton = themed<PseudoLinkProps>(props =>
+    <Atoms.Link {...props}>
         <View style={{
             border: 'solid',
             borderColor: props.theme.color.foreground,
@@ -75,6 +70,7 @@ export const ActivityIndicator = comp(props =>
 
 export const PanelLink = comp<{
     to: string,
+    action?: Callback<void>,
     text: string,
 }>(props =>
     <Atoms.Link to={props.to}>

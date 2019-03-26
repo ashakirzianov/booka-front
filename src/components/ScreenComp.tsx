@@ -27,7 +27,7 @@ const Header: Comp<Screen> = (props =>
     <Row>
         {
             props.screen === 'library' ? <LibraryScreenHeader />
-                : props.screen === 'book' ? <BookScreenHeader />
+                : props.screen === 'book' ? <BookScreenHeader {...props} />
                     : assertNever(props)
         }
     </Row>
