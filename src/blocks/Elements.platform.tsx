@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { Text } from './Elements';
-import { ReactContent, Callback, themed, comp, relative } from './comp-utils';
+import { ReactContent, Callback, themed, comp, relative, hoverable } from './comp-utils';
 
 export const Inline = comp(props =>
     <div style={{ display: 'inline' }}>{props.children}</div>,
@@ -22,20 +21,24 @@ export const DottedLine = themed(props =>
     }} />,
 );
 
-export const LinkButton = themed<Atoms.LinkProps>(props =>
+export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
     <Atoms.Link {...props}>
         <div style={{
             border: 'solid',
-            borderColor: props.theme.color.foreground,
+            borderColor: props.theme.color.accent,
+            color: props.theme.color.accent,
+            fontSize: props.theme.fontSize.normal,
             borderRadius: props.theme.radius,
-            padding: relative(0.5), // TODO: extract somewhere ?
+            padding: relative(0.3), // TODO: extract somewhere ?
+            [':hover']: {
+                borderColor: props.theme.color.highlight,
+                color: props.theme.color.highlight,
+            },
         }}>
-            <Text>
-                {props.children}
-            </Text>
+            {props.children}
         </div>
     </Atoms.Link>,
-);
+));
 
 export const Clickable = comp<{ onClick: () => void }>(props =>
     <div onClick={props.onClick}>

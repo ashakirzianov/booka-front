@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextProps, TextPropsStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, comp, hoverable, Hoverable } from './comp-utils';
+import { isOpenNewTabEvent, Callback, hoverable, Hoverable } from './comp-utils';
 import { navigateToUrl } from '../logic';
 
-export const Text = comp<TextProps>(props =>
+export const Text = hoverable<TextProps>(props =>
     <span
         style={props.style}
     >

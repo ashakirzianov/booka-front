@@ -45,7 +45,7 @@ export function partial<T>(Cmp: Comp<T>) {
     };
 }
 
-export function hoverable<T>(Cmp: React.SFC<T>): React.SFC<T> {
+export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<T> {
     return Radium(Cmp);
 }
 

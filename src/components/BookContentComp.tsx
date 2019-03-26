@@ -12,7 +12,7 @@ import { assertNever } from '../utils';
 import {
     comp, Callback, relative, connected,
     Row, NewLine, Tab, Inline, Text,
-    Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link,
 } from '../blocks';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
@@ -65,7 +65,7 @@ const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
     <Link action={() => props.openFootnote(props.s.id)}>
-        <Text>
+        <Text color='accent' hoverColor='highlight'>
             {props.s.text}
         </Text>
     </Link>,
@@ -95,7 +95,7 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
         margin: relative(2),
     }}>
         <LinkButton to={linkForBook(bookLocator(props.id, props.path))}>
-            <Label text={props.text} />
+            {props.text}
         </LinkButton>
     </Row>,
 );

@@ -18,12 +18,19 @@ type AllowedTextStyleProps = Pick<TextStyle,
 type TextProps = {
     style?: AllowedTextStyleProps,
     size?: keyof Theme['fontSize'],
+    color?: keyof Theme['color'],
+    hoverColor?: keyof Theme['color'],
 };
 export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
-        fontSize: props.theme.fontSize[props.size || 'normal'],
-        color: props.theme.color.foreground,
+        fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
+        color: props.theme.color[props.color || 'foreground'],
+        ...(props.hoverColor && {
+            [':hover']: {
+                color: props.theme.color[props.hoverColor],
+            },
+        }),
         ...props.style,
     }}>
         {props.children}

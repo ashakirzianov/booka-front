@@ -23,6 +23,7 @@ function validateState(restored: object | undefined): App | undefined {
 
 // TODO: remove
 const defaultTheme: Theme = {
+    fontScale: 1,
     fontFamily: 'Georgia',
     color: {
         foreground: '#999',
