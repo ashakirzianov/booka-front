@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Defined } from '../utils';
-import { comp, VoidCallback, themed, Callback } from './comp-utils';
+import { comp, VoidCallback, themed, Callback, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
@@ -45,7 +45,7 @@ export const PanelLink = comp<{
     text: string,
 }>(props =>
     <Atoms.Link to={props.to} action={props.action}>
-        <Text>{props.text}</Text>
+        <Text style={{ margin: relative(0.3) }}>{props.text}</Text>
     </Atoms.Link>,
 );
 
@@ -54,7 +54,7 @@ export const PanelButton = comp<{
     onClick: VoidCallback,
 }>(props =>
     <Atoms.Button onClick={props.onClick}>
-        <Text>{props.text}</Text>
+        <Text style={{ margin: relative(0.3) }}>{props.text}</Text>
     </Atoms.Button>,
 );
 
