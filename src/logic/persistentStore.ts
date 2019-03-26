@@ -25,10 +25,10 @@ export const lightTheme: Theme = {
     fontFamily: 'Georgia',
     color: {
         foreground: '#321',
-        background: '#fed',
-        secondBack: '#cba',
+        background: '#cba',
+        secondBack: '#987',
         accent: '#654',
-        highlight: '#987',
+        highlight: '#fff',
     },
     fontSize: {
         normal: 26,
