@@ -5,7 +5,6 @@ export * from './Utility';
 export * from './Elements';
 export {
     Row, Column, Div, Tab, NewLine, Link,
-    ScrollView, ClickResponder, ModalBox,
-    SafeAreaView, TopPanel, FullScreen,
-    Button,
+    ClickResponder, TopPanel, Button,
 } from './Atoms';
+export { SafeAreaView, ScrollView } from 'react-native';

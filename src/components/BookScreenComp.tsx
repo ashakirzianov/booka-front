@@ -61,7 +61,7 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 );
 
 const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }>(props =>
-    <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
+    <ModalBox heightPerc={95} maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
             <PanelButton text='X' onClick={props.toggleToc} />
             <Label text='Table of Contents' />
@@ -82,7 +82,7 @@ const FootnoteComp: Comp<Footnote> = (props =>
 );
 
 const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
-    <ModalBox color='gray' maxWidth={60} header={
+    <ModalBox maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
             <PanelButton text='X' onClick={() => props.openFootnote(null)} />
             <Label text={props.footnote.title || ''} />

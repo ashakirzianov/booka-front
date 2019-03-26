@@ -4,8 +4,10 @@ import { Defined } from '../utils';
 import { comp, VoidCallback, themed, Callback, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
-import { Link } from './Atoms';
 import { Theme } from '../model';
+import { platformValue } from '../platform';
+
+export * from './Elements.platform';
 
 type TextStyle = Defined<Atoms.TextProps['style']>;
 type AllowedTextStyleProps = Pick<TextStyle,
@@ -91,7 +93,7 @@ export const PanelButton = comp<{
 
 export const StretchLink = comp<{ to: string }>(props =>
     <View style={{ flex: 1 }}>
-        <Link to={props.to}>
+        <Atoms.Link to={props.to}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -99,6 +101,19 @@ export const StretchLink = comp<{ to: string }>(props =>
             }}>
                 {props.children}
             </div>
-        </Link>
+        </Atoms.Link>
+    </View>,
+);
+
+export const FullScreen = themed(props =>
+    <View style={{
+        position: 'absolute',
+        minHeight: '100%',
+        minWidth: '100%',
+        width: platformValue({ mobile: '100%' }),
+        height: platformValue({ mobile: '100%' }),
+        backgroundColor: props.theme.color.background,
+    }}>
+        {props.children}
     </View>,
 );

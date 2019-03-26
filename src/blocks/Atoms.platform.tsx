@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextProps } from './Atoms';
-import { Comp, isOpenNewTabEvent, Callback, ReactContent } from './comp-utils';
+import { Comp, isOpenNewTabEvent, Callback } from './comp-utils';
 import { navigateToUrl } from '../logic';
 
 export const Text: Comp<TextProps> = props =>
@@ -71,52 +71,6 @@ export const TopPanel: Comp = (props =>
         {props.children}
     </div>
 );
-
-export const ModalBox: Comp<{
-    header?: ReactContent,
-    color?: string,
-    heightPerc?: number,
-    maxWidth?: number,
-    onExternalClick?: Callback<any>,
-}> = (props =>
-    <div style={{
-        position: 'fixed',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        zIndex: 10,
-    }} onClick={props.onExternalClick}>
-        <div style={{
-            backgroundColor: props.color,
-            borderRadius: 5,
-            height: props.heightPerc ? `${props.heightPerc}%` : undefined,
-            width: '100%',
-            maxWidth: props.maxWidth && `${props.maxWidth}em`,
-            margin: '0 auto',
-            zIndex: 10,
-        }}
-            onClick={e => e.stopPropagation()}
-        >
-            {
-                props.header
-                    ? <div style={{
-                        height: '10%',
-                    }}>
-                        {props.header}
-                    </div>
-                    : null
-            }
-            <div style={{
-                overflowY: 'scroll',
-                height: props.header ? '90%' : '100%',
-            }}>
-                {props.children}
-            </div>
-        </div>
-    </div>
-    );
 
 // TODO: why do we need this ?
 export const Div: Comp = (props =>
