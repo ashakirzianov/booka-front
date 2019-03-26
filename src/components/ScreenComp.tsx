@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { connected, comp, Comp, Row } from '../blocks';
+import { connected, comp, Row } from '../blocks';
 import { Screen } from '../model';
 import { assertNever } from '../utils';
 import { ScreenLayout } from './ScreenComp.Layout';
@@ -23,14 +23,14 @@ const Content = comp<Screen>(props =>
             : assertNever(props),
 );
 
-const Header: Comp<Screen> = (props =>
+const Header = comp<Screen>(props =>
     <Row>
         {
             props.screen === 'library' ? <LibraryScreenHeader />
                 : props.screen === 'book' ? <BookScreenHeader {...props} />
                     : assertNever(props)
         }
-    </Row>
+    </Row>,
 );
 
 function screenTitle(screen: Screen) {

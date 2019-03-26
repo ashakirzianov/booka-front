@@ -29,12 +29,7 @@ export const Text = themed<TextProps>(props =>
     </Atoms.Text>,
 );
 
-export type PseudoLinkProps = {
-    to: string,
-    action?: Callback<void>,
-};
-
-export const LinkButton = themed<PseudoLinkProps>(props =>
+export const LinkButton = themed<Atoms.LinkProps>(props =>
     <Atoms.Link {...props}>
         <View style={{
             border: 'solid',

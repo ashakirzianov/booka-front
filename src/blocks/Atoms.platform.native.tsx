@@ -2,16 +2,17 @@ import * as React from 'react';
 import {
     Text as NativeText, Alert, TextStyle, StyleProp,
 } from 'react-native';
-import { TextProps } from './Atoms';
-import { Comp } from './comp-utils';
 import { Defined } from '../utils';
+import { TextProps } from './Atoms';
+import { comp } from './comp-utils';
 
-export const Text: Comp<TextProps> = props =>
+export const Text = comp<TextProps>(props =>
     <NativeText
         style={convertStyle(props.style)}
     >
         {props.children}
-    </NativeText>;
+    </NativeText>,
+);
 
 export function showAlert(message: string) {
     Alert.alert('Alert', message);

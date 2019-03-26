@@ -10,32 +10,36 @@ import {
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
-    Comp, Callback, relative, connected,
+    comp, Callback, relative, connected,
     Row, NewLine, Tab, Div, Text,
     Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Button,
 } from '../blocks';
 
-const ChapterTitle: Comp<{ text?: string }> = props =>
+const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
         <Text>{props.text}</Text>
-    </Row>;
+    </Row>,
+);
 
-const PartTitle: Comp<{ text?: string }> = props =>
+const PartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
         <Text style={{ fontWeight: 'bold' }} size='large'>{props.text}</Text>
-    </Row>;
+    </Row>,
+);
 
-const SubpartTitle: Comp<{ text?: string }> = props =>
+const SubpartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'flex-start' }}>
         <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
-    </Row>;
+    </Row>,
+);
 
-const BookTitle: Comp<{ text?: string }> = props =>
+const BookTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
         <Text style={{ fontWeight: 'bold' }} size='largest'>{props.text}</Text>
-    </Row>;
+    </Row>,
+);
 
-const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
+const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
     <Text style={{
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
     }}>
@@ -45,18 +49,19 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
                 ? [<NewLine key='nl' />, <Tab key='tab' />]
                 : null
         }
-    </Text>);
-
-const SimpleSpanComp: Comp<{ s: SimpleSpan }> = (props =>
-    <Text>{props.s}</Text>
+    </Text>,
 );
-const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
+
+const SimpleSpanComp = comp<{ s: SimpleSpan }>(props =>
+    <Text>{props.s}</Text>,
+);
+const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
         {
             props.s.spans.map((childP, idx) =>
                 <SpanComp key={`${idx}`} span={childP} />)
         }
-    </StyledWithAttributes>
+    </StyledWithAttributes>,
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
     <Button onClick={() => props.openFootnote(props.s.id)}>
@@ -66,11 +71,11 @@ const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(pr
     </Button>,
 
 );
-const SpanComp: Comp<{ span: Span }> = (props =>
+const SpanComp = comp<{ span: Span }>(props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
         : isSimple(props.span) ? <SimpleSpanComp s={props.span} />
             : isFootnote(props.span) ? <FootnoteSpanComp s={props.span} />
-                : assertNever(props.span)
+                : assertNever(props.span),
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
@@ -85,7 +90,7 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
-const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
+const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
     <Row style={{
         justifyContent: 'center',
         margin: relative(2),
@@ -93,10 +98,10 @@ const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
         <LinkButton to={linkForBook(bookLocator(props.id, props.path))}>
             <Label text={props.text} />
         </LinkButton>
-    </Row>
+    </Row>,
 );
 
-export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
     <>
         {
             buildNodes(props.nodes, [], {
@@ -104,7 +109,7 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
                 range: bookRange(),
             })
         }
-    </>
+    </>,
 );
 
 type RefMap = { [k in string]?: RefType };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     comp, ReactContent, TopPanel, AnimatedVisibility, Row,
-    relative, Label, Comp, VoidCallback, Column,
+    relative, Label, VoidCallback, Column,
 } from '../blocks';
 
 export const Header = comp<{
@@ -33,17 +33,18 @@ export const Header = comp<{
     </TopPanel>,
 );
 
-export const ScreenLayout: Comp<{
+type ScreenLayoutProps = {
     headerVisible: boolean,
     headerTitle?: string,
     header?: ReactContent,
     onContentClick?: VoidCallback,
-}> = (props =>
+};
+export const ScreenLayout = comp<ScreenLayoutProps>(props =>
     <Column style={{ width: '100%', alignItems: 'center' }}>
         <Header title={props.headerTitle} visible={props.headerVisible}>
             {props.header || null}
         </Header>
         <Row style={{ margin: relative(3) }} />
         {props.children}
-    </Column>
-    );
+    </Column>,
+);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { comp, ActivityIndicator, connected, Comp, Label } from '../blocks';
+import { comp, ActivityIndicator, connected, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
     inRange, bookRange, emptyPath,
@@ -39,8 +39,9 @@ const LoadedBookComp = connected(['pathToOpen'], ['updateCurrentBookPosition'])<
     />;
 });
 
-const ErrorBookComp: Comp<ErrorBook> = props =>
-    <Label text={'Error: ' + props.error} />;
+const ErrorBookComp = comp<ErrorBook>(props =>
+    <Label text={'Error: ' + props.error} />,
+);
 
 function buildPaths(path: BookPath, toc: TableOfContents): {
     prev?: BookPath,

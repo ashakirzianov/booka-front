@@ -2,17 +2,17 @@ import * as React from 'react';
 
 import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
 import { linkForBook } from '../logic/routing';
-import { Comp, Row, Link, SafeAreaView, Column, ActivityIndicator, Text } from '../blocks';
+import { comp, Row, Link, SafeAreaView, Column, ActivityIndicator, Text } from '../blocks';
 
-const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
+const BookMetaComp = comp<{ meta: BookInfo, id: string }>(props =>
     <Row>
         <Link to={linkForBook(bookLocator(remoteBookId(props.id)))}>
             <Text>{props.meta.title}</Text>
         </Link>
-    </Row>
+    </Row>,
 );
 
-export const LibraryComp: Comp<Library> = (props =>
+export const LibraryComp = comp<Library>(props =>
     <SafeAreaView>
         <Column>
             {
@@ -23,5 +23,5 @@ export const LibraryComp: Comp<Library> = (props =>
                         />)
             }
         </Column>
-    </SafeAreaView>
+    </SafeAreaView>,
 );

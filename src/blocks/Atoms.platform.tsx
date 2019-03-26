@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { TextProps } from './Atoms';
-import { Comp, isOpenNewTabEvent, Callback } from './comp-utils';
+import { isOpenNewTabEvent, Callback, comp } from './comp-utils';
 import { navigateToUrl } from '../logic';
 
-export const Text: Comp<TextProps> = props =>
+export const Text = comp<TextProps>(props =>
     <span
         style={props.style}
     >
         {props.children}
-    </span>;
+    </span>,
+);
 
-export const Button: Comp<{
+export const Button = comp<{
     onClick: Callback<void>,
-}> = (props =>
+}>(props =>
     <div
         style={{
             cursor: 'pointer',
@@ -23,13 +24,14 @@ export const Button: Comp<{
         }}
     >
         {props.children}
-    </div>
-    );
+    </div>,
+);
 
-export const Link: Comp<{
+export type LinkProps = {
     to: string,
-    action?: Callback<void>,
-}> = (props =>
+    action?: Callback<void>, // TODO: rethinks this
+};
+export const Link = comp<LinkProps>(props =>
     <a
         href={props.to}
         style={{
@@ -49,8 +51,8 @@ export const Link: Comp<{
         }}
     >
         {props.children}
-    </a>
-    );
+    </a>,
+);
 
 export function showAlert(message: string) {
     alert(message);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Comp, connected, Row, relative, ClickResponder, ModalBox,
+    connected, Row, relative, ClickResponder, ModalBox,
     Label, PanelLink, PanelButton, comp,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
@@ -21,15 +21,15 @@ export const BookScreenHeader = comp<BookScreen>(props =>
     </>,
 );
 
-const LibButton: Comp = (props =>
-    <PanelLink text='<' to={linkForLib()} />
+const LibButton = comp(props =>
+    <PanelLink text='<' to={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
     <PanelLink text='...' to={linkForToc(props.bi)} action={props.toggleToc} />,
 );
 
-export const BookScreenComp: Comp<BookScreen> = (props =>
+export const BookScreenComp = comp<BookScreen>(props =>
     <>
         <BookText book={props.book} />
         {
@@ -46,7 +46,7 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
                 )
                 : null
         }
-    </>
+    </>,
 );
 const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
     <Row style={{
@@ -78,8 +78,8 @@ const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }
     </ModalBox>,
 );
 
-const FootnoteComp: Comp<Footnote> = (props =>
-    <BookNodesComp nodes={props.content} />
+const FootnoteComp = comp<Footnote>(props =>
+    <BookNodesComp nodes={props.content} />,
 );
 
 const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>

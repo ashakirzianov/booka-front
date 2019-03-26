@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ViewStyle } from 'react-native';
-import { Comp } from './comp-utils';
+import { comp } from './comp-utils';
 
 export * from './Atoms.platform';
 
@@ -19,18 +19,21 @@ export type AllowedViewStyle = Pick<ViewStyle,
 export type LayoutProps = {
     style?: AllowedViewStyle,
 };
-export const Column: Comp<LayoutProps> = props =>
+export const Column = comp<LayoutProps>(props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
         {props.children}
-    </View>;
+    </View>,
+);
 
-export const Row: Comp<LayoutProps> = props =>
+export const Row = comp<LayoutProps>(props =>
     <View
         style={{ ...convertStyle(props.style), flexDirection: 'row' }}
     >
         {props.children}
-    </View>;
+    </View>,
+);
 
+// TODO: remove
 export type TextProps = {
     style?: {
         fontWeight?: 'normal' | 'bold' | number,
