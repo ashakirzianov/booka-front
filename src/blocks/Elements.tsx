@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import { Defined } from '../utils';
-import { comp, VoidCallback, themed, Callback, relative } from './comp-utils';
+import { comp, themed, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
 import { platformValue } from '../platform';
+import { LinkProps } from './Atoms.platform';
 
 export * from './Elements.platform';
 
@@ -39,23 +40,18 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = comp<{
-    to: string,
-    action?: Callback<void>,
-    text: string,
-}>(props =>
-    <Atoms.Link to={props.to} action={props.action}>
-        <Text style={{ margin: relative(0.3) }}>{props.text}</Text>
+export const PanelLink = themed<LinkProps & { text: string }>(props =>
+    <Atoms.Link to={props.to} action={props.action} style={{
+        fontSize: props.theme.fontSize.normal,
+        fontFamily: props.theme.fontFamily,
+        color: props.theme.color.accent,
+        [':hover']: {
+            color: props.theme.color.highlight,
+        },
+        margin: relative(0.3),
+    }}>
+        {props.text}
     </Atoms.Link>,
-);
-
-export const PanelButton = comp<{
-    text: string,
-    onClick: VoidCallback,
-}>(props =>
-    <Atoms.Button onClick={props.onClick}>
-        <Text style={{ margin: relative(0.3) }}>{props.text}</Text>
-    </Atoms.Button>,
 );
 
 export const StretchLink = comp<{ to: string }>(props =>

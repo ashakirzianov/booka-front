@@ -25,11 +25,11 @@ function validateState(restored: object | undefined): App | undefined {
 const defaultTheme: Theme = {
     fontFamily: 'Georgia',
     color: {
-        foreground: '#999999',
-        background: '#000000',
-        secondBack: '#222222',
-        accent: '#9999DD',
-        highlight: '#DD99DD',
+        foreground: '#999',
+        background: '#000',
+        secondBack: '#222',
+        accent: '#ddd',
+        highlight: '#fff',
     },
     fontSize: {
         normal: 26,

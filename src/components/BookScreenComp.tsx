@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, ModalBox,
-    Label, PanelLink, PanelButton, comp,
+    Label, PanelLink, comp,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -64,7 +64,7 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }>(props =>
     <ModalBox heightPerc={95} maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelButton text='X' onClick={props.toggleToc} />
+            <PanelLink text='X' action={props.toggleToc} />
             <Label text='Table of Contents' />
             <Row style={{ flex: 1 }} />
         </Row>
@@ -85,7 +85,7 @@ const FootnoteComp = comp<Footnote>(props =>
 const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
     <ModalBox maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelButton text='X' onClick={() => props.openFootnote(null)} />
+            <PanelLink text='X' action={() => props.openFootnote(null)} />
             <Label text={props.footnote.title || ''} />
             <Row style={{ flex: 1 }} />
         </Row>

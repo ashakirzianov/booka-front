@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TextProps } from './Atoms';
-import { isOpenNewTabEvent, Callback, comp } from './comp-utils';
+import { TextProps, TextPropsStyle } from './Atoms';
+import { isOpenNewTabEvent, Callback, comp, hoverable, Hoverable } from './comp-utils';
 import { navigateToUrl } from '../logic';
 
 export const Text = comp<TextProps>(props =>
@@ -11,33 +11,18 @@ export const Text = comp<TextProps>(props =>
     </span>,
 );
 
-export const Button = comp<{
-    onClick: Callback<void>,
-}>(props =>
-    <div
-        style={{
-            display: 'inline',
-            cursor: 'pointer',
-        }}
-        onClick={e => {
-            e.stopPropagation();
-            props.onClick();
-        }}
-    >
-        {props.children}
-    </div>,
-);
-
 export type LinkProps = {
-    to: string,
+    to?: string,
     action?: Callback<void>, // TODO: rethinks this
+    style?: Hoverable<TextPropsStyle>,
 };
-export const Link = comp<LinkProps>(props =>
+export const Link = hoverable<LinkProps>(props =>
     <a
         href={props.to}
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
+            ...props.style,
         }}
         onClick={e => {
             e.stopPropagation();
@@ -45,7 +30,7 @@ export const Link = comp<LinkProps>(props =>
                 e.preventDefault();
                 if (props.action) {
                     props.action();
-                } else {
+                } else if (props.to) {
                     navigateToUrl(props.to);
                 }
             }

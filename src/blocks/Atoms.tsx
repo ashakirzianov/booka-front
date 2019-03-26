@@ -34,16 +34,17 @@ export const Row = comp<LayoutProps>(props =>
 );
 
 // TODO: remove
+export type TextPropsStyle = {
+    fontWeight?: 'normal' | 'bold' | number,
+    fontFamily?: string,
+    fontSize?: number,
+    fontStyle?: 'italic' | 'normal',
+    textAlign?: 'justify',
+    color?: string,
+    cursor?: 'pointer',
+    border?: string,
+    margin?: string,
+};
 export type TextProps = {
-    style?: {
-        fontWeight?: 'normal' | 'bold' | number,
-        fontFamily?: string,
-        fontSize?: number,
-        fontStyle?: 'italic' | 'normal',
-        textAlign?: 'justify',
-        color?: string,
-        cursor?: 'pointer',
-        border?: string,
-        margin?: string,
-    },
+    style?: TextPropsStyle,
 };

@@ -12,7 +12,7 @@ import { assertNever } from '../utils';
 import {
     comp, Callback, relative, connected,
     Row, NewLine, Tab, Inline, Text,
-    Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Button,
+    Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link,
 } from '../blocks';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
@@ -64,11 +64,11 @@ const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
     </StyledWithAttributes>,
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
-    <Button onClick={() => props.openFootnote(props.s.id)}>
+    <Link action={() => props.openFootnote(props.s.id)}>
         <Text>
             {props.s.text}
         </Text>
-    </Button>,
+    </Link>,
 );
 const SpanComp = comp<{ span: Span }>(props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
