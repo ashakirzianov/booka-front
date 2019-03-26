@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import { Theme } from '../model/theme';
-import { Comp, Callback, connected } from './comp-utils';
+import { Comp, Callback, connected, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { Defined } from '../utils';
+import { View } from 'react-native';
 
 type ThemeableComp<T> = Comp<T & {
     theme: Theme,
@@ -40,22 +41,28 @@ export type LinkButtonProps = Atoms.TextProps & {
     stretch?: boolean,
     borders?: boolean,
 };
-export const LinkButton = themed<LinkButtonProps>(props =>
-    <Atoms.Link
-        text={props.text}
-        to={props.link}
-        onClick={props.onClick}
-        style={{
-            fontFamily: props.theme.fontFamily,
-            fontSize: props.theme.fontSize.normal,
-            color: props.theme.color.foreground,
-            ...props.style,
-            ...(props.borders && {
-                border: 'solid',
-                borderColor: props.theme.color.foreground,
-                borderRadius: 9,
-            }),
-        }}
-        stretch={props.stretch}
-    >{props.children}</Atoms.Link>,
+
+export const LinkButton = themed<{
+    to: string,
+}>(props =>
+    <Atoms.Link to={props.to}>
+        <View style={{
+            border: 'solid',
+            borderColor: props.theme.color.foreground,
+            borderRadius: props.theme.radius,
+            padding: relative(0.3), // TODO: extract somewhere ?
+        }}>
+            <Text>
+                {props.children}
+            </Text>
+        </View>
+    </Atoms.Link>,
+);
+
+export const DottedLine = themed(props =>
+    <View style={{
+        flex: 1,
+        borderBottom: 'dotted 0.2em',
+        color: props.theme.color.foreground,
+    }} />,
 );

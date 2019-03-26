@@ -4,9 +4,9 @@ export * from './Animations.platform';
 export * from './ThemedAtoms';
 export * from './Utility';
 export * from './Elements';
-export { LinkButton, Text } from './ThemedAtoms';
 export {
-    Row, Column, Div, Tab, NewLine,
+    Row, Column, Div, Tab, NewLine, Link,
     ScrollView, ClickResponder, ModalBox,
-    SafeAreaView, TopPanel, DottedLine, FullScreen,
+    SafeAreaView, TopPanel, FullScreen,
+    Button,
 } from './Atoms';

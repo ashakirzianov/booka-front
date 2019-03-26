@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Comp, LinkButton, connected, Row, relative, ClickResponder, ModalBox, Label,
+    Comp, connected, Row, relative, ClickResponder, ModalBox, Label, PanelLink, PanelButton,
 } from '../blocks';
 import { BookScreen, Book, Footnote } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -21,11 +21,11 @@ export const BookScreenHeader: Comp = (props =>
 );
 
 const LibButton: Comp = (props =>
-    <LinkButton text='<' link={linkForLib()} />
+    <PanelLink text='<' to={linkForLib()} />
 );
 
 const OpenTocButton = connected([], ['toggleToc'])(props =>
-    <LinkButton text='...' onClick={props.toggleToc} />,
+    <PanelButton text='...' onClick={props.toggleToc} />,
 );
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
@@ -63,7 +63,7 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }>(props =>
     <ModalBox color='gray' heightPerc={95} maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <LinkButton text='X' onClick={props.toggleToc} />
+            <PanelButton text='X' onClick={props.toggleToc} />
             <Label text='Table of Contents' />
             <Row style={{ flex: 1 }} />
         </Row>
@@ -84,7 +84,7 @@ const FootnoteComp: Comp<Footnote> = (props =>
 const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
     <ModalBox color='gray' maxWidth={60} header={
         <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <LinkButton text='X' onClick={() => props.openFootnote(null)} />
+            <PanelButton text='X' onClick={() => props.openFootnote(null)} />
             <Label text={props.footnote.title || ''} />
             <Row style={{ flex: 1 }} />
         </Row>

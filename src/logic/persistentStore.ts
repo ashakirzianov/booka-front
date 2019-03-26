@@ -33,6 +33,7 @@ const defaultTheme: Theme = {
         large: 30,
         largest: 36,
     },
+    radius: 9,
 };
 
 function createNewState(): App {

@@ -61,14 +61,4 @@ export const FullScreen: Comp<{
     </View>
 );
 
-export const DottedLine: Comp = (props =>
-    <View style={{
-        flex: 1,
-        borderBottom: 'dotted 0.2em',
-    }} />
-);
-
-export {
-    ClickResponder, Link, Tab, ModalBox, TopPanel, Div,
-    Text, showAlert, NewLine,
-} from './Atoms.platform';
+export * from './Atoms.platform';

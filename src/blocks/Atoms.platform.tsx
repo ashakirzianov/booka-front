@@ -1,21 +1,32 @@
 import * as React from 'react';
-import { TextProps, TextCallbacks } from './Atoms';
-import { Comp, VoidCallback, isOpenNewTabEvent, Callback, ReactContent } from './comp-utils';
+import { TextProps } from './Atoms';
+import { Comp, isOpenNewTabEvent, Callback, ReactContent } from './comp-utils';
 import { navigateToUrl } from '../logic';
-import { View } from 'react-native';
 
-export const Text: Comp<TextProps, TextCallbacks> = props =>
+export const Text: Comp<TextProps> = props =>
     <span
-        style={{
-            cursor: props.onClick ? 'pointer' : undefined,
-            ...props.style,
-        }}
-        onClick={props.onClick}
+        style={props.style}
     >
         {props.children}
     </span>;
 
-export const ClickResponder: Comp<{ onClick?: VoidCallback }> = (props =>
+export const Button: Comp<{
+    onClick: Callback<void>,
+}> = (props =>
+    <div
+        style={{
+            cursor: 'pointer',
+        }}
+        onClick={e => {
+            e.stopPropagation();
+            props.onClick();
+        }}
+    >
+        {props.children}
+    </div>
+    );
+
+export const ClickResponder: Comp<{ onClick?: () => void }> = (props =>
     <div onClick={props.onClick}>
         {props.children}
     </div>
@@ -25,43 +36,25 @@ export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 );
 
-export const Link: Comp<TextProps & {
-    text?: string,
-    onClick?: Callback<void>,
-    to?: string,
-    stretch?: boolean,
+export const Link: Comp<{
+    to: string,
 }> = (props =>
-    <View style={props.stretch && { flex: 1 }}>
-        <a
-            href={props.to}
-            style={{
-                textDecoration: 'none',
-                cursor: 'pointer',
-                ...props.style,
-            }}
-            onClick={e => {
-                e.stopPropagation();
-                if (!isOpenNewTabEvent(e)) {
-                    e.preventDefault();
-                    if (props.onClick) {
-                        props.onClick();
-                    } else if (props.to) {
-                        navigateToUrl(props.to);
-                    }
-                }
-            }}
-        >
-            <div style={{
-                ...(props.stretch && {
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }),
-                margin: '0.3em',
-            }}>
-                {props.text || null}{props.children}
-            </div>
-        </a>
-    </View>
+    <a
+        href={props.to}
+        style={{
+            textDecoration: 'none',
+            cursor: 'pointer',
+        }}
+        onClick={e => {
+            e.stopPropagation();
+            if (!isOpenNewTabEvent(e)) {
+                e.preventDefault();
+                navigateToUrl(props.to);
+            }
+        }}
+    >
+        {props.children}
+    </a>
     );
 
 export function showAlert(message: string) {
@@ -125,6 +118,7 @@ export const ModalBox: Comp<{
     </div>
     );
 
+// TODO: why do we need this ?
 export const Div: Comp = (props =>
     <div style={{ display: 'inline' }}>{props.children}</div>
 );

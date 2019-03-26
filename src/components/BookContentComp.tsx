@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
 import {
-    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
-    isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote, FootnoteSpan, bookRange,
+    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange,
+    BookNode, isParagraph, isChapter, inRange, BookContent,
+    subpathCouldBeInRange, AttributesObject, SimpleSpan,
+    AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
+    isFootnote, FootnoteSpan, bookRange,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
     Comp, Callback, relative, connected,
     Row, NewLine, Tab, Div, Text,
-    LinkButton, Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef,
+    Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Button,
 } from '../blocks';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
@@ -57,11 +59,12 @@ const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
     </StyledWithAttributes>
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
-    <Text
-    // onClick={() => props.openFootnote(props.s.id)} // TODO: implement link buttons
-    >
-        {props.s.text}
-    </Text>,
+    <Button onClick={() => props.openFootnote(props.s.id)}>
+        <Text>
+            {props.s.text}
+        </Text>,
+    </Button>,
+
 );
 const SpanComp: Comp<{ span: Span }> = (props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
@@ -87,7 +90,7 @@ const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
         justifyContent: 'center',
         margin: relative(2),
     }}>
-        <LinkButton borders link={linkForBook(bookLocator(props.id, props.path))}>
+        <LinkButton to={linkForBook(bookLocator(props.id, props.path))}>
             <Label text={props.text} />
         </LinkButton>
     </Row>

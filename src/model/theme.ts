@@ -13,4 +13,5 @@ export type Theme = {
         large: FontSize,
         largest: FontSize,
     },
+    radius: number,
 };
