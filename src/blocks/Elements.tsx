@@ -117,3 +117,14 @@ export const FullScreen = themed(props =>
         {props.children}
     </View>,
 );
+
+export const TopPanel = comp(props =>
+    <div style={{
+        width: '100%',
+        position: 'fixed',
+        top: 0,
+        zIndex: 5,
+    }}>
+        {props.children}
+    </div>,
+);

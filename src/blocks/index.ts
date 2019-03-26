@@ -4,7 +4,6 @@ export * from './Animations.platform';
 export * from './Utility';
 export * from './Elements';
 export {
-    Row, Column, Div, Tab, NewLine, Link,
-    ClickResponder, TopPanel, Button,
+    Row, Column, Link, Button,
 } from './Atoms';
 export { SafeAreaView, ScrollView } from 'react-native';

@@ -26,16 +26,6 @@ export const Button: Comp<{
     </div>
     );
 
-export const ClickResponder: Comp<{ onClick?: () => void }> = (props =>
-    <div onClick={props.onClick}>
-        {props.children}
-    </div>
-);
-
-export const Tab: Comp = (props =>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-);
-
 export const Link: Comp<{
     to: string,
 }> = (props =>
@@ -60,21 +50,3 @@ export const Link: Comp<{
 export function showAlert(message: string) {
     alert(message);
 }
-
-export const TopPanel: Comp = (props =>
-    <div style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 5,
-    }}>
-        {props.children}
-    </div>
-);
-
-// TODO: why do we need this ?
-export const Div: Comp = (props =>
-    <div style={{ display: 'inline' }}>{props.children}</div>
-);
-
-export const NewLine: Comp = props => <br />;

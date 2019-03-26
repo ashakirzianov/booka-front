@@ -1,6 +1,23 @@
 import * as React from 'react';
 
-import { ReactContent, Callback, themed } from './comp-utils';
+import { ReactContent, Callback, themed, comp } from './comp-utils';
+
+// TODO: why do we need this ?
+export const Div = comp(props =>
+    <div style={{ display: 'inline' }}>{props.children}</div>,
+);
+
+export const NewLine = comp(props => <br />);
+
+export const Tab = comp(props =>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
+);
+
+export const ClickResponder = comp<{ onClick?: () => void }>(props =>
+    <div onClick={props.onClick}>
+        {props.children}
+    </div>,
+);
 
 type ModalBoxProps = {
     header?: ReactContent,
