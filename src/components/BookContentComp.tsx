@@ -9,44 +9,42 @@ import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
     Comp, Callback, relative, connected,
-    Row, StyledText, NewLine, Tab, Text, Div,
-    LinkButton, Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef,
+    Row, RegularText, NewLine, Tab, Div,
+    LinkButton, Label, ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, CustomText,
 } from '../blocks';
 
 const ChapterTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
-        <StyledText>{props.text}</StyledText>
+        <CustomText>{props.text}</CustomText>
     </Row>;
 
 const PartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
-        <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
+        <CustomText bold size='large'>{props.text}</CustomText>
     </Row>;
 
 const SubpartTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <StyledText style={{ fontWeight: 'bold' }}>{props.text}</StyledText>
+        <CustomText bold>{props.text}</CustomText>
     </Row>;
 
 const BookTitle: Comp<{ text?: string }> = props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
+        <CustomText bold size='largest'>{props.text}</CustomText>
     </Row>;
 
 const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
-    <Text style={{
-        fontStyle: props.attrs.italic ? 'italic' : undefined,
-    }}>
+    <CustomText italic={props.attrs.italic}>
         {props.children}
         {
             props.attrs.line
                 ? [<NewLine key='nl' />, <Tab key='tab' />]
                 : null
         }
-    </Text>);
+    </CustomText>);
 
 const SimpleSpanComp: Comp<{ s: SimpleSpan }> = (props =>
-    <StyledText>{props.s}</StyledText>
+    <RegularText>{props.s}</RegularText>
 );
 const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
@@ -57,9 +55,11 @@ const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
     </StyledWithAttributes>
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
-    <StyledText onClick={() => props.openFootnote(props.s.id)}>
+    <RegularText
+    // onClick={() => props.openFootnote(props.s.id)} // TODO: implement link buttons
+    >
         {props.s.text}
-    </StyledText>,
+    </RegularText>,
 );
 const SpanComp: Comp<{ span: Span }> = (props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />

@@ -1,95 +1,43 @@
 import * as React from 'react';
-import * as Atoms from './Atoms';
-import { Comp, Callback } from './comp-utils';
 
-export const ActivityIndicator: Comp = props =>
-    <Label text='Loading now...' />;
+import { ThemedText } from './Themeable';
+import { comp } from './comp-utils';
+import { Tab } from './Atoms';
 
-export const defaultStyle: Atoms.TextProps['style'] = {
-    fontFamily: 'Georgia',
-    color: '#999999',
-    fontSize: 26,
-};
+export const CustomText = comp<{
+    size?: 'regular' | 'large' | 'largest',
+    bold?: boolean,
+    italic?: boolean,
+    justify?: boolean,
+}>(props =>
+    <ThemedText
+        fontSizeKey={props.size === 'large' ? 'largeFontSize'
+            : props.size === 'largest' ? 'largestFontSize'
+                : 'baseFontSize'}
+        fontWeight={props.bold ? 'bold' : 'normal'}
+        fontStyle={props.italic ? 'italic' : undefined}
+        textAlign={props.justify ? 'justify' : undefined}
+    >
+        {props.children}
+    </ThemedText>,
+);
 
-export const StyledText: Comp<Atoms.TextProps, Atoms.TextCallbacks> = props =>
-    <Atoms.Text
-        {...props}
-        style={{ ...defaultStyle, ...props.style }}
-    >{props.children}</Atoms.Text>;
+export const RegularText = comp(props =>
+    <CustomText>
+        {props.children}
+    </CustomText>);
 
-export const Label: Comp<{ text: string, margin?: string }> = props =>
-    <StyledText style={{ margin: props.margin }}>{props.text}</StyledText>;
+// TODO: do we really need this ?
+export const Label = comp<{ text: string, margin?: string }>(props =>
+    <ThemedText margin={props.margin} fontSizeKey='baseFontSize'>
+        {props.text}
+    </ThemedText>,
+);
 
-export const ParagraphText: Comp<{ text: string }> = props =>
-    <StyledText style={{
-        textAlign: 'justify',
-        foo: 'foo', // TODO: why excessive property check doesn't work here ?
-    }}><Atoms.Tab />{props.text}</StyledText>;
+export const ActivityIndicator = comp(props =>
+    <Label text='Loading now...' />,
+);
 
-export const LinkButton: Comp<Atoms.TextProps & {
-    text?: string,
-    onClick?: Callback<void>,
-    link?: string,
-    stretch?: boolean,
-    borders?: boolean,
-}> = props =>
-        <Atoms.Link
-            text={props.text}
-            to={props.link}
-            onClick={props.onClick}
-            style={{
-                ...defaultStyle,
-                ...props.style,
-                ...(props.borders && {
-                    border: 'solid',
-                    borderColor: defaultStyle.color,
-                    borderRadius: 9,
-                }),
-            }}
-            stretch={props.stretch}
-        >{props.children}</Atoms.Link>;
-
-export class IncrementalLoad extends React.Component<{
-    increment?: number,
-    initial?: number,
-    timeout?: number,
-    skip?: number,
-}, {
-    count: number,
-}> {
-    public state = this.initialState();
-    public initialState() {
-        return {
-            count: this.props.initial !== undefined ? this.props.initial : this.props.increment || 10,
-        };
-    }
-
-    public componentDidMount() {
-        this.setState(this.initialState());
-        this.handleIncrement();
-    }
-
-    public handleIncrement() {
-        const { children, increment, timeout } = this.props;
-        const { count } = this.state;
-        const childrenCount = Array.isArray(children) ? children.length : 0;
-        if (count < childrenCount) {
-            this.setState({
-                count: count + (increment || 10),
-            });
-            setTimeout(() => this.handleIncrement(), (timeout || 500));
-        }
-    }
-
-    public render() {
-        const { children, skip } = this.props;
-        const { count } = this.state;
-        if (Array.isArray(children) && children.length > count) {
-            const start = skip && skip > count ? skip - count : 0;
-            const end = (skip || 0) + count;
-            return children.slice(start, end);
-        } else {
-            return children;
-        }
-    }
-}
+export const ParagraphText = comp<{ text: string }>(props =>
+    <CustomText justify><Tab />{props.text}</CustomText>,
+);
