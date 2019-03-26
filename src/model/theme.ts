@@ -4,8 +4,10 @@ export type Color = string;
 
 export type Theme = {
     fontFamily: FontFamily,
-    foregroundColor: Color,
-    backgroundColor: Color,
+    color: {
+        foreground: Color,
+        background: Color,
+    },
     fontSize: {
         normal: FontSize,
         large: FontSize,

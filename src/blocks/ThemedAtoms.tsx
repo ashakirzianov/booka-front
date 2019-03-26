@@ -8,13 +8,15 @@ import { Defined } from '../utils';
 // TODO: remove
 const defaultTheme: Theme = {
     fontFamily: 'Georgia',
+    color: {
+        foreground: '#999999',
+        background: '#000000',
+    },
     fontSize: {
         normal: 26,
         large: 30,
         largest: 36,
-    },
-    foregroundColor: '#999999',
-    backgroundColor: '#000000',
+    }, x,
 };
 
 type ThemeableComp<T> = Comp<T & {
@@ -38,7 +40,7 @@ export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'],
-        color: props.theme.foregroundColor,
+        color: props.theme.color.foreground,
         ...props.style,
     }}>
         {props.children}
@@ -60,11 +62,11 @@ export const LinkButton = themed<LinkButtonProps>(props =>
         style={{
             fontFamily: props.theme.fontFamily,
             fontSize: props.theme.fontSize.normal,
-            color: props.theme.foregroundColor,
+            color: props.theme.color.foreground,
             ...props.style,
             ...(props.borders && {
                 border: 'solid',
-                borderColor: props.theme.foregroundColor,
+                borderColor: props.theme.color.foreground,
                 borderRadius: 9,
             }),
         }}
