@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    comp, Row, Text, Tab, relative, Label,
+    comp, Row, Text, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
 import { bookLocator, pathToString } from '../model';
@@ -19,9 +19,9 @@ const TocItemComp = comp<TableOfContentsItem & { tabs: number }>(props =>
     <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
         <StretchLink to={linkForBook(bookLocator(props.id, props.path))}>
-            <Label text={props.title} margin={relative(0.1)} />
+            {props.title}
             <DottedLine />
-            <Label text={props.percentage.toString()} margin={relative(0.1)} />
+            {props.percentage.toString()}
         </StretchLink>
     </Row>,
 );

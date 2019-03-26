@@ -13,11 +13,10 @@ export const Tab = comp(props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
 );
 
-export const DottedLine = themed(props =>
-    <div style={{
+export const DottedLine = comp(props =>
+    <div key='aaa' style={{
         flex: 1,
         borderBottom: 'dotted 0.2em',
-        color: props.theme.color.foreground,
     }} />,
 );
 

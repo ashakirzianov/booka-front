@@ -61,9 +61,17 @@ export const PanelLink = themed<LinkProps & { text: string }>(props =>
     </Atoms.Link>,
 );
 
-export const StretchLink = comp<{ to: string }>(props =>
+export const StretchLink = themed<{ to: string }>(props =>
     <View style={{ flex: 1 }}>
-        <Atoms.Link to={props.to}>
+        <Atoms.Link to={props.to} style={{
+            fontSize: props.theme.fontSize.normal,
+            fontFamily: props.theme.fontFamily,
+            color: props.theme.color.accent,
+            [':hover']: {
+                color: props.theme.color.highlight,
+            },
+            margin: relative(0.3),
+        }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
