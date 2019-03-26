@@ -1,13 +1,11 @@
 import * as React from 'react';
+
+import { comp, ActivityIndicator, connected, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
     inRange, bookRange, emptyPath,
 } from '../model';
 import { assertNever } from '../utils';
-import { Comp, connected, comp } from './comp-utils';
-import {
-    ActivityIndicator, Label,
-} from './Elements';
 import { TableOfContents } from '../model/tableOfContent';
 import { BookContentComp } from './BookContentComp';
 
@@ -41,8 +39,9 @@ const LoadedBookComp = connected(['pathToOpen'], ['updateCurrentBookPosition'])<
     />;
 });
 
-const ErrorBookComp: Comp<ErrorBook> = props =>
-    <Label text={'Error: ' + props.error} />;
+const ErrorBookComp = comp<ErrorBook>(props =>
+    <Label text={'Error: ' + props.error} />,
+);
 
 function buildPaths(path: BookPath, toc: TableOfContents): {
     prev?: BookPath,

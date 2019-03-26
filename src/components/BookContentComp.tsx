@@ -1,40 +1,47 @@
 import * as React from 'react';
 import { throttle } from 'lodash';
 import {
-    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange, BookNode, isParagraph,
-    isChapter, inRange, BookContent, subpathCouldBeInRange, AttributesObject,
-    SimpleSpan, AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode, isFootnote, FootnoteSpan, bookRange,
+    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange,
+    BookNode, isParagraph, isChapter, inRange, BookContent,
+    subpathCouldBeInRange, AttributesObject, SimpleSpan,
+    AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
+    isFootnote, FootnoteSpan, bookRange,
 } from '../model';
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
-import { Comp, Callback, relative, connected } from './comp-utils';
-import { Row, StyledText, LinkButton, Label, ScrollView, IncrementalLoad } from './Elements';
-import { refable, RefType, isPartiallyVisible, scrollToRef } from './Scroll.platform';
-import { Text, Div, Tab, NewLine } from './Atoms';
+import {
+    comp, Callback, relative, connected,
+    Row, NewLine, Tab, Inline, Text,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link,
+} from '../blocks';
 
-const ChapterTitle: Comp<{ text?: string }> = props =>
+const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <StyledText>{props.text}</StyledText>
-    </Row>;
+        <Text>{props.text}</Text>
+    </Row>,
+);
 
-const PartTitle: Comp<{ text?: string }> = props =>
+const PartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <StyledText style={{ fontWeight: 'bold', fontSize: 30 }}>{props.text}</StyledText>
-    </Row>;
+        <Text style={{ fontWeight: 'bold' }} size='large'>{props.text}</Text>
+    </Row>,
+);
 
-const SubpartTitle: Comp<{ text?: string }> = props =>
+const SubpartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <StyledText style={{ fontWeight: 'bold' }}>{props.text}</StyledText>
-    </Row>;
+        <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
+    </Row>,
+);
 
-const BookTitle: Comp<{ text?: string }> = props =>
+const BookTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <StyledText style={{ fontWeight: 'bold', fontSize: 36 }}>{props.text}</StyledText>
-    </Row>;
+        <Text style={{ fontWeight: 'bold' }} size='largest'>{props.text}</Text>
+    </Row>,
+);
 
-const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
+const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
     <Text style={{
-        fontStyle: props.attrs.italic ? 'italic' : undefined,
+        fontStyle: props.attrs.italic ? 'italic' : 'normal',
     }}>
         {props.children}
         {
@@ -42,35 +49,38 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
                 ? [<NewLine key='nl' />, <Tab key='tab' />]
                 : null
         }
-    </Text>);
-
-const SimpleSpanComp: Comp<{ s: SimpleSpan }> = (props =>
-    <StyledText>{props.s}</StyledText>
+    </Text>,
 );
-const AttributedSpanComp: Comp<{ s: AttributedSpan }> = (props =>
+
+const SimpleSpanComp = comp<{ s: SimpleSpan }>(props =>
+    <Text>{props.s}</Text>,
+);
+const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
         {
             props.s.spans.map((childP, idx) =>
                 <SpanComp key={`${idx}`} span={childP} />)
         }
-    </StyledWithAttributes>
+    </StyledWithAttributes>,
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
-    <StyledText onClick={() => props.openFootnote(props.s.id)}>
-        {props.s.text}
-    </StyledText>,
+    <Link action={() => props.openFootnote(props.s.id)}>
+        <Text color='accent' hoverColor='highlight'>
+            {props.s.text}
+        </Text>
+    </Link>,
 );
-const SpanComp: Comp<{ span: Span }> = (props =>
+const SpanComp = comp<{ span: Span }>(props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
         : isSimple(props.span) ? <SimpleSpanComp s={props.span} />
             : isFootnote(props.span) ? <FootnoteSpanComp s={props.span} />
-                : assertNever(props.span)
+                : assertNever(props.span),
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
-    <Div>
+    <Inline>
         <Tab /><SpanComp span={props.p.span} />
-    </Div>,
+    </Inline>,
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
@@ -79,18 +89,18 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
             : <SubpartTitle text={props.title} />,
 );
 
-const PathLink: Comp<{ path: BookPath, id: BookId, text: string }> = (props =>
+const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
     <Row style={{
         justifyContent: 'center',
         margin: relative(2),
     }}>
-        <LinkButton borders link={linkForBook(bookLocator(props.id, props.path))}>
-            <Label text={props.text} />
+        <LinkButton to={linkForBook(bookLocator(props.id, props.path))}>
+            {props.text}
         </LinkButton>
-    </Row>
+    </Row>,
 );
 
-export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
     <>
         {
             buildNodes(props.nodes, [], {
@@ -98,7 +108,7 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
                 range: bookRange(),
             })
         }
-    </>
+    </>,
 );
 
 type RefMap = { [k in string]?: RefType };

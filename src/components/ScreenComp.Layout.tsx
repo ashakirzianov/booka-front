@@ -1,11 +1,10 @@
 import * as React from 'react';
+import {
+    comp, ReactContent, TopPanel, AnimatedVisibility, Row,
+    relative, Label, VoidCallback, Column, themed,
+} from '../blocks';
 
-import { Comp, comp, VoidCallback, relative, ReactContent } from './comp-utils';
-import { Row, TopPanel, Column } from './Atoms';
-import { Label } from './Elements';
-import { AnimatedVisibility } from './Animations.platform';
-
-export const Header = comp<{
+export const Header = themed<{
     title?: string,
     right?: ReactContent,
     visible: boolean,
@@ -19,7 +18,7 @@ export const Header = comp<{
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: relative(1),
-                        backgroundColor: 'black',
+                        backgroundColor: props.theme.color.secondBack,
                     }}>
                         {/* Left */}
                         <Row>{props.children}</Row>
@@ -34,17 +33,18 @@ export const Header = comp<{
     </TopPanel>,
 );
 
-export const ScreenLayout: Comp<{
+type ScreenLayoutProps = {
     headerVisible: boolean,
     headerTitle?: string,
     header?: ReactContent,
     onContentClick?: VoidCallback,
-}> = (props =>
+};
+export const ScreenLayout = comp<ScreenLayoutProps>(props =>
     <Column style={{ width: '100%', alignItems: 'center' }}>
         <Header title={props.headerTitle} visible={props.headerVisible}>
             {props.header || null}
         </Header>
         <Row style={{ margin: relative(3) }} />
         {props.children}
-    </Column>
-    );
+    </Column>,
+);

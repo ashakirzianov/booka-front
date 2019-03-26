@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { TopComp } from './TopComp';
+
 import { ConnectedProvider } from '../redux';
-// import { ElementsStore } from './ComponentsStore';
+import { TopComp } from './TopComp';
 
 const App: React.SFC = props =>
     <ConnectedProvider><TopComp /></ConnectedProvider>;

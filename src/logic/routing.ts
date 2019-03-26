@@ -47,8 +47,8 @@ export function linkForToc(bi: BookId): Destination {
     return `/book/${biToString(bi)}?toc`;
 }
 
-export function linkForFootnote(bl: BookLocator, footnoteId: string): Destination {
-    return `/book/${blToString(bl)}?fid=${footnoteId}`;
+export function linkForFootnote(bi: BookId, footnoteId: string): Destination {
+    return `/book/${biToString(bi)}?fid=${footnoteId}`;
 }
 
 export function linkForLib(): Destination {

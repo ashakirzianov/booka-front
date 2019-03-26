@@ -1,20 +1,18 @@
 import * as React from 'react';
-import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
-import { Comp } from './comp-utils';
-import { Column, Row, LinkButton, ActivityIndicator } from './Elements';
-import { SafeAreaView } from './Atoms';
-import { linkForBook } from '../logic/routing';
 
-const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
+import { Library, BookInfo, bookLocator, remoteBookId } from '../model';
+import { linkForBook } from '../logic/routing';
+import { comp, Row, Link, SafeAreaView, Column, ActivityIndicator, Text } from '../blocks';
+
+const BookMetaComp = comp<{ meta: BookInfo, id: string }>(props =>
     <Row>
-        <LinkButton
-            text={props.meta.title}
-            link={linkForBook(bookLocator(remoteBookId(props.id)))}
-        />
-    </Row>
+        <Link to={linkForBook(bookLocator(remoteBookId(props.id)))}>
+            <Text>{props.meta.title}</Text>
+        </Link>
+    </Row>,
 );
 
-export const LibraryComp: Comp<Library> = (props =>
+export const LibraryComp = comp<Library>(props =>
     <SafeAreaView>
         <Column>
             {
@@ -25,5 +23,5 @@ export const LibraryComp: Comp<Library> = (props =>
                         />)
             }
         </Column>
-    </SafeAreaView>
+    </SafeAreaView>,
 );

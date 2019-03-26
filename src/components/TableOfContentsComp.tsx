@@ -1,32 +1,29 @@
 import * as React from 'react';
 
-import { Comp, relative } from './comp-utils';
-import { Row, StyledText, LinkButton, Label } from './Elements';
-import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
-import { ScrollView } from 'react-native';
-import { Column, DottedLine } from './Atoms';
+import {
+    comp, Row, Text, Tab, relative,
+    Column, DottedLine, ScrollView, StretchLink,
+} from '../blocks';
 import { bookLocator, pathToString } from '../model';
+import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { nums } from '../utils';
-import { Tab } from './Atoms.platform';
 import { linkForBook } from '../logic/routing';
 
-const TocHeader: Comp<{ text: string }> = props =>
+const TocHeader = comp<{ text: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <StyledText style={{ fontSize: 30 }}>{props.text}</StyledText>
-    </Row>;
+        <Text size='large'>{props.text}</Text>
+    </Row>,
+);
 
-const TocItemComp: Comp<TableOfContentsItem & { tabs: number }> = (props =>
+const TocItemComp = comp<TableOfContentsItem & { tabs: number }>(props =>
     <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <LinkButton stretch
-            link={linkForBook(bookLocator(props.id, props.path))}
-            style={{ margin: relative(0.1) }}
-        >
-            <Label text={props.title} margin={relative(0.1)} />
+        <StretchLink to={linkForBook(bookLocator(props.id, props.path))}>
+            {props.title}
             <DottedLine />
-            <Label text={props.percentage.toString()} margin={relative(0.1)} />
-        </LinkButton>
-    </Row>
+            {props.percentage.toString()}
+        </StretchLink>
+    </Row>,
 );
 
 export class TableOfContentsComp extends React.Component<TableOfContents> {
