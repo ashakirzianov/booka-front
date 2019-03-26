@@ -2,7 +2,7 @@ import * as React from 'react';
 import Radium from 'radium';
 import { KeyRestriction, ExcludeKeys } from '../utils';
 import { buildConnectRedux } from '../redux';
-import { actionsTemplate, App } from '../model';
+import { actionsTemplate, App, Theme } from '../model';
 import { platformValue } from '../platform';
 
 export type ReactContent = React.ReactNode;
@@ -45,6 +45,13 @@ export function partial<T>(Cmp: Comp<T>) {
 
 export function hoverable<T>(Cmp: React.SFC<T>): React.SFC<T> {
     return Radium(Cmp);
+}
+
+type ThemeableComp<T> = Comp<T & {
+    theme: Theme,
+}>;
+export function themed<T = {}>(C: ThemeableComp<T>) {
+    return connected(['theme'], [])(C);
 }
 
 export { isOpenNewTabEvent } from './comp-utils.platform';
