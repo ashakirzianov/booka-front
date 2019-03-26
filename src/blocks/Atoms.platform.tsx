@@ -16,6 +16,7 @@ export const Button = comp<{
 }>(props =>
     <div
         style={{
+            display: 'inline',
             cursor: 'pointer',
         }}
         onClick={e => {

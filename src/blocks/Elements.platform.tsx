@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import { ReactContent, Callback, themed, comp } from './comp-utils';
+import * as Atoms from './Atoms';
+import { Text } from './Elements';
+import { ReactContent, Callback, themed, comp, relative } from './comp-utils';
 
 export const Inline = comp(props =>
     <div style={{ display: 'inline' }}>{props.children}</div>,
@@ -10,6 +12,29 @@ export const NewLine = comp(props => <br />);
 
 export const Tab = comp(props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
+);
+
+export const DottedLine = themed(props =>
+    <div style={{
+        flex: 1,
+        borderBottom: 'dotted 0.2em',
+        color: props.theme.color.foreground,
+    }} />,
+);
+
+export const LinkButton = themed<Atoms.LinkProps>(props =>
+    <Atoms.Link {...props}>
+        <div style={{
+            border: 'solid',
+            borderColor: props.theme.color.foreground,
+            borderRadius: props.theme.radius,
+            padding: relative(0.5), // TODO: extract somewhere ?
+        }}>
+            <Text>
+                {props.children}
+            </Text>
+        </div>
+    </Atoms.Link>,
 );
 
 export const Clickable = comp<{ onClick: () => void }>(props =>

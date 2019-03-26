@@ -67,9 +67,8 @@ const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(pr
     <Button onClick={() => props.openFootnote(props.s.id)}>
         <Text>
             {props.s.text}
-        </Text>,
+        </Text>
     </Button>,
-
 );
 const SpanComp = comp<{ span: Span }>(props =>
     isAttributed(props.span) ? <AttributedSpanComp s={props.span} />

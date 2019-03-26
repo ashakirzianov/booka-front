@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Defined } from '../utils';
-import { comp, VoidCallback, themed, Callback, relative } from './comp-utils';
+import { comp, VoidCallback, themed, Callback } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
@@ -27,29 +27,6 @@ export const Text = themed<TextProps>(props =>
     }}>
         {props.children}
     </Atoms.Text>,
-);
-
-export const LinkButton = themed<Atoms.LinkProps>(props =>
-    <Atoms.Link {...props}>
-        <View style={{
-            border: 'solid',
-            borderColor: props.theme.color.foreground,
-            borderRadius: props.theme.radius,
-            padding: relative(0.3), // TODO: extract somewhere ?
-        }}>
-            <Text>
-                {props.children}
-            </Text>
-        </View>
-    </Atoms.Link>,
-);
-
-export const DottedLine = themed(props =>
-    <View style={{
-        flex: 1,
-        borderBottom: 'dotted 0.2em',
-        color: props.theme.color.foreground,
-    }} />,
 );
 
 export const Label = comp<{ text: string, margin?: string }>(props =>
