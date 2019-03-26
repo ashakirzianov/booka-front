@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {
-    Label, ParagraphText,
+    Label,
 } from './Elements';
 import { FullScreen, Row, Column } from './Atoms';
 
 export const ElementsStore: React.SFC = props => (
     <FullScreen color='green'>
-        <ParagraphText text='Paragraph' />
         <Row>
             <Column>
                 <Label text='R 1 C 1' />

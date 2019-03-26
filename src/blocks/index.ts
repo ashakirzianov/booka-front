@@ -4,9 +4,9 @@ export * from './Animations.platform';
 export * from './Themeable';
 export * from './Utility';
 export * from './Elements';
-export { LinkButton } from './Themeable';
+export { LinkButton, Text } from './Themeable';
 export {
-    Row, Column, Div, Tab, NewLine, Text,
+    Row, Column, Div, Tab, NewLine,
     ScrollView, ClickResponder, ModalBox,
     SafeAreaView, TopPanel, DottedLine, FullScreen,
 } from './Atoms';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Comp, Row, CustomText, Tab, LinkButton, relative, Label,
+    Comp, Row, Text, Tab, LinkButton, relative, Label,
     Column, DottedLine, ScrollView,
 } from '../blocks';
 import { bookLocator, pathToString } from '../model';
@@ -11,7 +11,7 @@ import { linkForBook } from '../logic/routing';
 
 const TocHeader: Comp<{ text: string }> = props =>
     <Row style={{ justifyContent: 'center' }}>
-        <CustomText size='large'>{props.text}</CustomText>
+        <Text size='large'>{props.text}</Text>
     </Row>;
 
 const TocItemComp: Comp<TableOfContentsItem & { tabs: number }> = (props =>

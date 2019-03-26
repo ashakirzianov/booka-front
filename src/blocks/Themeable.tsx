@@ -3,13 +3,16 @@ import * as React from 'react';
 import { Theme } from '../model/theme';
 import { Comp, Callback } from './comp-utils';
 import * as Atoms from './Atoms';
+import { Defined } from '../utils';
 
 // TODO: remove
 const defaultTheme: Theme = {
     fontFamily: 'Georgia',
-    baseFontSize: 26,
-    largeFontSize: 30,
-    largestFontSize: 36,
+    fontSize: {
+        normal: 26,
+        large: 30,
+        largest: 36,
+    },
     foregroundColor: '#999999',
     backgroundColor: '#000000',
 };
@@ -22,22 +25,21 @@ function themed<T = {}>(C: ThemeableComp<T>): Comp<T> {
     return props => <C theme={defaultTheme} {...props} />;
 }
 
-type FontSizeName = 'baseFontSize' | 'largeFontSize' | 'largestFontSize';
-type FontWeight = 'normal' | 'bold' | number;
+type TextStyle = Defined<Atoms.TextProps['style']>;
+type AllowedTextStyleProps = Pick<TextStyle,
+    | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
+    | 'textAlign'
+>;
 type TextProps = {
-    fontSizeKey: FontSizeName,
-    fontWeight?: FontWeight,
-    fontStyle?: 'italic',
-    margin?: string,
-    textAlign?: 'justify',
+    style?: AllowedTextStyleProps,
+    size?: keyof Theme['fontSize'],
 };
-export const ThemedText = themed<TextProps>(props =>
+export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
-        fontSize: props.theme[props.fontSizeKey],
-        fontStyle: props.fontStyle,
+        fontSize: props.theme.fontSize[props.size || 'normal'],
         color: props.theme.foregroundColor,
-        textAlign: props.textAlign,
+        ...props.style,
     }}>
         {props.children}
     </Atoms.Text>,
@@ -57,7 +59,7 @@ export const LinkButton = themed<LinkButtonProps>(props =>
         onClick={props.onClick}
         style={{
             fontFamily: props.theme.fontFamily,
-            fontSize: props.theme.baseFontSize,
+            fontSize: props.theme.fontSize.normal,
             color: props.theme.foregroundColor,
             ...props.style,
             ...(props.borders && {

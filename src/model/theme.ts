@@ -6,7 +6,9 @@ export type Theme = {
     fontFamily: FontFamily,
     foregroundColor: Color,
     backgroundColor: Color,
-    baseFontSize: FontSize,
-    largeFontSize: FontSize,
-    largestFontSize: FontSize,
+    fontSize: {
+        normal: FontSize,
+        large: FontSize,
+        largest: FontSize,
+    },
 };
