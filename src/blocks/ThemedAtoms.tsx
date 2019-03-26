@@ -1,30 +1,16 @@
 import * as React from 'react';
 
 import { Theme } from '../model/theme';
-import { Comp, Callback } from './comp-utils';
+import { Comp, Callback, connected } from './comp-utils';
 import * as Atoms from './Atoms';
 import { Defined } from '../utils';
-
-// TODO: remove
-const defaultTheme: Theme = {
-    fontFamily: 'Georgia',
-    color: {
-        foreground: '#999999',
-        background: '#000000',
-    },
-    fontSize: {
-        normal: 26,
-        large: 30,
-        largest: 36,
-    }, x,
-};
 
 type ThemeableComp<T> = Comp<T & {
     theme: Theme,
 }>;
 
-function themed<T = {}>(C: ThemeableComp<T>): Comp<T> {
-    return props => <C theme={defaultTheme} {...props} />;
+function themed<T = {}>(C: ThemeableComp<T>) {
+    return connected(['theme'], [])(C);
 }
 
 type TextStyle = Defined<Atoms.TextProps['style']>;

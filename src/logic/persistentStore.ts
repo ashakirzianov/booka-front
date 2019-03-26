@@ -2,7 +2,7 @@ import {
     readValue,
     // storeValue,
 } from './persistentStore.platform';
-import { App, libraryScreen, library } from '../model';
+import { App, libraryScreen, library, Theme } from '../model';
 
 const storeKey = 'state';
 export function storeState(state: App) {
@@ -21,10 +21,25 @@ function validateState(restored: object | undefined): App | undefined {
     return undefined; // TODO: implement
 }
 
+// TODO: remove
+const defaultTheme: Theme = {
+    fontFamily: 'Georgia',
+    color: {
+        foreground: '#999999',
+        background: '#000000',
+    },
+    fontSize: {
+        normal: 26,
+        large: 30,
+        largest: 36,
+    },
+};
+
 function createNewState(): App {
     return {
         screen: libraryScreen(library()),
         pathToOpen: null,
         controlsVisible: true,
+        theme: defaultTheme,
     };
 }

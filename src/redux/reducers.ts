@@ -4,6 +4,7 @@ import {
 import { buildPartialReducers } from './redux-utils';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
+    theme: {},
     screen: {
         navigateToScreen: {
             pending: (current, loading) => loading,
