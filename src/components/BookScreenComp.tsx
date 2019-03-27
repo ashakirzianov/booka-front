@@ -8,7 +8,6 @@ import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
-import { letExp } from '../utils';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -38,11 +37,7 @@ export const BookScreenComp = comp<BookScreen>(props =>
         }
         {
             props.book.book === 'book'
-                ? letExp(footnoteForId(props.book.content, props.footnoteId), fn =>
-                    fn
-                        ? <FootnoteBox footnote={fn} />
-                        : null,
-                )
+                ? <FootnoteBox footnote={footnoteForId(props.book.content, props.footnoteId)} />
                 : null
         }
     </>,
@@ -63,7 +58,6 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal title='Table of Contents' toggle={props.toggleToc} open={props.open}
     >
-
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
         </Row>
@@ -74,13 +68,17 @@ const FootnoteComp = comp<Footnote>(props =>
     <BookNodesComp nodes={props.content} />,
 );
 
-const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
-    <Modal title={props.footnote.title} open={true}
+const FootnoteBox = connected([], ['openFootnote'])<{ footnote?: Footnote }>(props =>
+    <Modal
+        title={props.footnote && props.footnote.title}
+        open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
-
-        <Row style={{ overflow: 'scroll' }}>
-            <FootnoteComp {...props.footnote} />
-        </Row>
+        {
+            !props.footnote ? null :
+                <Row style={{ overflow: 'scroll' }}>
+                    <FootnoteComp {...props.footnote} />
+                </Row>
+        }
     </Modal>,
 );

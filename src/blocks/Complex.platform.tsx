@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { LinkButton } from './Elements';
-import { themed, Callback } from './comp-utils';
+import { Callback, themed } from './comp-utils';
+import { LinkButton, Text } from './Elements';
+import { View } from 'react-native';
+import { AnimatedVisibility } from './Animations.platform';
 
 type ModalBoxProps = {
     open: boolean,
@@ -8,33 +10,45 @@ type ModalBoxProps = {
     toggle: Callback<any>,
 };
 export const Modal = themed<ModalBoxProps>(props =>
-    !props.open ? null :
+    <AnimatedVisibility visible={props.open}>
         <div style={{
             position: 'fixed',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
+            top: 0, bottom: 0, left: 0, right: 0,
             backgroundColor: 'rgba(0,0,0,0.7)',
             zIndex: 10,
-        }} onClick={props.toggle}>
+        }}
+            onClick={props.toggle}
+        >
             <div style={{
                 backgroundColor: props.theme.color.secondBack,
                 width: '100%',
+                maxWidth: '50em',
                 margin: '0 auto',
                 zIndex: 10,
                 borderRadius: props.theme.radius,
             }}
                 onClick={e => e.stopPropagation()}
             >
-                {
-                    <div style={{
-                        height: '10%',
+                <div style={{
+                    height: '10%',
+                }}>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
                     }}>
-                        <LinkButton action={props.toggle} />
-                        {props.title}
-                    </div>
-                }
+                        <View>
+                            <LinkButton action={props.toggle}>X</LinkButton>
+                        </View>
+                        <View style={{
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}>
+                            <Text>{props.title}</Text>
+                        </View>
+                        <View />
+                    </View>
+                </div>
                 <div style={{
                     overflowY: 'scroll',
                     height: '90%',
@@ -42,5 +56,6 @@ export const Modal = themed<ModalBoxProps>(props =>
                     {props.children}
                 </div>
             </div>
-        </div>,
+        </div>
+    </AnimatedVisibility>,
 );
