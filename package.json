@@ -19,6 +19,7 @@
     "redux": "^4.0.1",
     "redux-promise-middleware": "^5.1.1",
     "serve": "^10.1.1",
+    "shards-react": "^1.0.3",
     "store": "^2.0.12"
   },
   "scripts": {
