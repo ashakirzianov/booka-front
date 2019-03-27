@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, ModalBox,
-    Label, PanelLink, comp,
+    connected, Row, relative, Clickable, Modal, PanelLink, comp,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -33,8 +32,8 @@ export const BookScreenComp = comp<BookScreen>(props =>
     <>
         <BookText book={props.book} />
         {
-            props.tocOpen && props.book.book === 'book'
-                ? <TableOfContentsBox toc={props.book.toc} />
+            props.book.book === 'book'
+                ? <TableOfContentsBox toc={props.book.toc} open={props.tocOpen} />
                 : null
         }
         {
@@ -61,21 +60,14 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 
 );
 
-const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }>(props =>
-    <ModalBox heightPerc={95} maxWidth={60} header={
-        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelLink text='X' action={props.toggleToc} />
-            <Label text='Table of Contents' />
-            <Row style={{ flex: 1 }} />
-        </Row>
-    }
-        onExternalClick={props.toggleToc}
+const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents, open: boolean }>(props =>
+    <Modal title='Table of Contents' toggle={props.toggleToc} open={props.open}
     >
 
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
         </Row>
-    </ModalBox>,
+    </Modal>,
 );
 
 const FootnoteComp = comp<Footnote>(props =>
@@ -83,18 +75,12 @@ const FootnoteComp = comp<Footnote>(props =>
 );
 
 const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
-    <ModalBox maxWidth={60} header={
-        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelLink text='X' action={() => props.openFootnote(null)} />
-            <Label text={props.footnote.title || ''} />
-            <Row style={{ flex: 1 }} />
-        </Row>
-    }
-        onExternalClick={() => props.openFootnote(null)}
+    <Modal title={props.footnote.title} open={true}
+        toggle={() => props.openFootnote(null)}
     >
 
         <Row style={{ overflow: 'scroll' }}>
             <FootnoteComp {...props.footnote} />
         </Row>
-    </ModalBox>,
+    </Modal>,
 );

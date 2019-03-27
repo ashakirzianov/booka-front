@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { ReactContent, Callback, themed, comp, relative, hoverable } from './comp-utils';
+import { Callback, themed, comp, relative, hoverable } from './comp-utils';
 
 export const Inline = comp(props =>
     <div style={{ display: 'inline' }}>{props.children}</div>,
@@ -46,47 +46,44 @@ export const Clickable = comp<{ onClick: () => void }>(props =>
 );
 
 type ModalBoxProps = {
-    header?: ReactContent,
-    heightPerc?: number,
-    maxWidth?: number,
-    onExternalClick?: Callback<any>,
+    open: boolean,
+    title?: string,
+    toggle: Callback<any>,
 };
-export const ModalBox = themed<ModalBoxProps>(props =>
-    <div style={{
-        position: 'fixed',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        zIndex: 10,
-    }} onClick={props.onExternalClick}>
+export const Modal = themed<ModalBoxProps>(props =>
+    !props.open ? null :
         <div style={{
-            backgroundColor: props.theme.color.secondBack,
-            height: props.heightPerc ? `${props.heightPerc}%` : undefined,
-            width: '100%',
-            maxWidth: props.maxWidth && `${props.maxWidth}em`,
-            margin: '0 auto',
+            position: 'fixed',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)',
             zIndex: 10,
-            borderRadius: props.theme.radius,
-        }}
-            onClick={e => e.stopPropagation()}
-        >
-            {
-                props.header
-                    ? <div style={{
+        }} onClick={props.toggle}>
+            <div style={{
+                backgroundColor: props.theme.color.secondBack,
+                width: '100%',
+                margin: '0 auto',
+                zIndex: 10,
+                borderRadius: props.theme.radius,
+            }}
+                onClick={e => e.stopPropagation()}
+            >
+                {
+                    <div style={{
                         height: '10%',
                     }}>
-                        {props.header}
+                        <LinkButton action={props.toggle} />
+                        {props.title}
                     </div>
-                    : null
-            }
-            <div style={{
-                overflowY: 'scroll',
-                height: props.header ? '90%' : '100%',
-            }}>
-                {props.children}
+                }
+                <div style={{
+                    overflowY: 'scroll',
+                    height: '90%',
+                }}>
+                    {props.children}
+                </div>
             </div>
-        </div>
-    </div>,
+        </div>,
 );
