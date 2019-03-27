@@ -12,6 +12,9 @@ type ModalBoxProps = {
 export const Modal = themed<ModalBoxProps>(props =>
     <AnimatedVisibility visible={props.open}>
         <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
             position: 'fixed',
             top: 0, bottom: 0, left: 0, right: 0,
             backgroundColor: 'rgba(0,0,0,0.7)',
@@ -19,18 +22,19 @@ export const Modal = themed<ModalBoxProps>(props =>
         }}
             onClick={props.toggle}
         >
-            <div style={{
+            <View style={{
+                alignSelf: 'center',
                 backgroundColor: props.theme.color.secondBack,
                 width: '100%',
                 maxWidth: '50em',
+                maxHeight: '100%',
                 margin: '0 auto',
                 zIndex: 10,
                 borderRadius: props.theme.radius,
             }}
-                onClick={e => e.stopPropagation()}
             >
-                <div style={{
-                    height: '10%',
+                <View style={{
+                    // height: '10%',
                 }}>
                     <View style={{
                         flex: 1,
@@ -48,14 +52,15 @@ export const Modal = themed<ModalBoxProps>(props =>
                         </View>
                         <View />
                     </View>
-                </div>
-                <div style={{
+                </View>
+                <View style={{
                     overflowY: 'scroll',
-                    height: '90%',
+                    maxHeight: '90%',
+                    // height: '90%',
                 }}>
                     {props.children}
-                </div>
-            </div>
+                </View>
+            </View>
         </div>
     </AnimatedVisibility>,
 );
