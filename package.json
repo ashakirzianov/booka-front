@@ -11,6 +11,7 @@
     "react": "16.7.0",
     "react-art": "16.7.0",
     "react-dom": "16.7.0",
+    "react-icons": "^3.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-web": "^0.10.0-alpha.2",
     "react-pose": "^4.0.7",
