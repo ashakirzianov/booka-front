@@ -60,13 +60,15 @@ export const Modal = themed<ModalBoxProps>(props =>
     </AnimatedVisibility>,
 );
 
-export const TopBar = comp(props =>
+export const TopBar = comp<{ open: boolean }>(props =>
     <div style={{
         width: '100%',
         position: 'fixed',
         top: 0,
         zIndex: 5,
     }}>
-        {props.children}
-    </div>,
+        <AnimatedVisibility visible={props.open}>
+            {props.children}
+        </AnimatedVisibility>
+    </div >,
 );
