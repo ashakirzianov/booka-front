@@ -12,7 +12,7 @@ export const Layer = themed(props =>
         minWidth: '100%',
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
-        backgroundColor: props.theme.color.background,
+        backgroundColor: props.theme.palette.background,
     }}>
         {props.children}
     </View>,

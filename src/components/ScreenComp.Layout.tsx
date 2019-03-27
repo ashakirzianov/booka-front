@@ -15,7 +15,7 @@ export const Header = themed<{
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: relative(1),
-            backgroundColor: props.theme.color.secondBack,
+            backgroundColor: props.theme.palette.secondBack,
         }}>
             {/* Left */}
             <Row>{props.children}</Row>

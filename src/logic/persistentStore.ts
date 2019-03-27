@@ -23,7 +23,7 @@ function validateState(restored: object | undefined): App | undefined {
 
 export const lightTheme: Theme = {
     fontFamily: 'Georgia',
-    color: {
+    palette: {
         foreground: '#321',
         background: '#cba',
         secondBack: '#987',
@@ -40,7 +40,7 @@ export const lightTheme: Theme = {
 };
 export const darkTheme: Theme = {
     fontFamily: 'Georgia',
-    color: {
+    palette: {
         foreground: '#999',
         background: '#000',
         secondBack: '#222',

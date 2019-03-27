@@ -24,7 +24,7 @@ export const Modal = themed<ModalBoxProps>(props =>
         >
             <View style={{
                 alignSelf: 'center',
-                backgroundColor: props.theme.color.secondBack,
+                backgroundColor: props.theme.palette.secondBack,
                 width: '100%',
                 maxWidth: '50em',
                 maxHeight: '100%',

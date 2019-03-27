@@ -17,17 +17,17 @@ type AllowedTextStyleProps = Pick<TextStyle,
 type TextProps = {
     style?: AllowedTextStyleProps,
     size?: keyof Theme['fontSize'],
-    color?: keyof Theme['color'],
-    hoverColor?: keyof Theme['color'],
+    color?: keyof Theme['palette'],
+    hoverColor?: keyof Theme['palette'],
 };
 export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: props.theme.color[props.color || 'foreground'],
+        color: props.theme.palette[props.color || 'foreground'],
         ...(props.hoverColor && {
             [':hover']: {
-                color: props.theme.color[props.hoverColor],
+                color: props.theme.palette[props.hoverColor],
             },
         }),
         ...props.style,
@@ -50,9 +50,9 @@ export const PanelLink = themed<LinkProps & { text: string }>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
-        color: props.theme.color.accent,
+        color: props.theme.palette.accent,
         [':hover']: {
-            color: props.theme.color.highlight,
+            color: props.theme.palette.highlight,
         },
         margin: relative(0.3),
     }}>
@@ -65,9 +65,9 @@ export const StretchLink = themed<{ to: string }>(props =>
         <Atoms.Link to={props.to} style={{
             fontSize: props.theme.fontSize.normal,
             fontFamily: props.theme.fontFamily,
-            color: props.theme.color.accent,
+            color: props.theme.palette.accent,
             [':hover']: {
-                color: props.theme.color.highlight,
+                color: props.theme.palette.highlight,
             },
             margin: relative(0.3),
         }}>

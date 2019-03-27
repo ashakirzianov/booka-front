@@ -24,14 +24,14 @@ export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
     <Atoms.Link {...props}>
         <div style={{
             border: 'solid',
-            borderColor: props.theme.color.accent,
-            color: props.theme.color.accent,
+            borderColor: props.theme.palette.accent,
+            color: props.theme.palette.accent,
             fontSize: props.theme.fontSize.normal,
             borderRadius: props.theme.radius,
             padding: relative(0.3), // TODO: extract somewhere ?
             [':hover']: {
-                borderColor: props.theme.color.highlight,
-                color: props.theme.color.highlight,
+                borderColor: props.theme.palette.highlight,
+                color: props.theme.palette.highlight,
             },
         }}>
             {props.children}
