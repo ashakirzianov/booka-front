@@ -11,6 +11,7 @@ export type Theme = {
         secondBack: Color,
         accent: Color,
         highlight: Color,
+        shadow: Color,
     },
     fontSize: {
         normal: FontSize,

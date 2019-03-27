@@ -29,6 +29,7 @@ export const lightTheme: Theme = {
         secondBack: '#987',
         accent: '#654',
         highlight: '#fff',
+        shadow: '#321',
     },
     fontSize: {
         normal: 26,
@@ -46,6 +47,7 @@ export const darkTheme: Theme = {
         secondBack: '#222',
         accent: '#ddd',
         highlight: '#fff',
+        shadow: '#222',
     },
     fontSize: {
         normal: 26,

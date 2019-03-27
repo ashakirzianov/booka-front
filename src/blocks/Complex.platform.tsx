@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback, themed, comp } from './comp-utils';
+import { Callback, themed } from './comp-utils';
 import { Text, PanelLink } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
@@ -31,6 +31,7 @@ export const Modal = themed<ModalBoxProps>(props =>
                 margin: '0 auto',
                 zIndex: 10,
                 borderRadius: props.theme.radius,
+                boxShadow: `5px 5px 5px ${props.theme.palette.shadow}`,
             }}
             >
                 <View style={{
@@ -60,12 +61,13 @@ export const Modal = themed<ModalBoxProps>(props =>
     </AnimatedVisibility>,
 );
 
-export const TopBar = comp<{ open: boolean }>(props =>
+export const TopBar = themed<{ open: boolean }>(props =>
     <div style={{
         width: '100%',
         position: 'fixed',
         top: 0,
         zIndex: 5,
+        boxShadow: `0px 3px 2px ${props.theme.palette.shadow}`,
     }}>
         <AnimatedVisibility visible={props.open}>
             {props.children}
