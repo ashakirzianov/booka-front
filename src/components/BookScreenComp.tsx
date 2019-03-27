@@ -20,11 +20,11 @@ export const BookScreenHeader = comp<BookScreen>(props =>
 );
 
 const LibButton = comp(props =>
-    <PanelLink text='<' to={linkForLib()} />,
+    <PanelLink icon='left' to={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
-    <PanelLink text='...' to={linkForToc(props.bi)} action={props.toggleToc} />,
+    <PanelLink icon='items' to={linkForToc(props.bi)} action={props.toggleToc} />,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>

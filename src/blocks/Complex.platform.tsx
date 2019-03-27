@@ -3,7 +3,6 @@ import { Callback, themed, comp } from './comp-utils';
 import { Text, PanelLink } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
-import { Icon } from './Icons';
 
 type ModalBoxProps = {
     open: boolean,
@@ -40,7 +39,7 @@ export const Modal = themed<ModalBoxProps>(props =>
                     flexDirection: 'row',
                 }}>
                     <View>
-                        <PanelLink action={props.toggle}><Icon name='close' /></PanelLink>
+                        <PanelLink action={props.toggle} icon='close' />
                     </View>
                     <View style={{
                         justifyContent: 'center',

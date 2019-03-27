@@ -6,6 +6,7 @@ import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
 import { LinkProps } from './Atoms.platform';
+import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
 
@@ -46,7 +47,7 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = themed<LinkProps & { text?: string }>(props =>
+export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
@@ -56,7 +57,7 @@ export const PanelLink = themed<LinkProps & { text?: string }>(props =>
         },
         margin: relative(0.3),
     }}>
-        {props.text}{props.children}
+        <Icon name={props.icon} />{props.children}
     </Atoms.Link>,
 );
 
