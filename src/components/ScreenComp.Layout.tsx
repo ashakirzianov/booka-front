@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    comp, ReactContent, TopPanel, AnimatedVisibility, Row,
+    comp, ReactContent, TopBar, AnimatedVisibility, Row,
     relative, Label, VoidCallback, Column, themed,
 } from '../blocks';
 
@@ -9,7 +9,7 @@ export const Header = themed<{
     right?: ReactContent,
     visible: boolean,
 }>(props =>
-    <TopPanel>
+    <TopBar>
         <AnimatedVisibility visible={props.visible}>
             {
                 props.visible ?
@@ -30,7 +30,7 @@ export const Header = themed<{
                     : null
             }
         </AnimatedVisibility>
-    </TopPanel>,
+    </TopBar>,
 );
 
 type ScreenLayoutProps = {

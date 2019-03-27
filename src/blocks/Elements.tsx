@@ -5,7 +5,6 @@ import { comp, themed, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
-import { platformValue } from '../platform';
 import { LinkProps } from './Atoms.platform';
 
 export * from './Elements.platform';
@@ -81,28 +80,4 @@ export const StretchLink = themed<{ to: string }>(props =>
             </div>
         </Atoms.Link>
     </View>,
-);
-
-export const FullScreen = themed(props =>
-    <View style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        width: platformValue({ mobile: '100%' }),
-        height: platformValue({ mobile: '100%' }),
-        backgroundColor: props.theme.color.background,
-    }}>
-        {props.children}
-    </View>,
-);
-
-export const TopPanel = comp(props =>
-    <div style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 5,
-    }}>
-        {props.children}
-    </div>,
 );
