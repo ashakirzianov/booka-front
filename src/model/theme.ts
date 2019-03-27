@@ -5,12 +5,13 @@ export type Color = string;
 export type Theme = {
     fontScale: number,
     fontFamily: FontFamily,
-    color: {
+    palette: {
         foreground: Color,
         background: Color,
         secondBack: Color,
         accent: Color,
         highlight: Color,
+        shadow: Color,
     },
     fontSize: {
         normal: FontSize,

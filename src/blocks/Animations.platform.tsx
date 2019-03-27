@@ -71,6 +71,6 @@ const VisibilityDiv = posed.div({
 
 export const AnimatedVisibility: Comp<{ visible: boolean }> = (props =>
     <VisibilityDiv pose={props.visible ? 'visible' : 'hidden'}>
-        {props.children}
+        {props.visible ? props.children : null}
     </VisibilityDiv>
 );

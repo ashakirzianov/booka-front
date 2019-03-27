@@ -23,12 +23,13 @@ function validateState(restored: object | undefined): App | undefined {
 
 export const lightTheme: Theme = {
     fontFamily: 'Georgia',
-    color: {
+    palette: {
         foreground: '#321',
         background: '#cba',
         secondBack: '#987',
         accent: '#654',
         highlight: '#fff',
+        shadow: '#321',
     },
     fontSize: {
         normal: 26,
@@ -40,12 +41,13 @@ export const lightTheme: Theme = {
 };
 export const darkTheme: Theme = {
     fontFamily: 'Georgia',
-    color: {
+    palette: {
         foreground: '#999',
         background: '#000',
         secondBack: '#222',
         accent: '#ddd',
         highlight: '#fff',
+        shadow: '#222',
     },
     fontSize: {
         normal: 26,

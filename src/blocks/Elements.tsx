@@ -5,8 +5,8 @@ import { comp, themed, relative } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme } from '../model';
-import { platformValue } from '../platform';
 import { LinkProps } from './Atoms.platform';
+import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
 
@@ -18,17 +18,17 @@ type AllowedTextStyleProps = Pick<TextStyle,
 type TextProps = {
     style?: AllowedTextStyleProps,
     size?: keyof Theme['fontSize'],
-    color?: keyof Theme['color'],
-    hoverColor?: keyof Theme['color'],
+    color?: keyof Theme['palette'],
+    hoverColor?: keyof Theme['palette'],
 };
 export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: props.theme.color[props.color || 'foreground'],
+        color: props.theme.palette[props.color || 'foreground'],
         ...(props.hoverColor && {
             [':hover']: {
-                color: props.theme.color[props.hoverColor],
+                color: props.theme.palette[props.hoverColor],
             },
         }),
         ...props.style,
@@ -47,17 +47,17 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = themed<LinkProps & { text: string }>(props =>
+export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
-        color: props.theme.color.accent,
+        color: props.theme.palette.accent,
         [':hover']: {
-            color: props.theme.color.highlight,
+            color: props.theme.palette.highlight,
         },
         margin: relative(0.3),
     }}>
-        {props.text}
+        <Icon name={props.icon} />{props.children}
     </Atoms.Link>,
 );
 
@@ -66,9 +66,9 @@ export const StretchLink = themed<{ to: string }>(props =>
         <Atoms.Link to={props.to} style={{
             fontSize: props.theme.fontSize.normal,
             fontFamily: props.theme.fontFamily,
-            color: props.theme.color.accent,
+            color: props.theme.palette.accent,
             [':hover']: {
-                color: props.theme.color.highlight,
+                color: props.theme.palette.highlight,
             },
             margin: relative(0.3),
         }}>
@@ -81,28 +81,4 @@ export const StretchLink = themed<{ to: string }>(props =>
             </div>
         </Atoms.Link>
     </View>,
-);
-
-export const FullScreen = themed(props =>
-    <View style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        width: platformValue({ mobile: '100%' }),
-        height: platformValue({ mobile: '100%' }),
-        backgroundColor: props.theme.color.background,
-    }}>
-        {props.children}
-    </View>,
-);
-
-export const TopPanel = comp(props =>
-    <div style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 5,
-    }}>
-        {props.children}
-    </div>,
 );

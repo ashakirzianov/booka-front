@@ -1,15 +1,13 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, ModalBox,
-    Label, PanelLink, comp,
+    connected, Row, relative, Clickable, Modal, PanelLink, comp,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
-import { letExp } from '../utils';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -22,28 +20,24 @@ export const BookScreenHeader = comp<BookScreen>(props =>
 );
 
 const LibButton = comp(props =>
-    <PanelLink text='<' to={linkForLib()} />,
+    <PanelLink icon='left' to={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
-    <PanelLink text='...' to={linkForToc(props.bi)} action={props.toggleToc} />,
+    <PanelLink icon='items' to={linkForToc(props.bi)} action={props.toggleToc} />,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
     <>
         <BookText book={props.book} />
         {
-            props.tocOpen && props.book.book === 'book'
-                ? <TableOfContentsBox toc={props.book.toc} />
+            props.book.book === 'book'
+                ? <TableOfContentsBox toc={props.book.toc} open={props.tocOpen} />
                 : null
         }
         {
             props.book.book === 'book'
-                ? letExp(footnoteForId(props.book.content, props.footnoteId), fn =>
-                    fn
-                        ? <FootnoteBox footnote={fn} />
-                        : null,
-                )
+                ? <FootnoteBox footnote={footnoteForId(props.book.content, props.footnoteId)} />
                 : null
         }
     </>,
@@ -61,40 +55,30 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 
 );
 
-const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents }>(props =>
-    <ModalBox heightPerc={95} maxWidth={60} header={
-        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelLink text='X' action={props.toggleToc} />
-            <Label text='Table of Contents' />
-            <Row style={{ flex: 1 }} />
-        </Row>
-    }
-        onExternalClick={props.toggleToc}
+const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents, open: boolean }>(props =>
+    <Modal title='Table of Contents' toggle={props.toggleToc} open={props.open}
     >
-
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
         </Row>
-    </ModalBox>,
+    </Modal>,
 );
 
 const FootnoteComp = comp<Footnote>(props =>
     <BookNodesComp nodes={props.content} />,
 );
 
-const FootnoteBox = connected([], ['openFootnote'])<{ footnote: Footnote }>(props =>
-    <ModalBox maxWidth={60} header={
-        <Row style={{ justifyContent: 'space-between', margin: relative(2) }}>
-            <PanelLink text='X' action={() => props.openFootnote(null)} />
-            <Label text={props.footnote.title || ''} />
-            <Row style={{ flex: 1 }} />
-        </Row>
-    }
-        onExternalClick={() => props.openFootnote(null)}
+const FootnoteBox = connected([], ['openFootnote'])<{ footnote?: Footnote }>(props =>
+    <Modal
+        title={props.footnote && props.footnote.title}
+        open={props.footnote !== undefined}
+        toggle={() => props.openFootnote(null)}
     >
-
-        <Row style={{ overflow: 'scroll' }}>
-            <FootnoteComp {...props.footnote} />
-        </Row>
-    </ModalBox>,
+        {
+            !props.footnote ? null :
+                <Row style={{ overflow: 'scroll' }}>
+                    <FootnoteComp {...props.footnote} />
+                </Row>
+        }
+    </Modal>,
 );
