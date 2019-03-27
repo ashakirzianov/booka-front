@@ -46,7 +46,7 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = themed<LinkProps & { text: string }>(props =>
+export const PanelLink = themed<LinkProps & { text?: string }>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
@@ -56,7 +56,7 @@ export const PanelLink = themed<LinkProps & { text: string }>(props =>
         },
         margin: relative(0.3),
     }}>
-        {props.text}
+        {props.text}{props.children}
     </Atoms.Link>,
 );
 
