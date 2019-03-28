@@ -18,7 +18,7 @@ export const Modal = comp<ModalBoxProps>(props =>
             flexDirection: 'column',
             position: 'fixed',
             top: 0, bottom: 0, left: 0, right: 0,
-            backgroundColor: 'rgba(0,0,0,0.7)',
+            backgroundColor: 'rgba(0,0,0,0.4)',
             zIndex: 10,
         }}
             onClick={props.toggle}
@@ -109,21 +109,21 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                     </>
                 }
             </Reference>
-            <Popper placement={props.placement}>
-                {
-                    ({ ref, style, placement }) =>
-                        <div ref={ref} style={{
-                            ...style,
-                        }} data-placement={placement}>
-                            {/* TODO: add arrows */}
-                            <AnimatedVisibility visible={open}>
+            <AnimatedVisibility visible={open}>
+                <Popper placement={props.placement}>
+                    {
+                        ({ ref, style, placement }) =>
+                            <div ref={ref} style={{
+                                ...style,
+                            }} data-placement={placement}>
+                                {/* TODO: add arrows */}
                                 <OverlayBox>
                                     {props.body}
                                 </OverlayBox>
-                            </AnimatedVisibility>
-                        </div>
-                }
-            </Popper>
-        </Manager>;
+                            </div>
+                    }
+                </Popper>
+            </AnimatedVisibility>
+        </Manager >;
     }
 }
