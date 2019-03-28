@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Callback, themed } from './comp-utils';
+import { Callback, themed, ReactContent, comp } from './comp-utils';
 import { Text, PanelLink } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
+import { Manager, Reference, Popper } from 'react-popper';
 
 type ModalBoxProps = {
     open: boolean,
@@ -73,4 +74,28 @@ export const TopBar = themed<{ open: boolean }>(props =>
             {props.children}
         </AnimatedVisibility>
     </div >,
+);
+
+export type WithPopoverProps = {
+    body: ReactContent,
+};
+export const WithPopover = comp<WithPopoverProps>(props =>
+    <Manager>
+        <Reference>
+            {({ ref }) => (
+                <div ref={ref} style={{ display: 'inline' }}>
+                    {props.body}
+                </div>
+            )}
+        </Reference>
+        <Popper placement='right'>
+            {
+                ({ ref, style, placement, arrowProps }) =>
+                    <div ref={ref} style={style} data-placement={placement}>
+                        {props.children}
+                        <div ref={arrowProps.ref} style={arrowProps.style} />
+                    </div>
+            }
+        </Popper>
+    </Manager>,
 );
