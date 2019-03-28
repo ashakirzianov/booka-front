@@ -5,6 +5,8 @@ import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 
+const headerHeight = relative(4);
+
 type ModalBoxProps = {
     open: boolean,
     title?: string,
@@ -25,20 +27,27 @@ export const Modal = comp<ModalBoxProps>(props =>
         >
             <OverlayBox>
                 <View style={{
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    flexDirection: 'row',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    height: headerHeight,
                 }}>
-                    <View>
-                        <PanelLink action={props.toggle} icon='close' />
-                    </View>
                     <View style={{
-                        justifyContent: 'center',
-                        flexDirection: 'column',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        boxShadow: '0 0 2px black',
                     }}>
-                        <Text>{props.title}</Text>
+                        <View>
+                            <PanelLink action={props.toggle} icon='close' />
+                        </View>
+                        <View style={{
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}>
+                            <Text>{props.title}</Text>
+                        </View>
+                        <View />
                     </View>
-                    <View />
                 </View>
                 <View style={{
                     overflowY: 'scroll',
@@ -58,11 +67,11 @@ export const TopBar = themed<{ open: boolean }>(props =>
             flexDirection: 'column',
             justifyContent: 'center',
             width: '100%',
-            height: relative(4),
+            height: headerHeight,
             position: 'fixed',
             top: 0, left: 0,
             zIndex: 5,
-            boxShadow: `0px 1px 1px ${props.theme.palette.shadow}`,
+            boxShadow: `0px 0px 2px ${props.theme.palette.shadow}`,
             backgroundColor: props.theme.palette.secondBack,
         }}>
             {props.children}
