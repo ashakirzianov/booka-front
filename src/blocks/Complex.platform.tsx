@@ -76,24 +76,37 @@ export type WithPopoverState = {
 export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
     public state = { open: false };
 
-    public toggleVisibility() {
+    public toggleVisibility = () => {
         this.setState({ open: !this.state.open });
     }
+
+    public hide = () => this.setState({ open: false });
 
     public render() {
         const props = this.props;
         const { open } = this.state;
         return <Manager>
             <Reference>
-                {({ ref }) => (
-                    <div ref={ref} style={{ display: 'flex' }}>
-                        {props.children(() => this.toggleVisibility())}
-                    </div>
-                )}
+                {({ ref }) =>
+                    <>
+                        {!open ? null :
+                            <div style={{
+                                position: 'fixed',
+                                top: 0, bottom: 0, left: 0, right: 0,
+                                zIndex: -10,
+                            }}
+                                onClick={this.hide}
+                            />
+                        }
+                        <div ref={ref} style={{ display: 'flex' }}>
+                            {props.children(this.toggleVisibility)}
+                        </div>
+                    </>
+                }
             </Reference>
             <Popper placement={props.placement}>
                 {
-                    ({ ref, style, placement, arrowProps }) =>
+                    ({ ref, style, placement }) =>
                         <div ref={ref} style={{
                             ...style,
                         }} data-placement={placement}>
