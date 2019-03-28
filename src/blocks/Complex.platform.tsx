@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, comp } from './comp-utils';
+import { Callback, themed, ReactContent, comp, relative } from './comp-utils';
 import { Text, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
@@ -52,17 +52,22 @@ export const Modal = comp<ModalBoxProps>(props =>
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>
-    <div style={{
-        width: '100%',
-        position: 'fixed',
-        top: 0,
-        zIndex: 5,
-        boxShadow: `0px 1px 1px ${props.theme.palette.shadow}`,
-    }}>
-        <AnimatedVisibility visible={props.open}>
+    <AnimatedVisibility visible={props.open}>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: '100%',
+            height: relative(4),
+            position: 'fixed',
+            top: 0, left: 0,
+            zIndex: 5,
+            boxShadow: `0px 1px 1px ${props.theme.palette.shadow}`,
+            backgroundColor: props.theme.palette.secondBack,
+        }}>
             {props.children}
-        </AnimatedVisibility>
-    </div >,
+        </div >
+    </AnimatedVisibility >,
 );
 
 export type WithPopoverProps = {

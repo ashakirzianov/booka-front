@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, Modal, PanelLink, comp, WithPopover, Text,
+    connected, Row, relative, Clickable, Modal, PanelLink,
+    comp, WithPopover, Text, Line,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -13,11 +14,15 @@ import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 
 export const BookScreenHeader = comp<BookScreen>(props =>
-    <>
-        <LibButton key='back' />
-        <OpenTocButton key='toc' bi={props.bl.id} />
-        <AppearanceButton key='appearance' />
-    </>,
+    <Line>
+        <Row>
+            <LibButton key='back' />
+            <OpenTocButton key='toc' bi={props.bl.id} />
+        </Row>
+        <Row>
+            <AppearanceButton key='appearance' />
+        </Row>
+    </Line>,
 );
 
 const LibButton = comp(() =>
