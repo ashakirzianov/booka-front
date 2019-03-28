@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent } from './comp-utils';
-import { Text, PanelLink } from './Elements';
+import { Callback, themed, ReactContent, comp } from './comp-utils';
+import { Text, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
@@ -10,7 +10,7 @@ type ModalBoxProps = {
     title?: string,
     toggle: Callback<any>,
 };
-export const Modal = themed<ModalBoxProps>(props =>
+export const Modal = comp<ModalBoxProps>(props =>
     <AnimatedVisibility visible={props.open}>
         <div style={{
             display: 'flex',
@@ -23,18 +23,7 @@ export const Modal = themed<ModalBoxProps>(props =>
         }}
             onClick={props.toggle}
         >
-            <View style={{
-                alignSelf: 'center',
-                backgroundColor: props.theme.palette.secondBack,
-                width: '100%',
-                maxWidth: '50em',
-                maxHeight: '100%',
-                margin: '0 auto',
-                zIndex: 10,
-                borderRadius: props.theme.radius,
-                boxShadow: `5px 5px 5px ${props.theme.palette.shadow}`,
-            }}
-            >
+            <OverlayBox>
                 <View style={{
                     flex: 1,
                     justifyContent: 'space-between',
@@ -57,7 +46,7 @@ export const Modal = themed<ModalBoxProps>(props =>
                 }}>
                     {props.children}
                 </View>
-            </View>
+            </OverlayBox>
         </div>
     </AnimatedVisibility>,
 );
@@ -68,7 +57,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
         position: 'fixed',
         top: 0,
         zIndex: 5,
-        boxShadow: `0px 3px 2px ${props.theme.palette.shadow}`,
+        boxShadow: `0px 1px 1px ${props.theme.palette.shadow}`,
     }}>
         <AnimatedVisibility visible={props.open}>
             {props.children}
@@ -85,7 +74,7 @@ export type WithPopoverState = {
     open: boolean,
 };
 export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
-    public state = { open: true };
+    public state = { open: false };
 
     public toggleVisibility() {
         this.setState({ open: !this.state.open });
@@ -110,7 +99,9 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                         }} data-placement={placement}>
                             {/* TODO: add arrows */}
                             <AnimatedVisibility visible={open}>
-                                {props.body}
+                                <OverlayBox>
+                                    {props.body}
+                                </OverlayBox>
                             </AnimatedVisibility>
                         </div>
                 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, Modal, PanelLink, comp, WithPopover,
+    connected, Row, relative, Clickable, Modal, PanelLink, comp, WithPopover, Text,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -38,9 +38,7 @@ const AppearanceButton = comp(() =>
 );
 
 const ThemePicker = comp(props =>
-    <div style={{ background: 'orange' }}>
-        Theme picker
-    </div>,
+    <Text>Theme picker</Text>,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
