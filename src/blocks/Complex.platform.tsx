@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, comp } from './comp-utils';
+import { Callback, themed, ReactContent } from './comp-utils';
 import { Text, PanelLink } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
-import { Manager, Reference, Popper } from 'react-popper';
+import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 
 type ModalBoxProps = {
     open: boolean,
@@ -78,24 +78,43 @@ export const TopBar = themed<{ open: boolean }>(props =>
 
 export type WithPopoverProps = {
     body: ReactContent,
+    placement: PopperProps['placement'],
+    children: (onClick: Callback<void>) => ReactContent,
 };
-export const WithPopover = comp<WithPopoverProps>(props =>
-    <Manager>
-        <Reference>
-            {({ ref }) => (
-                <div ref={ref} style={{ display: 'inline' }}>
-                    {props.body}
-                </div>
-            )}
-        </Reference>
-        <Popper placement='right'>
-            {
-                ({ ref, style, placement, arrowProps }) =>
-                    <div ref={ref} style={style} data-placement={placement}>
-                        {props.children}
-                        <div ref={arrowProps.ref} style={arrowProps.style} />
+export type WithPopoverState = {
+    open: boolean,
+};
+export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
+    public state = { open: true };
+
+    public toggleVisibility() {
+        this.setState({ open: !this.state.open });
+    }
+
+    public render() {
+        const props = this.props;
+        const { open } = this.state;
+        return <Manager>
+            <Reference>
+                {({ ref }) => (
+                    <div ref={ref} style={{ display: 'flex' }}>
+                        {props.children(() => this.toggleVisibility())}
                     </div>
-            }
-        </Popper>
-    </Manager>,
-);
+                )}
+            </Reference>
+            <Popper placement={props.placement}>
+                {
+                    ({ ref, style, placement, arrowProps }) =>
+                        <div ref={ref} style={{
+                            ...style,
+                        }} data-placement={placement}>
+                            {/* TODO: add arrows */}
+                            <AnimatedVisibility visible={open}>
+                                {props.body}
+                            </AnimatedVisibility>
+                        </div>
+                }
+            </Popper>
+        </Manager>;
+    }
+}

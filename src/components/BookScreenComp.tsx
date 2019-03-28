@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, Modal, PanelLink, comp,
+    connected, Row, relative, Clickable, Modal, PanelLink, comp, WithPopover,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
@@ -16,15 +16,31 @@ export const BookScreenHeader = comp<BookScreen>(props =>
     <>
         <LibButton key='back' />
         <OpenTocButton key='toc' bi={props.bl.id} />
+        <AppearanceButton key='appearance' />
     </>,
 );
 
-const LibButton = comp(props =>
+const LibButton = comp(() =>
     <PanelLink icon='left' to={linkForLib()} />,
 );
 
 const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
     <PanelLink icon='items' to={linkForToc(props.bi)} action={props.toggleToc} />,
+);
+
+const AppearanceButton = comp(() =>
+    <WithPopover
+        placement='bottom'
+        body={<ThemePicker />}
+    >
+        {onClick => <PanelLink icon='letter' action={onClick} />}
+    </WithPopover>,
+);
+
+const ThemePicker = comp(props =>
+    <div style={{ background: 'orange' }}>
+        Theme picker
+    </div>,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
