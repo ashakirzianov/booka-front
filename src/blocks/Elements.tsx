@@ -37,6 +37,20 @@ export const Text = themed<TextProps>(props =>
     </Atoms.Text>,
 );
 
+export const Link = themed<LinkProps>(props =>
+    <Atoms.Link to={props.to} action={props.action} style={{
+        ...props.style,
+        fontSize: props.theme.fontSize.normal,
+        fontFamily: props.theme.fontFamily,
+        color: palette(props).accent,
+        [':hover']: {
+            color: palette(props).highlight,
+        },
+    }}>
+        {props.children}
+    </Atoms.Link>,
+);
+
 export const Label = comp<{ text: string, margin?: string }>(props =>
     <Text style={{ margin: props.margin }} size='normal'>
         {props.text}
@@ -47,33 +61,17 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
-    <Atoms.Link to={props.to} action={props.action} style={{
-        fontSize: props.theme.fontSize.normal,
-        fontFamily: props.theme.fontFamily,
-        color: palette(props).accent,
-        [':hover']: {
-            color: palette(props).highlight,
-        },
-        margin: relative(0.5),
-    }}>
+export const PanelLink = comp<LinkProps & { icon: IconName }>(props =>
+    <Link to={props.to} action={props.action} style={{ margin: relative(0.5) }}>
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
-    </Atoms.Link>,
+    </Link>,
 );
 
-export const StretchLink = themed<{ to: string }>(props =>
+export const StretchLink = themed<LinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <Atoms.Link to={props.to} style={{
-            fontSize: props.theme.fontSize.normal,
-            fontFamily: props.theme.fontFamily,
-            color: palette(props).accent,
-            [':hover']: {
-                color: palette(props).highlight,
-            },
-            margin: relative(0.3),
-        }}>
+        <Link to={props.to} style={{ margin: relative(0.5) }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -81,7 +79,7 @@ export const StretchLink = themed<{ to: string }>(props =>
             }}>
                 {props.children}
             </div>
-        </Atoms.Link>
+        </Link>
     </View>,
 );
 
