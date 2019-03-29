@@ -22,7 +22,7 @@ type TextProps = {
     color?: keyof Palette,
     hoverColor?: keyof Palette,
 };
-export const Text = themed<TextProps>(props =>
+export const ThemedText = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
@@ -37,6 +37,8 @@ export const Text = themed<TextProps>(props =>
         {props.children}
     </Atoms.Text>,
 );
+
+export const PlainText = Atoms.Text;
 
 export const Link = themed<LinkProps>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
@@ -53,9 +55,9 @@ export const Link = themed<LinkProps>(props =>
 );
 
 export const Label = comp<{ text: string, margin?: string }>(props =>
-    <Text style={{ margin: props.margin }} size='normal'>
+    <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
-    </Text>,
+    </ThemedText>,
 );
 
 export const ActivityIndicator = comp(props =>

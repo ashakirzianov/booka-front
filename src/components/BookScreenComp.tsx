@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, Link, Text,
+    comp, WithPopover, Line, Column, Link, ThemedText,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents } from '../model';
 import { linkForLib, linkForToc } from '../logic';
@@ -125,7 +125,7 @@ const FontScaleButton = connected([], ['incrementScale'])<{
         justifyContent: 'center',
     }}>
         <Link action={() => props.incrementScale(props.increment)}>
-            <Text style={{ fontSize: props.size }}>Abc</Text>
+            <ThemedText style={{ fontSize: props.size }}>Abc</ThemedText>
         </Link>
     </Column>,
 );

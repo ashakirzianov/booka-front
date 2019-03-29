@@ -11,36 +11,36 @@ import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
     comp, Callback, relative, connected,
-    Row, NewLine, Tab, Inline, Text,
-    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link,
+    Row, NewLine, Tab, Inline, ThemedText,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <Text>{props.text}</Text>
+        <ThemedText>{props.text}</ThemedText>
     </Row>,
 );
 
 const PartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <Text style={{ fontWeight: 'bold' }} size='large'>{props.text}</Text>
+        <ThemedText style={{ fontWeight: 'bold' }} size='large'>{props.text}</ThemedText>
     </Row>,
 );
 
 const SubpartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <Text style={{ fontWeight: 'bold' }}>{props.text}</Text>
+        <ThemedText style={{ fontWeight: 'bold' }}>{props.text}</ThemedText>
     </Row>,
 );
 
 const BookTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <Text style={{ fontWeight: 'bold' }} size='largest'>{props.text}</Text>
+        <ThemedText style={{ fontWeight: 'bold' }} size='largest'>{props.text}</ThemedText>
     </Row>,
 );
 
 const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
-    <Text style={{
+    <PlainText style={{
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
     }}>
         {props.children}
@@ -49,11 +49,11 @@ const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
                 ? [<NewLine key='nl' />, <Tab key='tab' />]
                 : null
         }
-    </Text>,
+    </PlainText>,
 );
 
 const SimpleSpanComp = comp<{ s: SimpleSpan }>(props =>
-    <Text>{props.s}</Text>,
+    <PlainText>{props.s}</PlainText>,
 );
 const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
@@ -65,9 +65,9 @@ const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
 );
 const FootnoteSpanComp = connected([], ['openFootnote'])<{ s: FootnoteSpan }>(props =>
     <Link action={() => props.openFootnote(props.s.id)}>
-        <Text color='accent' hoverColor='highlight'>
+        <ThemedText color='accent' hoverColor='highlight'>
             {props.s.text}
-        </Text>
+        </ThemedText>
     </Link>,
 );
 const SpanComp = comp<{ span: Span }>(props =>
@@ -101,14 +101,14 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
 );
 
 export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
-    <>
+    <ThemedText>
         {
             buildNodes(props.nodes, [], {
                 refHandler: () => undefined,
                 range: bookRange(),
             })
         }
-    </>,
+    </ThemedText>,
 );
 
 type RefMap = { [k in string]?: RefType };
@@ -165,12 +165,14 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
-            <IncrementalLoad
-                increment={250}
-                initial={50}
-            >
-                {buildBook(content, params)}
-            </IncrementalLoad>
+            <ThemedText>
+                <IncrementalLoad
+                    increment={250}
+                    initial={50}
+                >
+                    {buildBook(content, params)}
+                </IncrementalLoad>
+            </ThemedText>
             {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
         </ScrollView>;
     }

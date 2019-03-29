@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
-import { Text, PanelLink, OverlayBox } from './Elements';
+import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
@@ -47,7 +47,7 @@ export const Modal = comp<ModalBoxProps>(props =>
                             justifyContent: 'center',
                             flexDirection: 'column',
                         }}>
-                            <Text>{props.title}</Text>
+                            <ThemedText>{props.title}</ThemedText>
                         </View>
                         <View />
                     </View>
