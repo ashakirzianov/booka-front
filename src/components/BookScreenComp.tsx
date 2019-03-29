@@ -4,7 +4,7 @@ import {
     connected, Row, relative, Clickable, Modal, PanelLink,
     comp, WithPopover, Line, Column, LinkButton,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, whitePalette, sepiaPalette, darkPalette } from '../model';
+import { BookScreen, Book, Footnote, BookId } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
@@ -49,9 +49,9 @@ const ThemePicker = connected([], ['incrementScale', 'setPalette'])(props =>
             <LinkButton action={() => props.incrementScale(+0.1)}>A</LinkButton>
         </Row>
         <Row style={{ justifyContent: 'space-around' }}>
-            <LinkButton action={() => props.setPalette(whitePalette)}>B</LinkButton>
-            <LinkButton action={() => props.setPalette(sepiaPalette)}>B</LinkButton>
-            <LinkButton action={() => props.setPalette(darkPalette)}>B</LinkButton>
+            <LinkButton action={() => props.setPalette('light')}>B</LinkButton>
+            <LinkButton action={() => props.setPalette('sepia')}>B</LinkButton>
+            <LinkButton action={() => props.setPalette('dark')}>B</LinkButton>
         </Row>
     </Column>,
 );

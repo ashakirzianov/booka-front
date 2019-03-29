@@ -2,7 +2,7 @@ import {
     readValue,
     // storeValue,
 } from './persistentStore.platform';
-import { App, libraryScreen, library, defaultTheme } from '../model';
+import { App, libraryScreen, library, defaultTheme, defaultPaletteName } from '../model';
 
 const storeKey = 'state';
 export function storeState(state: App) {
@@ -27,5 +27,6 @@ function createNewState(): App {
         pathToOpen: null,
         controlsVisible: true,
         theme: defaultTheme,
+        palette: defaultPaletteName,
     };
 }
