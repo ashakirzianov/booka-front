@@ -10,7 +10,7 @@ function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
 
 export type AllowedViewStyle = Pick<ViewStyle,
     | 'justifyContent' | 'width' | 'height' | 'alignItems'
-    | 'maxWidth' | 'overflow' | 'margin'
+    | 'maxWidth' | 'overflow' | 'margin' | 'padding'
     | 'flex' // TODO: do not allow ?
 > & {
     position?: ViewStyle['position'] | 'fixed',

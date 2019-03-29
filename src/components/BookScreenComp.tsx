@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, LinkButton,
+    comp, WithPopover, Line, Column, Link, Text,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId } from '../model';
-import { TableOfContents } from '../model/tableOfContent';
+import { BookScreen, Book, Footnote, BookId, TableOfContents } from '../model';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
@@ -40,20 +39,6 @@ const AppearanceButton = comp(() =>
     >
         {onClick => <PanelLink icon='letter' action={onClick} />}
     </WithPopover>,
-);
-
-const ThemePicker = connected([], ['incrementScale', 'setPalette'])(props =>
-    <Column>
-        <Row style={{ justifyContent: 'space-around' }}>
-            <LinkButton action={() => props.incrementScale(-0.1)}>a</LinkButton>
-            <LinkButton action={() => props.incrementScale(+0.1)}>A</LinkButton>
-        </Row>
-        <Row style={{ justifyContent: 'space-around' }}>
-            <LinkButton action={() => props.setPalette('light')}>B</LinkButton>
-            <LinkButton action={() => props.setPalette('sepia')}>B</LinkButton>
-            <LinkButton action={() => props.setPalette('dark')}>B</LinkButton>
-        </Row>
-    </Column>,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
@@ -110,4 +95,51 @@ const FootnoteBox = connected([], ['openFootnote'])<{ footnote?: Footnote }>(pro
                 </Row>
         }
     </Modal>,
+);
+
+const ThemePicker = comp(props =>
+    <Column>
+        <FontScale />
+        <PalettePicker />
+    </Column>,
+);
+
+const FontScale = comp(props =>
+    <Column style={{
+        justifyContent: 'center',
+        height: relative(4),
+        width: relative(10),
+    }}>
+        <Row style={{ justifyContent: 'space-around' }}>
+            <FontScaleButton increment={-0.1} size={18} />
+            <FontScaleButton increment={0.1} size={36} />
+        </Row>
+    </Column>,
+);
+
+const FontScaleButton = connected([], ['incrementScale'])<{
+    increment: number,
+    size: number,
+}>(props =>
+    <Column style={{
+        justifyContent: 'center',
+    }}>
+        <Link action={() => props.incrementScale(props.increment)}>
+            <Text style={{ fontSize: props.size }}>Abc</Text>
+        </Link>
+    </Column>,
+);
+
+const PalettePicker = connected([], ['setPalette'])(props =>
+    <Column style={{
+        justifyContent: 'center',
+        height: relative(4),
+        width: relative(10),
+    }}>
+        <Row style={{ justifyContent: 'space-around' }}>
+            <Link action={() => props.setPalette('light')}>B</Link>
+            <Link action={() => props.setPalette('sepia')}>B</Link>
+            <Link action={() => props.setPalette('dark')}>B</Link>
+        </Row>
+    </Column>,
 );

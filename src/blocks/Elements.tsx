@@ -14,6 +14,7 @@ type TextStyle = Defined<Atoms.TextProps['style']>;
 type AllowedTextStyleProps = Pick<TextStyle,
     | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
     | 'textAlign'
+    | 'fontSize' // TODO: disallow ?
 >;
 type TextProps = {
     style?: AllowedTextStyleProps,
@@ -94,6 +95,7 @@ export const OverlayBox = themed(props =>
         zIndex: 10,
         borderRadius: props.theme.radius,
         boxShadow: `0px 0px 10px ${palette(props).shadow}`,
+        padding: relative(1),
     }}
     >
         {props.children}

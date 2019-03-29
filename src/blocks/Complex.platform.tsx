@@ -36,7 +36,6 @@ export const Modal = comp<ModalBoxProps>(props =>
                         flex: 1,
                         justifyContent: 'space-between',
                         flexDirection: 'row',
-                        boxShadow: '0 0 2px black',
                     }}>
                         <View style={{
                             justifyContent: 'center',
