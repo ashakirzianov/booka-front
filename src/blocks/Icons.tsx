@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { FaTimes, FaAngleLeft, FaBars } from 'react-icons/fa';
+import { FaTimes, FaAngleLeft, FaBars, FaFont } from 'react-icons/fa';
 import { assertNever } from '../utils';
 import { comp } from './comp-utils';
 
-export type IconName = 'close' | 'left' | 'items';
+export type IconName = 'close' | 'left' | 'items' | 'letter';
 
 function iconForName(name: IconName) {
     switch (name) {
@@ -14,6 +14,8 @@ function iconForName(name: IconName) {
             return <FaAngleLeft />;
         case 'items':
             return <FaBars />;
+        case 'letter':
+            return <FaFont />;
         default:
             return assertNever(name);
     }

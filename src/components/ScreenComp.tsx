@@ -10,7 +10,6 @@ import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 export const ScreenComp = connected(['controlsVisible'])<Screen>(props =>
     <ScreenLayout
         headerVisible={props.controlsVisible}
-        headerTitle={screenTitle(props)}
         header={<Header {...props} />}
     >
         <Content {...props} />
@@ -32,9 +31,3 @@ const Header = comp<Screen>(props =>
         }
     </Row>,
 );
-
-function screenTitle(screen: Screen) {
-    return screen.screen === 'library' ? 'Library'
-        : screen.screen === 'book' ? undefined
-            : assertNever(screen);
-}

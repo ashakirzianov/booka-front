@@ -55,9 +55,11 @@ export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
         [':hover']: {
             color: props.theme.palette.highlight,
         },
-        margin: relative(0.3),
+        margin: relative(0.5),
     }}>
-        <Icon name={props.icon} />{props.children}
+        <Atoms.Column style={{ justifyContent: 'center' }}>
+            <Icon name={props.icon} />{props.children}
+        </Atoms.Column>
     </Atoms.Link>,
 );
 
@@ -81,4 +83,32 @@ export const StretchLink = themed<{ to: string }>(props =>
             </div>
         </Atoms.Link>
     </View>,
+);
+
+export const OverlayBox = themed(props =>
+    <View style={{
+        alignSelf: 'center',
+        backgroundColor: props.theme.palette.secondBack,
+        width: '100%',
+        maxWidth: '50em',
+        maxHeight: '100%',
+        margin: '0 auto',
+        zIndex: 10,
+        borderRadius: props.theme.radius,
+        boxShadow: `0px 0px 20px ${props.theme.palette.shadow}`,
+    }}
+    >
+        {props.children}
+    </View>,
+);
+
+export const Line = comp(props =>
+    <Atoms.Row style={{
+        width: '100%',
+        justifyContent: 'space-between',
+        padding: relative(1.5),
+
+    }}>
+        {props.children}
+    </Atoms.Row>,
 );

@@ -24,12 +24,12 @@ function validateState(restored: object | undefined): App | undefined {
 export const lightTheme: Theme = {
     fontFamily: 'Georgia',
     palette: {
-        foreground: '#321',
-        background: '#cba',
-        secondBack: '#987',
-        accent: '#654',
-        highlight: '#fff',
-        shadow: '#321',
+        foreground: '#5f3e24',
+        background: '#f9f3e9',
+        secondBack: '#e6e0d6',
+        accent: '#987',
+        highlight: '#321',
+        shadow: '#000',
     },
     fontSize: {
         normal: 26,
