@@ -34,10 +34,12 @@ export const Modal = comp<ModalBoxProps>(props =>
                 }}>
                     <View style={{
                         flex: 1,
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                         flexDirection: 'row',
                     }}>
                         <View style={{
+                            position: 'absolute',
+                            top: 0, left: 0, bottom: 0, right: 0,
                             justifyContent: 'center',
                             flexDirection: 'column',
                         }}>
