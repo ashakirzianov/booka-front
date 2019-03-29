@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, Link, PlainText, hoverable,
+    comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { linkForLib, linkForToc } from '../logic';
@@ -11,7 +11,6 @@ import { footnoteForId } from '../model/book.utils';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { View } from 'react-native';
 
 export const BookScreenHeader = comp<BookScreen>(props =>
     <Line>
@@ -103,6 +102,7 @@ const ThemePicker = comp(props =>
         width: relative(14),
     }}>
         <FontScale />
+        <Separator />
         <PalettePicker />
     </Column>,
 );
@@ -110,7 +110,7 @@ const ThemePicker = comp(props =>
 const FontScale = comp(() =>
     <Column style={{
         justifyContent: 'center',
-        height: relative(4),
+        height: relative(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
             <FontScaleButton increment={-0.1} size={18} />
@@ -135,7 +135,7 @@ const FontScaleButton = connected([], ['incrementScale'])<{
 const PalettePicker = comp(() =>
     <Column style={{
         justifyContent: 'center',
-        height: relative(4),
+        height: relative(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
             <PaletteButton name='light' text='L' />

@@ -20,6 +20,10 @@ export const DottedLine = comp(props =>
     }} />,
 );
 
+export const Separator = comp(() =>
+    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />,
+);
+
 export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
     <Atoms.Link {...props}>
         <div style={{
