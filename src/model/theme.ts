@@ -47,7 +47,7 @@ export const darkPalette: Palette = {
     secondBack: '#222',
     accent: '#ddd',
     highlight: '#fff',
-    shadow: '#222',
+    shadow: '#555',
 };
 
 const defaultPalette = whitePalette;

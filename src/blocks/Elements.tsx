@@ -95,7 +95,7 @@ export const OverlayBox = themed(props =>
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 20px ${props.theme.palette.shadow}`,
+        boxShadow: `0px 0px 10px ${props.theme.palette.shadow}`,
     }}
     >
         {props.children}
