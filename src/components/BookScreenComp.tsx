@@ -70,7 +70,7 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 );
 
 const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents, open: boolean }>(props =>
-    <Modal title='Table of Contents' toggle={props.toggleToc} open={props.open}
+    <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
     >
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
