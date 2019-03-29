@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    comp, Row, Text, Tab, relative,
+    comp, Row, ThemedText, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
 import { bookLocator, pathToString } from '../model';
@@ -11,7 +11,7 @@ import { linkForBook } from '../logic/routing';
 
 const TocHeader = comp<{ text: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
-        <Text size='large'>{props.text}</Text>
+        <ThemedText size='large'>{props.text}</ThemedText>
     </Row>,
 );
 

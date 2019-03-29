@@ -4,7 +4,15 @@ import {
 import { buildPartialReducers } from './redux-utils';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    theme: {},
+    theme: {
+        setPalette: (theme, palette) => ({
+            ...theme,
+            currentPalette: palette,
+        }),
+        incrementScale: (theme, scaleIncrement) => theme.fontScale + scaleIncrement > 0
+            ? { ...theme, fontScale: theme.fontScale + scaleIncrement }
+            : theme,
+    },
     screen: {
         navigateToScreen: {
             pending: (current, loading) => loading,

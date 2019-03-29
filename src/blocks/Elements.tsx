@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { Defined } from '../utils';
-import { comp, themed, relative } from './comp-utils';
+import { comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
-import { Theme } from '../model';
+import { Theme, Palette } from '../model';
 import { LinkProps } from './Atoms.platform';
 import { IconName, Icon } from './Icons';
 
@@ -14,21 +14,22 @@ type TextStyle = Defined<Atoms.TextProps['style']>;
 type AllowedTextStyleProps = Pick<TextStyle,
     | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
     | 'textAlign'
+    | 'fontSize' // TODO: disallow ?
 >;
 type TextProps = {
     style?: AllowedTextStyleProps,
     size?: keyof Theme['fontSize'],
-    color?: keyof Theme['palette'],
-    hoverColor?: keyof Theme['palette'],
+    color?: keyof Palette,
+    hoverColor?: keyof Palette,
 };
-export const Text = themed<TextProps>(props =>
+export const ThemedText = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: props.theme.palette[props.color || 'foreground'],
+        color: palette(props)[props.color || 'text'],
         ...(props.hoverColor && {
             [':hover']: {
-                color: props.theme.palette[props.hoverColor],
+                color: palette(props)[props.hoverColor],
             },
         }),
         ...props.style,
@@ -37,43 +38,43 @@ export const Text = themed<TextProps>(props =>
     </Atoms.Text>,
 );
 
+export const PlainText = Atoms.Text;
+
+export const Link = themed<LinkProps>(props =>
+    <Atoms.Link to={props.to} action={props.action} style={{
+        ...props.style,
+        fontSize: props.theme.fontSize.normal,
+        fontFamily: props.theme.fontFamily,
+        color: palette(props).accent,
+        [':hover']: {
+            color: palette(props).highlight,
+        },
+    }}>
+        {props.children}
+    </Atoms.Link>,
+);
+
 export const Label = comp<{ text: string, margin?: string }>(props =>
-    <Text style={{ margin: props.margin }} size='normal'>
+    <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
-    </Text>,
+    </ThemedText>,
 );
 
 export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
-    <Atoms.Link to={props.to} action={props.action} style={{
-        fontSize: props.theme.fontSize.normal,
-        fontFamily: props.theme.fontFamily,
-        color: props.theme.palette.accent,
-        [':hover']: {
-            color: props.theme.palette.highlight,
-        },
-        margin: relative(0.5),
-    }}>
+export const PanelLink = comp<LinkProps & { icon: IconName }>(props =>
+    <Link to={props.to} action={props.action} style={{ margin: relative(0.5) }}>
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
-    </Atoms.Link>,
+    </Link>,
 );
 
-export const StretchLink = themed<{ to: string }>(props =>
+export const StretchLink = themed<LinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <Atoms.Link to={props.to} style={{
-            fontSize: props.theme.fontSize.normal,
-            fontFamily: props.theme.fontFamily,
-            color: props.theme.palette.accent,
-            [':hover']: {
-                color: props.theme.palette.highlight,
-            },
-            margin: relative(0.3),
-        }}>
+        <Link to={props.to} style={{ margin: relative(0.5) }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -81,21 +82,22 @@ export const StretchLink = themed<{ to: string }>(props =>
             }}>
                 {props.children}
             </div>
-        </Atoms.Link>
+        </Link>
     </View>,
 );
 
 export const OverlayBox = themed(props =>
     <View style={{
         alignSelf: 'center',
-        backgroundColor: props.theme.palette.secondBack,
+        backgroundColor: palette(props).secondary,
         width: '100%',
         maxWidth: '50em',
         maxHeight: '100%',
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 20px ${props.theme.palette.shadow}`,
+        boxShadow: `0px 0px 10px ${palette(props).shadow}`,
+        padding: relative(1),
     }}
     >
         {props.children}

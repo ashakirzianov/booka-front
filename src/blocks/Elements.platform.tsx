@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { themed, comp, relative, hoverable } from './comp-utils';
+import { themed, comp, relative, hoverable, palette } from './comp-utils';
 
 export const Inline = comp(props =>
     <div style={{ display: 'inline' }}>{props.children}</div>,
@@ -20,18 +20,22 @@ export const DottedLine = comp(props =>
     }} />,
 );
 
+export const Separator = comp(() =>
+    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />,
+);
+
 export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
     <Atoms.Link {...props}>
         <div style={{
             border: 'solid',
-            borderColor: props.theme.palette.accent,
-            color: props.theme.palette.accent,
+            borderColor: palette(props).accent,
+            color: palette(props).accent,
             fontSize: props.theme.fontSize.normal,
             borderRadius: props.theme.radius,
             padding: relative(0.3), // TODO: extract somewhere ?
             [':hover']: {
-                borderColor: props.theme.palette.highlight,
-                color: props.theme.palette.highlight,
+                borderColor: palette(props).highlight,
+                color: palette(props).highlight,
             },
         }}>
             {props.children}

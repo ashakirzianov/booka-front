@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, comp, relative } from './comp-utils';
-import { Text, PanelLink, OverlayBox } from './Elements';
+import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
+import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
@@ -36,7 +36,6 @@ export const Modal = comp<ModalBoxProps>(props =>
                         flex: 1,
                         justifyContent: 'space-between',
                         flexDirection: 'row',
-                        boxShadow: '0 0 2px black',
                     }}>
                         <View style={{
                             justifyContent: 'center',
@@ -48,7 +47,7 @@ export const Modal = comp<ModalBoxProps>(props =>
                             justifyContent: 'center',
                             flexDirection: 'column',
                         }}>
-                            <Text>{props.title}</Text>
+                            <ThemedText>{props.title}</ThemedText>
                         </View>
                         <View />
                     </View>
@@ -75,8 +74,8 @@ export const TopBar = themed<{ open: boolean }>(props =>
             position: 'fixed',
             top: 0, left: 0,
             zIndex: 5,
-            boxShadow: `0px 0px 2px ${props.theme.palette.shadow}`,
-            backgroundColor: props.theme.palette.secondBack,
+            boxShadow: `0px 0px 2px ${palette(props).shadow}`,
+            backgroundColor: palette(props).secondary,
         }}>
             {props.children}
         </div >
