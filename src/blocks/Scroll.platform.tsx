@@ -1,13 +1,4 @@
-import * as React from 'react';
-
-export type RefType = HTMLDivElement | null;
-export type RefHandler = (ref: RefType) => void;
-export function refable<T>(C: React.ComponentType<T>) {
-    return React.forwardRef((props: T, ref: React.Ref<HTMLDivElement>) =>
-        <div ref={ref} style={{ display: 'inline' }}>
-            <C {...props} />
-        </div>);
-}
+import { RefType } from './comp-utils';
 
 export function isPartiallyVisible(ref?: RefType) {
     if (ref) {

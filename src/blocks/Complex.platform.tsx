@@ -4,6 +4,7 @@ import { Text, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
+import { Refable } from './comp-utils.platform';
 
 const headerHeight = relative(4);
 
@@ -115,9 +116,9 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                                 onClick={this.hide}
                             />
                         }
-                        <div ref={ref} style={{ display: 'flex' }}>
+                        <Refable ref={ref}>
                             {props.children(this.toggleVisibility)}
-                        </div>
+                        </Refable>
                     </>
                 }
             </Reference>
