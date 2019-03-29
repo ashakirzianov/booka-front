@@ -25,7 +25,7 @@ export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: palette(props)[props.color || 'foreground'],
+        color: palette(props)[props.color || 'text'],
         ...(props.hoverColor && {
             [':hover']: {
                 color: palette(props)[props.hoverColor],
@@ -88,7 +88,7 @@ export const StretchLink = themed<{ to: string }>(props =>
 export const OverlayBox = themed(props =>
     <View style={{
         alignSelf: 'center',
-        backgroundColor: palette(props).secondBack,
+        backgroundColor: palette(props).secondary,
         width: '100%',
         maxWidth: '50em',
         maxHeight: '100%',

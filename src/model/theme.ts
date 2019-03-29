@@ -3,9 +3,9 @@ export type FontSize = number;
 export type Color = string;
 
 export type Palette = {
-    foreground: Color,
-    background: Color,
-    secondBack: Color,
+    text: Color,
+    primary: Color,
+    secondary: Color,
     accent: Color,
     highlight: Color,
     shadow: Color,

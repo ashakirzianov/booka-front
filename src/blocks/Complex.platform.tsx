@@ -76,7 +76,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
             top: 0, left: 0,
             zIndex: 5,
             boxShadow: `0px 0px 2px ${palette(props).shadow}`,
-            backgroundColor: palette(props).secondBack,
+            backgroundColor: palette(props).secondary,
         }}>
             {props.children}
         </div >
