@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Text, Line,
+    comp, WithPopover, Line, Column, LinkButton,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId } from '../model';
+import { BookScreen, Book, Footnote, BookId, whitePalette, sepiaPalette, darkPalette } from '../model';
 import { TableOfContents } from '../model/tableOfContent';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
@@ -42,8 +42,18 @@ const AppearanceButton = comp(() =>
     </WithPopover>,
 );
 
-const ThemePicker = comp(props =>
-    <Text>Theme picker</Text>,
+const ThemePicker = connected([], ['incrementScale', 'setPalette'])(props =>
+    <Column>
+        <Row style={{ justifyContent: 'space-around' }}>
+            <LinkButton action={() => props.incrementScale(-0.1)}>a</LinkButton>
+            <LinkButton action={() => props.incrementScale(+0.1)}>A</LinkButton>
+        </Row>
+        <Row style={{ justifyContent: 'space-around' }}>
+            <LinkButton action={() => props.setPalette(whitePalette)}>B</LinkButton>
+            <LinkButton action={() => props.setPalette(sepiaPalette)}>B</LinkButton>
+            <LinkButton action={() => props.setPalette(darkPalette)}>B</LinkButton>
+        </Row>
+    </Column>,
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
