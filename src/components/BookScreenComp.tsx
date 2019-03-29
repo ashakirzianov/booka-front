@@ -4,13 +4,14 @@ import {
     connected, Row, relative, Clickable, Modal, PanelLink,
     comp, WithPopover, Line, Column, Link, PlainText,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents } from '../model';
+import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { linkForLib, linkForToc } from '../logic';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
+import { View } from 'react-native';
 
 export const BookScreenHeader = comp<BookScreen>(props =>
     <Line>
@@ -98,17 +99,18 @@ const FootnoteBox = connected([], ['openFootnote'])<{ footnote?: Footnote }>(pro
 );
 
 const ThemePicker = comp(props =>
-    <Column>
+    <Column style={{
+        width: relative(14),
+    }}>
         <FontScale />
         <PalettePicker />
     </Column>,
 );
 
-const FontScale = comp(props =>
+const FontScale = comp(() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(4),
-        width: relative(10),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
             <FontScaleButton increment={-0.1} size={18} />
@@ -130,16 +132,43 @@ const FontScaleButton = connected([], ['incrementScale'])<{
     </Column>,
 );
 
-const PalettePicker = connected([], ['setPalette'])(props =>
+const PalettePicker = comp(() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(4),
-        width: relative(10),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
-            <Link action={() => props.setPalette('light')}>B</Link>
-            <Link action={() => props.setPalette('sepia')}>B</Link>
-            <Link action={() => props.setPalette('dark')}>B</Link>
+            <PaletteButton name='light' text='l' />
+            <PaletteButton name='sepia' text='s' />
+            <PaletteButton name='dark' text='d' />
         </Row>
     </Column>,
+);
+
+const PaletteButton = connected(['theme'], ['setPalette'])<{
+    name: PaletteName,
+    text: string,
+}>(props => {
+    const palette = props.theme.palettes[props.name];
+    return <Link action={() => props.setPalette(props.name)}>
+        <View style={{
+            width: 50,
+            height: 50,
+            justifyContent: 'center',
+            backgroundColor: palette.primary,
+            borderRadius: 50,
+            borderColor: palette.highlight, // 'orange' ?
+            borderWidth: props.name === props.theme.currentPalette ? 2 : 0,
+            shadowColor: palette.shadow,
+            shadowRadius: 4,
+        }}>
+            <Row style={{ justifyContent: 'center' }}>
+                <PlainText style={{
+                    fontSize: props.theme.fontSize.normal,
+                    color: palette.text,
+                }}>{props.text}</PlainText>
+            </Row>
+        </View>
+    </Link>;
+},
 );
