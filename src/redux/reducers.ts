@@ -1,16 +1,13 @@
 import {
-    ActionsTemplate, App, forScreen, updateRangeStart, palettes,
+    ActionsTemplate, App, forScreen, updateRangeStart,
 } from '../model';
 import { buildPartialReducers } from './redux-utils';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    palette: {
-        setPalette: (_, palette) => palette,
-    },
     theme: {
         setPalette: (theme, palette) => ({
             ...theme,
-            palette: palettes[palette],
+            currentPalette: palette,
         }),
         incrementScale: (theme, scaleIncrement) => theme.fontScale + scaleIncrement > 0
             ? { ...theme, fontScale: theme.fontScale + scaleIncrement }

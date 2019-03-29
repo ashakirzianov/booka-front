@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { Defined } from '../utils';
-import { comp, themed, relative } from './comp-utils';
+import { comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
-import { Theme } from '../model';
+import { Theme, Palette } from '../model';
 import { LinkProps } from './Atoms.platform';
 import { IconName, Icon } from './Icons';
 
@@ -18,17 +18,17 @@ type AllowedTextStyleProps = Pick<TextStyle,
 type TextProps = {
     style?: AllowedTextStyleProps,
     size?: keyof Theme['fontSize'],
-    color?: keyof Theme['palette'],
-    hoverColor?: keyof Theme['palette'],
+    color?: keyof Palette,
+    hoverColor?: keyof Palette,
 };
 export const Text = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: props.theme.palette[props.color || 'foreground'],
+        color: palette(props)[props.color || 'foreground'],
         ...(props.hoverColor && {
             [':hover']: {
-                color: props.theme.palette[props.hoverColor],
+                color: palette(props)[props.hoverColor],
             },
         }),
         ...props.style,
@@ -51,9 +51,9 @@ export const PanelLink = themed<LinkProps & { icon: IconName }>(props =>
     <Atoms.Link to={props.to} action={props.action} style={{
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
-        color: props.theme.palette.accent,
+        color: palette(props).accent,
         [':hover']: {
-            color: props.theme.palette.highlight,
+            color: palette(props).highlight,
         },
         margin: relative(0.5),
     }}>
@@ -68,9 +68,9 @@ export const StretchLink = themed<{ to: string }>(props =>
         <Atoms.Link to={props.to} style={{
             fontSize: props.theme.fontSize.normal,
             fontFamily: props.theme.fontFamily,
-            color: props.theme.palette.accent,
+            color: palette(props).accent,
             [':hover']: {
-                color: props.theme.palette.highlight,
+                color: palette(props).highlight,
             },
             margin: relative(0.3),
         }}>
@@ -88,14 +88,14 @@ export const StretchLink = themed<{ to: string }>(props =>
 export const OverlayBox = themed(props =>
     <View style={{
         alignSelf: 'center',
-        backgroundColor: props.theme.palette.secondBack,
+        backgroundColor: palette(props).secondBack,
         width: '100%',
         maxWidth: '50em',
         maxHeight: '100%',
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 10px ${props.theme.palette.shadow}`,
+        boxShadow: `0px 0px 10px ${palette(props).shadow}`,
     }}
     >
         {props.children}

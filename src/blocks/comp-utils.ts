@@ -2,7 +2,7 @@ import * as React from 'react';
 import Radium from 'radium';
 import { KeyRestriction, ExcludeKeys } from '../utils';
 import { buildConnectRedux } from '../redux';
-import { actionsTemplate, App, Theme } from '../model';
+import { actionsTemplate, App, Theme, Palette } from '../model';
 import { platformValue } from '../platform';
 
 export * from './comp-utils.platform';
@@ -49,9 +49,13 @@ export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<T
     return Radium(Cmp);
 }
 
-type ThemeableComp<T> = Comp<T & {
+type Themeable = {
     theme: Theme,
-}>;
+};
+type ThemeableComp<T> = Comp<T & Themeable>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
     return connected(['theme'], [])(C);
+}
+export function palette(themeable: Themeable): Palette {
+    return themeable.theme.palettes[themeable.theme.currentPalette];
 }

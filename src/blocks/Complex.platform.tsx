@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, comp, relative } from './comp-utils';
+import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
 import { Text, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { AnimatedVisibility } from './Animations.platform';
@@ -75,8 +75,8 @@ export const TopBar = themed<{ open: boolean }>(props =>
             position: 'fixed',
             top: 0, left: 0,
             zIndex: 5,
-            boxShadow: `0px 0px 2px ${props.theme.palette.shadow}`,
-            backgroundColor: props.theme.palette.secondBack,
+            boxShadow: `0px 0px 2px ${palette(props).shadow}`,
+            backgroundColor: palette(props).secondBack,
         }}>
             {props.children}
         </div >

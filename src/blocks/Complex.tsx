@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed } from './comp-utils';
+import { themed, palette } from './comp-utils';
 import { View } from 'react-native';
 import { platformValue } from '../platform';
 
@@ -12,7 +12,7 @@ export const Layer = themed(props =>
         minWidth: '100%',
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
-        backgroundColor: props.theme.palette.background,
+        backgroundColor: palette(props).background,
     }}>
         {props.children}
     </View>,
