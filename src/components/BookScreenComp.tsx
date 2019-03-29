@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connected, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, Link, PlainText,
+    comp, WithPopover, Line, Column, Link, PlainText, hoverable,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { linkForLib, linkForToc } from '../logic';
@@ -138,29 +138,33 @@ const PalettePicker = comp(() =>
         height: relative(4),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
-            <PaletteButton name='light' text='l' />
-            <PaletteButton name='sepia' text='s' />
-            <PaletteButton name='dark' text='d' />
+            <PaletteButton name='light' text='L' />
+            <PaletteButton name='sepia' text='S' />
+            <PaletteButton name='dark' text='D' />
         </Row>
     </Column>,
 );
 
+const HoverableView = hoverable(View);
 const PaletteButton = connected(['theme'], ['setPalette'])<{
     name: PaletteName,
     text: string,
 }>(props => {
     const palette = props.theme.palettes[props.name];
     return <Link action={() => props.setPalette(props.name)}>
-        <View style={{
+        <HoverableView style={{
             width: 50,
             height: 50,
             justifyContent: 'center',
             backgroundColor: palette.primary,
             borderRadius: 50,
             borderColor: palette.highlight, // 'orange' ?
-            borderWidth: props.name === props.theme.currentPalette ? 2 : 0,
+            borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
             shadowColor: palette.shadow,
             shadowRadius: 4,
+            [':hover']: {
+                borderWidth: 3,
+            },
         }}>
             <Row style={{ justifyContent: 'center' }}>
                 <PlainText style={{
@@ -168,7 +172,7 @@ const PaletteButton = connected(['theme'], ['setPalette'])<{
                     color: palette.text,
                 }}>{props.text}</PlainText>
             </Row>
-        </View>
+        </HoverableView>
     </Link>;
 },
 );
