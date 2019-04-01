@@ -4,7 +4,6 @@ export type BookInfo = {
 };
 
 export type Library = {
-    loading: boolean,
     books: {
         [key: string]: BookInfo | undefined;
     },
@@ -12,14 +11,6 @@ export type Library = {
 
 export function library(books: Library['books'] = {}): Library {
     return {
-        loading: false,
         books: books,
-    };
-}
-
-export function loadingLibrary(): Library {
-    return {
-        loading: true,
-        books: {},
     };
 }

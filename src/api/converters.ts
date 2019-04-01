@@ -4,7 +4,6 @@ import { tocFromContent } from '../model/tableOfContent';
 
 export function convertLibrary(lib: Contracts.Library): Library {
     return {
-        loading: false,
         books: lib,
     };
 }
