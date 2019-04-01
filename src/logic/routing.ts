@@ -24,7 +24,7 @@ function* actionsForDest(dest: Destination) {
                     ? url.search.fid
                     : undefined;
                 yield actionCreators.navigateToScreen(buildBookScreen(bl, tocOpen, footnoteId));
-                yield actionCreators.updateCurrentBookPosition(bl.range.start);
+                yield actionCreators.updateBookPosition({ path: bl.range.start, id: bl.id });
             }
             return;
         default:
