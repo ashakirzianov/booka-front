@@ -24,6 +24,10 @@ export function linkForBook(bl: BookLocator): Destination {
     return `/book/${blToString(bl)}`;
 }
 
+export function linkForCurrentPosition(bi: BookId): Destination {
+    return `/book/${bi.name}/current`;
+}
+
 export function linkForToc(bi: BookId): Destination {
     return `/book/${biToString(bi)}?toc`;
 }
