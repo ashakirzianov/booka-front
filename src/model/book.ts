@@ -29,14 +29,6 @@ export function loadingBook(id: BookId): LoadingBook {
     };
 }
 
-export function errorBook(error: string): ErrorBook {
-    return {
-        book: 'error',
-        id: { bi: 'not-book' },
-        error: error,
-    };
-}
-
 export function leadPath(): BookPath {
     return [0];
 }

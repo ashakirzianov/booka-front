@@ -1,12 +1,12 @@
 import { def } from '../utils';
 import { Screen } from './screen';
-import { BookPath } from './bookLocator';
 import { OptimisticPromise } from '../promisePlus';
 import { PaletteName } from './theme';
+import { BookPath } from './bookLocator';
 
 export const actionsTemplate = {
     navigateToScreen: def<OptimisticPromise<Screen>>(),
-    updateCurrentBookPosition: def<BookPath>(),
+    updateBookPosition: def<BookPath>(),
     toggleControls: def(),
     toggleToc: def(),
     openFootnote: def<string | null>(),

@@ -1,15 +1,10 @@
 import {
-    BookLocator, bookScreen, libraryScreen, Screen, BookId, Book, Library, loadingBook,
+    bookScreen, libraryScreen, Screen, Library, loadingBook, bookLocator,
 } from '../model';
-import { bookForId, currentLibrary, cachedLibrary } from './dataAccess';
+import { bookForId, currentLibrary, cachedLibrary, currentPosition } from './dataAccess';
 import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
-
-function optimisticBook(id: BookId): OptimisticPromise<Book> {
-    const guess = loadingBook(id);
-    const promise = bookForId(id);
-
-    return optimisticPromise<Book>(guess, promise);
-}
+import { ToBook, NavigationObject } from './navigationObject';
+import { assertNever } from '../utils';
 
 function optimisticLibrary(): OptimisticPromise<Library> {
     const guess = cachedLibrary();
@@ -18,14 +13,39 @@ function optimisticLibrary(): OptimisticPromise<Library> {
     return optimisticPromise<Library>(guess, promise);
 }
 
-export function buildBookScreen(bl: BookLocator, tocOpen?: boolean, footnoteId?: string): OptimisticPromise<Screen> {
-    const promise = optimisticBook(bl.id);
+function buildBookScreen(navigation: ToBook): OptimisticPromise<Screen> {
+    const book = bookForId(navigation.id);
+    const path = navigation.location.location === 'current'
+        ? currentPosition(navigation.id)
+        : Promise.resolve(navigation.location.path || []);
 
-    return then(promise, book => bookScreen(book, bl, tocOpen, footnoteId));
+    const promise = Promise.all([book, path]).then(([b, p]) => {
+        const { id, toc, footnoteId } = navigation;
+        const locator = bookLocator(id, p);
+        return bookScreen(b, locator, toc, footnoteId);
+    });
+
+    const guess = bookScreen(loadingBook(navigation.id), bookLocator(navigation.id));
+
+    return optimisticPromise(guess, promise);
 }
 
-export function buildLibraryScreen(): OptimisticPromise<Screen> {
+function buildLibraryScreen(): OptimisticPromise<Screen> {
     const promise = optimisticLibrary();
 
     return then(promise, lib => libraryScreen(lib));
+}
+
+export function buildScreenForNavigation(navigation: NavigationObject): OptimisticPromise<Screen> {
+    switch (navigation.navigate) {
+        case 'book':
+            return buildBookScreen(navigation);
+        case 'default':
+        case 'library':
+        case 'unknown':
+            // TODO: report errors
+            return buildLibraryScreen();
+        default:
+            return assertNever(navigation);
+    }
 }

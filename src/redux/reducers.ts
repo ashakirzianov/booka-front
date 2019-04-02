@@ -18,7 +18,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             pending: (current, loading) => loading,
             fulfilled: (current, next) => next,
         },
-        updateCurrentBookPosition: (screen, bp) => forScreen(screen, {
+        updateBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
                 bl: updateRangeStart(bs.bl, bp),

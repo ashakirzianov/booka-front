@@ -6,7 +6,7 @@ import { reducer } from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
 import { buildActionCreators, ActionsType } from './redux-utils';
 import { actionsTemplate } from '../model';
-import { storeState, initialState, updateHistoryMiddleware } from '../logic';
+import { storeState, initialState, updateHistoryMiddleware, syncMiddleware } from '../logic';
 
 export const actionCreators = buildActionCreators(actionsTemplate);
 export type Action = ActionsType<typeof actionsTemplate>;
@@ -20,6 +20,7 @@ const initial = initialState();
 const store = createStore(reducer, initial, applyMiddleware(
     promiseMiddleware(),
     updateHistoryMiddleware,
+    syncMiddleware,
 ));
 
 store.subscribe(throttle(() => {

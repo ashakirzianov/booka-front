@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { throttle } from 'lodash';
 import {
     Span, BookPath, ChapterNode, BookId, bookLocator, BookRange,
     BookNode, isParagraph, isChapter, inRange, BookContent,
@@ -115,7 +114,7 @@ type RefMap = { [k in string]?: RefType };
 type BookContentCompProps = {
     content: BookContent,
     pathToNavigate: BookPath | null,
-    updateCurrentBookPosition: Callback<BookPath>,
+    updateBookPosition: Callback<BookPath>,
     range: BookRange,
     prevPath?: BookPath,
     nextPath?: BookPath,
@@ -124,14 +123,14 @@ type BookContentCompProps = {
 export class BookContentComp extends React.Component<BookContentCompProps> {
     public refMap: RefMap = {};
 
-    public handleScroll = throttle(() => {
+    public handleScroll = () => {
         const newCurrentPath = Object.entries(this.refMap)
             .reduce<BookPath | undefined>((path, [key, ref]) =>
                 path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
         if (newCurrentPath) {
-            this.props.updateCurrentBookPosition(newCurrentPath);
+            this.props.updateBookPosition(newCurrentPath);
         }
-    }, 250);
+    }
 
     public scrollToCurrentPath = () => {
         const props = this.props;

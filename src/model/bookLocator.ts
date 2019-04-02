@@ -2,10 +2,7 @@ export type RemoteBookId = {
     bi: 'remote-book',
     name: string,
 };
-export type NotABookId = {
-    bi: 'not-book',
-};
-export type BookId = RemoteBookId | NotABookId;
+export type BookId = RemoteBookId;
 export function sameId(bi1: BookId, bi2: BookId): boolean {
     return bi1.bi === 'remote-book'
         ? bi2.bi === 'remote-book' && bi2.name === bi1.name

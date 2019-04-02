@@ -1,10 +1,8 @@
 import * as Contracts from '../contracts';
-import { Library, BookId, LoadedBook } from '../model';
-import { tocFromContent } from '../model/tableOfContent';
+import { Library, BookId, LoadedBook, tocFromContent } from '../model';
 
 export function convertLibrary(lib: Contracts.Library): Library {
     return {
-        loading: false,
         books: lib,
     };
 }
