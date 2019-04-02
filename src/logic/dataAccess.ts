@@ -78,7 +78,7 @@ export const syncMiddleware: Middleware<{}, App> = store => next => actionAny =>
             ? state.screen.book.id
             : undefined;
         if (id) {
-            setCurrentPosition(id, position.path);
+            setCurrentPosition(id, position);
         }
     }
     return result;

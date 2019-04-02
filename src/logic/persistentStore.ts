@@ -27,9 +27,6 @@ function createNewState(): App {
         pathToOpen: null,
         controlsVisible: true,
         theme: defaultTheme,
-        syncable: {
-            positionStore: {},
-        },
     };
 }
 

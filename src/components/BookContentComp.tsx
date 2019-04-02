@@ -13,7 +13,6 @@ import {
     Row, NewLine, Tab, Inline, ThemedText,
     ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
-import { BookPosition } from '../model/syncable';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -115,7 +114,7 @@ type RefMap = { [k in string]?: RefType };
 type BookContentCompProps = {
     content: BookContent,
     pathToNavigate: BookPath | null,
-    updateBookPosition: Callback<BookPosition>,
+    updateBookPosition: Callback<BookPath>,
     range: BookRange,
     prevPath?: BookPath,
     nextPath?: BookPath,
@@ -129,7 +128,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
             .reduce<BookPath | undefined>((path, [key, ref]) =>
                 path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
         if (newCurrentPath) {
-            this.props.updateBookPosition({ path: newCurrentPath, id: this.props.id });
+            this.props.updateBookPosition(newCurrentPath);
         }
     }
 

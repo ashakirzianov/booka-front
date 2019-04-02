@@ -2,13 +2,8 @@ import {
     ActionsTemplate, App, forScreen, updateRangeStart,
 } from '../model';
 import { buildPartialReducers } from './redux-utils';
-import { updateBookPosition } from '../model/syncable';
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    syncable: {
-        updateBookPosition: (sync, bp) =>
-            updateBookPosition(sync, bp),
-    },
     theme: {
         setPalette: (theme, palette) => ({
             ...theme,
@@ -26,7 +21,7 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         updateBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
-                bl: updateRangeStart(bs.bl, bp.path),
+                bl: updateRangeStart(bs.bl, bp),
             }),
             default: () => screen,
         }),
