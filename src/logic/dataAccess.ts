@@ -1,7 +1,9 @@
 import {
-    Book, Library, library, BookId, sameId, BookPath,
+    Book, Library, library, BookId, sameId, BookPath, App,
 } from '../model';
 import { fetchBI, fetchLibrary, convertBook, convertLibrary } from '../api';
+import { Middleware } from 'redux';
+import { Action } from '../redux/store';
 
 type BookStore = Book[];
 const bookStore: BookStore = [];
@@ -65,3 +67,19 @@ export async function currentPosition(bookId: BookId): Promise<BookPath> {
 export function setCurrentPosition(bookId: BookId, path: BookPath) {
     positionStore[bookId.name] = path;
 }
+
+export const syncMiddleware: Middleware<{}, App> = store => next => actionAny => {
+    const result = next(actionAny);
+    const action = actionAny as Action;
+    if (action.type === 'updateBookPosition') {
+        const position = action.payload;
+        const state = store.getState();
+        const id = state.screen.screen === 'book'
+            ? state.screen.book.id
+            : undefined;
+        if (id) {
+            setCurrentPosition(id, position.path);
+        }
+    }
+    return result;
+};

@@ -15,12 +15,15 @@ function optimisticLibrary(): OptimisticPromise<Library> {
 
 function buildBookScreen(navigation: ToBook): OptimisticPromise<Screen> {
     const book = bookForId(navigation.id);
-    const path = navigation.location.location === 'static'
-        ? Promise.resolve(navigation.location.path || [])
-        : currentPosition(navigation.id);
+    const path = navigation.location.location === 'current'
+        ? currentPosition(navigation.id)
+        : Promise.resolve(navigation.location.path || []);
 
-    const promise = Promise.all([book, path]).then(([b, p]) =>
-        bookScreen(b, bookLocator(navigation.id, p), navigation.toc, navigation.footnoteId));
+    const promise = Promise.all([book, path]).then(([b, p]) => {
+        const { id, toc, footnoteId } = navigation;
+        const locator = bookLocator(id, p);
+        return bookScreen(b, locator, toc, footnoteId);
+    });
 
     const guess = bookScreen(loadingBook(navigation.id), bookLocator(navigation.id));
 
