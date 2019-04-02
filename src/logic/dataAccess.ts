@@ -1,8 +1,7 @@
 import {
     Book, Library, library, BookId, sameId, BookPath,
 } from '../model';
-import { fetchBI, fetchLibrary } from '../api';
-import { convertBook, convertLibrary } from '../api/converters';
+import { fetchBI, fetchLibrary, convertBook, convertLibrary } from '../api';
 
 type BookStore = Book[];
 const bookStore: BookStore = [];
