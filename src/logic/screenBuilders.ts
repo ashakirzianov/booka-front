@@ -1,17 +1,10 @@
 import {
-    BookLocator, bookScreen, libraryScreen, Screen, BookId, Book, Library, loadingBook, bookLocator,
+    bookScreen, libraryScreen, Screen, Library, loadingBook, bookLocator,
 } from '../model';
-import { bookForId, currentLibrary, cachedLibrary } from './dataAccess';
+import { bookForId, currentLibrary, cachedLibrary, currentPosition } from './dataAccess';
 import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
-import { ToBook, ToLibrary, NavigationObject } from './navigationObject';
+import { ToBook, NavigationObject } from './navigationObject';
 import { assertNever } from '../utils';
-
-function optimisticBook(id: BookId): OptimisticPromise<Book> {
-    const guess = loadingBook(id);
-    const promise = bookForId(id);
-
-    return optimisticPromise<Book>(guess, promise);
-}
 
 function optimisticLibrary(): OptimisticPromise<Library> {
     const guess = cachedLibrary();
@@ -21,12 +14,17 @@ function optimisticLibrary(): OptimisticPromise<Library> {
 }
 
 function buildBookScreen(navigation: ToBook): OptimisticPromise<Screen> {
-    const promise = optimisticBook(navigation.id);
-    const bl = navigation.location.location === 'static'
-        ? bookLocator(navigation.id, navigation.location.path)
-        : bookLocator(navigation.id);
+    const book = bookForId(navigation.id);
+    const path = navigation.location.location === 'static'
+        ? Promise.resolve(navigation.location.path || [])
+        : currentPosition(navigation.id);
 
-    return then(promise, book => bookScreen(book, bl, navigation.toc, navigation.footnoteId));
+    const promise = Promise.all([book, path]).then(([b, p]) =>
+        bookScreen(b, bookLocator(navigation.id, p), navigation.toc, navigation.footnoteId));
+
+    const guess = bookScreen(loadingBook(navigation.id), bookLocator(navigation.id));
+
+    return optimisticPromise(guess, promise);
 }
 
 function buildLibraryScreen(): OptimisticPromise<Screen> {

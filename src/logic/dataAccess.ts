@@ -1,5 +1,5 @@
 import {
-    Book, Library, library, BookId, sameId,
+    Book, Library, library, BookId, sameId, BookPath,
 } from '../model';
 import { fetchBI, fetchLibrary } from '../api';
 import { convertBook, convertLibrary } from '../api/converters';
@@ -51,4 +51,18 @@ export async function currentLibrary(): Promise<Library> {
 
 export function cachedLibrary(): Library {
     return libraryCache;
+}
+
+type BookPositionStore = {
+    [bi in string]?: BookPath;
+};
+const positionStore: BookPositionStore = {};
+
+export async function currentPosition(bookId: BookId): Promise<BookPath> {
+    const inStore = positionStore[bookId.name];
+    return inStore || [];
+}
+
+export function setCurrentPosition(bookId: BookId, path: BookPath) {
+    positionStore[bookId.name] = path;
 }
