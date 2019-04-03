@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { throttle } from 'lodash';
 import { reducer } from './reducers';
 import { buildActionCreators, ActionsType, createEnhancedStore } from './redux-utils';
-import { actionsTemplate } from '../model';
 import { storeState, initialState, updateHistoryMiddleware, syncMiddleware } from '../logic';
+import { actionsTemplate } from './actions';
 
 export const actionCreators = buildActionCreators(actionsTemplate);
 export type Action = ActionsType<typeof actionsTemplate>;

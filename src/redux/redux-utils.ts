@@ -3,16 +3,19 @@ import {
     Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import { install as installLoop, loop as reduxLoop, Cmd, combineReducers } from 'redux-loop';
+import * as ReduxLoop from 'redux-loop';
 import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
 
+// TODO: fix after TypeScript 3.4
+// see more: https://github.com/Microsoft/TypeScript/issues/21592
+const RL = ReduxLoop as any;
 export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
         promiseMiddleware(),
         ...middlewares,
     );
-    const loopEnhancer = installLoop();
+    const loopEnhancer = RL.install();
     return createStore(reducer, initial, compose(
         loopEnhancer,
         middlewareEnhancer,
@@ -33,7 +36,7 @@ export function buildLoop<AT>() {
         fail?: F,
     };
     return <State, Suc extends keyof AT, F extends CanHandleErrorKeys<AT>>(input: LoopInput<State, Suc, F>): State =>
-        reduxLoop(input.state, Cmd.run(input.async, {
+        RL.loop(input.state, RL.Cmd.run(input.async, {
             successActionCreator: buildActionCreator(input.success),
             failActionCreator: input.fail && buildActionCreator(input.fail) as any,
         })) as any;
@@ -126,7 +129,7 @@ type PartialReducersTemplate<State, AT> = {
 };
 export function buildPartialReducers<State, AT>(template: PartialReducersTemplate<State, AT>): ReducerRedux<State> {
     const reducersMap = mapObject(template, (_, pt) => buildPartialReducer(pt as any)) as any; // TODO: add note whe we need to cast to any
-    return combineReducers(reducersMap) as any;
+    return RL.combineReducers(reducersMap) as any;
 }
 
 function findReducerT<State, Template, Key extends keyof Template>(
@@ -138,9 +141,9 @@ function findReducerT<State, Template, Key extends keyof Template>(
     if (isSimple(reducer)) {
         return reducer;
     } else if (isLoop(reducer)) {
-        return (state: State, payload: any) => reduxLoop(
+        return (state: State, payload: any) => RL.loop(
             reducer.sync(state, payload),
-            Cmd.run(reducer.async, {
+            RL.Cmd.run(reducer.async, {
                 successActionCreator: buildActionCreator(reducer.success),
                 failActionCreator: reducer.fail ? buildActionCreator(reducer.fail) : undefined,
                 args: [state, payload],

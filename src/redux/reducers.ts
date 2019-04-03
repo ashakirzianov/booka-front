@@ -1,11 +1,12 @@
 import {
-    App, forScreen, updateRangeStart, Theme, libraryScreen, library, Screen, ActionsTemplate,
+    App, forScreen, updateRangeStart, Theme, libraryScreen, library, Screen,
 } from '../model';
 import { Action } from './store';
 import { combineReducers, LoopReducer } from 'redux-loop';
 import { Reducer } from 'redux';
 import { buildScreenForNavigation } from '../logic';
 import { buildLoop } from './redux-utils';
+import { ActionsTemplate } from './actions';
 
 const loop = buildLoop<ActionsTemplate>();
 

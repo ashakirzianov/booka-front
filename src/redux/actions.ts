@@ -1,8 +1,5 @@
 import { def } from '../utils';
-import { PaletteName } from './theme';
-import { BookPath } from './bookLocator';
-import { NavigationObject } from './navigationObject';
-import { Screen } from './screen';
+import { PaletteName, NavigationObject, BookPath, Screen } from '../model';
 
 export const actionsTemplate = {
     navigate: def<NavigationObject>(),
