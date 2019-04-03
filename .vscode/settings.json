@@ -30,6 +30,7 @@
         "onupdatefound",
         "precached",
         "subpath",
+        "succ",
         "timeouted"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"

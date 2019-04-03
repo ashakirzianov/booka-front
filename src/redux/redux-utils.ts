@@ -1,13 +1,13 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
 import {
-    Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose,
+    Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import { install as installLoop, loop, Cmd, combineReducers } from 'redux-loop';
+import { install as installLoop, loop as reduxLoop, Cmd, combineReducers } from 'redux-loop';
 import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
 
-export function createEnhancedStore<State>(reducer: ReducerRedux<State>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
+export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
         promiseMiddleware(),
         ...middlewares,
@@ -17,6 +17,26 @@ export function createEnhancedStore<State>(reducer: ReducerRedux<State>, initial
         loopEnhancer,
         middlewareEnhancer,
     ));
+}
+
+type ErrorType = string | undefined;
+type CanHandleErrorKeys<AT> = {
+    [k in keyof AT]: ErrorType extends AT[k]
+    ? k
+    : never;
+}[keyof AT];
+export function buildLoop<AT>() {
+    type LoopInput<State, Suc extends keyof AT, F extends CanHandleErrorKeys<AT>> = {
+        state: State,
+        async: () => Promise<AT[Suc]>,
+        success: Suc,
+        fail?: F,
+    };
+    return <State, Suc extends keyof AT, F extends CanHandleErrorKeys<AT>>(input: LoopInput<State, Suc, F>): State =>
+        reduxLoop(input.state, Cmd.run(input.async, {
+            successActionCreator: buildActionCreator(input.success),
+            failActionCreator: input.fail && buildActionCreator(input.fail) as any,
+        })) as any;
 }
 
 // Actions:
@@ -118,7 +138,7 @@ function findReducerT<State, Template, Key extends keyof Template>(
     if (isSimple(reducer)) {
         return reducer;
     } else if (isLoop(reducer)) {
-        return (state: State, payload: any) => loop(
+        return (state: State, payload: any) => reduxLoop(
             reducer.sync(state, payload),
             Cmd.run(reducer.async, {
                 successActionCreator: buildActionCreator(reducer.success),
