@@ -1,5 +1,5 @@
-import { BookPath, BookId, remoteBookId } from '../model';
-import { ParsedUrl } from './parseUrl';
+import { ParsedUrl } from '../parseUrl';
+import { BookId, BookPath, remoteBookId } from './bookLocator';
 
 export type ToLibrary = {
     navigate: 'library',

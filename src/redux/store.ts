@@ -11,10 +11,12 @@ export type Action = ActionsType<typeof actionsTemplate>;
 export function dispatchAction(action: Action) {
     store.dispatch(action);
 }
+// class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(Provider, { store: store }, props.children);
 
 const initial = initialState();
+
 const store = createEnhancedStore(reducer, initial, [
     updateHistoryMiddleware,
     syncMiddleware,

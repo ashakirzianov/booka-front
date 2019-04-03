@@ -14,8 +14,8 @@ export function createEnhancedStore<State>(reducer: ReducerRedux<State>, initial
     );
     const loopEnhancer = installLoop();
     return createStore(reducer, initial, compose(
-        middlewareEnhancer,
         loopEnhancer,
+        middlewareEnhancer,
     ));
 }
 
@@ -54,9 +54,9 @@ type PromiseReducerT<State, Payload = {}, Data = undefined> = {
     rejected?: SimpleReducerT<State, any>,
     fulfilled?: SimpleReducerT<State, Payload>,
 };
-type LoopReducerT<State, Payload, ActionsT, Suc extends keyof ActionsT, Err extends keyof ActionsT> = {
-    sync: SimpleReducerT<State, Payload>,
-    async: () => Promise<ActionsT[Suc]>,
+export type LoopReducerT<S, AT, K extends keyof AT, Suc extends keyof AT, Err extends keyof AT> = {
+    sync: SimpleReducerT<S, AT[K]>,
+    async: (s: S, p: AT[K]) => Promise<AT[Suc]>,
     success: Suc,
     fail?: Err,
 };
@@ -64,7 +64,7 @@ type LoopReducerT<State, Payload, ActionsT, Suc extends keyof ActionsT, Err exte
 type SingleReducerT<State, ActionsT, Key extends keyof ActionsT> =
     ActionsT[Key] extends Promise<infer Fulfilled> ? PromiseReducerT<State, Fulfilled>
     : ActionsT[Key] extends PromisePlus<infer F, infer D> ? PromiseReducerT<State, F, D>
-    : (SimpleReducerT<State, ActionsT[Key]> | LoopReducerT<State, ActionsT[Key], ActionsT, keyof ActionsT, keyof ActionsT>)
+    : (SimpleReducerT<State, ActionsT[Key]> | LoopReducerT<State, ActionsT, Key, keyof ActionsT, keyof ActionsT>)
     ;
 
 export type ReducerTs<State, ActionsT> = {
@@ -123,6 +123,7 @@ function findReducerT<State, Template, Key extends keyof Template>(
             Cmd.run(reducer.async, {
                 successActionCreator: buildActionCreator(reducer.success),
                 failActionCreator: reducer.fail ? buildActionCreator(reducer.fail) : undefined,
+                args: [state, payload],
             }),
         ) as any;
     }

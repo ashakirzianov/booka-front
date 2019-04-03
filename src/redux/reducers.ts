@@ -1,7 +1,12 @@
 import {
     ActionsTemplate, App, forScreen, updateRangeStart,
 } from '../model';
-import { buildPartialReducers } from './redux-utils';
+import { buildPartialReducers, LoopReducerT } from './redux-utils';
+import { buildScreenForNavigation } from '../logic';
+
+export function loopR<State, K extends keyof ActionsTemplate, S extends keyof ActionsTemplate>(red: LoopReducerT<State, ActionsTemplate, K, S, keyof ActionsTemplate>): LoopReducerT<State, ActionsTemplate, K, S, keyof ActionsTemplate> {
+    return red;
+}
 
 export const reducer = buildPartialReducers<App, ActionsTemplate>({
     theme: {
@@ -14,10 +19,12 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
             : theme,
     },
     screen: {
-        navigateToScreen: {
-            pending: (current, loading) => loading,
-            fulfilled: (current, next) => next,
-        },
+        pushScreen: (curr, next) => next,
+        navigate: loopR({
+            sync: s => s,
+            async: (s, no) => buildScreenForNavigation(no),
+            success: 'pushScreen',
+        }),
         updateBookPosition: (screen, bp) => forScreen(screen, {
             book: bs => ({
                 ...bs,
@@ -41,20 +48,16 @@ export const reducer = buildPartialReducers<App, ActionsTemplate>({
         }),
     },
     pathToOpen: {
-        navigateToScreen: {
-            fulfilled: (path, screen) => forScreen(screen, {
-                book: bs => bs.bl.range.start,
-                default: () => null,
-            }),
-        },
+        pushScreen: (path, screen) => forScreen(screen, {
+            book: bs => bs.bl.range.start,
+            default: () => null,
+        }),
     },
     controlsVisible: {
         toggleControls: (current, _) => !current,
-        navigateToScreen: {
-            pending: (_, screen) => forScreen(screen, {
-                book: false,
-                default: true,
-            }),
-        },
+        pushScreen: (_, screen) => forScreen(screen, {
+            book: false,
+            default: true,
+        }),
     },
 });

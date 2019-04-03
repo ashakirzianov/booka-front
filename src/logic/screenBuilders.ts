@@ -1,19 +1,11 @@
 import {
-    bookScreen, libraryScreen, Screen, Library, loadingBook, bookLocator,
+    bookScreen, libraryScreen, Screen, bookLocator,
 } from '../model';
-import { bookForId, currentLibrary, cachedLibrary, currentPosition } from './dataAccess';
-import { OptimisticPromise, optimisticPromise, then } from '../promisePlus';
-import { ToBook, NavigationObject } from './navigationObject';
+import { bookForId, currentPosition, currentLibrary } from './dataAccess';
+import { ToBook, NavigationObject } from '../model/navigationObject';
 import { assertNever } from '../utils';
 
-function optimisticLibrary(): OptimisticPromise<Library> {
-    const guess = cachedLibrary();
-    const promise = currentLibrary();
-
-    return optimisticPromise<Library>(guess, promise);
-}
-
-function buildBookScreen(navigation: ToBook): OptimisticPromise<Screen> {
+function buildBookScreen(navigation: ToBook): Promise<Screen> {
     const book = bookForId(navigation.id);
     const path = navigation.location.location === 'current'
         ? currentPosition(navigation.id)
@@ -25,18 +17,14 @@ function buildBookScreen(navigation: ToBook): OptimisticPromise<Screen> {
         return bookScreen(b, locator, toc, footnoteId);
     });
 
-    const guess = bookScreen(loadingBook(navigation.id), bookLocator(navigation.id));
-
-    return optimisticPromise(guess, promise);
+    return promise;
 }
 
-function buildLibraryScreen(): OptimisticPromise<Screen> {
-    const promise = optimisticLibrary();
-
-    return then(promise, lib => libraryScreen(lib));
+function buildLibraryScreen(): Promise<Screen> {
+    return currentLibrary().then(l => libraryScreen(l));
 }
 
-export function buildScreenForNavigation(navigation: NavigationObject): OptimisticPromise<Screen> {
+export function buildScreenForNavigation(navigation: NavigationObject): Promise<Screen> {
     switch (navigation.navigate) {
         case 'book':
             return buildBookScreen(navigation);
