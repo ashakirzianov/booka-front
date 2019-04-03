@@ -10,3 +10,10 @@ declare module 'store' {
     const store: Store;
     export = store;
 }
+
+// TODO: fix after TypeScript 3.4
+// see more: https://github.com/Microsoft/TypeScript/issues/21592
+declare module 'redux-loop' {
+    const all: any;
+    export = all;
+}

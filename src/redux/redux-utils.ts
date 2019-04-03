@@ -3,13 +3,17 @@ import {
     Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import * as ReduxLoop from 'redux-loop';
+import * as RL from 'redux-loop';
 import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
 
-// TODO: fix after TypeScript 3.4
-// see more: https://github.com/Microsoft/TypeScript/issues/21592
-const RL = ReduxLoop as any;
+type ReducersMap<State, Action extends AnyAction> = {
+    [k in keyof State]: ReducerRedux<State[k], Action>;
+};
+export function combineReducers<State, Action extends AnyAction>(map: ReducersMap<State, Action>): ReducerRedux<State, Action> {
+    return RL.combineReducers(map);
+}
+
 export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
         promiseMiddleware(),

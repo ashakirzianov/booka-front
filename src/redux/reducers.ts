@@ -2,10 +2,8 @@ import {
     App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
 } from '../model';
 import { Action } from './store';
-import { combineReducers, LoopReducer } from 'redux-loop';
-import { Reducer } from 'redux';
 import { buildScreenForNavigation } from '../logic';
-import { buildLoop } from './redux-utils';
+import { buildLoop, combineReducers } from './redux-utils';
 import { ActionsTemplate } from './actions';
 
 const loop = buildLoop<ActionsTemplate>();
@@ -48,63 +46,63 @@ const defaultTheme: Theme = {
     radius: 9,
 };
 
-function themeReducer(theme: Theme | undefined = defaultTheme, action: Action): Theme {
+function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
     switch (action.type) {
         case 'setPalette':
             return {
-                ...theme,
+                ...state,
                 currentPalette: action.payload,
             };
         case 'incrementScale':
-            return theme.fontScale + action.payload > 0
-                ? { ...theme, fontScale: theme.fontScale + action.payload }
-                : theme;
+            return state.fontScale + action.payload > 0
+                ? { ...state, fontScale: state.fontScale + action.payload }
+                : state;
         default:
-            return theme;
+            return state;
     }
 }
 
 const defaultScreen = libraryScreen(library());
-export function screenReducer(screen: AppScreen | undefined = defaultScreen, action: Action): AppScreen {
+export function screen(state: AppScreen | undefined = defaultScreen, action: Action): AppScreen {
     switch (action.type) {
         case 'navigate':
             return loop({
-                state: screen,
+                state: state,
                 async: () => buildScreenForNavigation(action.payload),
                 success: 'pushScreen',
             });
         case 'pushScreen':
             return action.payload;
         case 'updateBookPosition':
-            return forScreen(screen, {
+            return forScreen(state, {
                 book: bs => ({
                     ...bs,
                     bl: updateRangeStart(bs.bl, action.payload),
                 }),
-                default: () => screen,
+                default: () => state,
             });
         case 'toggleToc':
-            return forScreen(screen, {
+            return forScreen(state, {
                 book: bs => ({
                     ...bs,
                     tocOpen: !bs.tocOpen,
                 }),
-                default: () => screen,
+                default: () => state,
             });
         case 'openFootnote':
-            return forScreen(screen, {
+            return forScreen(state, {
                 book: bs => ({
                     ...bs,
                     footnoteId: action.payload,
                 }),
-                default: () => screen,
+                default: () => state,
             });
         default:
-            return screen;
+            return state;
     }
 }
 
-function pathToOpenReducer(path: App['pathToOpen'] | undefined = null, action: Action): App['pathToOpen'] {
+function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action): App['pathToOpen'] {
     switch (action.type) {
         case 'pushScreen':
             return forScreen(action.payload, {
@@ -112,11 +110,11 @@ function pathToOpenReducer(path: App['pathToOpen'] | undefined = null, action: A
                 default: () => null,
             });
         default:
-            return path;
+            return state;
     }
 }
 
-function controlsVisibleReducer(cv: boolean | undefined = false, action: Action): boolean {
+function controlsVisible(state: boolean | undefined = false, action: Action): boolean {
     switch (action.type) {
         case 'pushScreen':
             return forScreen(action.payload, {
@@ -124,16 +122,15 @@ function controlsVisibleReducer(cv: boolean | undefined = false, action: Action)
                 default: () => true,
             });
         case 'toggleControls':
-            return !cv;
+            return !state;
         default:
-            return cv;
+            return state;
     }
 }
 
 export const reducer = combineReducers<App, Action>({
-    // TODO: remove casts after 'redux-loop' improve typings
-    theme: themeReducer as LoopReducer<Theme, Action>,
-    screen: screenReducer as LoopReducer<AppScreen, Action>,
-    pathToOpen: pathToOpenReducer as LoopReducer<App['pathToOpen'], Action>,
-    controlsVisible: controlsVisibleReducer as LoopReducer<boolean, Action>,
-}) as any as Reducer<App, Action>;
+    theme,
+    screen,
+    pathToOpen,
+    controlsVisible,
+});
