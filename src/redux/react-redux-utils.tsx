@@ -2,9 +2,12 @@ import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { mapObject, pick, ExcludeKeys } from '../utils';
 import {
-    ActionDispatchers, ActionCreators,
-    buildActionCreators, ActionDispatcher,
+    ActionCreators,
+    buildActionCreators,
 } from './redux-utils';
+
+type ActionDispatcher<Payload> = (p: Payload) => void;
+type ActionDispatchers<Template> = { [k in keyof Template]: ActionDispatcher<Template[k]> };
 
 export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
     return function connectKeys<
@@ -12,7 +15,7 @@ export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
         ActionKs extends Exclude<keyof ActionsT, StateKs> = never>(
             stateKs: StateKs[],
             actionKs: ActionKs[] = [],
-        ) {
+    ) {
         type ComponentProps = Pick<State, StateKs> & {
             [k in ActionKs]: ActionDispatcher<ActionsT[k]>;
         };
