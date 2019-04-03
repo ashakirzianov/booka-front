@@ -14,13 +14,13 @@ export function combineReducers<State, Action extends AnyAction>(map: ReducersMa
     return RL.combineReducers(map);
 }
 
-export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
+export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
         promiseMiddleware(),
         ...middlewares,
     );
     const loopEnhancer = RL.install();
-    return createStore(reducer, initial, compose(
+    return createStore(reducer, compose(
         loopEnhancer,
         middlewareEnhancer,
     ));

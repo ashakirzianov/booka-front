@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { throttle } from 'lodash';
 import { reducer } from './reducers';
 import { buildActionCreators, ActionsType, createEnhancedStore } from './redux-utils';
-import { storeState, initialState, updateHistoryMiddleware, syncMiddleware } from '../logic';
+import { updateHistoryMiddleware, syncMiddleware } from '../logic';
 import { actionsTemplate } from './actions';
 
 export const actionCreators = buildActionCreators(actionsTemplate);
@@ -15,13 +14,7 @@ class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
-const initial = initialState();
-
-const store = createEnhancedStore(reducer, initial, [
+const store = createEnhancedStore(reducer, [
     updateHistoryMiddleware,
     syncMiddleware,
 ]);
-
-store.subscribe(throttle(() => {
-    storeState(store.getState());
-}, 1000));
