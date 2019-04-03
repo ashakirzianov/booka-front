@@ -2,7 +2,7 @@ import { Book } from './book';
 import { BookLocator } from './bookLocator';
 import { Library } from './library';
 
-export type ScreenStack = Screen[];
+export type ScreenStack = AppScreen[];
 
 export function emptyStack(): ScreenStack {
     return [];
@@ -12,14 +12,14 @@ export function popScreen(stack: ScreenStack): ScreenStack {
     return stack.length > 1 ? stack.slice(0, stack.length - 1) : stack;
 }
 
-export function pushScreen(stack: ScreenStack, screen: Screen): ScreenStack {
+export function pushScreen(stack: ScreenStack, screen: AppScreen): ScreenStack {
     const newStack = stack.slice();
     newStack.push(screen);
 
     return newStack;
 }
 
-export function replaceScreen(stack: ScreenStack, screen: Screen) {
+export function replaceScreen(stack: ScreenStack, screen: AppScreen) {
     const index = stack.length > 0 ? stack.length - 1 : 0;
     const newStack = stack.slice();
     newStack[index] = screen;
@@ -27,26 +27,26 @@ export function replaceScreen(stack: ScreenStack, screen: Screen) {
     return newStack;
 }
 
-export function topScreen(stack: ScreenStack): Screen | undefined {
+export function topScreen(stack: ScreenStack): AppScreen | undefined {
     return stack.length > 0
         ? stack[stack.length - 1]
         : undefined
         ;
 }
 
-type MapValue<S extends Screen, T> = T | ((screen: S) => T);
+type MapValue<S extends AppScreen, T> = T | ((screen: S) => T);
 type ForScreenMap<T> = {
-    default: MapValue<Screen, T>,
+    default: MapValue<AppScreen, T>,
     book: MapValue<BookScreen, T>,
     library: MapValue<LibraryScreen, T>,
 };
 type DefaultScreen<T> = {
-    default: MapValue<Screen, T>,
+    default: MapValue<AppScreen, T>,
 };
 
-export function forScreen<T>(screen: Screen, map: ForScreenMap<T> | DefaultScreen<T> & Partial<ForScreenMap<T>>): T;
-export function forScreen<T>(screen: Screen, map: Partial<ForScreenMap<T>>): T | undefined;
-export function forScreen<T>(screen: Screen, map: Partial<DefaultScreen<T> & ForScreenMap<T>>): T | undefined {
+export function forScreen<T>(screen: AppScreen, map: ForScreenMap<T> | DefaultScreen<T> & Partial<ForScreenMap<T>>): T;
+export function forScreen<T>(screen: AppScreen, map: Partial<ForScreenMap<T>>): T | undefined;
+export function forScreen<T>(screen: AppScreen, map: Partial<DefaultScreen<T> & ForScreenMap<T>>): T | undefined {
     const funcOrValue = map[screen.screen] !== undefined
         ? map[screen.screen]
         : map.default;
@@ -63,7 +63,7 @@ export function forScreen<T>(screen: Screen, map: Partial<DefaultScreen<T> & For
     return undefined;
 }
 
-export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): ScreenStack {
+export function stackForScreen(stack: ScreenStack, map: ForScreenMap<AppScreen>): ScreenStack {
     const top = topScreen(stack);
     const next = top && forScreen(top, map);
 
@@ -72,7 +72,7 @@ export function stackForScreen(stack: ScreenStack, map: ForScreenMap<Screen>): S
         : replaceScreen(stack, next);
 }
 
-export type Screen =
+export type AppScreen =
     | BookScreen | LibraryScreen
     ;
 export type BookScreen = ReturnType<typeof bookScreen>;

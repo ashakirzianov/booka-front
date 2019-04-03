@@ -1,9 +1,9 @@
 import { def } from '../utils';
-import { PaletteName, NavigationObject, BookPath, Screen } from '../model';
+import { PaletteName, NavigationObject, BookPath, AppScreen } from '../model';
 
 export const actionsTemplate = {
     navigate: def<NavigationObject>(),
-    pushScreen: def<Screen>(),
+    pushScreen: def<AppScreen>(),
     updateBookPosition: def<BookPath>(),
     toggleControls: def(),
     toggleToc: def(),

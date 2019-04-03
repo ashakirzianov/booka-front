@@ -1,5 +1,5 @@
 import {
-    App, forScreen, updateRangeStart, Theme, libraryScreen, library, Screen,
+    App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
 } from '../model';
 import { Action } from './store';
 import { combineReducers, LoopReducer } from 'redux-loop';
@@ -65,7 +65,7 @@ function themeReducer(theme: Theme | undefined = defaultTheme, action: Action): 
 }
 
 const defaultScreen = libraryScreen(library());
-export function screenReducer(screen: Screen | undefined = defaultScreen, action: Action): Screen {
+export function screenReducer(screen: AppScreen | undefined = defaultScreen, action: Action): AppScreen {
     switch (action.type) {
         case 'navigate':
             return loop({
@@ -133,7 +133,7 @@ function controlsVisibleReducer(cv: boolean | undefined = false, action: Action)
 export const reducer = combineReducers<App, Action>({
     // TODO: remove casts after 'redux-loop' improve typings
     theme: themeReducer as LoopReducer<Theme, Action>,
-    screen: screenReducer as LoopReducer<Screen, Action>,
+    screen: screenReducer as LoopReducer<AppScreen, Action>,
     pathToOpen: pathToOpenReducer as LoopReducer<App['pathToOpen'], Action>,
     controlsVisible: controlsVisibleReducer as LoopReducer<boolean, Action>,
 }) as any as Reducer<App, Action>;

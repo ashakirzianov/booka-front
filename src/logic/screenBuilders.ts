@@ -1,11 +1,11 @@
 import {
-    bookScreen, libraryScreen, Screen, bookLocator,
+    bookScreen, libraryScreen, AppScreen, bookLocator,
 } from '../model';
 import { bookForId, currentPosition, currentLibrary } from './dataAccess';
 import { ToBook, NavigationObject } from '../model/navigationObject';
 import { assertNever } from '../utils';
 
-function buildBookScreen(navigation: ToBook): Promise<Screen> {
+function buildBookScreen(navigation: ToBook): Promise<AppScreen> {
     const book = bookForId(navigation.id);
     const path = navigation.location.location === 'current'
         ? currentPosition(navigation.id)
@@ -20,11 +20,11 @@ function buildBookScreen(navigation: ToBook): Promise<Screen> {
     return promise;
 }
 
-function buildLibraryScreen(): Promise<Screen> {
+function buildLibraryScreen(): Promise<AppScreen> {
     return currentLibrary().then(l => libraryScreen(l));
 }
 
-export function buildScreenForNavigation(navigation: NavigationObject): Promise<Screen> {
+export function buildScreenForNavigation(navigation: NavigationObject): Promise<AppScreen> {
     switch (navigation.navigate) {
         case 'book':
             return buildBookScreen(navigation);
