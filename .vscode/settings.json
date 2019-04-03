@@ -24,6 +24,7 @@
         "backend",
         "booka",
         "browserslist",
+        "middlewares",
         "nums",
         "onstatechange",
         "onupdatefound",

@@ -1,7 +1,23 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
+import {
+    combineReducers, Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose,
+} from 'redux';
+import promiseMiddleware from 'redux-promise-middleware';
+import { install as installLoop } from 'redux-loop';
 import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
-import { combineReducers, Reducer as ReducerRedux } from 'redux';
+
+export function createEnhancedStore<State>(reducer: ReducerRedux<State>, initial: State, middlewares: Array<Middleware<{}, State, any>>) {
+    const middlewareEnhancer = applyMiddleware(
+        promiseMiddleware(),
+        ...middlewares,
+    );
+    const loopEnhancer = installLoop();
+    return createStore(reducer, initial, compose(
+        middlewareEnhancer,
+        loopEnhancer,
+    ));
+}
 
 // Actions:
 
