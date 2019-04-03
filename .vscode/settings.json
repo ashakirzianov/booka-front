@@ -31,5 +31,6 @@
         "precached",
         "subpath",
         "timeouted"
-    ]
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

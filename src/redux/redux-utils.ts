@@ -1,9 +1,9 @@
 // NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
 import {
-    combineReducers, Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose,
+    Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import { install as installLoop } from 'redux-loop';
+import { install as installLoop, loop, Cmd, combineReducers } from 'redux-loop';
 import { mapObject, Func } from '../utils';
 import { PromisePlus } from '../promisePlus';
 
@@ -54,10 +54,17 @@ type PromiseReducerT<State, Payload = {}, Data = undefined> = {
     rejected?: SimpleReducerT<State, any>,
     fulfilled?: SimpleReducerT<State, Payload>,
 };
+type LoopReducerT<State, Payload, ActionsT, Suc extends keyof ActionsT, Err extends keyof ActionsT> = {
+    sync: SimpleReducerT<State, Payload>,
+    async: () => Promise<ActionsT[Suc]>,
+    success: Suc,
+    fail?: Err,
+};
+
 type SingleReducerT<State, ActionsT, Key extends keyof ActionsT> =
     ActionsT[Key] extends Promise<infer Fulfilled> ? PromiseReducerT<State, Fulfilled>
     : ActionsT[Key] extends PromisePlus<infer F, infer D> ? PromiseReducerT<State, F, D>
-    : SimpleReducerT<State, ActionsT[Key]>
+    : (SimpleReducerT<State, ActionsT[Key]> | LoopReducerT<State, ActionsT[Key], ActionsT, keyof ActionsT, keyof ActionsT>)
     ;
 
 export type ReducerTs<State, ActionsT> = {
@@ -99,7 +106,7 @@ type PartialReducersTemplate<State, AT> = {
 };
 export function buildPartialReducers<State, AT>(template: PartialReducersTemplate<State, AT>): ReducerRedux<State> {
     const reducersMap = mapObject(template, (_, pt) => buildPartialReducer(pt as any)) as any; // TODO: add note whe we need to cast to any
-    return combineReducers(reducersMap);
+    return combineReducers(reducersMap) as any;
 }
 
 function findReducerT<State, Template, Key extends keyof Template>(
@@ -107,9 +114,17 @@ function findReducerT<State, Template, Key extends keyof Template>(
     actionType: Extract<keyof Template, string>,
 ): SimpleReducerT<State, any> | undefined {
 
-    const reducer = reducerTs[actionType] as any; // TODO: add note why we need to cast to any
-    if (reducer && typeof reducer === 'function') {
-        return reducer as SimpleReducerT<State, any>;
+    const reducer = reducerTs[actionType]; // TODO: add note why we need to cast to any
+    if (isSimple(reducer)) {
+        return reducer;
+    } else if (isLoop(reducer)) {
+        return (state: State, payload: any) => loop(
+            reducer.sync(state, payload),
+            Cmd.run(reducer.async, {
+                successActionCreator: buildActionCreator(reducer.success),
+                failActionCreator: reducer.fail ? buildActionCreator(reducer.fail) : undefined,
+            }),
+        ) as any;
     }
 
     const promiseTemplate = reducerTs as { [k: string]: PromiseReducerT<State, any> };
@@ -147,3 +162,15 @@ function stringEndCondition<T>(str: string, toTrim: string, f: (trimmed: string)
         : undefined
         ;
 }
+
+function isSimple(r: any): r is SimpleReducerT<any, any> {
+    return r && typeof r === 'function';
+}
+
+function isLoop(r: any): r is LoopReducerT<any, any, any, any, any> {
+    return r && r.sync;
+}
+
+// function isPromise(r: any): r is PromiseReducerT<any, any> {
+//     return r && (r.pending || r.fulfilled || r.rejected);
+// }
