@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextProps, TextPropsStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectDispatch } from './comp-utils';
+import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
 import { navigateToUrl } from '../logic';
 import { Action } from '../redux/actions';
 
@@ -46,7 +46,7 @@ export type ActionLinkProps = {
     onClick?: Callback<void>,
     style?: Hoverable<TextPropsStyle>,
 };
-export const ActionLink = connectDispatch<ActionLinkProps>(props =>
+export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Link action={() => {
         if (props.action) {
             props.dispatch(props.action);

@@ -22,8 +22,8 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
             [k in ActionKs]: ActionDispatcher<PayloadType<ACs[k]>>;
         };
         return function connectComp<P>(Comp: React.ComponentType<P & ComponentProps>): React.ComponentType<ExcludeKeys<P, StateKs | ActionKs>> {
-            function mapStateToProps(store: State): Pick<State, StateKs> {
-                return pick(store, ...stateKs);
+            function mapStateToProps(state: State): Pick<State, StateKs> {
+                return pick(state, ...stateKs);
             }
 
             const ac = pick(actionCreators, ...actionKs);
@@ -52,14 +52,18 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
         return connect([], actionKs);
     }
 
-    function connectDispatch<P>(Comp: React.ComponentType<P & { dispatch: Dispatch<Action> }>): React.ComponentType<P> {
-        return connectReactRedux()(Comp as any) as any;
+    type ConnectAllProps = {
+        dispatch: Dispatch<Action>,
+        state: State,
+    };
+    function connectAll<P>(Comp: React.ComponentType<P & ConnectAllProps>): React.ComponentType<P> {
+        return connectReactRedux(state => ({ state }))(Comp as any) as any;
     }
 
     return {
         connect,
         connectState,
         connectActions,
-        connectDispatch,
+        connectAll,
     };
 }
