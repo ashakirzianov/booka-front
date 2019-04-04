@@ -4,15 +4,15 @@ import {
     BookNode, isParagraph, isChapter, inRange, BookContent,
     subpathCouldBeInRange, AttributesObject, SimpleSpan,
     AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
-    isFootnote, FootnoteSpan, bookRange,
+    isFootnote, FootnoteSpan, bookRange, noForBl,
 } from '../model';
-import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
     comp, Callback, relative, connectActions,
     Row, NewLine, Tab, Inline, ThemedText,
     ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
+import { actionCreators } from '../redux/actions';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center' }}>
@@ -63,7 +63,7 @@ const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
     </StyledWithAttributes>,
 );
 const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(props =>
-    <Link action={() => props.openFootnote(props.s.id)}>
+    <Link action={actionCreators.openFootnote(props.s.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
             {props.s.text}
         </ThemedText>
@@ -93,7 +93,7 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
         justifyContent: 'center',
         margin: relative(2),
     }}>
-        <LinkButton to={linkForBook(bookLocator(props.id, props.path))}>
+        <LinkButton action={actionCreators.navigate(noForBl(bookLocator(props.id, props.path)))}>
             {props.text}
         </LinkButton>
     </Row>,

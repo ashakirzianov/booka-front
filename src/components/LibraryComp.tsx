@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Library, BookInfo, remoteBookId } from '../model';
-import { linkForCurrentPosition } from '../logic/routing';
+import { Library, BookInfo, remoteBookId, noForCurrent } from '../model';
 import { comp, Row, Link, SafeAreaView, Column, ThemedText } from '../blocks';
+import { actionCreators } from '../redux/actions';
 
 const BookMetaComp = comp<{ meta: BookInfo, id: string }>(props =>
     <Row>
-        <Link to={linkForCurrentPosition(remoteBookId(props.id))}>
+        <Link action={actionCreators.navigate(noForCurrent(remoteBookId(props.id)))}>
             <ThemedText>{props.meta.title}</ThemedText>
         </Link>
     </Row>,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextProps, TextPropsStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable, Hoverable, comp, connectDispatch } from './comp-utils';
+import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectDispatch } from './comp-utils';
 import { navigateToUrl } from '../logic';
 import { Action } from '../redux/actions';
 
@@ -42,11 +42,21 @@ export const Link = hoverable<LinkProps>(props =>
 );
 
 export type ActionLinkProps = {
-    action: Action,
+    action?: Action,
+    onClick?: Callback<void>,
     style?: Hoverable<TextPropsStyle>,
 };
 export const ActionLink = connectDispatch<ActionLinkProps>(props =>
-    <Link action={() => props.dispatch(props.action)} />,
+    <Link action={() => {
+        if (props.action) {
+            props.dispatch(props.action);
+        }
+        if (props.onClick) {
+            props.onClick();
+        }
+    }} to='' style={props.style}>
+        {props.children}
+    </Link>,
 );
 
 export function showAlert(message: string) {

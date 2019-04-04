@@ -1,5 +1,5 @@
 import { ParsedUrl } from '../parseUrl';
-import { BookId, BookPath, remoteBookId } from './bookLocator';
+import { BookId, BookPath, remoteBookId, BookLocator } from './bookLocator';
 
 export type ToLibrary = {
     navigate: 'library',
@@ -84,4 +84,35 @@ function locationForPath(pathString: string | undefined): BookLocation {
                     path: path,
                 };
     }
+}
+
+export function noForBl(bl: BookLocator): NavigationObject {
+    return {
+        navigate: 'book',
+        location: {
+            location: 'static',
+            path: bl.range.start,
+        },
+        id: bl.id,
+        toc: false,
+        footnoteId: undefined,
+    };
+}
+
+export function noForCurrent(bi: BookId): NavigationObject {
+    return {
+        navigate: 'book',
+        location: {
+            location: 'current',
+        },
+        id: bi,
+        toc: false,
+        footnoteId: undefined,
+    };
+}
+
+export function noForLib(): NavigationObject {
+    return {
+        navigate: 'library',
+    };
 }

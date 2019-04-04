@@ -5,7 +5,6 @@ import { comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme, Palette } from '../model';
-import { LinkProps } from './Atoms.platform';
 import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
@@ -40,8 +39,8 @@ export const ThemedText = themed<TextProps>(props =>
 
 export const PlainText = Atoms.Text;
 
-export const Link = themed<LinkProps>(props =>
-    <Atoms.Link to={props.to} action={props.action} style={{
+export const Link = themed<Atoms.ActionLinkProps>(props =>
+    <Atoms.ActionLink action={props.action} style={{
         ...props.style,
         fontSize: props.theme.fontSize.normal,
         fontFamily: props.theme.fontFamily,
@@ -51,7 +50,7 @@ export const Link = themed<LinkProps>(props =>
         },
     }}>
         {props.children}
-    </Atoms.Link>,
+    </Atoms.ActionLink>,
 );
 
 export const Label = comp<{ text: string, margin?: string }>(props =>
@@ -64,17 +63,17 @@ export const ActivityIndicator = comp(props =>
     <Label text='Loading now...' />,
 );
 
-export const PanelLink = comp<LinkProps & { icon: IconName }>(props =>
-    <Link to={props.to} action={props.action} style={{ margin: relative(0.5) }}>
+export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
+    <Link action={props.action} style={{ margin: relative(0.5) }}>
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
     </Link>,
 );
 
-export const StretchLink = themed<LinkProps>(props =>
+export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <Link to={props.to} style={{ margin: relative(0.5) }}>
+        <Link action={props.action} style={{ margin: relative(0.5) }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',

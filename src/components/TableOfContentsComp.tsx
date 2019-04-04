@@ -4,15 +4,15 @@ import {
     comp, Row, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
-import { bookLocator, pathToString } from '../model';
+import { bookLocator, pathToString, noForBl } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { nums } from '../utils';
-import { linkForBook } from '../logic/routing';
+import { actionCreators } from '../redux/actions';
 
 const TocItemComp = comp<TableOfContentsItem & { tabs: number }>(props =>
     <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <StretchLink to={linkForBook(bookLocator(props.id, props.path))}>
+        <StretchLink action={actionCreators.navigate(noForBl(bookLocator(props.id, props.path)))}>
             {props.title}
             <DottedLine />
             {props.percentage.toString()}

@@ -4,13 +4,13 @@ import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
     comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
-import { linkForLib, linkForToc } from '../logic';
+import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName, noForLib } from '../model';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
+import { actionCreators } from '../redux/actions';
 
 export const BookScreenHeader = comp<BookScreen>(props =>
     <Line>
@@ -25,11 +25,11 @@ export const BookScreenHeader = comp<BookScreen>(props =>
 );
 
 const LibButton = comp(() =>
-    <PanelLink icon='left' to={linkForLib()} />,
+    <PanelLink icon='left' action={actionCreators.navigate(noForLib())} />,
 );
 
-const OpenTocButton = connectActions('toggleToc')<{ bi: BookId }>(props =>
-    <PanelLink icon='items' to={linkForToc(props.bi)} action={props.toggleToc} />,
+const OpenTocButton = comp<{ bi: BookId }>(props =>
+    <PanelLink icon='items' action={actionCreators.toggleToc()} />,
 );
 
 const AppearanceButton = comp(() =>
@@ -37,7 +37,7 @@ const AppearanceButton = comp(() =>
         placement='bottom'
         body={<ThemePicker />}
     >
-        {onClick => <PanelLink icon='letter' action={onClick} />}
+        {onClick => <PanelLink icon='letter' onClick={onClick} />}
     </WithPopover>,
 );
 
@@ -126,7 +126,7 @@ const FontScaleButton = connectActions('incrementScale')<{
     <Column style={{
         justifyContent: 'center',
     }}>
-        <Link action={() => props.incrementScale(props.increment)}>
+        <Link action={actionCreators.incrementScale(props.increment)}>
             <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
         </Link>
     </Column>,
@@ -151,7 +151,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
     text: string,
 }>(props => {
     const palette = props.theme.palettes[props.name];
-    return <Link action={() => props.setPalette(props.name)}>
+    return <Link action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,
             height: 50,
