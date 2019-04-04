@@ -1,5 +1,5 @@
 import { PaletteName, NavigationObject, BookPath, AppScreen } from '../model';
-import { actionCreator, ActionsType } from './redux-utils';
+import { actionCreator, ActionFromCreators } from './redux-utils';
 
 export const actionCreators = {
     navigate: actionCreator<NavigationObject>()('navigate'),
@@ -12,4 +12,4 @@ export const actionCreators = {
     incrementScale: actionCreator<number>()('incrementScale'),
 };
 
-export type Action = ActionsType<typeof actionCreators>;
+export type Action = ActionFromCreators<typeof actionCreators>;

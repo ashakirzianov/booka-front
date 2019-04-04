@@ -59,7 +59,7 @@ type ExtractActionType<T> = T extends ActionCreator<infer Type, infer Payload>
     ? ActionObject<Type, Payload>
     : never;
 
-export type ActionsType<AC> = {
+export type ActionFromCreators<AC> = {
     [k in keyof AC]: ExtractActionType<AC[k]>
 }[keyof AC];
 
