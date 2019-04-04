@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { TextProps, TextPropsStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable, Hoverable } from './comp-utils';
+import { isOpenNewTabEvent, Callback, hoverable, Hoverable, comp, connectDispatch } from './comp-utils';
 import { navigateToUrl } from '../logic';
+import { Action } from '../redux/actions';
 
 export const Text = hoverable<TextProps>(props =>
     <span
@@ -38,6 +39,14 @@ export const Link = hoverable<LinkProps>(props =>
     >
         {props.children}
     </a>,
+);
+
+export type ActionLinkProps = {
+    action: Action,
+    style?: Hoverable<TextPropsStyle>,
+};
+export const ActionLink = connectDispatch<ActionLinkProps>(props =>
+    <Link action={() => props.dispatch(props.action)} />,
 );
 
 export function showAlert(message: string) {
