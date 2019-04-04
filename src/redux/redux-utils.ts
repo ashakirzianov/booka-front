@@ -3,7 +3,6 @@ import {
     Reducer as ReducerRedux,
     Action as ReduxAction,
 } from 'redux';
-import promiseMiddleware from 'redux-promise-middleware';
 import {
     install, Cmd, Loop,
     combineReducers as loopCombineReducers,
@@ -22,7 +21,6 @@ export function combineReducers<State, Action extends ReduxAction>(map: Reducers
 
 export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
-        promiseMiddleware(),
         ...middlewares,
     );
     const loopEnhancer = install();
