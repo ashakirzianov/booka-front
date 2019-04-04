@@ -1,18 +1,25 @@
 import {
-    Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
+    createStore, Middleware, applyMiddleware, compose,
+    Reducer as ReducerRedux,
+    Action as ReduxAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import { install, Cmd, loop, combineReducers as loopCombineReducers } from 'redux-loop';
+import {
+    install, Cmd, loop, CmdType, Loop,
+    combineReducers as loopCombineReducers,
+} from 'redux-loop';
 
-type ReducersMap<State, Action extends AnyAction> = {
-    [k in keyof State]: ReducerRedux<State[k], Action>;
+// TODO: remove it once 'redux-loop' improve typings
+type ActualLoopReducer<S, A extends ReduxAction> = (state: S | undefined, action: A, ...args: any[]) => (S | Loop<S, A>);
+type ReducersMap<State, Action extends ReduxAction> = {
+    [k in keyof State]: ActualLoopReducer<State[k], Action>;
 };
-export function combineReducers<State, Action extends AnyAction>(map: ReducersMap<State, Action>): ReducerRedux<State, Action> {
+export function combineReducers<State, Action extends ReduxAction>(map: ReducersMap<State, Action>): ReducerRedux<State, Action> {
     // TODO: remove type assertions once 'redux-loop' improve typings
     return loopCombineReducers(map as any) as any;
 }
 
-export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
+export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
     const middlewareEnhancer = applyMiddleware(
         promiseMiddleware(),
         ...middlewares,
@@ -27,7 +34,7 @@ export function createEnhancedStore<State, A extends AnyAction>(reducer: Reducer
 type ErrorType = string | undefined;
 type PossibleCreator<A, Payload> = (p: Payload) => A;
 
-export function buildLoop<A>() {
+export function buildLoop<A extends ReduxAction>() {
     type LoopInput<State, AsyncResult> = {
         state: State,
         async: () => Promise<AsyncResult>,
@@ -35,11 +42,11 @@ export function buildLoop<A>() {
         fail?: PossibleCreator<A, ErrorType>,
     };
     // TODO: remove type assertions once 'redux-loop' improve typings
-    return <State, AsyncResult>(input: LoopInput<State, AsyncResult>): State =>
-        loop(input.state, Cmd.run(input.async, {
-            successActionCreator: input.success as any,
-            failActionCreator: input.fail as any,
-        })) as any;
+    return <State, AsyncResult>(input: LoopInput<State, AsyncResult>): [State, CmdType<A>] =>
+        loop<State, A>(input.state, Cmd.run(input.async, {
+            successActionCreator: input.success,
+            failActionCreator: input.fail,
+        }));
 }
 
 // Actions:

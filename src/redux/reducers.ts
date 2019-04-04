@@ -62,7 +62,7 @@ function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
 }
 
 const defaultScreen = libraryScreen(library());
-export function screen(state: AppScreen | undefined = defaultScreen, action: Action): AppScreen {
+export function screen(state: AppScreen | undefined = defaultScreen, action: Action) {
     switch (action.type) {
         case 'navigate':
             return loop({
@@ -128,7 +128,7 @@ function controlsVisible(state: boolean | undefined = false, action: Action): bo
 }
 
 export const reducer = combineReducers<App, Action>({
-    theme,
+    theme: theme,
     screen,
     pathToOpen,
     controlsVisible,
