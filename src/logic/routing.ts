@@ -1,8 +1,8 @@
 import { BookLocator, blToString, BookId, biToString } from '../model';
-import { actionCreators, dispatchAction } from '../redux';
-import { Action } from '../redux/store';
+import { dispatchAction } from '../redux';
 import { parsePartialUrl } from '../parseUrl';
 import { urlToNavigation } from '../model/navigationObject';
+import { Action, actionCreators } from '../redux/actions';
 
 export type Destination = string;
 export function destinationToActions(dest: Destination): Action[] {

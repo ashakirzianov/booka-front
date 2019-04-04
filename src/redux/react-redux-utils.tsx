@@ -1,46 +1,37 @@
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { mapObject, pick, ExcludeKeys } from '../utils';
-import {
-    ActionCreators,
-    buildActionCreators,
-} from './redux-utils';
+import { ActionCreatorsMap, ActionCreator } from './redux-utils';
 
 type ActionDispatcher<Payload> = (p: Payload) => void;
-type ActionDispatchers<Template> = { [k in keyof Template]: ActionDispatcher<Template[k]> };
 
-export function buildConnectRedux<State, ActionsT>(actionsT: ActionsT) {
+type PayloadType<A> = A extends ActionCreator<infer T, infer P>
+    ? P
+    : never;
+
+export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCreators: ACs) {
     return function connectKeys<
         StateKs extends keyof State,
-        ActionKs extends Exclude<keyof ActionsT, StateKs> = never>(
+        ActionKs extends Exclude<keyof ACs, StateKs> = never>(
             stateKs: StateKs[],
             actionKs: ActionKs[] = [],
     ) {
         type ComponentProps = Pick<State, StateKs> & {
-            [k in ActionKs]: ActionDispatcher<ActionsT[k]>;
+            [k in ActionKs]: ActionDispatcher<PayloadType<ACs[k]>>;
         };
-        // const actionKs: ActionKs[] = allKeys
-        //     .filter(key =>
-        //         (actionsT as any)[key] !== undefined) as ActionKs[];
-        // const stateKs: StateKs[] = allKeys
-        //     .filter(key =>
-        //         actionKs.find(ak => ak === key) === undefined) as StateKs[];
         return function connectComp<P>(Comp: React.ComponentType<P & ComponentProps>): React.ComponentType<ExcludeKeys<P, StateKs | ActionKs>> {
             function mapStateToProps(store: State): Pick<State, StateKs> {
                 return pick(store, ...stateKs);
             }
 
-            const ac = buildActionCreators(pick(actionsT, ...actionKs));
+            const ac = pick(actionCreators, ...actionKs);
             function mapDispatchToProps(dispatch: Dispatch<Action<any>>) {
-                function buildCallbacks<T>(creators: ActionCreators<T>): ActionDispatchers<T> {
-                    return mapObject(
-                        creators,
-                        (key, value) =>
-                            ((x: any) => { dispatch(value(x)); }) as any, // TODO: try to remove this last cast
-                    );
-                }
 
-                const callbacks = buildCallbacks(ac);
+                const callbacks = mapObject(
+                    ac,
+                    (key, value) =>
+                        ((x: any) => { dispatch(value(x)); }),
+                );
                 return callbacks;
             }
 

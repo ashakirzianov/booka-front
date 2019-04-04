@@ -4,7 +4,7 @@ import { KeyRestriction, ExcludeKeys } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
 import { platformValue } from '../platform';
-import { actionsTemplate } from '../redux/actions';
+import { actionCreators } from '../redux/actions';
 
 export * from './comp-utils.platform';
 
@@ -32,7 +32,7 @@ export function absolute(size: number) {
     return `${size}`;
 }
 
-export const connected = buildConnectRedux<App, typeof actionsTemplate>(actionsTemplate);
+export const connected = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
 export type Hoverable<T extends KeyRestriction<T, ':hover'>> = T & { ':hover'?: Partial<T> };
 

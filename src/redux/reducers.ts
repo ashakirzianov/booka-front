@@ -1,12 +1,11 @@
 import {
     App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
 } from '../model';
-import { Action } from './store';
 import { buildScreenForNavigation } from '../logic';
 import { buildLoop, combineReducers } from './redux-utils';
-import { ActionsTemplate } from './actions';
+import { Action, actionCreators } from './actions';
 
-const loop = buildLoop<ActionsTemplate>();
+const loop = buildLoop<Action>();
 
 const defaultTheme: Theme = {
     palettes: {
@@ -69,7 +68,7 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return loop({
                 state: state,
                 async: () => buildScreenForNavigation(action.payload),
-                success: 'pushScreen',
+                success: actionCreators.pushScreen,
             });
         case 'pushScreen':
             return action.payload;

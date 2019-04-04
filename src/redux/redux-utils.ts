@@ -1,10 +1,8 @@
-// NOTE: this file contains lots of crypto code. I'm sorry, future Anton, but you have to deal with it!
 import {
     Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
 import * as RL from 'redux-loop';
-import { mapObject, Func } from '../utils';
 
 type ReducersMap<State, Action extends AnyAction> = {
     [k in keyof State]: ReducerRedux<State[k], Action>;
@@ -26,44 +24,47 @@ export function createEnhancedStore<State, A extends AnyAction>(reducer: Reducer
 }
 
 type ErrorType = string | undefined;
-type CanHandleErrorKeys<AT> = {
-    [k in keyof AT]: ErrorType extends AT[k]
-    ? k
-    : never;
-}[keyof AT];
-export function buildLoop<AT>() {
-    type LoopInput<State, Suc extends keyof AT, F extends CanHandleErrorKeys<AT>> = {
+type PossibleCreator<A, Payload> = (p: Payload) => A;
+
+export function buildLoop<A>() {
+    type LoopInput<State, AsyncResult> = {
         state: State,
-        async: () => Promise<AT[Suc]>,
-        success: Suc,
-        fail?: F,
+        async: () => Promise<AsyncResult>,
+        success: PossibleCreator<A, AsyncResult>,
+        fail?: PossibleCreator<A, ErrorType>,
     };
-    return <State, Suc extends keyof AT, F extends CanHandleErrorKeys<AT>>(input: LoopInput<State, Suc, F>): State =>
+    return <State, AsyncResult>(input: LoopInput<State, AsyncResult>): State =>
         RL.loop(input.state, RL.Cmd.run(input.async, {
-            successActionCreator: buildActionCreator(input.success),
-            failActionCreator: input.fail && buildActionCreator(input.fail) as any,
-        })) as any;
+            successActionCreator: input.success,
+            failActionCreator: input.fail,
+        }));
 }
 
 // Actions:
 
-export type ActionType<Type extends PropertyKey, Payload> = {
+type ActionObject<Type extends PropertyKey, Payload> = {
     type: Type,
     payload: Payload,
 };
-export type ActionsType<Templates> =
-    ({ [k in keyof Templates]: ActionType<k, Templates[k]> })[keyof Templates];
 
-export type ActionCreator<Type extends PropertyKey, Payload> = Func<Payload, ActionType<Type, Payload>>;
-export type ActionCreators<Template> = { [k in keyof Template]: ActionCreator<k, Template[k]> };
+export type ActionCreator<Type extends PropertyKey, Payload> =
+    (x: Payload) => ActionObject<Type, Payload>;
 
-function buildActionCreator<T extends PropertyKey, P = any>(type: T): ActionCreator<T, P> {
-    return p => ({
+type ExtractActionType<T> = T extends ActionCreator<infer Type, infer Payload>
+    ? ActionObject<Type, Payload>
+    : never;
+
+export type ActionsType<AC> = {
+    [k in keyof AC]: ExtractActionType<AC[k]>
+}[keyof AC];
+
+export type ActionCreatorsMap = {
+    [k in string]: ActionCreator<any, any>
+};
+
+export function actionCreator<P = void>() {
+    return <T extends PropertyKey>(type: T): ActionCreator<T, P> => p => ({
         type: type,
         payload: p,
     });
-}
-
-export function buildActionCreators<Template>(actionTemplate: Template): ActionCreators<Template> {
-    return mapObject(actionTemplate, buildActionCreator as any) as ActionCreators<Template>;
 }

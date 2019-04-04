@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { reducer } from './reducers';
-import { buildActionCreators, ActionsType, createEnhancedStore } from './redux-utils';
+import { createEnhancedStore } from './redux-utils';
 import { updateHistoryMiddleware, syncMiddleware } from '../logic';
-import { actionsTemplate } from './actions';
+import { Action } from './actions';
 
-export const actionCreators = buildActionCreators(actionsTemplate);
-export type Action = ActionsType<typeof actionsTemplate>;
 export function dispatchAction(action: Action) {
     store.dispatch(action);
 }
