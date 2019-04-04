@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { mapObject, pick, ExcludeKeys } from '../utils';
+import { mapObject, pick, ExcludeKeys, Func } from '../utils';
 import { ActionCreatorsMap, ActionCreator } from './redux-utils';
 
-type ActionDispatcher<Payload> = (p: Payload) => void;
+type ActionDispatcher<Payload> = Func<Payload, void>;
 
 type PayloadType<A> = A extends ActionCreator<infer T, infer P>
     ? P

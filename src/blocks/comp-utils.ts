@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Radium from 'radium';
-import { KeyRestriction, ExcludeKeys } from '../utils';
+import { KeyRestriction, ExcludeKeys, Func } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
 import { platformValue } from '../platform';
@@ -9,15 +9,14 @@ import { actionCreators } from '../redux/actions';
 export * from './comp-utils.platform';
 
 export type ReactContent = React.ReactNode;
-export type Callback<Argument> = (arg: Argument) => void;
-export type VoidCallback = Callback<void>;
+export type Callback<Argument> = Func<Argument, void>;
 export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;
 export type Comp<P = {}, A = {}> = React.ComponentType<CompProps<P, A>>;
-export function comp<P ={}, A = {}>(c: Comp<P, A>) {
+export function comp<P = {}, A = {}>(c: Comp<P, A>) {
     return c;
 }
 

@@ -11,7 +11,7 @@ const headerHeight = relative(4);
 type ModalBoxProps = {
     open: boolean,
     title?: string,
-    toggle: Callback<any>,
+    toggle: Callback<void>,
 };
 export const Modal = comp<ModalBoxProps>(props =>
     <AnimatedVisibility visible={props.open}>
