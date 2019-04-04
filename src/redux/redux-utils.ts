@@ -2,13 +2,14 @@ import {
     Reducer as ReducerRedux, createStore, Middleware, applyMiddleware, compose, AnyAction,
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import * as RL from 'redux-loop';
+import { install, Cmd, loop, combineReducers as loopCombineReducers } from 'redux-loop';
 
 type ReducersMap<State, Action extends AnyAction> = {
     [k in keyof State]: ReducerRedux<State[k], Action>;
 };
 export function combineReducers<State, Action extends AnyAction>(map: ReducersMap<State, Action>): ReducerRedux<State, Action> {
-    return RL.combineReducers(map);
+    // TODO: remove type assertions once 'redux-loop' improve typings
+    return loopCombineReducers(map as any) as any;
 }
 
 export function createEnhancedStore<State, A extends AnyAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
@@ -16,7 +17,7 @@ export function createEnhancedStore<State, A extends AnyAction>(reducer: Reducer
         promiseMiddleware(),
         ...middlewares,
     );
-    const loopEnhancer = RL.install();
+    const loopEnhancer = install();
     return createStore(reducer, compose(
         loopEnhancer,
         middlewareEnhancer,
@@ -33,11 +34,12 @@ export function buildLoop<A>() {
         success: PossibleCreator<A, AsyncResult>,
         fail?: PossibleCreator<A, ErrorType>,
     };
+    // TODO: remove type assertions once 'redux-loop' improve typings
     return <State, AsyncResult>(input: LoopInput<State, AsyncResult>): State =>
-        RL.loop(input.state, RL.Cmd.run(input.async, {
-            successActionCreator: input.success,
-            failActionCreator: input.fail,
-        }));
+        loop(input.state, Cmd.run(input.async, {
+            successActionCreator: input.success as any,
+            failActionCreator: input.fail as any,
+        })) as any;
 }
 
 // Actions:
