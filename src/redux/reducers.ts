@@ -2,10 +2,8 @@ import {
     App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
 } from '../model';
 import { buildScreenForNavigation } from '../logic';
-import { buildLoop, combineReducers } from './redux-utils';
+import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
-
-const loop = buildLoop<Action>();
 
 const defaultTheme: Theme = {
     palettes: {

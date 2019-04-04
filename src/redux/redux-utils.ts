@@ -5,8 +5,9 @@ import {
 } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
 import {
-    install, Cmd, loop, CmdType, Loop,
+    install, Cmd, Loop,
     combineReducers as loopCombineReducers,
+    loop as loopLoop,
 } from 'redux-loop';
 
 // TODO: remove it once 'redux-loop' improve typings
@@ -33,20 +34,17 @@ export function createEnhancedStore<State, A extends ReduxAction>(reducer: Reduc
 
 type ErrorType = string | undefined;
 type PossibleCreator<A, Payload> = (p: Payload) => A;
-
-export function buildLoop<A extends ReduxAction>() {
-    type LoopInput<State, AsyncResult> = {
-        state: State,
-        async: () => Promise<AsyncResult>,
-        success: PossibleCreator<A, AsyncResult>,
-        fail?: PossibleCreator<A, ErrorType>,
-    };
-    // TODO: remove type assertions once 'redux-loop' improve typings
-    return <State, AsyncResult>(input: LoopInput<State, AsyncResult>): [State, CmdType<A>] =>
-        loop<State, A>(input.state, Cmd.run(input.async, {
-            successActionCreator: input.success,
-            failActionCreator: input.fail,
-        }));
+type LoopInput<State, A extends ReduxAction, AsyncResult> = {
+    state: State,
+    async: () => Promise<AsyncResult>,
+    success: PossibleCreator<A, AsyncResult>,
+    fail?: PossibleCreator<A, ErrorType>,
+};
+export function loop<S, A extends ReduxAction, AsyncResult>(input: LoopInput<S, A, AsyncResult>) {
+    return loopLoop(input.state, Cmd.run(input.async, {
+        successActionCreator: input.success,
+        failActionCreator: input.fail,
+    }));
 }
 
 // Actions:
