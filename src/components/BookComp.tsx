@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { comp, ActivityIndicator, connected, Label } from '../blocks';
+import { comp, ActivityIndicator, connect, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
     inRange, bookRange, emptyPath,
@@ -22,7 +22,7 @@ export const BookComp = comp<Book>(props => {
     }
 });
 
-const LoadedBookComp = connected(['pathToOpen'], ['updateBookPosition'])<LoadedBook>(props => {
+const LoadedBookComp = connect(['pathToOpen'], ['updateBookPosition'])<LoadedBook>(props => {
     const {
         pathToOpen, updateBookPosition,
         content, id, toc,

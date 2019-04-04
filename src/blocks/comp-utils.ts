@@ -31,7 +31,7 @@ export function absolute(size: number) {
     return `${size}`;
 }
 
-export const connected = buildConnectRedux<App, typeof actionCreators>(actionCreators);
+export const { connect, connectState, connectDispatch } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
 export type Hoverable<T extends KeyRestriction<T, ':hover'>> = T & { ':hover'?: Partial<T> };
 
@@ -54,7 +54,7 @@ type Themeable = {
 };
 type ThemeableComp<T> = Comp<T & Themeable>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
-    return connected(['theme'], [])(C);
+    return connectState('theme')(C);
 }
 export function palette(themeable: Themeable): Palette {
     return themeable.theme.palettes[themeable.theme.currentPalette];

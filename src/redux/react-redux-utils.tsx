@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect as connectReactRedux } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { mapObject, pick, ExcludeKeys, Func } from '../utils';
 import { ActionCreatorsMap, ActionCreator } from './redux-utils';
@@ -10,7 +10,7 @@ type PayloadType<A> = A extends ActionCreator<infer T, infer P>
     : never;
 
 export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCreators: ACs) {
-    return function connectKeys<
+    function connect<
         StateKs extends keyof State,
         ActionKs extends Exclude<keyof ACs, StateKs> = never>(
             stateKs: StateKs[],
@@ -35,10 +35,24 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
                 return callbacks;
             }
 
-            const connector = connect(mapStateToProps, mapDispatchToProps);
+            const connector = connectReactRedux(mapStateToProps, mapDispatchToProps);
 
             const connected = connector(Comp as any); // TODO: try not to use 'as any'
             return connected as any; // TODO: try not to use 'as any'
         };
+    }
+
+    function connectState<StateKs extends keyof State>(...stateKs: StateKs[]) {
+        return connect(stateKs, []);
+    }
+
+    function connectDispatch<ActionKs extends keyof ACs>(...actionKs: ActionKs[]) {
+        return connect([], actionKs);
+    }
+
+    return {
+        connect,
+        connectState,
+        connectDispatch,
     };
 }
