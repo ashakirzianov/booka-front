@@ -9,7 +9,7 @@ import {
 import { linkForBook } from '../logic';
 import { assertNever } from '../utils';
 import {
-    comp, Callback, relative, connectDispatch,
+    comp, Callback, relative, connectActions,
     Row, NewLine, Tab, Inline, ThemedText,
     ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
@@ -62,7 +62,7 @@ const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
         }
     </StyledWithAttributes>,
 );
-const FootnoteSpanComp = connectDispatch('openFootnote')<{ s: FootnoteSpan }>(props =>
+const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(props =>
     <Link action={() => props.openFootnote(props.s.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
             {props.s.text}

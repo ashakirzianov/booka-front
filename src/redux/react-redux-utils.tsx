@@ -46,13 +46,16 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
         return connect(stateKs, []);
     }
 
-    function connectDispatch<ActionKs extends keyof ACs>(...actionKs: ActionKs[]) {
+    function connectActions<ActionKs extends keyof ACs>(...actionKs: ActionKs[]) {
         return connect([], actionKs);
     }
+
+    const connectDispatch = connectReactRedux();
 
     return {
         connect,
         connectState,
+        connectActions,
         connectDispatch,
     };
 }
