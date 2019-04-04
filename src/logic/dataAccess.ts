@@ -3,7 +3,7 @@ import {
 } from '../model';
 import { fetchBI, fetchLibrary, convertBook, convertLibrary } from '../api';
 import { Middleware } from 'redux';
-import { Action } from '../redux/store';
+import { Action } from '../redux/actions';
 
 type BookStore = Book[];
 const bookStore: BookStore = [];

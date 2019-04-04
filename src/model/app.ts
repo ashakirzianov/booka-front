@@ -1,9 +1,9 @@
-import { Screen } from './screen';
+import { AppScreen } from './screen';
 import { BookPath } from './bookLocator';
 import { Theme } from './theme';
 
 export type App = {
-    screen: Screen,
+    screen: AppScreen,
     pathToOpen: BookPath | null,
     controlsVisible: boolean,
     theme: Theme,

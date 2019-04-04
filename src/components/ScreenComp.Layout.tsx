@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     comp, ReactContent, TopBar, Row,
-    relative, VoidCallback, Column, themed,
+    relative, Column, themed, Callback,
 } from '../blocks';
 
 export const Header = themed<{
@@ -15,7 +15,7 @@ export const Header = themed<{
 type ScreenLayoutProps = {
     headerVisible: boolean,
     header?: ReactContent,
-    onContentClick?: VoidCallback,
+    onContentClick?: Callback<void>,
 };
 export const ScreenLayout = comp<ScreenLayoutProps>(props =>
     <Column style={{ width: '100%', alignItems: 'center' }}>

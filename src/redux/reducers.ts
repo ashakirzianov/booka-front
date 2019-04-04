@@ -1,60 +1,133 @@
 import {
-    ActionsTemplate, App, forScreen, updateRangeStart,
+    App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
 } from '../model';
-import { buildPartialReducers } from './redux-utils';
+import { buildScreenForNavigation } from '../logic';
+import { combineReducers, loop } from './redux-utils';
+import { Action, actionCreators } from './actions';
 
-export const reducer = buildPartialReducers<App, ActionsTemplate>({
-    theme: {
-        setPalette: (theme, palette) => ({
-            ...theme,
-            currentPalette: palette,
-        }),
-        incrementScale: (theme, scaleIncrement) => theme.fontScale + scaleIncrement > 0
-            ? { ...theme, fontScale: theme.fontScale + scaleIncrement }
-            : theme,
-    },
-    screen: {
-        navigateToScreen: {
-            pending: (current, loading) => loading,
-            fulfilled: (current, next) => next,
+const defaultTheme: Theme = {
+    palettes: {
+        light: {
+            text: '#000',
+            primary: '#fff',
+            secondary: '#eee',
+            accent: '#777',
+            highlight: '#aaf',
+            shadow: '#000',
         },
-        updateBookPosition: (screen, bp) => forScreen(screen, {
-            book: bs => ({
-                ...bs,
-                bl: updateRangeStart(bs.bl, bp),
-            }),
-            default: () => screen,
-        }),
-        toggleToc: screen => forScreen(screen, {
-            book: bs => ({
-                ...bs,
-                tocOpen: !bs.tocOpen,
-            }),
-            default: () => screen,
-        }),
-        openFootnote: (screen, fid) => forScreen(screen, {
-            book: bs => ({
-                ...bs,
-                footnoteId: fid,
-            }),
-            default: () => screen,
-        }),
+        sepia: {
+            text: '#5f3e24',
+            primary: '#f9f3e9',
+            secondary: '#e6e0d6',
+            accent: '#987',
+            highlight: '#321',
+            shadow: '#000',
+        },
+        dark: {
+            text: '#999',
+            primary: '#000',
+            secondary: '#222',
+            accent: '#ddd',
+            highlight: '#fff',
+            shadow: '#555',
+        },
     },
-    pathToOpen: {
-        navigateToScreen: {
-            fulfilled: (path, screen) => forScreen(screen, {
+    currentPalette: 'light',
+    fontFamily: 'Georgia',
+    fontSize: {
+        normal: 26,
+        large: 30,
+        largest: 36,
+    },
+    fontScale: 1,
+    radius: 9,
+};
+
+function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
+    switch (action.type) {
+        case 'setPalette':
+            return {
+                ...state,
+                currentPalette: action.payload,
+            };
+        case 'incrementScale':
+            return state.fontScale + action.payload > 0
+                ? { ...state, fontScale: state.fontScale + action.payload }
+                : state;
+        default:
+            return state;
+    }
+}
+
+const defaultScreen = libraryScreen(library());
+export function screen(state: AppScreen | undefined = defaultScreen, action: Action) {
+    switch (action.type) {
+        case 'navigate':
+            return loop({
+                state: state,
+                async: () => buildScreenForNavigation(action.payload),
+                success: actionCreators.pushScreen,
+            });
+        case 'pushScreen':
+            return action.payload;
+        case 'updateBookPosition':
+            return forScreen(state, {
+                book: bs => ({
+                    ...bs,
+                    bl: updateRangeStart(bs.bl, action.payload),
+                }),
+                default: () => state,
+            });
+        case 'toggleToc':
+            return forScreen(state, {
+                book: bs => ({
+                    ...bs,
+                    tocOpen: !bs.tocOpen,
+                }),
+                default: () => state,
+            });
+        case 'openFootnote':
+            return forScreen(state, {
+                book: bs => ({
+                    ...bs,
+                    footnoteId: action.payload,
+                }),
+                default: () => state,
+            });
+        default:
+            return state;
+    }
+}
+
+function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action): App['pathToOpen'] {
+    switch (action.type) {
+        case 'pushScreen':
+            return forScreen(action.payload, {
                 book: bs => bs.bl.range.start,
                 default: () => null,
-            }),
-        },
-    },
-    controlsVisible: {
-        toggleControls: (current, _) => !current,
-        navigateToScreen: {
-            pending: (_, screen) => forScreen(screen, {
+            });
+        default:
+            return state;
+    }
+}
+
+function controlsVisible(state: boolean | undefined = false, action: Action): boolean {
+    switch (action.type) {
+        case 'pushScreen':
+            return forScreen(action.payload, {
                 book: false,
-                default: true,
-            }),
-        },
-    },
+                default: () => true,
+            });
+        case 'toggleControls':
+            return !state;
+        default:
+            return state;
+    }
+}
+
+export const reducer = combineReducers<App, Action>({
+    theme: theme,
+    screen,
+    pathToOpen,
+    controlsVisible,
 });

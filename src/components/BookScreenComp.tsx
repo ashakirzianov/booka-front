@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    connected, Row, relative, Clickable, Modal, PanelLink,
+    connect, connectDispatch, Row, relative, Clickable, Modal, PanelLink,
     comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
@@ -28,7 +28,7 @@ const LibButton = comp(() =>
     <PanelLink icon='left' to={linkForLib()} />,
 );
 
-const OpenTocButton = connected([], ['toggleToc'])<{ bi: BookId }>(props =>
+const OpenTocButton = connectDispatch('toggleToc')<{ bi: BookId }>(props =>
     <PanelLink icon='items' to={linkForToc(props.bi)} action={props.toggleToc} />,
 );
 
@@ -56,7 +56,7 @@ export const BookScreenComp = comp<BookScreen>(props =>
         }
     </>,
 );
-const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
+const BookText = connectDispatch('toggleControls')<{ book: Book }>(props =>
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
@@ -69,7 +69,7 @@ const BookText = connected([], ['toggleControls'])<{ book: Book }>(props =>
 
 );
 
-const TableOfContentsBox = connected([], ['toggleToc'])<{ toc: TableOfContents, open: boolean }>(props =>
+const TableOfContentsBox = connectDispatch('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
     >
         <Row style={{ overflow: 'scroll' }}>
@@ -82,7 +82,7 @@ const FootnoteComp = comp<Footnote>(props =>
     <BookNodesComp nodes={props.content} />,
 );
 
-const FootnoteBox = connected([], ['openFootnote'])<{ footnote?: Footnote }>(props =>
+const FootnoteBox = connectDispatch('openFootnote')<{ footnote?: Footnote }>(props =>
     <Modal
         title={props.footnote && props.footnote.title}
         open={props.footnote !== undefined}
@@ -119,7 +119,7 @@ const FontScale = comp(() =>
     </Column>,
 );
 
-const FontScaleButton = connected([], ['incrementScale'])<{
+const FontScaleButton = connectDispatch('incrementScale')<{
     increment: number,
     size: number,
 }>(props =>
@@ -146,7 +146,7 @@ const PalettePicker = comp(() =>
 );
 
 const HoverableView = hoverable(View);
-const PaletteButton = connected(['theme'], ['setPalette'])<{
+const PaletteButton = connect(['theme'], ['setPalette'])<{
     name: PaletteName,
     text: string,
 }>(props => {

@@ -1,16 +1,14 @@
 import { BookLocator, blToString, BookId, biToString } from '../model';
-import { actionCreators, dispatchAction } from '../redux';
-import { buildScreenForNavigation } from './screenBuilders';
-import { Action } from '../redux/store';
-import { parsePartialUrl } from './parseUrl';
-import { urlToNavigation } from './navigationObject';
+import { dispatchAction } from '../redux';
+import { parsePartialUrl } from '../parseUrl';
+import { urlToNavigation } from '../model/navigationObject';
+import { Action, actionCreators } from '../redux/actions';
 
 export type Destination = string;
 export function destinationToActions(dest: Destination): Action[] {
     const url = parsePartialUrl(dest);
     const no = urlToNavigation(url);
-    const screen = buildScreenForNavigation(no);
-    const action = actionCreators.navigateToScreen(screen);
+    const action = actionCreators.navigate(no);
 
     return [action];
 }

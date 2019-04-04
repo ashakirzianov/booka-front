@@ -24,11 +24,14 @@
         "backend",
         "booka",
         "browserslist",
+        "middlewares",
         "nums",
         "onstatechange",
         "onupdatefound",
         "precached",
         "subpath",
+        "succ",
         "timeouted"
-    ]
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
