@@ -52,10 +52,6 @@ export type BookLocator = {
     location: BookLocation,
 };
 
-export type BookPositionStore = {
-    [bi in string]?: BookPath;
-};
-
 export function bookLocator(id: BookId, location?: BookLocation): BookLocator {
     return {
         id: id,

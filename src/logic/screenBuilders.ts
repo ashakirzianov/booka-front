@@ -2,7 +2,8 @@ import {
     bookScreen, libraryScreen, AppScreen,
     BookLocator, bookLocator, locationPath,
 } from '../model';
-import { bookForId, currentLibrary, positionStore } from './dataAccess';
+import { bookForId, currentLibrary } from './dataAccess';
+import { positionStore } from './persistent';
 
 export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
     const book = bookForId(bl.id);
