@@ -146,8 +146,8 @@ export function rangeToString(br: BookRange): string {
     return `${pathToString(br.start)}${br.end ? ':' + pathToString(br.end) : ''}`;
 }
 
-export function pathToString(path: BookPath): string {
-    return path.length === 0 || (path.length === 1 && path[0] === 0)
+export function pathToString(path: BookPath | undefined): string {
+    return path === undefined || path.length === 0 || (path.length === 1 && path[0] === 0)
         ? ''
         : `/${path.join('-')}`
         ;
