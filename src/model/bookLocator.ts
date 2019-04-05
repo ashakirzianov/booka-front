@@ -90,13 +90,13 @@ export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean
 
 export type BookLocator = {
     id: BookId,
-    range: BookRange,
+    path: BookPath,
 };
 
-export function bookLocator(id: BookId, start?: BookPath, end?: BookPath): BookLocator {
+export function bookLocator(id: BookId, path?: BookPath): BookLocator {
     return {
         id: id,
-        range: bookRange(start, end),
+        path: path || emptyPath(),
     };
 }
 
@@ -104,13 +104,10 @@ export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
     return sameId(bl1.id, bl2.id);
 }
 
-export function updateRangeStart(bl: BookLocator, path: BookPath): BookLocator {
+export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
     return {
         ...bl,
-        range: {
-            ...bl.range,
-            start: path,
-        },
+        path: path,
     };
 }
 
@@ -133,7 +130,7 @@ export function stringToBL(str: string): BookLocator | undefined {
 }
 
 export function blToString(bl: BookLocator): string {
-    return `${biToString(bl.id)}${rangeToString(bl.range)}`;
+    return `${biToString(bl.id)}/${pathToString(bl.path)}`;
 }
 
 export function biToString(bi: BookId): string {
@@ -143,7 +140,7 @@ export function biToString(bi: BookId): string {
 }
 
 export function rangeToString(br: BookRange): string {
-    return `/${pathToString(br.start)}${br.end ? ':' + pathToString(br.end) : ''}`;
+    return `${pathToString(br.start)}${br.end ? ':' + pathToString(br.end) : ''}`;
 }
 
 export function pathToString(path: BookPath | undefined): string {

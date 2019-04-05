@@ -1,5 +1,5 @@
 import {
-    App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
+    App, forScreen, updatePath, Theme, libraryScreen, library, AppScreen,
 } from '../model';
 import { buildScreenForNavigation } from '../logic';
 import { combineReducers, loop } from './redux-utils';
@@ -74,7 +74,7 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: updateRangeStart(bs.bl, action.payload),
+                    bl: updatePath(bs.bl, action.payload),
                 }),
                 default: () => state,
             });
@@ -103,7 +103,7 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
     switch (action.type) {
         case 'pushScreen':
             return forScreen(action.payload, {
-                book: bs => bs.bl.range.start,
+                book: bs => bs.bl.path,
                 default: () => null,
             });
         default:

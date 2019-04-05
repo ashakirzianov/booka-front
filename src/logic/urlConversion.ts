@@ -89,20 +89,20 @@ export function urlToNO(url: string): NavigationObject {
 }
 
 export function stateToUrl(state: App) {
-    const current = state.screen;
+    const { screen } = state;
 
-    switch (current.screen) {
+    switch (screen.screen) {
         case 'library':
             return '/';
         case 'book':
             let search = '';
-            search += current.tocOpen ? 'toc' : '';
-            search += current.footnoteId ? `fid=${current.footnoteId}` : '';
+            search += screen.tocOpen ? 'toc' : '';
+            search += screen.footnoteId ? `fid=${screen.footnoteId}` : '';
 
             search = search ? '?' + search : '';
-            return `/book/${blToString(current.bl)}${search}`;
+            return `/book/${blToString(screen.bl)}${search}`;
         default:
-            return assertNever(current);
+            return assertNever(screen);
     }
 }
 

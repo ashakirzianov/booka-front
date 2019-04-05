@@ -39,7 +39,7 @@ export function noForBl(bl: BookLocator): NavigationObject {
         navigate: 'book',
         location: {
             location: 'static',
-            path: bl.range.start,
+            path: bl.path,
         },
         id: bl.id,
         toc: false,
@@ -71,7 +71,7 @@ export function noForBookScreen(bs: BookScreen): ToBook {
         id: bs.bl.id,
         location: {
             location: 'static',
-            path: bs.bl.range.start,
+            path: bs.bl.path,
         },
         footnoteId: undefined,
         toc: false,
