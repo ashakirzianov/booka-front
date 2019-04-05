@@ -72,8 +72,5 @@ export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
 }
 
 export function updateLocation(bl: BookLocator, location: BookLocation): BookLocator {
-    return {
-        ...bl,
-        location,
-    };
+    return bookLocator(bl.id, location);
 }

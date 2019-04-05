@@ -1,7 +1,6 @@
 import {
     bookScreen, libraryScreen, AppScreen,
-    BookLocator,
-    updatePath,
+    BookLocator, bookLocator, locationPath,
 } from '../model';
 import { bookForId, currentLibrary, positionStore } from './dataAccess';
 
@@ -10,7 +9,7 @@ export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
     if (bl.location.location === 'current') {
         const store = await positionStore();
         const position = store[bl.id.name] || [];
-        bl = updatePath(bl, position);
+        bl = bookLocator(bl.id, locationPath(position));
     }
 
     const toc = bl.location.location === 'toc';

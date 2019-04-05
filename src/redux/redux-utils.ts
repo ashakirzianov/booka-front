@@ -52,9 +52,8 @@ type ActionObject<Type extends PropertyKey, Payload> = {
     payload: Payload,
 };
 
-export type ActionCreator<Type extends PropertyKey, Payload> = void extends Payload
-    ? () => ActionObject<Type, Payload>
-    : (x: Payload) => ActionObject<Type, Payload>;
+export type ActionCreator<Type extends PropertyKey, Payload> =
+    (x: Payload) => ActionObject<Type, Payload>;
 
 type ExtractActionType<T> = T extends ActionCreator<infer Type, infer Payload>
     ? ActionObject<Type, Payload>
@@ -72,5 +71,5 @@ export function actionCreator<P = void>() {
     return <T extends PropertyKey>(type: T): ActionCreator<T, P> => ((p: P) => ({
         type: type,
         payload: p,
-    })) as any; // Because ActionCreator<T, void> means () => ...
+    }));
 }

@@ -1,7 +1,7 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote, updateLocation,
+    locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote,
 } from '../model';
 import { assertNever } from '../utils';
 import { parsePartialUrl, ParsedUrl } from '../parseUrl';
@@ -19,7 +19,7 @@ export function actionToUrl(action: Action | undefined, state: App): string | un
             if (screen.screen === 'book' && action.payload) {
                 // TODO: implement footnote location
                 return blToUrl(
-                    updateLocation(screen.bl,
+                    bookLocator(screen.bl.id,
                         locationFootnote(action.payload)));
             } else {
                 return undefined;
@@ -27,7 +27,7 @@ export function actionToUrl(action: Action | undefined, state: App): string | un
         case 'toggleToc':
             if (screen.screen === 'book') {
                 // TODO: implement toc location
-                return blToUrl(updateLocation(screen.bl, locationToc()));
+                return blToUrl(bookLocator(screen.bl.id, locationToc()));
             } else {
                 return undefined;
             }

@@ -1,5 +1,5 @@
 import {
-    App, forScreen, updatePath, Theme, libraryScreen, library, AppScreen,
+    App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath,
 } from '../model';
 import { buildLibraryScreen, buildBookScreen } from '../logic';
 import { combineReducers, loop } from './redux-utils';
@@ -80,7 +80,7 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: updatePath(bs.bl, action.payload),
+                    bl: bookLocator(bs.bl.id, locationPath(action.payload)),
                 }),
                 default: () => state,
             });
