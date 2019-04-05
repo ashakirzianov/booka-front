@@ -1,8 +1,8 @@
-import { dispatchNavigationEvent } from './routing';
 import { Middleware } from 'redux';
+import { dispatchUrlNavigation } from '../redux/store';
 
 export function onInit() {
-    dispatchNavigationEvent('/');
+    dispatchUrlNavigation('/');
 }
 
 export const updateHistoryMiddleware: Middleware = store => next => action => {

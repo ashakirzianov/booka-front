@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { TextProps, TextPropsStyle } from './Atoms';
 import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
-import { navigateToUrl } from '../logic';
 import { Action } from '../redux/actions';
 import { actionToUrl } from '../logic/urlConversion';
 
@@ -15,7 +14,7 @@ export const Text = hoverable<TextProps>(props =>
 
 export type LinkProps = {
     to?: string,
-    action?: Callback<void>, // TODO: rethinks this
+    onClick?: Callback<void>, // TODO: rethinks this
     style?: Hoverable<TextPropsStyle>,
 };
 export const Link = hoverable<LinkProps>(props =>
@@ -30,10 +29,8 @@ export const Link = hoverable<LinkProps>(props =>
             e.stopPropagation();
             if (!isOpenNewTabEvent(e)) {
                 e.preventDefault();
-                if (props.action) {
-                    props.action();
-                } else if (props.to) {
-                    navigateToUrl(props.to);
+                if (props.onClick) {
+                    props.onClick();
                 }
             }
         }}
@@ -49,7 +46,7 @@ export type ActionLinkProps = {
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Link
-        action={() => {
+        onClick={() => {
             if (props.action) {
                 props.dispatch(props.action);
             }

@@ -1,12 +1,22 @@
 import { Action, actionCreators } from '../redux/actions';
-import { App, NavigationObject, pathToString, ToBook, BookLocation, remoteBookId, BookScreen } from '../model';
-import { filterUndefined } from '../utils';
-import { parseUrl } from '../parseUrl';
+import {
+    App, NavigationObject, pathToString, ToBook,
+    BookLocation, remoteBookId, noForBookScreen, blToString,
+} from '../model';
+import { filterUndefined, assertNever } from '../utils';
+import { parsePartialUrl } from '../parseUrl';
 
 export function actionToUrl(action: Action | undefined, state: App) {
     const no = action && actionToNO(action, state);
 
     return no && noToUrl(no);
+}
+
+export function urlToAction(url: string): Action {
+    const no = urlToNO(url);
+    const action = noToAction(no);
+
+    return action;
 }
 
 export function actionToNO(action: Action, state: App): NavigationObject | undefined {
@@ -60,7 +70,7 @@ export function noToUrl(no: NavigationObject): string {
 }
 
 export function urlToNO(url: string): NavigationObject {
-    const parsedUrl = parseUrl(url);
+    const parsedUrl = parsePartialUrl(url);
     const name = parsedUrl.path[1];
     if (!name) {
         return { navigate: 'unknown' };
@@ -76,6 +86,24 @@ export function urlToNO(url: string): NavigationObject {
         toc: parsedUrl.search.toc !== undefined,
         footnoteId: parsedUrl.search.fid,
     };
+}
+
+export function stateToUrl(state: App) {
+    const current = state.screen;
+
+    switch (current.screen) {
+        case 'library':
+            return '/';
+        case 'book':
+            let search = '';
+            search += current.tocOpen ? 'toc' : '';
+            search += current.footnoteId ? `fid=${current.footnoteId}` : '';
+
+            search = search ? '?' + search : '';
+            return `/book/${blToString(current.bl)}${search}`;
+        default:
+            return assertNever(current);
+    }
 }
 
 function locationForPath(pathString: string | undefined): BookLocation {
@@ -107,17 +135,4 @@ function filterString(toBook: ToBook) {
         ? '?' + filters.join('&')
         : '';
     return result;
-}
-
-function noForBookScreen(bs: BookScreen): ToBook {
-    return {
-        navigate: 'book',
-        id: bs.bl.id,
-        location: {
-            location: 'static',
-            path: bs.bl.range.start,
-        },
-        footnoteId: undefined,
-        toc: false,
-    };
 }

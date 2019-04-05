@@ -1,8 +1,8 @@
 import { createBrowserHistory } from 'history';
-import { dispatchNavigationEvent } from './routing';
-import { App, blToString, BookLocator, biToString, BookId } from '../model';
-import { assertNever } from '../utils';
+import { App } from '../model';
 import { Middleware } from 'redux';
+import { stateToUrl } from './urlConversion';
+import { dispatchUrlNavigation } from '../redux/store';
 
 const history = createBrowserHistory();
 
@@ -12,33 +12,12 @@ function fullUrl(location: typeof history['location']) {
 }
 
 export function wireHistoryNavigation() {
-    dispatchNavigationEvent(fullUrl(history.location));
+    dispatchUrlNavigation(fullUrl(history.location));
     history.listen((l, e) => {
         if (e === 'POP') {
-            dispatchNavigationEvent(fullUrl(l));
+            dispatchUrlNavigation(fullUrl(l));
         }
     });
-}
-
-export function navigateToUrl(url: string) {
-    history.push(url);
-    dispatchNavigationEvent(url);
-}
-
-export function navigateToBl(bl: BookLocator) {
-    navigateToUrl('/book/' + blToString(bl));
-}
-
-export function navigateBack() {
-    history.goBack();
-}
-
-export function navigateToLibrary() {
-    navigateToUrl('/');
-}
-
-export function navigateToToc(bi: BookId) {
-    navigateToUrl('/toc/' + biToString(bi));
 }
 
 export const updateHistoryMiddleware: Middleware<{}, App> = store => next => action => {
@@ -51,21 +30,3 @@ export const updateHistoryMiddleware: Middleware<{}, App> = store => next => act
     }
     return result;
 };
-
-export function stateToUrl(state: App) {
-    const current = state.screen;
-
-    switch (current.screen) {
-        case 'library':
-            return '/';
-        case 'book':
-            let search = '';
-            search += current.tocOpen ? 'toc' : '';
-            search += current.footnoteId ? `fid=${current.footnoteId}` : '';
-
-            search = search ? '?' + search : '';
-            return `/book/${blToString(current.bl)}${search}`;
-        default:
-            return assertNever(current);
-    }
-}
