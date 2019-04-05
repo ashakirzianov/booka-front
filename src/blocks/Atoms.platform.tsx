@@ -3,6 +3,7 @@ import { TextProps, TextPropsStyle } from './Atoms';
 import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
 import { navigateToUrl } from '../logic';
 import { Action } from '../redux/actions';
+import { actionToUrl } from '../logic/urlConversion';
 
 export const Text = hoverable<TextProps>(props =>
     <span
@@ -47,14 +48,18 @@ export type ActionLinkProps = {
     style?: Hoverable<TextPropsStyle>,
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
-    <Link action={() => {
-        if (props.action) {
-            props.dispatch(props.action);
-        }
-        if (props.onClick) {
-            props.onClick();
-        }
-    }} to='' style={props.style}>
+    <Link
+        action={() => {
+            if (props.action) {
+                props.dispatch(props.action);
+            }
+            if (props.onClick) {
+                props.onClick();
+            }
+        }}
+        to={actionToUrl(props.action, props.state)}
+        style={props.style}
+    >
         {props.children}
     </Link>,
 );

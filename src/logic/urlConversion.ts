@@ -3,6 +3,12 @@ import { App, NavigationObject, pathToString, ToBook, BookLocation, remoteBookId
 import { filterUndefined } from '../utils';
 import { parseUrl } from '../parseUrl';
 
+export function actionToUrl(action: Action | undefined, state: App) {
+    const no = action && actionToNO(action, state);
+
+    return no && noToUrl(no);
+}
+
 export function actionToNO(action: Action, state: App): NavigationObject | undefined {
     const { screen } = state;
     switch (action.type) {
