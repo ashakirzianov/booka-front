@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { BookId } from '../model';
 import * as Contracts from '../contracts';
-import { throwExp } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
@@ -16,13 +15,8 @@ export async function fetchLibrary(): Promise<Contracts.Library> {
 }
 
 export async function fetchBI(bookId: BookId): Promise<Contracts.BookContent> {
-    switch (bookId.bi) {
-        case 'remote-book':
-            const backendBook = fetchBook(bookId.name);
-            return backendBook;
-        default:
-            return throwExp(`Unsupported book id: ${bookId.bi}`);
-    }
+    const backendBook = fetchBook(bookId.name);
+    return backendBook;
 }
 
 export async function fetchBook(bookName: string): Promise<Contracts.BookContent> {

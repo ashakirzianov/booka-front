@@ -1,4 +1,4 @@
-import { BookId, BookPath } from './bookLocator';
+import { BookId } from './bookLocator';
 import { BookContent } from './bookContent';
 import { TableOfContents } from './tableOfContent';
 
@@ -27,8 +27,4 @@ export function loadingBook(id: BookId): LoadingBook {
         book: 'loading',
         id,
     };
-}
-
-export function leadPath(): BookPath {
-    return [0];
 }

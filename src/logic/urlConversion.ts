@@ -1,7 +1,7 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
-    App, remoteBookId, blToString, bookLocator, locationCurrent,
-    locationPath, BookLocation,
+    App, remoteBookId, bookLocator, locationCurrent,
+    locationPath, BookLocation, stringToPath, BookLocator, pathToString,
 } from '../model';
 import { assertNever } from '../utils';
 import { parsePartialUrl, ParsedUrl } from '../parseUrl';
@@ -85,16 +85,22 @@ function locationForPath(pathString: string | undefined): BookLocation {
         case 'current':
             return locationCurrent();
         default:
-            if (!pathString) {
-                return locationPath([]);
-            }
-            const path = pathString
-                .split('-')
-                .map(pc => parseInt(pc, 10))
-                ;
-            return path.some(p => isNaN(p))
-                ? locationPath([]) // TODO: report errors in url ?
-                : locationPath(path);
+            return locationPath(stringToPath(pathString) || []);
+    }
+}
+
+function blToString(bl: BookLocator): string {
+    return `${bl.id.name}/${locationToString(bl.location)}`;
+}
+
+function locationToString(l: BookLocation) {
+    switch (l.location) {
+        case 'path':
+            return pathToString(l.path);
+        case 'current':
+            return 'current';
+        default:
+            return assertNever(l);
     }
 }
 

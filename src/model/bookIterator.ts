@@ -1,4 +1,4 @@
-import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookLocator';
+import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookRange';
 import { BookNode, BookContent, children } from './bookContent';
 
 export type RootIterator = {
