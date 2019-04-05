@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Radium from 'radium';
-import { KeyRestriction, ExcludeKeys, Func } from '../utils';
+import { KeyRestriction, ExcludeKeys, Func, platformValue } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
-import { platformValue } from '../platform';
 import { actionCreators } from '../redux/actions';
 
 export * from './comp-utils.platform';

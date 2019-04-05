@@ -3,8 +3,7 @@ import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote,
 } from '../model';
-import { assertNever } from '../utils';
-import { parsePartialUrl, ParsedUrl } from '../parseUrl';
+import { assertNever, parsePartialUrl, ParsedUrl } from '../utils';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {

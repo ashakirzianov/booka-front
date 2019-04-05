@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppComp } from './components';
 import registerServiceWorker from './registerServiceWorker';
-import { onInit } from './logic';
+import { wireHistoryNavigation } from './logic';
 
-onInit();
+wireHistoryNavigation();
 ReactDOM.render(
   <AppComp />,
   document.getElementById('root') as HTMLElement,

@@ -19,7 +19,7 @@ export function combineReducers<State, Action extends ReduxAction>(map: Reducers
     return loopCombineReducers(map as any) as any;
 }
 
-export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>>) {
+export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>> | undefined = []) {
     const middlewareEnhancer = applyMiddleware(
         ...middlewares,
     );

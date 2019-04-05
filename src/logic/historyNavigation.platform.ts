@@ -1,8 +1,6 @@
 import { createBrowserHistory } from 'history';
-import { App } from '../model';
-import { Middleware } from 'redux';
 import { stateToUrl } from './urlConversion';
-import { dispatchUrlNavigation } from '../redux/store';
+import { dispatchUrlNavigation, subscribe } from '../redux/store';
 
 const history = createBrowserHistory();
 
@@ -20,13 +18,10 @@ export function wireHistoryNavigation() {
     });
 }
 
-export const updateHistoryMiddleware: Middleware<{}, App> = store => next => action => {
-    const result = next(action);
-    const currState = store.getState();
-    const urlFromState = stateToUrl(currState);
+subscribe(state => {
+    const urlFromState = stateToUrl(state);
     const fullCurrentUrl = fullUrl(history.location);
     if (fullCurrentUrl !== urlFromState) {
         history.replace(urlFromState);
     }
-    return result;
-};
+});
