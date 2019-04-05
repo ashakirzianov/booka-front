@@ -1,10 +1,8 @@
 // import * as store from 'store';
 import {
     BookId, BookPath, library, LoadedBook,
-    Library, App, BookInfo, Theme,
+    Library, BookInfo, Theme,
 } from '../model';
-import { Action } from '../redux';
-import { Middleware } from 'redux';
 import { smartStore, forEach, singleValueStore } from '../utils';
 import { subscribe } from '../redux/store';
 
@@ -39,21 +37,14 @@ export function setCurrentPosition(bookId: BookId, path: BookPath) {
     stores.positions.set(bookId.name, path);
 }
 
-export const syncMiddleware: Middleware<{}, App> = store => next => actionAny => {
-    const result = next(actionAny);
-    const action = actionAny as Action;
-    if (action.type === 'updateBookPosition') {
-        const position = action.payload;
-        const state = store.getState();
-        const id = state.screen.screen === 'book'
-            ? state.screen.book.id
-            : undefined;
-        if (id) {
-            setCurrentPosition(id, position);
-        }
+subscribe(state => {
+    const { screen } = state;
+    if (screen.screen === 'book' && screen.bl.location.location === 'path') {
+        const id = screen.book.id;
+        const position = screen.bl.location.path;
+        setCurrentPosition(id, position);
     }
-    return result;
-};
+});
 
 // ---- Theme
 

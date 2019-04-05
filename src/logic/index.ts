@@ -1,3 +1,2 @@
-export { wireHistoryNavigation as onInit, updateHistoryMiddleware } from './historyNavigation.platform';
+export { wireHistoryNavigation } from './historyNavigation.platform';
 export * from './screenBuilders';
-export { syncMiddleware } from './persistent';
