@@ -1,7 +1,7 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
     App, NavigationObject, pathToString, ToBook,
-    BookLocation, remoteBookId, noForBookScreen, blToString, bookLocator, currentPositionBL,
+    BookNavigation, remoteBookId, noForBookScreen, blToString, bookLocator, locationCurrent, locationPath,
 } from '../model';
 import { filterUndefined, assertNever } from '../utils';
 import { parsePartialUrl } from '../parseUrl';
@@ -24,8 +24,8 @@ export function actionToNO(action: Action, state: App): NavigationObject | undef
     switch (action.type) {
         case 'navigateToBook':
             const bl = action.payload;
-            const location: BookLocation = bl.locator === 'static'
-                ? { location: 'static', path: bl.path }
+            const location: BookNavigation = bl.location.location === 'path'
+                ? { location: 'static', path: bl.location.path }
                 : { location: 'current' };
             return {
                 navigate: 'book',
@@ -61,8 +61,8 @@ export function noToAction(no: NavigationObject): Action {
     switch (no.navigate) {
         case 'book':
             const bl = no.location.location === 'static'
-                ? bookLocator(no.id, no.location.path)
-                : currentPositionBL(no.id);
+                ? bookLocator(no.id, locationPath(no.location.path || []))
+                : bookLocator(no.id, locationCurrent());
             return actionCreators.navigateToBook(bl);
         case 'library':
         case 'unknown':
@@ -127,7 +127,7 @@ export function stateToUrl(state: App) {
     }
 }
 
-function locationForPath(pathString: string | undefined): BookLocation {
+function locationForPath(pathString: string | undefined): BookNavigation {
     switch (pathString) {
         case 'current':
             return { location: 'current' };

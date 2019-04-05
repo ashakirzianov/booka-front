@@ -19,6 +19,34 @@ export function remoteBookId(name: string): RemoteBookId {
 }
 
 export type BookPath = number[];
+export type PathPosition = {
+    position: 'path',
+    path: BookPath,
+};
+export type CurrentPosition = { position: 'current' };
+export type TocPosition = { position: 'toc' };
+export type FootnotePosition = {
+    position: 'footnote',
+    id: string,
+};
+
+export type BookLocation =
+    | ReturnType<typeof locationPath>
+    | ReturnType<typeof locationCurrent>
+    ;
+
+export function locationPath(path: BookPath) {
+    return {
+        location: 'path' as 'path',
+        path,
+    };
+}
+
+export function locationCurrent() {
+    return {
+        location: 'current' as 'current',
+    };
+}
 
 export function emptyPath(): BookPath {
     return [];
@@ -90,57 +118,20 @@ export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean
     return could;
 }
 
-type BookLocatorBase<L extends string> = {
-    locator: L,
+export type BookLocator = {
     id: BookId,
+    location: BookLocation,
 };
-export type StaticBookLocator = BookLocatorBase<'static'> & {
-    path: BookPath,
-};
-
-export type CurrentBookLocator = BookLocatorBase<'current'>;
-export type TocBookLocator = BookLocatorBase<'toc'>;
-export type FootnoteBookLocator = BookLocatorBase<'footnote'> & {
-    footnoteId: string,
-};
-
-export type BookLocator =
-    | StaticBookLocator
-    | CurrentBookLocator | TocBookLocator | FootnoteBookLocator
-    ;
 
 export type BookPositionStore = {
     [bi in string]?: BookPath;
 };
 
-export function bookLocator(id: BookId, path?: BookPath): StaticBookLocator {
+export function bookLocator(id: BookId, location?: BookLocation): BookLocator {
     return {
-        locator: 'static',
         id: id,
-        path: path || emptyPath(),
+        location: location || locationPath([]),
     };
-}
-
-export function currentPositionBL(id: BookId): CurrentBookLocator {
-    return {
-        locator: 'current',
-        id: id,
-    };
-}
-
-export function resolveBL(bl: BookLocator, positions: BookPositionStore): BookLocator {
-    switch (bl.locator) {
-        case 'static':
-        case 'toc':
-        case 'footnote':
-            return bl;
-        case 'current':
-            const path = positions[bl.id.name];
-            return bookLocator(bl.id, path);
-            return bookLocator(bl.id);
-        default:
-            return assertNever(bl);
-    }
 }
 
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
@@ -148,7 +139,7 @@ export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
 }
 
 export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
-    return bookLocator(bl.id, path);
+    return bookLocator(bl.id, locationPath(path));
 }
 
 export function stringToBL(str: string): BookLocator | undefined {
@@ -163,7 +154,7 @@ export function stringToBL(str: string): BookLocator | undefined {
             .split('-')
             .map(pc => parseInt(pc, 10))
             ;
-        return bookLocator(remoteBookId(bookName), path);
+        return bookLocator(remoteBookId(bookName), locationPath(path));
     }
 
     return bookLocator(remoteBookId(bookName));
@@ -171,17 +162,17 @@ export function stringToBL(str: string): BookLocator | undefined {
 
 // TODO: move to urlConversion.ts ?
 export function blToString(bl: BookLocator): string {
-    switch (bl.locator) {
-        case 'static':
-            return `${biToString(bl.id)}/${pathToString(bl.path)}`;
+    return `${biToString(bl.id)}/${locationToString(bl.location)}`;
+}
+
+export function locationToString(l: BookLocation) {
+    switch (l.location) {
+        case 'path':
+            return pathToString(l.path);
         case 'current':
-            return `${biToString(bl.id)}/current`;
-        case 'toc':
-            return `${biToString(bl.id)}?toc`;
-        case 'footnote':
-            return `${biToString(bl.id)}?fid=${bl.footnoteId}`;
+            return 'current';
         default:
-            return assertNever(bl);
+            return assertNever(l);
     }
 }
 

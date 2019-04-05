@@ -8,7 +8,7 @@ export type ToLibrary = {
 export type ToBook = {
     navigate: 'book',
     id: BookId,
-    location: BookLocation,
+    location: BookNavigation,
     toc: boolean,
     footnoteId: string | undefined,
 };
@@ -23,20 +23,20 @@ export type ToDefault = {
 
 export type NavigationObject = ToLibrary | ToBook | ToDefault | ToUnknown;
 
-export type StaticLocation = {
+export type StaticNavigation = {
     location: 'static',
     path?: BookPath,
 };
 
-export type CurrentLocation = {
+export type CurrentNavigation = {
     location: 'current',
 };
 
-export type BookLocation = StaticLocation | CurrentLocation;
+export type BookNavigation = StaticNavigation | CurrentNavigation;
 
 export function noForBl(bl: BookLocator): NavigationObject {
-    const location: BookLocation = bl.locator === 'static'
-        ? { location: 'static', path: bl.path }
+    const location: BookNavigation = bl.location.location === 'path'
+        ? { location: 'static', path: bl.location.path }
         : { location: 'current' };
     return {
         navigate: 'book',
@@ -66,8 +66,9 @@ export function noForLib(): NavigationObject {
 }
 
 export function noForBookScreen(bs: BookScreen): ToBook {
-    const location: BookLocation = bs.bl.locator === 'static'
-        ? { location: 'static', path: bs.bl.path }
+    const bl = bs.bl;
+    const location: BookNavigation = bl.location.location === 'path'
+        ? { location: 'static', path: bl.location.path }
         : { location: 'current' };
     return {
         navigate: 'book',

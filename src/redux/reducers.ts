@@ -109,8 +109,8 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
     switch (action.type) {
         case 'pushScreen':
             const { payload } = action;
-            if (payload.screen === 'book' && payload.bl.locator === 'static') {
-                return payload.bl.path;
+            if (payload.screen === 'book' && payload.bl.location.location === 'path') {
+                return payload.bl.location.path;
             } else {
                 return null;
             }
