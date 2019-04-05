@@ -29,7 +29,7 @@ export function cacheLibrary(lib: Library) {
     forEach(lib.books, (id, info) => stores.library.set(id, info));
 }
 
-export async function currentPositionForId(bi: BookId): Promise<BookPath> {
+export async function resolveCurrentPosition(bi: BookId): Promise<BookPath> {
     return stores.positions.get(bi.name) || [];
 }
 
