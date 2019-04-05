@@ -13,8 +13,12 @@ export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
         bl = updatePath(bl, position);
     }
 
-    // TODO: fix open toc, etc.
-    return bookScreen(await book, bl, false, undefined);
+    const toc = bl.location.location === 'toc';
+    const fid = bl.location.location === 'footnote'
+        ? bl.location.id
+        : undefined;
+
+    return bookScreen(await book, bl, toc, fid);
 }
 
 export async function buildLibraryScreen(): Promise<AppScreen> {

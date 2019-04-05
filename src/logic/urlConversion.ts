@@ -1,7 +1,7 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, stringToPath, BookLocator, pathToString,
+    locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote, updateLocation,
 } from '../model';
 import { assertNever } from '../utils';
 import { parsePartialUrl, ParsedUrl } from '../parseUrl';
@@ -14,18 +14,20 @@ export function actionToUrl(action: Action | undefined, state: App): string | un
     const { screen } = state;
     switch (action.type) {
         case 'navigateToBook':
-            return blToString(action.payload);
+            return blToUrl(action.payload);
         case 'openFootnote':
             if (screen.screen === 'book' && action.payload) {
                 // TODO: implement footnote location
-                return blToString(screen.bl);
+                return blToUrl(
+                    updateLocation(screen.bl,
+                        locationFootnote(action.payload)));
             } else {
                 return undefined;
             }
         case 'toggleToc':
             if (screen.screen === 'book') {
                 // TODO: implement toc location
-                return blToString(screen.bl);
+                return blToUrl(updateLocation(screen.bl, locationToc()));
             } else {
                 return undefined;
             }
@@ -54,7 +56,7 @@ function parsedUrlToOpenBookAction(parsedUrl: ParsedUrl): Action | undefined {
         return undefined; // TODO: report error ?
     }
 
-    const path = parsedUrl.path[2];
+    const path = parsedUrl.path.slice(2);
     const location = locationForPath(path);
     const bl = bookLocator(remoteBookId(name), location);
 
@@ -69,28 +71,30 @@ export function stateToUrl(state: App) {
         case 'library':
             return '/';
         case 'book':
-            let search = '';
-            search += screen.tocOpen ? 'toc' : '';
-            search += screen.footnoteId ? `fid=${screen.footnoteId}` : '';
-
-            search = search ? '?' + search : '';
-            return `/book/${blToString(screen.bl)}${search}`;
+            return `${blToUrl(screen.bl)}`;
         default:
             return assertNever(screen);
     }
 }
 
-function locationForPath(pathString: string | undefined): BookLocation {
-    switch (pathString) {
+function locationForPath(path: string[]): BookLocation {
+    const head = path[0];
+    switch (head) {
         case 'current':
             return locationCurrent();
+        case 'toc':
+            return locationToc();
+        case 'footnote':
+            return path[1]
+                ? locationFootnote(path[1])
+                : locationPath([]); // TODO: report error ?
         default:
-            return locationPath(stringToPath(pathString) || []);
+            return locationPath(stringToPath(head) || []);
     }
 }
 
-function blToString(bl: BookLocator): string {
-    return `${bl.id.name}/${locationToString(bl.location)}`;
+function blToUrl(bl: BookLocator): string {
+    return `/book/${bl.id.name}/${locationToString(bl.location)}`;
 }
 
 function locationToString(l: BookLocation) {
@@ -99,18 +103,11 @@ function locationToString(l: BookLocation) {
             return pathToString(l.path);
         case 'current':
             return 'current';
+        case 'toc':
+            return 'toc';
+        case 'footnote':
+            return `footnote/${l.id}`;
         default:
             return assertNever(l);
     }
 }
-
-// function filterString(toBook: ToBook) {
-//     const toc = toBook.toc ? 'toc' : undefined;
-//     const fid = toBook.footnoteId ? `fid=${toBook.footnoteId}` : undefined;
-//     const filters = filterUndefined([toc, fid]);
-
-//     const result = filters.length > 0
-//         ? '?' + filters.join('&')
-//         : '';
-//     return result;
-// }

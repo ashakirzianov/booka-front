@@ -17,6 +17,8 @@ export function remoteBookId(name: string): RemoteBookId {
 export type BookLocation =
     | ReturnType<typeof locationPath>
     | ReturnType<typeof locationCurrent>
+    | ReturnType<typeof locationToc>
+    | ReturnType<typeof locationFootnote>
     ;
 
 export function locationPath(path: BookPath) {
@@ -29,6 +31,19 @@ export function locationPath(path: BookPath) {
 export function locationCurrent() {
     return {
         location: 'current' as 'current',
+    };
+}
+
+export function locationToc() {
+    return {
+        location: 'toc' as 'toc',
+    };
+}
+
+export function locationFootnote(id: string) {
+    return {
+        location: 'footnote' as 'footnote',
+        id,
     };
 }
 
@@ -54,4 +69,11 @@ export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
 
 export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
     return bookLocator(bl.id, locationPath(path));
+}
+
+export function updateLocation(bl: BookLocator, location: BookLocation): BookLocator {
+    return {
+        ...bl,
+        location,
+    };
 }
