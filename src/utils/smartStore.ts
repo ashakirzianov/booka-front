@@ -1,4 +1,5 @@
 import * as store from 'store';
+import { values } from './misc';
 
 export function smartStore<V>(key: string) {
     type K = string;
@@ -11,6 +12,11 @@ export function smartStore<V>(key: string) {
             return { ...cache };
         },
 
+        find(f: (x: V) => boolean): V | undefined {
+            const vs = values(cache);
+            return vs.find(f);
+        },
+
         get(k: K): V | undefined {
             return cache[k];
         },
@@ -19,5 +25,13 @@ export function smartStore<V>(key: string) {
             cache[k] = value;
             store.set(key, cache);
         },
+
+        clear() {
+            store.set(key, undefined);
+        },
     };
+}
+
+export function clearAllStores() {
+    store.clearAll();
 }

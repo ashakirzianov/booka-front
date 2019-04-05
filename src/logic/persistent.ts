@@ -1,49 +1,40 @@
 // import * as store from 'store';
 import {
-    BookId, BookPath, sameId, library, LoadedBook,
-    Library, App,
+    BookId, BookPath, library, LoadedBook,
+    Library, App, BookInfo,
 } from '../model';
 import { Action } from '../redux';
 import { Middleware } from 'redux';
+import { smartStore, forEach } from '../utils';
 
-type BookStore = LoadedBook[];
-const bookStore: BookStore = [];
+const stores = {
+    books: smartStore<LoadedBook>('books'),
+    library: smartStore<BookInfo>('library'),
+    positions: smartStore<BookPath>('positions'),
+};
+
 export function bookFromStore(bi: BookId): LoadedBook | undefined {
-    const book = bookStore.find(b => sameId(b.id, bi));
-
-    return book;
+    return stores.books.get(bi.name);
 }
 
 export function storeBook(book: LoadedBook) {
-    const index = bookStore.findIndex(b => sameId(b.id, book.id));
-
-    if (index >= 0) {
-        bookStore[index] = book;
-    } else {
-        bookStore.push(book);
-    }
+    stores.books.set(book.id.name, book);
 }
 
-let libraryCache = library();
-export function cachedLibrary() {
-    return libraryCache;
+export function cachedLibrary(): Library {
+    return library(stores.library.all());
 }
 
 export function cacheLibrary(lib: Library) {
-    libraryCache = lib;
+    forEach(lib.books, (id, info) => stores.library.set(id, info));
 }
 
-type BookPositionStore = {
-    [bi in string]?: BookPath;
-};
-const currentPositionStore: BookPositionStore = {};
-
-export async function positionStore(): Promise<BookPositionStore> {
-    return currentPositionStore;
+export async function currentPositionForId(bi: BookId): Promise<BookPath> {
+    return stores.positions.get(bi.name) || [];
 }
 
 export function setCurrentPosition(bookId: BookId, path: BookPath) {
-    currentPositionStore[bookId.name] = path;
+    stores.positions.set(bookId.name, path);
 }
 
 export const syncMiddleware: Middleware<{}, App> = store => next => actionAny => {

@@ -128,3 +128,19 @@ export function nums(start: number, end: number): number[] {
 export function compose<T, U, V>(f: (x: T) => U, g: (x: U) => V): (x: T) => V {
     return x => g(f(x));
 }
+
+type ObjectMap<V, K extends PropertyKey = string> = {
+    [k in K]?: V;
+};
+export function values<V>(obj: ObjectMap<V>): V[] {
+    return Object.values(obj) as any;
+}
+
+export function forEach<V>(obj: ObjectMap<V>, f: (key: string, value: V) => void) {
+    return Object.keys(obj).forEach(key => {
+        const value = obj[key];
+        if (value !== undefined) {
+            f(key, value);
+        }
+    });
+}
