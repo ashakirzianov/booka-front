@@ -1,54 +1,31 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
-    App, NavigationObject, pathToString, ToBook,
-    BookNavigation, remoteBookId, noForBookScreen, blToString, bookLocator, locationCurrent, locationPath,
+    App, remoteBookId, blToString, bookLocator, locationCurrent,
+    locationPath, BookLocation,
 } from '../model';
-import { filterUndefined, assertNever } from '../utils';
-import { parsePartialUrl } from '../parseUrl';
+import { assertNever } from '../utils';
+import { parsePartialUrl, ParsedUrl } from '../parseUrl';
 
-export function actionToUrl(action: Action | undefined, state: App) {
-    const no = action && actionToNO(action, state);
+export function actionToUrl(action: Action | undefined, state: App): string | undefined {
+    if (!action) {
+        return undefined;
+    }
 
-    return no && noToUrl(no);
-}
-
-export function urlToAction(url: string): Action {
-    const no = urlToNO(url);
-    const action = noToAction(no);
-
-    return action;
-}
-
-export function actionToNO(action: Action, state: App): NavigationObject | undefined {
     const { screen } = state;
     switch (action.type) {
         case 'navigateToBook':
-            const bl = action.payload;
-            const location: BookNavigation = bl.location.location === 'path'
-                ? { location: 'static', path: bl.location.path }
-                : { location: 'current' };
-            return {
-                navigate: 'book',
-                location,
-                id: bl.id,
-                toc: false,
-                footnoteId: undefined,
-            };
+            return blToString(action.payload);
         case 'openFootnote':
             if (screen.screen === 'book' && action.payload) {
-                return {
-                    ...noForBookScreen(screen),
-                    footnoteId: action.payload,
-                };
+                // TODO: implement footnote location
+                return blToString(screen.bl);
             } else {
                 return undefined;
             }
         case 'toggleToc':
             if (screen.screen === 'book') {
-                return {
-                    ...noForBookScreen(screen),
-                    toc: !screen.tocOpen,
-                };
+                // TODO: implement toc location
+                return blToString(screen.bl);
             } else {
                 return undefined;
             }
@@ -57,56 +34,32 @@ export function actionToNO(action: Action, state: App): NavigationObject | undef
     }
 }
 
-export function noToAction(no: NavigationObject): Action {
-    switch (no.navigate) {
+export function urlToAction(url: string): Action | undefined {
+    const parsedUrl = parsePartialUrl(url);
+    const head = parsedUrl.path[0];
+    switch (head) {
         case 'book':
-            const bl = no.location.location === 'static'
-                ? bookLocator(no.id, locationPath(no.location.path || []))
-                : bookLocator(no.id, locationCurrent());
-            return actionCreators.navigateToBook(bl);
+            return parsedUrlToOpenBookAction(parsedUrl);
         case 'library':
-        case 'unknown':
-        case 'default':
+        case '':
         default:
+            // TODO: report errors ?
             return actionCreators.navigateToLibrary();
     }
 }
 
-export function noToUrl(no: NavigationObject): string {
-    switch (no.navigate) {
-        case 'book':
-            const fs = filterString(no);
-            switch (no.location.location) {
-                case 'static':
-                    return `/book/${no.id.name}/${pathToString(no.location.path)}${fs}`;
-                case 'current':
-                    return `/book/${no.id.name}/current${filterString}`;
-            }
-        // TODO: handle properly
-        case 'library':
-        case 'default':
-        case 'unknown':
-            return '/';
-    }
-}
-
-export function urlToNO(url: string): NavigationObject {
-    const parsedUrl = parsePartialUrl(url);
+function parsedUrlToOpenBookAction(parsedUrl: ParsedUrl): Action | undefined {
     const name = parsedUrl.path[1];
     if (!name) {
-        return { navigate: 'unknown' };
+        return undefined; // TODO: report error ?
     }
 
     const path = parsedUrl.path[2];
     const location = locationForPath(path);
+    const bl = bookLocator(remoteBookId(name), location);
 
-    return {
-        navigate: 'book',
-        id: remoteBookId(name),
-        location: location,
-        toc: parsedUrl.search.toc !== undefined,
-        footnoteId: parsedUrl.search.fid,
-    };
+    // TODO: implement toc, fid
+    return actionCreators.navigateToBook(bl);
 }
 
 export function stateToUrl(state: App) {
@@ -127,33 +80,31 @@ export function stateToUrl(state: App) {
     }
 }
 
-function locationForPath(pathString: string | undefined): BookNavigation {
+function locationForPath(pathString: string | undefined): BookLocation {
     switch (pathString) {
         case 'current':
-            return { location: 'current' };
-        case undefined:
-            return { location: 'static' };
+            return locationCurrent();
         default:
+            if (!pathString) {
+                return locationPath([]);
+            }
             const path = pathString
                 .split('-')
                 .map(pc => parseInt(pc, 10))
                 ;
             return path.some(p => isNaN(p))
-                ? { location: 'static' } // TODO: report errors in url ?
-                : {
-                    location: 'static',
-                    path: path,
-                };
+                ? locationPath([]) // TODO: report errors in url ?
+                : locationPath(path);
     }
 }
 
-function filterString(toBook: ToBook) {
-    const toc = toBook.toc ? 'toc' : undefined;
-    const fid = toBook.footnoteId ? `fid=${toBook.footnoteId}` : undefined;
-    const filters = filterUndefined([toc, fid]);
+// function filterString(toBook: ToBook) {
+//     const toc = toBook.toc ? 'toc' : undefined;
+//     const fid = toBook.footnoteId ? `fid=${toBook.footnoteId}` : undefined;
+//     const filters = filterUndefined([toc, fid]);
 
-    const result = filters.length > 0
-        ? '?' + filters.join('&')
-        : '';
-    return result;
-}
+//     const result = filters.length > 0
+//         ? '?' + filters.join('&')
+//         : '';
+//     return result;
+// }

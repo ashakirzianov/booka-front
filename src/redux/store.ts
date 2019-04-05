@@ -8,7 +8,10 @@ import { urlToAction } from '../logic/urlConversion';
 
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);
-    store.dispatch(action);
+    if (action) {
+        // TODO: report errors ?
+        store.dispatch(action);
+    }
 }
 
 class AppProvider extends Provider<Action> { }

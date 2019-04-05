@@ -7,4 +7,3 @@ export * from './bookIterator';
 export * from './library';
 export * from './screen';
 export * from './theme';
-export * from './navigationObject';
