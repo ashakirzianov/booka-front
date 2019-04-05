@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { themed, palette } from './comp-utils';
 import { View } from 'react-native';
-import { platformValue } from '../platform';
+import { platformValue } from '../utils';
 
 export * from './Complex.platform';
 
