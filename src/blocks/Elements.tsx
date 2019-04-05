@@ -40,15 +40,19 @@ export const ThemedText = themed<TextProps>(props =>
 export const PlainText = Atoms.Text;
 
 export const Link = themed<Atoms.ActionLinkProps>(props =>
-    <Atoms.ActionLink action={props.action} style={{
-        ...props.style,
-        fontSize: props.theme.fontSize.normal,
-        fontFamily: props.theme.fontFamily,
-        color: palette(props).accent,
-        [':hover']: {
-            color: palette(props).highlight,
-        },
-    }}>
+    <Atoms.ActionLink
+        action={props.action}
+        onClick={props.onClick}
+        style={{
+            ...props.style,
+            fontSize: props.theme.fontSize.normal,
+            fontFamily: props.theme.fontFamily,
+            color: palette(props).accent,
+            [':hover']: {
+                color: palette(props).highlight,
+            },
+        }}
+    >
         {props.children}
     </Atoms.ActionLink>,
 );
@@ -64,7 +68,11 @@ export const ActivityIndicator = comp(props =>
 );
 
 export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
-    <Link action={props.action} style={{ margin: relative(0.5) }}>
+    <Link
+        action={props.action}
+        onClick={props.onClick}
+        style={{ margin: relative(0.5) }}
+    >
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
