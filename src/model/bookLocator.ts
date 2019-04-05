@@ -1,3 +1,5 @@
+import { assertNever } from '../utils';
+
 export type RemoteBookId = {
     bi: 'remote-book',
     name: string,
@@ -88,16 +90,41 @@ export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean
     return could;
 }
 
-export type BookLocator = {
+export type StaticBookLocator = {
+    locator: 'static',
     id: BookId,
     path: BookPath,
 };
 
-export function bookLocator(id: BookId, path?: BookPath): BookLocator {
+export type CurrentBookLocator = {
+    locator: 'current',
+    id: BookId,
+};
+
+export type BookLocator = StaticBookLocator | CurrentBookLocator;
+
+export type BookPositionStore = {
+    [bi in string]?: BookPath;
+};
+
+export function bookLocator(id: BookId, path?: BookPath): StaticBookLocator {
     return {
+        locator: 'static',
         id: id,
         path: path || emptyPath(),
     };
+}
+
+export function resolveBL(bl: BookLocator, positions: BookPositionStore): StaticBookLocator {
+    switch (bl.locator) {
+        case 'static':
+            return bl;
+        case 'current':
+            const path = positions[bl.id.name];
+            return bookLocator(bl.id, path);
+        default:
+            return assertNever(bl);
+    }
 }
 
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
@@ -105,10 +132,7 @@ export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
 }
 
 export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
-    return {
-        ...bl,
-        path: path,
-    };
+    return bookLocator(bl.id, path);
 }
 
 export function stringToBL(str: string): BookLocator | undefined {
@@ -130,7 +154,14 @@ export function stringToBL(str: string): BookLocator | undefined {
 }
 
 export function blToString(bl: BookLocator): string {
-    return `${biToString(bl.id)}/${pathToString(bl.path)}`;
+    switch (bl.locator) {
+        case 'static':
+            return `${biToString(bl.id)}/${pathToString(bl.path)}`;
+        case 'current':
+            return `${biToString(bl.id)}/current`;
+        default:
+            return assertNever(bl);
+    }
 }
 
 export function biToString(bi: BookId): string {

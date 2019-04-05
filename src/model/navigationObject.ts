@@ -35,12 +35,12 @@ export type CurrentLocation = {
 export type BookLocation = StaticLocation | CurrentLocation;
 
 export function noForBl(bl: BookLocator): NavigationObject {
+    const location: BookLocation = bl.locator === 'static'
+        ? { location: 'static', path: bl.path }
+        : { location: 'current' };
     return {
         navigate: 'book',
-        location: {
-            location: 'static',
-            path: bl.path,
-        },
+        location,
         id: bl.id,
         toc: false,
         footnoteId: undefined,
@@ -66,13 +66,13 @@ export function noForLib(): NavigationObject {
 }
 
 export function noForBookScreen(bs: BookScreen): ToBook {
+    const location: BookLocation = bs.bl.locator === 'static'
+        ? { location: 'static', path: bs.bl.path }
+        : { location: 'current' };
     return {
         navigate: 'book',
         id: bs.bl.id,
-        location: {
-            location: 'static',
-            path: bs.bl.path,
-        },
+        location,
         footnoteId: undefined,
         toc: false,
     };

@@ -102,10 +102,12 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
 function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action): App['pathToOpen'] {
     switch (action.type) {
         case 'pushScreen':
-            return forScreen(action.payload, {
-                book: bs => bs.bl.path,
-                default: () => null,
-            });
+            const { payload } = action;
+            if (payload.screen === 'book' && payload.bl.locator === 'static') {
+                return payload.bl.path;
+            } else {
+                return null;
+            }
         default:
             return state;
     }
