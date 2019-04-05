@@ -90,18 +90,24 @@ export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean
     return could;
 }
 
-export type StaticBookLocator = {
-    locator: 'static',
+type BookLocatorBase<L extends string> = {
+    locator: L,
     id: BookId,
+};
+export type StaticBookLocator = BookLocatorBase<'static'> & {
     path: BookPath,
 };
 
-export type CurrentBookLocator = {
-    locator: 'current',
-    id: BookId,
+export type CurrentBookLocator = BookLocatorBase<'current'>;
+export type TocBookLocator = BookLocatorBase<'toc'>;
+export type FootnoteBookLocator = BookLocatorBase<'footnote'> & {
+    footnoteId: string,
 };
 
-export type BookLocator = StaticBookLocator | CurrentBookLocator;
+export type BookLocator =
+    | StaticBookLocator
+    | CurrentBookLocator | TocBookLocator | FootnoteBookLocator
+    ;
 
 export type BookPositionStore = {
     [bi in string]?: BookPath;
@@ -115,13 +121,23 @@ export function bookLocator(id: BookId, path?: BookPath): StaticBookLocator {
     };
 }
 
-export function resolveBL(bl: BookLocator, positions: BookPositionStore): StaticBookLocator {
+export function currentPositionBL(id: BookId): CurrentBookLocator {
+    return {
+        locator: 'current',
+        id: id,
+    };
+}
+
+export function resolveBL(bl: BookLocator, positions: BookPositionStore): BookLocator {
     switch (bl.locator) {
         case 'static':
+        case 'toc':
+        case 'footnote':
             return bl;
         case 'current':
             const path = positions[bl.id.name];
             return bookLocator(bl.id, path);
+            return bookLocator(bl.id);
         default:
             return assertNever(bl);
     }
@@ -153,12 +169,17 @@ export function stringToBL(str: string): BookLocator | undefined {
     return bookLocator(remoteBookId(bookName));
 }
 
+// TODO: move to urlConversion.ts ?
 export function blToString(bl: BookLocator): string {
     switch (bl.locator) {
         case 'static':
             return `${biToString(bl.id)}/${pathToString(bl.path)}`;
         case 'current':
             return `${biToString(bl.id)}/current`;
+        case 'toc':
+            return `${biToString(bl.id)}?toc`;
+        case 'footnote':
+            return `${biToString(bl.id)}?fid=${bl.footnoteId}`;
         default:
             return assertNever(bl);
     }

@@ -4,7 +4,7 @@ import {
     BookNode, isParagraph, isChapter, inRange, BookContent,
     subpathCouldBeInRange, AttributesObject, SimpleSpan,
     AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
-    isFootnote, FootnoteSpan, bookRange, noForBl,
+    isFootnote, FootnoteSpan, bookRange,
 } from '../model';
 import { assertNever } from '../utils';
 import {
@@ -93,7 +93,9 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
         justifyContent: 'center',
         margin: relative(2),
     }}>
-        <LinkButton action={actionCreators.navigate(noForBl(bookLocator(props.id, props.path)))}>
+        <LinkButton action={actionCreators
+            .navigateToBook(bookLocator(props.id, props.path))}
+        >
             {props.text}
         </LinkButton>
     </Row>,

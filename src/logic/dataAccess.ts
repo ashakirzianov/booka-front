@@ -54,15 +54,14 @@ export function cachedLibrary(): Library {
     return libraryCache;
 }
 
-const positionStore: BookPositionStore = {};
+const currentPositionStore: BookPositionStore = {};
 
-export async function currentPosition(bookId: BookId): Promise<BookPath> {
-    const inStore = positionStore[bookId.name];
-    return inStore || [];
+export async function positionStore(): Promise<BookPositionStore> {
+    return currentPositionStore;
 }
 
 export function setCurrentPosition(bookId: BookId, path: BookPath) {
-    positionStore[bookId.name] = path;
+    currentPositionStore[bookId.name] = path;
 }
 
 export const syncMiddleware: Middleware<{}, App> = store => next => actionAny => {

@@ -1,7 +1,7 @@
 import { Action, actionCreators } from '../redux/actions';
 import {
     App, NavigationObject, pathToString, ToBook,
-    BookLocation, remoteBookId, noForBookScreen, blToString,
+    BookLocation, remoteBookId, noForBookScreen, blToString, bookLocator, currentPositionBL,
 } from '../model';
 import { filterUndefined, assertNever } from '../utils';
 import { parsePartialUrl } from '../parseUrl';
@@ -22,8 +22,18 @@ export function urlToAction(url: string): Action {
 export function actionToNO(action: Action, state: App): NavigationObject | undefined {
     const { screen } = state;
     switch (action.type) {
-        case 'navigate':
-            return action.payload;
+        case 'navigateToBook':
+            const bl = action.payload;
+            const location: BookLocation = bl.locator === 'static'
+                ? { location: 'static', path: bl.path }
+                : { location: 'current' };
+            return {
+                navigate: 'book',
+                location,
+                id: bl.id,
+                toc: false,
+                footnoteId: undefined,
+            };
         case 'openFootnote':
             if (screen.screen === 'book' && action.payload) {
                 return {
@@ -48,7 +58,18 @@ export function actionToNO(action: Action, state: App): NavigationObject | undef
 }
 
 export function noToAction(no: NavigationObject): Action {
-    return actionCreators.navigate(no);
+    switch (no.navigate) {
+        case 'book':
+            const bl = no.location.location === 'static'
+                ? bookLocator(no.id, no.location.path)
+                : currentPositionBL(no.id);
+            return actionCreators.navigateToBook(bl);
+        case 'library':
+        case 'unknown':
+        case 'default':
+        default:
+            return actionCreators.navigateToLibrary();
+    }
 }
 
 export function noToUrl(no: NavigationObject): string {

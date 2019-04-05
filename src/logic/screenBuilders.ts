@@ -1,39 +1,19 @@
 import {
-    bookScreen, libraryScreen, AppScreen, bookLocator,
+    bookScreen, libraryScreen, AppScreen,
+    BookLocator, resolveBL,
 } from '../model';
-import { bookForId, currentPosition, currentLibrary } from './dataAccess';
-import { ToBook, NavigationObject } from '../model/navigationObject';
-import { assertNever } from '../utils';
+import { bookForId, currentLibrary, positionStore } from './dataAccess';
 
-function buildBookScreen(navigation: ToBook): Promise<AppScreen> {
-    const book = bookForId(navigation.id);
-    const path = navigation.location.location === 'current'
-        ? currentPosition(navigation.id)
-        : Promise.resolve(navigation.location.path || []);
+export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
+    const store = await positionStore();
+    const resolved = resolveBL(bl, store);
+    const book = await bookForId(resolved.id);
 
-    const promise = Promise.all([book, path]).then(([b, p]) => {
-        const { id, toc, footnoteId } = navigation;
-        const locator = bookLocator(id, p);
-        return bookScreen(b, locator, toc, footnoteId);
-    });
-
-    return promise;
+    // TODO: fix open toc, etc.
+    return bookScreen(book, resolved, false, undefined);
 }
 
-function buildLibraryScreen(): Promise<AppScreen> {
-    return currentLibrary().then(l => libraryScreen(l));
-}
-
-export function buildScreenForNavigation(navigation: NavigationObject): Promise<AppScreen> {
-    switch (navigation.navigate) {
-        case 'book':
-            return buildBookScreen(navigation);
-        case 'default':
-        case 'library':
-        case 'unknown':
-            // TODO: report errors
-            return buildLibraryScreen();
-        default:
-            return assertNever(navigation);
-    }
+export async function buildLibraryScreen(): Promise<AppScreen> {
+    const lib = await currentLibrary();
+    return libraryScreen(lib);
 }

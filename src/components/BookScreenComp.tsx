@@ -4,7 +4,7 @@ import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
     comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName, noForLib } from '../model';
+import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { BookNodesComp } from './BookContentComp';
 import { footnoteForId } from '../model/book.utils';
 
@@ -25,7 +25,7 @@ export const BookScreenHeader = comp<BookScreen>(props =>
 );
 
 const LibButton = comp(() =>
-    <PanelLink icon='left' action={actionCreators.navigate(noForLib())} />,
+    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />,
 );
 
 const OpenTocButton = comp<{ bi: BookId }>(props =>

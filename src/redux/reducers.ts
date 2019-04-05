@@ -1,7 +1,7 @@
 import {
     App, forScreen, updatePath, Theme, libraryScreen, library, AppScreen,
 } from '../model';
-import { buildScreenForNavigation } from '../logic';
+import { buildLibraryScreen, buildBookScreen } from '../logic';
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
 
@@ -62,10 +62,16 @@ function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
 const defaultScreen = libraryScreen(library());
 export function screen(state: AppScreen | undefined = defaultScreen, action: Action) {
     switch (action.type) {
-        case 'navigate':
+        case 'navigateToBook':
             return loop({
                 state: state,
-                async: () => buildScreenForNavigation(action.payload),
+                async: () => buildBookScreen(action.payload),
+                success: actionCreators.pushScreen,
+            });
+        case 'navigateToLibrary':
+            return loop({
+                state: state,
+                async: buildLibraryScreen,
                 success: actionCreators.pushScreen,
             });
         case 'pushScreen':
