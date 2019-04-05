@@ -1,16 +1,18 @@
 // import * as store from 'store';
 import {
     BookId, BookPath, library, LoadedBook,
-    Library, App, BookInfo,
+    Library, App, BookInfo, Theme,
 } from '../model';
 import { Action } from '../redux';
 import { Middleware } from 'redux';
-import { smartStore, forEach } from '../utils';
+import { smartStore, forEach, singleValueStore } from '../utils';
+import { subscribe } from '../redux/store';
 
 const stores = {
     books: smartStore<LoadedBook>('books'),
     library: smartStore<BookInfo>('library'),
     positions: smartStore<BookPath>('positions'),
+    theme: singleValueStore<Theme>('theme'),
 };
 
 export function bookFromStore(bi: BookId): LoadedBook | undefined {
@@ -52,3 +54,51 @@ export const syncMiddleware: Middleware<{}, App> = store => next => actionAny =>
     }
     return result;
 };
+
+// ---- Theme
+
+const defaultTheme: Theme = {
+    palettes: {
+        light: {
+            text: '#000',
+            primary: '#fff',
+            secondary: '#eee',
+            accent: '#777',
+            highlight: '#aaf',
+            shadow: '#000',
+        },
+        sepia: {
+            text: '#5f3e24',
+            primary: '#f9f3e9',
+            secondary: '#e6e0d6',
+            accent: '#987',
+            highlight: '#321',
+            shadow: '#000',
+        },
+        dark: {
+            text: '#999',
+            primary: '#000',
+            secondary: '#222',
+            accent: '#ddd',
+            highlight: '#fff',
+            shadow: '#555',
+        },
+    },
+    currentPalette: 'light',
+    fontFamily: 'Georgia',
+    fontSize: {
+        normal: 26,
+        large: 30,
+        largest: 36,
+    },
+    fontScale: 1,
+    radius: 9,
+};
+
+export function restoreTheme(): Theme {
+    return stores.theme.get() || defaultTheme;
+}
+
+subscribe(state => {
+    stores.theme.set(state.theme);
+});

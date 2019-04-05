@@ -32,6 +32,20 @@ export function smartStore<V>(key: string) {
     };
 }
 
+export function singleValueStore<V extends object>(key: string) {
+    return {
+        get(): V | undefined {
+            return store.get(key) as any;
+        },
+        set(v: V) {
+            store.set(key, v);
+        },
+        clear() {
+            store.set(key, undefined);
+        },
+    };
+}
+
 export function clearAllStores() {
     store.clearAll();
 }

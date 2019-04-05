@@ -4,46 +4,9 @@ import {
 import { buildLibraryScreen, buildBookScreen } from '../logic';
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
+import { restoreTheme } from '../logic/persistent';
 
-const defaultTheme: Theme = {
-    palettes: {
-        light: {
-            text: '#000',
-            primary: '#fff',
-            secondary: '#eee',
-            accent: '#777',
-            highlight: '#aaf',
-            shadow: '#000',
-        },
-        sepia: {
-            text: '#5f3e24',
-            primary: '#f9f3e9',
-            secondary: '#e6e0d6',
-            accent: '#987',
-            highlight: '#321',
-            shadow: '#000',
-        },
-        dark: {
-            text: '#999',
-            primary: '#000',
-            secondary: '#222',
-            accent: '#ddd',
-            highlight: '#fff',
-            shadow: '#555',
-        },
-    },
-    currentPalette: 'light',
-    fontFamily: 'Georgia',
-    fontSize: {
-        normal: 26,
-        large: 30,
-        largest: 36,
-    },
-    fontScale: 1,
-    radius: 9,
-};
-
-function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
+function theme(state: Theme | undefined = restoreTheme(), action: Action): Theme {
     switch (action.type) {
         case 'setPalette':
             return {
