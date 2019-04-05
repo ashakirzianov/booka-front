@@ -6,7 +6,7 @@ export const fetchBL = timeouted(fetchBIStatic);
 function fetchBIStatic(bookId: BookId): Contracts.BookContent {
     return {
         meta: {
-            title: bookId.bi === 'remote-book' ? bookId.name : bookId.bi,
+            title: bookId.name,
         },
         footnotes: [],
         nodes: [

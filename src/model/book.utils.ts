@@ -1,5 +1,5 @@
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
-import { BookPath, BookRange, bookRange } from './bookLocator';
+import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
 import { Footnote } from '../contracts';

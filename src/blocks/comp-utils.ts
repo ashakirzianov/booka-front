@@ -31,7 +31,7 @@ export function absolute(size: number) {
     return `${size}`;
 }
 
-export const { connect, connectState, connectDispatch } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
+export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
 export type Hoverable<T extends KeyRestriction<T, ':hover'>> = T & { ':hover'?: Partial<T> };
 

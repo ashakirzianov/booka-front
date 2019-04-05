@@ -1,5 +1,5 @@
 import { AppScreen } from './screen';
-import { BookPath } from './bookLocator';
+import { BookPath } from './bookRange';
 import { Theme } from './theme';
 
 export type App = {

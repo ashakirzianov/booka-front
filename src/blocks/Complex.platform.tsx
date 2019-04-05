@@ -43,7 +43,7 @@ export const Modal = comp<ModalBoxProps>(props =>
                             justifyContent: 'center',
                             flexDirection: 'column',
                         }}>
-                            <PanelLink action={props.toggle} icon='close' />
+                            <PanelLink onClick={props.toggle} icon='close' />
                         </View>
                         <View style={{
                             justifyContent: 'center',

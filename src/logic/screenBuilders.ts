@@ -1,39 +1,26 @@
 import {
-    bookScreen, libraryScreen, AppScreen, bookLocator,
+    bookScreen, libraryScreen, AppScreen,
+    BookLocator, bookLocator, locationPath,
 } from '../model';
-import { bookForId, currentPosition, currentLibrary } from './dataAccess';
-import { ToBook, NavigationObject } from '../model/navigationObject';
-import { assertNever } from '../utils';
+import { bookForId, currentLibrary, positionStore } from './dataAccess';
 
-function buildBookScreen(navigation: ToBook): Promise<AppScreen> {
-    const book = bookForId(navigation.id);
-    const path = navigation.location.location === 'current'
-        ? currentPosition(navigation.id)
-        : Promise.resolve(navigation.location.path || []);
-
-    const promise = Promise.all([book, path]).then(([b, p]) => {
-        const { id, toc, footnoteId } = navigation;
-        const locator = bookLocator(id, p);
-        return bookScreen(b, locator, toc, footnoteId);
-    });
-
-    return promise;
-}
-
-function buildLibraryScreen(): Promise<AppScreen> {
-    return currentLibrary().then(l => libraryScreen(l));
-}
-
-export function buildScreenForNavigation(navigation: NavigationObject): Promise<AppScreen> {
-    switch (navigation.navigate) {
-        case 'book':
-            return buildBookScreen(navigation);
-        case 'default':
-        case 'library':
-        case 'unknown':
-            // TODO: report errors
-            return buildLibraryScreen();
-        default:
-            return assertNever(navigation);
+export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
+    const book = bookForId(bl.id);
+    if (bl.location.location === 'current') {
+        const store = await positionStore();
+        const position = store[bl.id.name] || [];
+        bl = bookLocator(bl.id, locationPath(position));
     }
+
+    const toc = bl.location.location === 'toc';
+    const fid = bl.location.location === 'footnote'
+        ? bl.location.id
+        : undefined;
+
+    return bookScreen(await book, bl, toc, fid);
+}
+
+export async function buildLibraryScreen(): Promise<AppScreen> {
+    const lib = await currentLibrary();
+    return libraryScreen(lib);
 }

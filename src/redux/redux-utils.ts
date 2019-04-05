@@ -59,7 +59,7 @@ type ExtractActionType<T> = T extends ActionCreator<infer Type, infer Payload>
     ? ActionObject<Type, Payload>
     : never;
 
-export type ActionsType<AC> = {
+export type ActionFromCreators<AC> = {
     [k in keyof AC]: ExtractActionType<AC[k]>
 }[keyof AC];
 
@@ -68,8 +68,8 @@ export type ActionCreatorsMap = {
 };
 
 export function actionCreator<P = void>() {
-    return <T extends PropertyKey>(type: T): ActionCreator<T, P> => p => ({
+    return <T extends PropertyKey>(type: T): ActionCreator<T, P> => ((p: P) => ({
         type: type,
         payload: p,
-    });
+    }));
 }

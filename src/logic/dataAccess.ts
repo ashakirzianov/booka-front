@@ -1,5 +1,5 @@
 import {
-    Book, Library, library, BookId, sameId, BookPath, App,
+    Book, Library, library, BookId, sameId, BookPath, App, BookPositionStore,
 } from '../model';
 import { fetchBI, fetchLibrary, convertBook, convertLibrary } from '../api';
 import { Middleware } from 'redux';
@@ -54,18 +54,14 @@ export function cachedLibrary(): Library {
     return libraryCache;
 }
 
-type BookPositionStore = {
-    [bi in string]?: BookPath;
-};
-const positionStore: BookPositionStore = {};
+const currentPositionStore: BookPositionStore = {};
 
-export async function currentPosition(bookId: BookId): Promise<BookPath> {
-    const inStore = positionStore[bookId.name];
-    return inStore || [];
+export async function positionStore(): Promise<BookPositionStore> {
+    return currentPositionStore;
 }
 
 export function setCurrentPosition(bookId: BookId, path: BookPath) {
-    positionStore[bookId.name] = path;
+    currentPositionStore[bookId.name] = path;
 }
 
 export const syncMiddleware: Middleware<{}, App> = store => next => actionAny => {

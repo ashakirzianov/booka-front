@@ -1,8 +1,9 @@
-import { PaletteName, NavigationObject, BookPath, AppScreen } from '../model';
-import { actionCreator, ActionsType } from './redux-utils';
+import { PaletteName, BookPath, AppScreen, BookLocator } from '../model';
+import { actionCreator, ActionFromCreators } from './redux-utils';
 
 export const actionCreators = {
-    navigate: actionCreator<NavigationObject>()('navigate'),
+    navigateToBook: actionCreator<BookLocator>()('navigateToBook'),
+    navigateToLibrary: actionCreator()('navigateToLibrary'),
     pushScreen: actionCreator<AppScreen>()('pushScreen'),
     updateBookPosition: actionCreator<BookPath>()('updateBookPosition'),
     toggleControls: actionCreator()('toggleControls'),
@@ -12,4 +13,4 @@ export const actionCreators = {
     incrementScale: actionCreator<number>()('incrementScale'),
 };
 
-export type Action = ActionsType<typeof actionCreators>;
+export type Action = ActionFromCreators<typeof actionCreators>;

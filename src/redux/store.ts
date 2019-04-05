@@ -4,10 +4,16 @@ import { reducer } from './reducers';
 import { createEnhancedStore } from './redux-utils';
 import { updateHistoryMiddleware, syncMiddleware } from '../logic';
 import { Action } from './actions';
+import { urlToAction } from '../logic/urlConversion';
 
-export function dispatchAction(action: Action) {
-    store.dispatch(action);
+export function dispatchUrlNavigation(url: string) {
+    const action = urlToAction(url);
+    if (action) {
+        // TODO: report errors ?
+        store.dispatch(action);
+    }
 }
+
 class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);

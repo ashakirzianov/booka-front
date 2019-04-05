@@ -1,7 +1,7 @@
 import {
-    App, forScreen, updateRangeStart, Theme, libraryScreen, library, AppScreen,
+    App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath,
 } from '../model';
-import { buildScreenForNavigation } from '../logic';
+import { buildLibraryScreen, buildBookScreen } from '../logic';
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
 
@@ -62,10 +62,16 @@ function theme(state: Theme | undefined = defaultTheme, action: Action): Theme {
 const defaultScreen = libraryScreen(library());
 export function screen(state: AppScreen | undefined = defaultScreen, action: Action) {
     switch (action.type) {
-        case 'navigate':
+        case 'navigateToBook':
             return loop({
                 state: state,
-                async: () => buildScreenForNavigation(action.payload),
+                async: () => buildBookScreen(action.payload),
+                success: actionCreators.pushScreen,
+            });
+        case 'navigateToLibrary':
+            return loop({
+                state: state,
+                async: buildLibraryScreen,
                 success: actionCreators.pushScreen,
             });
         case 'pushScreen':
@@ -74,7 +80,7 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: updateRangeStart(bs.bl, action.payload),
+                    bl: bookLocator(bs.bl.id, locationPath(action.payload)),
                 }),
                 default: () => state,
             });
@@ -102,10 +108,12 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
 function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action): App['pathToOpen'] {
     switch (action.type) {
         case 'pushScreen':
-            return forScreen(action.payload, {
-                book: bs => bs.bl.range.start,
-                default: () => null,
-            });
+            const { payload } = action;
+            if (payload.screen === 'book' && payload.bl.location.location === 'path') {
+                return payload.bl.location.path;
+            } else {
+                return null;
+            }
         default:
             return state;
     }

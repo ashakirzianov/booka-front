@@ -1,7 +1,8 @@
-import { BookPath, BookId } from './bookLocator';
+import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
 import { isAttributed, isSimple, isFootnote } from '../contracts';
+import { BookPath } from './bookRange';
 
 export type TableOfContentsItem = {
     toc: 'item',

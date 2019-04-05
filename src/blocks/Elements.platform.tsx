@@ -24,8 +24,8 @@ export const Separator = comp(() =>
     <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />,
 );
 
-export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
-    <Atoms.Link {...props}>
+export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
+    <Atoms.ActionLink {...props}>
         <div style={{
             border: 'solid',
             borderColor: palette(props).accent,
@@ -40,7 +40,7 @@ export const LinkButton = hoverable(themed<Atoms.LinkProps>(props =>
         }}>
             {props.children}
         </div>
-    </Atoms.Link>,
+    </Atoms.ActionLink>,
 ));
 
 export const Clickable = comp<{ onClick: () => void }>(props =>
