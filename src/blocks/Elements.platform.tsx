@@ -15,9 +15,10 @@ export const Tab = comp(props =>
 );
 
 export const DottedLine = comp(props =>
-    <div key='aaa' style={{
+    <div style={{
         flex: 1,
-        borderBottom: 'dotted 0.2em',
+        // TODO: consider properly implementing dotted line
+        // borderBottom: 'dotted 2px',
     }} />,
 );
 
