@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
 import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
-import { AnimatedVisibility } from './Animations.platform';
+import { FadeIn } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 import { Refable } from './comp-utils.platform';
 
@@ -14,7 +14,7 @@ type ModalBoxProps = {
     toggle: Callback<void>,
 };
 export const Modal = comp<ModalBoxProps>(props =>
-    <AnimatedVisibility visible={props.open}>
+    <FadeIn visible={props.open}>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -62,11 +62,11 @@ export const Modal = comp<ModalBoxProps>(props =>
                 </View>
             </OverlayBox>
         </div>
-    </AnimatedVisibility>,
+    </FadeIn>,
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>
-    <AnimatedVisibility visible={props.open}>
+    <FadeIn visible={props.open}>
         <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -81,7 +81,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
         }}>
             {props.children}
         </div >
-    </AnimatedVisibility >,
+    </FadeIn >,
 );
 
 export type WithPopoverProps = {
@@ -123,7 +123,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                     </>
                 }
             </Reference>
-            <AnimatedVisibility visible={open}>
+            <FadeIn visible={open}>
                 <Popper placement={props.placement}>
                     {
                         ({ ref, style, placement }) =>
@@ -137,7 +137,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                             </div>
                     }
                 </Popper>
-            </AnimatedVisibility>
+            </FadeIn>
         </Manager >;
     }
 }
