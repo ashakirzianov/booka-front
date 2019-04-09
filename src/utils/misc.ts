@@ -144,3 +144,7 @@ export function forEach<V>(obj: ObjectMap<V>, f: (key: string, value: V) => void
         }
     });
 }
+
+export async function delay(timeout: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}

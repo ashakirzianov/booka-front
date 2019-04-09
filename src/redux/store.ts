@@ -5,6 +5,7 @@ import { createEnhancedStore } from './redux-utils';
 import { Action } from './actions';
 import { urlToAction } from '../logic/urlConversion';
 import { App } from '../model';
+import { debug, clearAllStores } from '../utils';
 
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);
@@ -27,4 +28,5 @@ class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
+debug(() => clearAllStores());
 const store = createEnhancedStore(reducer);

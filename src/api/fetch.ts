@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { BookId } from '../model';
 import * as Contracts from '../contracts';
+import { debugValue } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = 'http://localhost:3042/';
-const backendBase = process.env.NODE_ENV === 'production' ?
-    backendBaseProd : backendBaseDebug;
+const backendBase = debugValue({
+    debug: backendBaseDebug,
+    production: backendBaseProd,
+});
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
