@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { FadeIn } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 import { Refable } from './comp-utils.platform';
+import { Transition } from 'react-transition-group';
 
 const headerHeight = relative(4);
 
@@ -14,55 +15,65 @@ type ModalBoxProps = {
     toggle: Callback<void>,
 };
 export const Modal = comp<ModalBoxProps>(props =>
-    <FadeIn visible={props.open}>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            position: 'fixed',
-            top: 0, bottom: 0, left: 0, right: 0,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            zIndex: 10,
-        }}
-            onClick={props.toggle}
-        >
-            <OverlayBox>
-                <View style={{
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    height: headerHeight,
-                }}>
+    <Transition in={props.open} timeout={300}>
+        {state => state === 'exited' ? null :
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                position: 'fixed',
+                top: 0, bottom: 0, left: 0, right: 0,
+                backgroundColor: 'rgba(0,0,0,0.4)',
+                zIndex: 10,
+                transition: '300ms ease-in-out',
+                opacity: state === 'entered' ? 1 : 0.01,
+            }}
+                onClick={props.toggle}
+            >
+                <OverlayBox
+                    style={{
+                        transitionDuration: '300ms',
+                        transform: state === 'entered' ? [] : [{ translateY: '100%' as any }],
+                    }}
+                >
                     <View style={{
-                        flex: 1,
+                        flexDirection: 'column',
                         justifyContent: 'center',
-                        flexDirection: 'row',
+                        height: headerHeight,
                     }}>
                         <View style={{
-                            position: 'absolute',
-                            top: 0, left: 0, bottom: 0, right: 0,
+                            flex: 1,
                             justifyContent: 'center',
-                            flexDirection: 'column',
+                            flexDirection: 'row',
                         }}>
-                            <PanelLink onClick={props.toggle} icon='close' />
+                            <View style={{
+                                position: 'absolute',
+                                top: 0, left: 0, bottom: 0, right: 0,
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <PanelLink onClick={props.toggle} icon='close' />
+                            </View>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <ThemedText>{props.title}</ThemedText>
+                            </View>
+                            <View />
                         </View>
-                        <View style={{
-                            justifyContent: 'center',
-                            flexDirection: 'column',
-                        }}>
-                            <ThemedText>{props.title}</ThemedText>
-                        </View>
-                        <View />
                     </View>
-                </View>
-                <View style={{
-                    overflowY: 'scroll',
-                    maxHeight: '90%',
-                }}>
-                    {props.children}
-                </View>
-            </OverlayBox>
-        </div>
-    </FadeIn>,
+                    <View style={{
+                        overflowY: 'scroll',
+                        maxHeight: '90%',
+                    }}>
+                        {props.children}
+                    </View>
+                </OverlayBox>
+
+            </div>
+        }
+    </Transition>,
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>

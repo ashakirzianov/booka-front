@@ -93,24 +93,6 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
     </View>,
 );
 
-export const OverlayBox = themed(props =>
-    <View style={{
-        alignSelf: 'center',
-        backgroundColor: palette(props).secondary,
-        width: '100%',
-        maxWidth: '50em',
-        maxHeight: '100%',
-        margin: '0 auto',
-        zIndex: 10,
-        borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 10px ${palette(props).shadow}`,
-        padding: relative(1),
-    }}
-    >
-        {props.children}
-    </View>,
-);
-
 export const Line = comp(props =>
     <Atoms.Row style={{
         width: '100%',
