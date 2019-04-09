@@ -7,4 +7,5 @@ export type App = {
     pathToOpen: BookPath | null,
     controlsVisible: boolean,
     theme: Theme,
+    loading: boolean,
 };

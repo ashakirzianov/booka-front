@@ -63,10 +63,6 @@ export const Label = comp<{ text: string, margin?: string }>(props =>
     </ThemedText>,
 );
 
-export const ActivityIndicator = comp(props =>
-    <Label text='Loading now...' />,
-);
-
 export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
     <Link
         action={props.action}

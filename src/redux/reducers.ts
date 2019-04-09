@@ -96,9 +96,22 @@ function controlsVisible(state: boolean | undefined = false, action: Action): bo
     }
 }
 
+function loading(state: boolean | undefined = false, action: Action) {
+    switch (action.type) {
+        case 'navigateToBook':
+        case 'navigateToLibrary':
+            return true;
+        case 'pushScreen':
+            return false;
+        default:
+            return state;
+    }
+}
+
 export const reducer = combineReducers<App, Action>({
-    theme: theme,
+    theme,
     screen,
     pathToOpen,
     controlsVisible,
+    loading,
 });
