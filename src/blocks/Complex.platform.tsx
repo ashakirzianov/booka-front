@@ -6,6 +6,7 @@ import { FadeIn } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 import { Refable } from './comp-utils.platform';
 import { Transition } from 'react-transition-group';
+import { defaults } from './defaults';
 
 const headerHeight = relative(4);
 
@@ -23,7 +24,7 @@ export const Modal = comp<ModalBoxProps>(props =>
                 flexDirection: 'column',
                 position: 'fixed',
                 top: 0, bottom: 0, left: 0, right: 0,
-                backgroundColor: 'rgba(0,0,0,0.4)',
+                backgroundColor: defaults.semiTransparent,
                 zIndex: 10,
                 transition: '300ms ease-in-out',
                 opacity: state === 'entered' ? 1 : 0.01,
