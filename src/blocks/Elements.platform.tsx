@@ -29,11 +29,11 @@ export const Separator = comp(() =>
 export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
     <Atoms.ActionLink {...props}>
         <div style={{
-            border: 'solid',
+            borderStyle: 'solid',
             borderColor: palette(props).accent,
             color: palette(props).accent,
             fontSize: props.theme.fontSize.normal,
-            borderRadius: props.theme.radius,
+            borderRadius: 10,
             padding: relative(0.3), // TODO: extract somewhere ?
             [':hover']: {
                 borderColor: palette(props).highlight,
