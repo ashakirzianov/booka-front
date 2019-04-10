@@ -8,15 +8,15 @@ export function debug(f: () => void) {
     }
 }
 
-type DebugValue<T> = {
+type ConfigValue<T> = {
     default?: T,
     debug?: T,
     production?: T,
 };
 
-export function debugValue<T>(pv: { default: T } & Partial<DebugValue<T>>): T;
-export function debugValue<T, U>(pv: { debug: T, production: U }): T | U;
-export function debugValue<T>(pv: DebugValue<T>): T | undefined {
+export function configValue<T>(pv: { default: T } & Partial<ConfigValue<T>>): T;
+export function configValue<T, U>(pv: { debug: T, production: U }): T | U;
+export function configValue<T>(pv: ConfigValue<T>): T | undefined {
     if (isDebug()) {
         return pv.debug || pv.default;
     } else {
@@ -39,7 +39,7 @@ function logDebug(msg: string) {
     console.log(msg);
 }
 
-export const log = debugValue({
+export const log = configValue({
     debug: logDebug,
     production: noOp,
 });

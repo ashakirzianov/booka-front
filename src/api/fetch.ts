@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { BookId } from '../model';
 import * as Contracts from '../contracts';
-import { debugValue, debugBackendBase } from '../utils';
+import { configValue, debugBackendBase } from '../utils';
 
 export const backendBaseProd = 'https://reader-back.herokuapp.com/';
 export const backendBaseDebug = debugBackendBase();
-const backendBase = debugValue({
+const backendBase = configValue({
     debug: backendBaseDebug,
     production: backendBaseProd,
 });
