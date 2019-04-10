@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { Defined } from '../utils';
 import { comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
@@ -9,14 +8,8 @@ import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
 
-type TextStyle = Defined<Atoms.TextProps['style']>;
-type AllowedTextStyleProps = Pick<TextStyle,
-    | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
-    | 'textAlign'
-    | 'fontSize' // TODO: disallow ?
->;
 type TextProps = {
-    style?: AllowedTextStyleProps,
+    style?: Atoms.AllowedTextStyle,
     size?: keyof Theme['fontSize'],
     color?: keyof Palette,
     hoverColor?: keyof Palette,

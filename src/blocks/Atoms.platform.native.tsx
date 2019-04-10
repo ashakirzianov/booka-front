@@ -21,22 +21,23 @@ export function showAlert(message: string) {
 type AtomTextStyle = Defined<TextProps['style']>;
 type NativeTextStyle = StyleProp<TextStyle>;
 function convertStyle(style: AtomTextStyle | undefined): NativeTextStyle | undefined {
-    return style && {
-        ...style,
-        fontWeight: fontWeight(style.fontWeight),
-    };
+    return style as any;
+    // return style && {
+    //     ...style,
+    //     fontWeight: fontWeight(style.fontWeight),
+    // };
 }
 
-function fontWeight(w: AtomTextStyle['fontWeight']): TextStyle['fontWeight'] {
-    return w === undefined || typeof w === 'string' ? w :
-        (w <= 100 ? '100'
-            : w <= 200 ? '200'
-                : w <= 300 ? '300'
-                    : w <= 400 ? '400'
-                        : w <= 500 ? '500'
-                            : w <= 600 ? '600'
-                                : w <= 700 ? '700'
-                                    : w <= 800 ? '800'
-                                        : '900'
-        );
-}
+// function fontWeight(w: AtomTextStyle['fontWeight']): TextStyle['fontWeight'] {
+//     return w === undefined || typeof w === 'string' ? w :
+//         (w <= 100 ? '100'
+//             : w <= 200 ? '200'
+//                 : w <= 300 ? '300'
+//                     : w <= 400 ? '400'
+//                         : w <= 500 ? '500'
+//                             : w <= 600 ? '600'
+//                                 : w <= 700 ? '700'
+//                                     : w <= 800 ? '800'
+//                                         : '900'
+//         );
+// }

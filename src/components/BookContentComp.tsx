@@ -15,20 +15,31 @@ import {
 import { actionCreators } from '../redux/actions';
 
 const ChapterTitle = comp<{ text?: string }>(props =>
-    <Row style={{ justifyContent: 'center' }}>
-        <ThemedText>{props.text}</ThemedText>
+    <Row style={{
+        justifyContent: 'center',
+        width: '100%',
+    }}>
+        <ThemedText style={{
+            letterSpacing: relative(0.25),
+            fontWeight: 'lighter',
+        }}>
+            {props.text && props.text.toLocaleUpperCase()}
+        </ThemedText>
     </Row>,
 );
 
 const PartTitle = comp<{ text?: string }>(props =>
-    <Row style={{ justifyContent: 'center' }}>
+    <Row style={{
+        justifyContent: 'center',
+        width: '100%',
+    }}>
         <ThemedText style={{ fontWeight: 'bold' }} size='large'>{props.text}</ThemedText>
     </Row>,
 );
 
 const SubpartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <ThemedText style={{ fontWeight: 'bold' }}>{props.text}</ThemedText>
+        <ThemedText style={{ fontStyle: 'italic' }}>{props.text}</ThemedText>
     </Row>,
 );
 
