@@ -166,7 +166,9 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
-            <ThemedText>
+            <ThemedText style={{
+                textAlign: 'justify',
+            }}>
                 <IncrementalLoad
                     increment={250}
                     initial={50}
