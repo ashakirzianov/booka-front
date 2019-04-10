@@ -8,11 +8,11 @@ import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
     <Column style={{ width: '100%', alignItems: 'center' }}>
+        {props.loading ? <FullScreenActivityIndicator /> : null}
         <TopBar open={props.controlsVisible}>
             <Header {...props} />
         </TopBar>
-        <Row style={{ margin: relative(3) }} />
-        {props.loading ? <FullScreenActivityIndicator /> : null}
+        <Row style={{ margin: relative(2) }} />
         <Content {...props} />
     </Column>,
 );
