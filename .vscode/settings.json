@@ -28,6 +28,7 @@
         "nums",
         "onstatechange",
         "onupdatefound",
+        "polyfill",
         "precached",
         "subpath",
         "succ",
