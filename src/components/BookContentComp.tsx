@@ -10,7 +10,7 @@ import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
     Row, NewLine, Tab, Inline, ThemedText,
-    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun, FadeOnMount,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
 
@@ -90,15 +90,21 @@ const SpanComp = comp<{ s: Span, first: boolean }>(props =>
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
-    <Inline>
-        <Tab /><SpanComp s={props.p.span} first={props.first} />
-    </Inline>,
+    <FadeOnMount>
+        <Inline>
+            <Tab /><SpanComp s={props.p.span} first={props.first} />
+        </Inline>
+    </FadeOnMount>,
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
-    props.level === 0 ? <ChapterTitle text={props.title} />
-        : props.level > 0 ? <PartTitle text={props.title} />
-            : <SubpartTitle text={props.title} />,
+    <FadeOnMount>
+        {
+            props.level === 0 ? <ChapterTitle text={props.title} />
+                : props.level > 0 ? <PartTitle text={props.title} />
+                    : <SubpartTitle text={props.title} />
+        }
+    </FadeOnMount>,
 );
 
 const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>

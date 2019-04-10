@@ -16,6 +16,26 @@ export const FadeIn = comp<FadeInProps>(props =>
         {props.children}
     </Animated>);
 
+export class FadeOnMount extends React.Component<{}, { in: boolean }> {
+    public state = { in: false };
+
+    public componentDidMount() {
+        this.fadeIn();
+    }
+
+    public fadeIn() {
+        if (!this.state.in) {
+            this.setState({ in: true });
+        }
+    }
+
+    public render() {
+        return <FadeIn visible={this.state.in}>
+            {this.props.children}
+        </FadeIn>;
+    }
+}
+
 export const PopUp = comp<{ in: boolean }>(props =>
     <Animated
         in={props.in}
