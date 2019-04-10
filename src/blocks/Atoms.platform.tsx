@@ -26,6 +26,7 @@ export const Link = hoverable<LinkProps>(props =>
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
+            alignSelf: 'flex-start',
             ...props.style,
         }}
         onClick={e => {

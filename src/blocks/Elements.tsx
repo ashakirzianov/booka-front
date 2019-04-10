@@ -70,7 +70,10 @@ export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props 
 
 export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <Link action={props.action} style={{ margin: relative(0.5) }}>
+        <Link action={props.action} style={{
+            margin: relative(0.5),
+            alignSelf: 'stretch',
+        }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
