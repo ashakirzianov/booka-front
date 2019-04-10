@@ -1,5 +1,5 @@
 export function isDebug() {
-    return process.env.NODE_ENV !== 'production';
+    return process.env.NODE_ENV === 'development';
 }
 
 export function debug(f: () => void) {
@@ -32,7 +32,14 @@ export function debugBackendBase() {
     return result;
 }
 
-export function log(msg: string) {
+export function noOp() { return; }
+
+function logDebug(msg: string) {
     // tslint:disable-next-line:no-console
     console.log(msg);
 }
+
+export const log = debugValue({
+    debug: logDebug,
+    production: noOp,
+});
