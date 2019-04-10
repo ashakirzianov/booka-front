@@ -60,7 +60,9 @@ export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props 
     <Link
         action={props.action}
         onClick={props.onClick}
-        style={{ margin: relative(0.5) }}
+        style={{
+            margin: relative(0.5),
+        }}
     >
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
@@ -89,8 +91,6 @@ export const Line = comp(props =>
     <Atoms.Row style={{
         width: '100%',
         justifyContent: 'space-between',
-        padding: relative(1.5),
-
     }}>
         {props.children}
     </Atoms.Row>,
