@@ -27,9 +27,9 @@ export function scrollToRef(ref: RefType | undefined) {
     if (ref) {
         const current = currentObject(ref);
         if (current) {
-            current.scrollIntoView();
+            current.scrollIntoView({ behavior: 'smooth' });
             // TODO: find other solution ?
-            window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
+            // window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
             return true;
         }
     }

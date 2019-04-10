@@ -10,9 +10,96 @@ import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
     Row, NewLine, Tab, Inline, ThemedText,
-    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun, FadeOnMount,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
+
+type RefMap = { [k in string]?: RefType };
+type BookContentCompProps = {
+    content: BookContent,
+    pathToNavigate: BookPath | null,
+    updateBookPosition: Callback<BookPath>,
+    range: BookRange,
+    prevPath?: BookPath,
+    nextPath?: BookPath,
+    id: BookId,
+};
+export class BookContentComp extends React.Component<BookContentCompProps> {
+    public refMap: RefMap = {};
+
+    public handleScroll = () => {
+        const newCurrentPath = Object.entries(this.refMap)
+            .reduce<BookPath | undefined>((path, [key, ref]) =>
+                path || !isPartiallyVisible(ref)
+                    ? path
+                    : stringToPath(key), undefined);
+        if (newCurrentPath) {
+            this.props.updateBookPosition(newCurrentPath);
+        }
+    }
+
+    public scrollToCurrentPath = () => {
+        const props = this.props;
+        const refMap = this.refMap;
+        if (props && props.pathToNavigate) {
+            const refToNavigate = refMap[pathToString(props.pathToNavigate)];
+            if (!scrollToRef(refToNavigate)) {
+                setTimeout(this.scrollToCurrentPath.bind(this), 250);
+            }
+        }
+    }
+
+    public componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll);
+        this.scrollToCurrentPath();
+
+    }
+
+    public componentDidUpdate() {
+        this.scrollToCurrentPath();
+    }
+
+    public componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    public render() {
+        const { range, prevPath, nextPath, id, content } = this.props;
+        const params: Params = {
+            range, refHandler: (ref, path) => {
+                this.refMap = {
+                    ...this.refMap,
+                    [pathToString(path)]: ref,
+                };
+            },
+        };
+        return <ScrollView>
+            {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
+            <ThemedText style={{
+                textAlign: 'justify',
+            }}>
+                <IncrementalLoad
+                    increment={250}
+                    initial={50}
+                >
+                    {buildBook(content, params)}
+                </IncrementalLoad>
+            </ThemedText>
+            {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
+        </ScrollView>;
+    }
+}
+
+export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
+    <ThemedText>
+        {
+            buildNodes(props.nodes, [], {
+                refHandler: () => undefined,
+                range: bookRange(),
+            })
+        }
+    </ThemedText>,
+);
 
 const ChapterTitle = comp<{ text?: string }>(props =>
     <Row style={{
@@ -90,21 +177,15 @@ const SpanComp = comp<{ s: Span, first: boolean }>(props =>
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
-    <FadeOnMount>
-        <Inline>
-            <Tab /><SpanComp s={props.p.span} first={props.first} />
-        </Inline>
-    </FadeOnMount>,
+    <Inline>
+        <Tab /><SpanComp s={props.p.span} first={props.first} />
+    </Inline>,
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
-    <FadeOnMount>
-        {
-            props.level === 0 ? <ChapterTitle text={props.title} />
-                : props.level > 0 ? <PartTitle text={props.title} />
-                    : <SubpartTitle text={props.title} />
-        }
-    </FadeOnMount>,
+    props.level === 0 ? <ChapterTitle text={props.title} />
+        : props.level > 0 ? <PartTitle text={props.title} />
+            : <SubpartTitle text={props.title} />,
 );
 
 const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
@@ -119,93 +200,6 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
         </LinkButton>
     </Row>,
 );
-
-export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
-    <ThemedText>
-        {
-            buildNodes(props.nodes, [], {
-                refHandler: () => undefined,
-                range: bookRange(),
-            })
-        }
-    </ThemedText>,
-);
-
-type RefMap = { [k in string]?: RefType };
-type BookContentCompProps = {
-    content: BookContent,
-    pathToNavigate: BookPath | null,
-    updateBookPosition: Callback<BookPath>,
-    range: BookRange,
-    prevPath?: BookPath,
-    nextPath?: BookPath,
-    id: BookId,
-};
-export class BookContentComp extends React.Component<BookContentCompProps> {
-    public refMap: RefMap = {};
-
-    public handleScroll = () => {
-        const newCurrentPath = Object.entries(this.refMap)
-            .reduce<BookPath | undefined>((path, [key, ref]) =>
-                path || !isPartiallyVisible(ref)
-                    ? path
-                    : stringToPath(key), undefined);
-        if (newCurrentPath) {
-            this.props.updateBookPosition(newCurrentPath);
-        }
-    }
-
-    public scrollToCurrentPath = () => {
-        const props = this.props;
-        const refMap = this.refMap;
-        if (props && props.pathToNavigate) {
-            const refToNavigate = refMap[pathToString(props.pathToNavigate)];
-            if (!scrollToRef(refToNavigate)) {
-                setTimeout(this.scrollToCurrentPath.bind(this), 250);
-            }
-        }
-    }
-
-    public componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-        this.scrollToCurrentPath();
-
-    }
-
-    public componentDidUpdate() {
-        this.scrollToCurrentPath();
-    }
-
-    public componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-    }
-
-    public render() {
-        const { range, prevPath, nextPath, id, content } = this.props;
-        const params: Params = {
-            range, refHandler: (ref, path) => {
-                this.refMap = {
-                    ...this.refMap,
-                    [pathToString(path)]: ref,
-                };
-            },
-        };
-        return <ScrollView>
-            {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
-            <ThemedText style={{
-                textAlign: 'justify',
-            }}>
-                <IncrementalLoad
-                    increment={250}
-                    initial={50}
-                >
-                    {buildBook(content, params)}
-                </IncrementalLoad>
-            </ThemedText>
-            {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
-        </ScrollView>;
-    }
-}
 
 type Params = {
     refHandler: (ref: RefType, path: BookPath) => void,
