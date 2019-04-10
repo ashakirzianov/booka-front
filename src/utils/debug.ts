@@ -31,3 +31,8 @@ export function debugBackendBase() {
 
     return result;
 }
+
+export function log(msg: string) {
+    // tslint:disable-next-line:no-console
+    console.log(msg);
+}
