@@ -76,7 +76,7 @@ const defaultTheme: Theme = {
         },
     },
     currentPalette: 'light',
-    fontFamily: 'Georgia',
+    fontFamily: 'San Francisco',
     fontSize: {
         normal: 26,
         large: 30,
