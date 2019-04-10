@@ -66,7 +66,8 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     public render() {
         const { range, prevPath, nextPath, id, content } = this.props;
         const params: Params = {
-            range, refHandler: (ref, path) => {
+            range,
+            refHandler: (ref, path) => {
                 this.refMap = {
                     ...this.refMap,
                     [pathToString(path)]: ref,
@@ -107,8 +108,10 @@ const ChapterTitle = comp<{ text?: string }>(props =>
         width: '100%',
     }}>
         <ThemedText style={{
-            letterSpacing: relative(0.25),
+            letterSpacing: relative(0.15),
             fontWeight: 'lighter',
+            textAlign: 'center',
+            margin: relative(1),
         }}>
             {props.text && props.text.toLocaleUpperCase()}
         </ThemedText>
@@ -120,13 +123,23 @@ const PartTitle = comp<{ text?: string }>(props =>
         justifyContent: 'center',
         width: '100%',
     }}>
-        <ThemedText style={{ fontWeight: 'bold' }} size='large'>{props.text}</ThemedText>
+        <ThemedText size='large' style={{
+            fontWeight: 'bold',
+            margin: relative(1),
+        }}>
+            {props.text}
+        </ThemedText>
     </Row>,
 );
 
 const SubpartTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'flex-start' }}>
-        <ThemedText style={{ fontStyle: 'italic' }}>{props.text}</ThemedText>
+        <ThemedText style={{
+            fontStyle: 'italic',
+            margin: relative(1),
+        }}>
+            {props.text}
+        </ThemedText>
     </Row>,
 );
 
@@ -210,6 +223,7 @@ function buildBook(book: BookContent, params: Params) {
     const head = params.range.start.length === 0
         ? [<BookTitle key={`bt`} text={book.meta.title} />]
         : [];
+
     return head
         .concat(buildNodes(book.nodes, [], params));
 }

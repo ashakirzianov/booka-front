@@ -29,10 +29,10 @@ export function samePath(p1: BookPath, p2: BookPath) {
 export function pathLessThan(left: BookPath, right: BookPath): boolean {
     for (let idx = 0; idx < right.length; idx++) {
         const leftElement = left[idx];
-        if (leftElement === undefined) {
+        const rightElement = right[idx];
+        if (leftElement === undefined && rightElement) {
             return true;
         }
-        const rightElement = right[idx];
         if (leftElement !== rightElement) {
             return leftElement < rightElement;
         }
