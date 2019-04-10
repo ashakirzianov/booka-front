@@ -162,6 +162,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
 
     public componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
+        this.scrollToCurrentPath();
 
     }
 
