@@ -141,7 +141,9 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     public handleScroll = () => {
         const newCurrentPath = Object.entries(this.refMap)
             .reduce<BookPath | undefined>((path, [key, ref]) =>
-                path || !isPartiallyVisible(ref) ? path : stringToPath(key), undefined);
+                path || !isPartiallyVisible(ref)
+                    ? path
+                    : stringToPath(key), undefined);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -160,6 +162,10 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
 
     public componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
+
+    }
+
+    public componentDidUpdate() {
         this.scrollToCurrentPath();
     }
 
