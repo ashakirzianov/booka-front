@@ -91,5 +91,10 @@ export const CapitalizeFirst = comp<{ text: string }>(props => {
             {text.slice(1)}
         </span>
     </p>;
-},
+});
+
+export const Article = comp(props =>
+    <article>
+        {props.children}
+    </article>,
 );

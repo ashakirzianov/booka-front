@@ -72,11 +72,11 @@ const defaultTheme: Theme = {
             secondary: '#222',
             accent: '#ddd',
             highlight: '#fff',
-            shadow: '#555',
+            shadow: '#000',
         },
     },
     currentPalette: 'light',
-    fontFamily: 'San Francisco',
+    fontFamily: 'Georgia',
     fontSize: {
         normal: 26,
         large: 30,

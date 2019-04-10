@@ -60,6 +60,7 @@ const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
+        margin: relative(2),
     }}
     >
         <Clickable key='book' onClick={() => props.toggleControls()}>
@@ -161,7 +162,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
             borderColor: palette.highlight, // 'orange' ?
             borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
             shadowColor: palette.shadow,
-            shadowRadius: 4,
+            shadowRadius: 5,
             [':hover']: {
                 borderWidth: 3,
             },
