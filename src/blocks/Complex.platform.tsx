@@ -26,14 +26,14 @@ export const Modal = comp<ModalBoxProps>(props =>
                 top: 0, bottom: 0, left: 0, right: 0,
                 backgroundColor: defaults.semiTransparent,
                 zIndex: 10,
-                transition: '300ms ease-in-out',
+                transition: `${defaults.animationDuration}ms ease-in-out`,
                 opacity: state === 'entered' ? 1 : 0.01,
             }}
                 onClick={props.toggle}
             >
                 <OverlayBox
                     style={{
-                        transitionDuration: '300ms',
+                        transitionDuration: `${defaults.animationDuration}ms`,
                         transform: state === 'entered' ? [] : [{ translateY: '100%' as any }],
                     }}
                 >
@@ -64,12 +64,14 @@ export const Modal = comp<ModalBoxProps>(props =>
                             <View />
                         </View>
                     </View>
-                    <View style={{
+                    <div style={{
+                        alignItems: 'stretch',
+                        width: '100%',
                         overflowY: 'scroll',
                         maxHeight: '90%',
                     }}>
                         {props.children}
-                    </View>
+                    </div>
                 </OverlayBox>
 
             </div>

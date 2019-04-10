@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Transition } from 'react-transition-group';
 import { comp } from './comp-utils';
+import { defaults } from './defaults';
 
 export type FadeInProps = {
     visible: boolean,
@@ -36,12 +37,11 @@ export type AnimatedProps = {
     end: AnimationStyles,
 };
 export const Animated = comp<AnimatedProps>(props => {
-    const duration = props.duration || 500;
+    const duration = props.duration || defaults.animationDuration;
     return <Transition in={props.in} timeout={duration}>
         {state =>
             state === 'exited' ? null :
                 <div style={{
-                    // display: 'flex',
                     transition: `${duration}ms ease-in-out`,
                     zIndex: 10, // NOTE: fix the glitch when fade in over the top bar
                     ...(state === 'entered' ? props.end : props.start),
