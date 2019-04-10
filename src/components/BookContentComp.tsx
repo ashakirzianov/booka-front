@@ -6,11 +6,11 @@ import {
     AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
     isFootnote, FootnoteSpan, bookRange, locationPath,
 } from '../model';
-import { assertNever } from '../utils';
+import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
     Row, NewLine, Tab, Inline, ThemedText,
-    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
+    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
 
@@ -62,14 +62,16 @@ const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
     </PlainText>,
 );
 
-const SimpleSpanComp = comp<{ s: SimpleSpan }>(props =>
-    <PlainText>{props.s}</PlainText>,
+const SimpleSpanComp = comp<{ s: SimpleSpan, first: boolean }>(props =>
+    props.first
+        ? <CapitalizeFirst text={props.s} />
+        : <TextRun text={props.s} />,
 );
-const AttributedSpanComp = comp<{ s: AttributedSpan }>(props =>
+const AttributedSpanComp = comp<{ s: AttributedSpan, first: boolean }>(props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
         {
             props.s.spans.map((childP, idx) =>
-                <SpanComp key={`${idx}`} span={childP} />)
+                <SpanComp key={`${idx}`} s={childP} first={props.first && idx === 0} />)
         }
     </StyledWithAttributes>,
 );
@@ -80,16 +82,16 @@ const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(pro
         </ThemedText>
     </Link>,
 );
-const SpanComp = comp<{ span: Span }>(props =>
-    isAttributed(props.span) ? <AttributedSpanComp s={props.span} />
-        : isSimple(props.span) ? <SimpleSpanComp s={props.span} />
-            : isFootnote(props.span) ? <FootnoteSpanComp s={props.span} />
-                : assertNever(props.span),
+const SpanComp = comp<{ s: Span, first: boolean }>(props =>
+    isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
+        : isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
+            : isFootnote(props.s) ? <FootnoteSpanComp s={props.s} />
+                : assertNever(props.s),
 );
 
-const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath }>(props =>
+const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
     <Inline>
-        <Tab /><SpanComp span={props.p.span} />
+        <Tab /><SpanComp s={props.p.span} first={props.first} />
     </Inline>,
 );
 
@@ -228,7 +230,13 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
 
 function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
     return inRange(path, params.range)
-        ? [<ParagraphComp key={`p-${pathToString(path)}`} p={paragraph} path={path} ref={ref => params.refHandler(ref, path)} />]
+        ? [<ParagraphComp
+            key={`p-${pathToString(path)}`}
+            p={paragraph}
+            path={path}
+            first={last(path) === 0}
+            ref={ref => params.refHandler(ref, path)}
+        />]
         : [];
 }
 

@@ -95,3 +95,7 @@ export const Line = comp(props =>
         {props.children}
     </Atoms.Row>,
 );
+
+export const TextRun = comp<{ text: string }>(props =>
+    <PlainText>{props.text}</PlainText>,
+);

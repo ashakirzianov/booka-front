@@ -148,3 +148,7 @@ export function forEach<V>(obj: ObjectMap<V>, f: (key: string, value: V) => void
 export async function delay(timeout: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
+
+export function last<T>(arr: T[]): T {
+    return arr[arr.length - 1];
+}
