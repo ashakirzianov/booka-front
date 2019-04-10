@@ -6,7 +6,10 @@ import { actionToUrl } from '../logic/urlConversion';
 
 export const Text = hoverable<TextProps>(props =>
     <span
-        style={props.style}
+        style={{
+            wordBreak: 'break-word',
+            ...props.style,
+        }}
     >
         {props.children}
     </span>,
