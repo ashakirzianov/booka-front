@@ -141,7 +141,12 @@ const SubpartTitle = comp<{ text?: string }>(props =>
 
 const BookTitle = comp<{ text?: string }>(props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <ThemedText style={{ fontWeight: 'bold' }} size='largest'>{props.text}</ThemedText>
+        <ThemedText size='largest' style={{
+            fontWeight: 'bold',
+            textAlign: 'center',
+        }}>
+            {props.text}
+        </ThemedText>
     </Row>,
 );
 
