@@ -1,19 +1,20 @@
 import * as React from 'react';
 
-import { connectState, comp, Row } from '../blocks';
+import { connectState, comp, Row, FullScreenActivityIndicator, Column, TopBar, relative } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
-import { ScreenLayout } from './ScreenComp.Layout';
 import { BookScreenComp, BookScreenHeader } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 
-export const ScreenComp = connectState('controlsVisible')<AppScreen>(props =>
-    <ScreenLayout
-        headerVisible={props.controlsVisible}
-        header={<Header {...props} />}
-    >
+export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
+    <Column style={{ width: '100%', alignItems: 'center' }}>
+        {props.loading ? <FullScreenActivityIndicator /> : null}
+        <TopBar open={props.controlsVisible}>
+            <Header {...props} />
+        </TopBar>
+        <Row style={{ margin: relative(2) }} />
         <Content {...props} />
-    </ScreenLayout>,
+    </Column>,
 );
 
 const Content = comp<AppScreen>(props =>

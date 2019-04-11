@@ -1,3 +1,5 @@
+import 'resize-observer-polyfill/dist/ResizeObserver.global';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppComp } from './components';

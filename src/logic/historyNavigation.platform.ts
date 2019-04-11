@@ -1,6 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { stateToUrl } from './urlConversion';
 import { dispatchUrlNavigation, subscribe } from '../redux/store';
+import { throttle } from 'lodash';
 
 const history = createBrowserHistory();
 
@@ -18,10 +19,10 @@ export function wireHistoryNavigation() {
     });
 }
 
-subscribe(state => {
+subscribe(throttle(state => {
     const urlFromState = stateToUrl(state);
     const fullCurrentUrl = fullUrl(history.location);
     if (fullCurrentUrl !== urlFromState) {
         history.replace(urlFromState);
     }
-});
+}, 250));

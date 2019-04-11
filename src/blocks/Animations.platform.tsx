@@ -1,76 +1,73 @@
 import * as React from 'react';
 
-import posed, {
-    PoseGroup,
-} from 'react-pose';
-import { Comp } from './comp-utils';
+import { Transition } from 'react-transition-group';
+import { comp } from './comp-utils';
+import { defaults } from './defaults';
 
-export const PopFromBottom = animateEntrance(posed.div({
-    enter: {
-        y: 0,
-        delay: 300,
-    },
-    exit: {
-        y: -200,
-    },
-}));
+export type FadeInProps = {
+    visible: boolean,
+};
+export const FadeIn = comp<FadeInProps>(props =>
+    <Animated
+        in={props.visible}
+        start={{ opacity: 0.01 }}
+        end={{ opacity: 1 }}
+    >
+        {props.children}
+    </Animated>);
 
-export const FadeIn = animateEntrance(posed.div({
-    enter: {
-        opacity: 1,
-    },
-    exit: {
-        opacity: 0,
-    },
-}));
-
-type AnimationChildren = React.ComponentType<any>;
-class EntranceAnimation extends React.Component<{
-    Animation: AnimationChildren,
-}> {
-    public state = { isVisible: false };
+export class FadeOnMount extends React.Component<{}, { in: boolean }> {
+    public state = { in: false };
 
     public componentDidMount() {
-        setTimeout(() => {
-            this.setState({
-                isVisible: true,
-            });
-        }, 0);
+        this.fadeIn();
+    }
+
+    public fadeIn() {
+        if (!this.state.in) {
+            this.setState({ in: true });
+        }
     }
 
     public render() {
-        const { isVisible } = this.state;
-        const { children, Animation } = this.props;
-
-        return (
-            <PoseGroup>
-                {isVisible && <Animation key='animation'>{children}</Animation>}
-            </PoseGroup>
-        );
+        return <FadeIn visible={this.state.in}>
+            {this.props.children}
+        </FadeIn>;
     }
 }
 
-function animateEntrance(A: AnimationChildren): React.ComponentType {
-    return props => <EntranceAnimation Animation={A}>{props.children}</EntranceAnimation>;
-}
-
-const VisibilityDiv = posed.div({
-    visible: {
-        opacity: 1,
-        transition: {
-            duration: 400,
-        },
-    },
-    hidden: {
-        opacity: 0,
-        transition: {
-            duration: 400,
-        },
-    },
-});
-
-export const AnimatedVisibility: Comp<{ visible: boolean }> = (props =>
-    <VisibilityDiv pose={props.visible ? 'visible' : 'hidden'}>
-        {props.visible ? props.children : null}
-    </VisibilityDiv>
+export const PopUp = comp<{ in: boolean }>(props =>
+    <Animated
+        in={props.in}
+        start={{ transform: 'translate(0%, 100%)', opacity: 0.01 }}
+        end={{ transform: 'translate(0%, 0%)', opacity: 1 }}
+    >
+        {props.children}
+    </Animated>,
 );
+
+export type AnimationStyles = {
+    opacity?: number,
+    transform?: string,
+};
+export type AnimatedProps = {
+    in: boolean,
+    duration?: number,
+    start: AnimationStyles,
+    end: AnimationStyles,
+};
+export const Animated = comp<AnimatedProps>(props => {
+    const duration = props.duration || defaults.animationDuration;
+    return <Transition in={props.in} timeout={duration}>
+        {state =>
+            state === 'exited' ? null :
+                <div style={{
+                    transition: `${duration}ms ease-in-out`,
+                    zIndex: 10, // NOTE: fix the glitch when fade in over the top bar
+                    ...(state === 'entered' ? props.end : props.start),
+                }}>
+                    {props.children}
+                </div>
+        }
+    </Transition>;
+});

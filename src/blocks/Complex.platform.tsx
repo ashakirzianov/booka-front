@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
 import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
-import { AnimatedVisibility } from './Animations.platform';
+import { FadeIn } from './Animations.platform';
 import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 import { Refable } from './comp-utils.platform';
+import { Transition } from 'react-transition-group';
+import { defaults } from './defaults';
 
 const headerHeight = relative(4);
 
@@ -14,59 +16,71 @@ type ModalBoxProps = {
     toggle: Callback<void>,
 };
 export const Modal = comp<ModalBoxProps>(props =>
-    <AnimatedVisibility visible={props.open}>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            position: 'fixed',
-            top: 0, bottom: 0, left: 0, right: 0,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            zIndex: 10,
-        }}
-            onClick={props.toggle}
-        >
-            <OverlayBox>
-                <View style={{
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    height: headerHeight,
-                }}>
+    <Transition in={props.open} timeout={300}>
+        {state => state === 'exited' ? null :
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                position: 'fixed',
+                top: 0, bottom: 0, left: 0, right: 0,
+                backgroundColor: defaults.semiTransparent,
+                zIndex: 10,
+                transition: `${defaults.animationDuration}ms ease-in-out`,
+                opacity: state === 'entered' ? 1 : 0.01,
+            }}
+                onClick={props.toggle}
+            >
+                <OverlayBox
+                    style={{
+                        transitionDuration: `${defaults.animationDuration}ms`,
+                        transform: state === 'entered' ? [] : [{ translateY: '100%' as any }],
+                    }}
+                >
                     <View style={{
-                        flex: 1,
+                        flexDirection: 'column',
                         justifyContent: 'center',
-                        flexDirection: 'row',
+                        height: headerHeight,
                     }}>
                         <View style={{
-                            position: 'absolute',
-                            top: 0, left: 0, bottom: 0, right: 0,
+                            flex: 1,
                             justifyContent: 'center',
-                            flexDirection: 'column',
+                            flexDirection: 'row',
                         }}>
-                            <PanelLink onClick={props.toggle} icon='close' />
+                            <View style={{
+                                position: 'absolute',
+                                top: 0, left: 0, bottom: 0, right: 0,
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <PanelLink onClick={props.toggle} icon='close' />
+                            </View>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <ThemedText>{props.title}</ThemedText>
+                            </View>
+                            <View />
                         </View>
-                        <View style={{
-                            justifyContent: 'center',
-                            flexDirection: 'column',
-                        }}>
-                            <ThemedText>{props.title}</ThemedText>
-                        </View>
-                        <View />
                     </View>
-                </View>
-                <View style={{
-                    overflowY: 'scroll',
-                    maxHeight: '90%',
-                }}>
-                    {props.children}
-                </View>
-            </OverlayBox>
-        </div>
-    </AnimatedVisibility>,
+                    <div style={{
+                        alignItems: 'stretch',
+                        width: '100%',
+                        overflowY: 'scroll',
+                        maxHeight: '90%',
+                    }}>
+                        {props.children}
+                    </div>
+                </OverlayBox>
+
+            </div>
+        }
+    </Transition>,
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>
-    <AnimatedVisibility visible={props.open}>
+    <FadeIn visible={props.open}>
         <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -81,7 +95,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
         }}>
             {props.children}
         </div >
-    </AnimatedVisibility >,
+    </FadeIn >,
 );
 
 export type WithPopoverProps = {
@@ -123,7 +137,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                     </>
                 }
             </Reference>
-            <AnimatedVisibility visible={open}>
+            <FadeIn visible={open}>
                 <Popper placement={props.placement}>
                     {
                         ({ ref, style, placement }) =>
@@ -137,7 +151,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                             </div>
                     }
                 </Popper>
-            </AnimatedVisibility>
+            </FadeIn>
         </Manager >;
     }
 }

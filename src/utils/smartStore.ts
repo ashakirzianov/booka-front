@@ -1,12 +1,13 @@
 import * as store from 'store';
 import { values } from './misc';
+import { log } from './debug';
 
 export function smartStore<V>(key: string) {
     type K = string;
     type Cache = {
         [k in K]?: V;
     };
-    const cache: Cache = store.get(key) || {};
+    let cache: Cache = store.get(key) || {};
     return {
         all() {
             return { ...cache };
@@ -23,7 +24,18 @@ export function smartStore<V>(key: string) {
 
         set(k: K, value: V) {
             cache[k] = value;
-            store.set(key, cache);
+            try {
+                store.set(key, cache);
+            } catch {
+                log(`Couldn't add ${key}: '${k}'`);
+                store.remove(key);
+                cache = { [k]: value };
+                try {
+                    store.set(key, cache);
+                } catch {
+                    log(`Store is too small for ${key}: '${k}'`);
+                }
+            }
         },
 
         clear() {

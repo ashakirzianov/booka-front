@@ -34,17 +34,12 @@ export const Row = comp<LayoutProps>(props =>
 );
 
 // TODO: remove
-export type TextPropsStyle = {
-    fontWeight?: 'normal' | 'bold' | number,
-    fontFamily?: string,
-    fontSize?: number,
-    fontStyle?: 'italic' | 'normal',
-    textAlign?: 'justify',
-    color?: string,
-    cursor?: 'pointer',
-    border?: string,
-    margin?: string,
-};
+export type TextPropsStyle = React.CSSProperties;
+export type AllowedTextStyle = Pick<TextPropsStyle,
+    | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
+    | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
+    | 'letterSpacing' | 'textIndent' | 'alignSelf'
+>;
 export type TextProps = {
-    style?: TextPropsStyle,
+    style?: AllowedTextStyle,
 };

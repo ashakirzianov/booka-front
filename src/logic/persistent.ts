@@ -72,7 +72,7 @@ const defaultTheme: Theme = {
             secondary: '#222',
             accent: '#ddd',
             highlight: '#fff',
-            shadow: '#555',
+            shadow: '#000',
         },
     },
     currentPalette: 'light',
@@ -83,7 +83,7 @@ const defaultTheme: Theme = {
         largest: 36,
     },
     fontScale: 1,
-    radius: 9,
+    radius: 5,
 };
 
 export function restoreTheme(): Theme {

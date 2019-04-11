@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { TextProps, TextPropsStyle } from './Atoms';
+import { TextProps, AllowedTextStyle } from './Atoms';
 import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
 import { Action } from '../redux/actions';
 import { actionToUrl } from '../logic/urlConversion';
 
 export const Text = hoverable<TextProps>(props =>
     <span
-        style={props.style}
+        style={{
+            wordBreak: 'break-word',
+            ...props.style,
+        }}
     >
         {props.children}
     </span>,
@@ -15,7 +18,7 @@ export const Text = hoverable<TextProps>(props =>
 export type LinkProps = {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
-    style?: Hoverable<TextPropsStyle>,
+    style?: Hoverable<AllowedTextStyle>,
 };
 export const Link = hoverable<LinkProps>(props =>
     <a
@@ -23,6 +26,7 @@ export const Link = hoverable<LinkProps>(props =>
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
+            alignSelf: 'flex-start',
             ...props.style,
         }}
         onClick={e => {
@@ -42,7 +46,7 @@ export const Link = hoverable<LinkProps>(props =>
 export type ActionLinkProps = {
     action?: Action,
     onClick?: Callback<void>,
-    style?: Hoverable<TextPropsStyle>,
+    style?: Hoverable<AllowedTextStyle>,
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Link

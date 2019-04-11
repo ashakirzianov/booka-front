@@ -3,10 +3,10 @@ import * as React from 'react';
 import { comp, ActivityIndicator, connect, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
-    inRange, bookRange, emptyPath,
+    inRange, bookRange, emptyPath, isFirstSubpath,
 } from '../model';
 import { assertNever } from '../utils';
-import { TableOfContents } from '../model/tableOfContent';
+import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { BookContentComp } from './BookContentComp';
 
 export const BookComp = comp<Book>(props => {
@@ -48,13 +48,30 @@ function buildPaths(path: BookPath, toc: TableOfContents): {
     current: BookPath,
     next?: BookPath,
 } {
+    function tocItemCondition(item: TableOfContentsItem): boolean {
+        return true;
+    }
+
     let current = emptyPath();
     let prev: BookPath | undefined;
-    let skipFirst = false;
 
-    for (const item of toc.items.filter(i => i.level === 0)) {
-        if (skipFirst) {
-            const next = item.path;
+    for (let idx = 1; idx < toc.items.length; idx++) {
+        const item = toc.items[idx];
+        if (tocItemCondition(item)) {
+            let next = item.path;
+
+            // If next chapter is directly bellow current chapter
+            // (e.g. no paragraphs between) we merge them together
+            while (isFirstSubpath(current, next)) {
+                idx++;
+                const candidate = toc.items[idx];
+                if (!candidate) {
+                    break;
+                }
+                if (tocItemCondition(candidate)) {
+                    next = candidate.path;
+                }
+            }
 
             if (inRange(path, bookRange(current, next))) {
                 return { prev, current, next };
@@ -63,7 +80,6 @@ function buildPaths(path: BookPath, toc: TableOfContents): {
             prev = current;
             current = next;
         }
-        skipFirst = true;
     }
 
     return { prev, current };

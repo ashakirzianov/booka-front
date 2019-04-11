@@ -32,7 +32,7 @@ export function absolute(size: number) {
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
-export type Hoverable<T extends KeyRestriction<T, ':hover'>> = T & { ':hover'?: Partial<T> };
+export type Hoverable<T> = T & { ':hover'?: Partial<T> };
 
 export function partial<T>(Cmp: Comp<T>) {
     return <P extends keyof T>(partials: Pick<T, P>): Comp<ExcludeKeys<T, P>> => {
