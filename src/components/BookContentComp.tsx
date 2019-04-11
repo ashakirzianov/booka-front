@@ -10,7 +10,7 @@ import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
     Row, NewLine, Pph, ThemedText,
-    ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
+    ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
 
@@ -79,12 +79,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
             <ThemedText style={{
                 textAlign: 'justify',
             }}>
-                <IncrementalLoad
-                    increment={250}
-                    initial={50}
-                >
-                    {buildBook(content, params)}
-                </IncrementalLoad>
+                {buildBook(content, params)}
             </ThemedText>
             {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
         </ScrollView>;
