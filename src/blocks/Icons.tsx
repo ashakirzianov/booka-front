@@ -30,4 +30,3 @@ export type IconProps = {
 export const Icon: Comp<IconProps> = (props =>
     React.createElement(iconForName(props.name), props)
 );
-

@@ -58,3 +58,8 @@ export function themed<T = {}>(C: ThemeableComp<T>) {
 export function palette(themeable: Themeable): Palette {
     return themeable.theme.palettes[themeable.theme.currentPalette];
 }
+
+export function named<P>(C: Comp<P>, name: string): Comp<P> {
+    C.displayName = name;
+    return C;
+}

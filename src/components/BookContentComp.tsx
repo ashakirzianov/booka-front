@@ -192,13 +192,15 @@ const SpanComp: Comp<{ s: Span, first: boolean }> = (props =>
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
     <Pph textIndent={relative(props.first ? 0 : 2)}>
         <SpanComp s={props.p.span} first={props.first} />
-    </Pph>
+    </Pph>,
+    'ParagraphComp'
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
-            : <SubpartTitle text={props.title} />
+            : <SubpartTitle text={props.title} />,
+    'ChapterHeader'
 );
 
 type PathLinkProps = {
