@@ -43,7 +43,7 @@ export const PopUp = comp<{ in: boolean }>(props =>
         end={{ transform: 'translate(0%, 0%)', opacity: 1 }}
     >
         {props.children}
-    </Animated>,
+    </Animated>
 );
 
 export type AnimationStyles = {

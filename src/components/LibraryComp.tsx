@@ -9,7 +9,7 @@ const BookMetaComp = comp<{ meta: BookInfo, id: string }>(props =>
         <Link action={actionCreators.navigateToBook(bookLocator(remoteBookId(props.id), locationCurrent()))}>
             <ThemedText>{props.meta.title}</ThemedText>
         </Link>
-    </Row>,
+    </Row>
 );
 
 export const LibraryComp = comp<Library>(props =>
@@ -22,5 +22,5 @@ export const LibraryComp = comp<Library>(props =>
                     />)
             }
         </Column>
-    </SafeAreaView>,
+    </SafeAreaView>
 );

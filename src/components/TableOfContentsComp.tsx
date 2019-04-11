@@ -19,7 +19,7 @@ const TocItemComp = comp<TableOfContentsItem & { tabs: number }>(props =>
             <DottedLine />
             {props.percentage.toString()}
         </StretchLink>
-    </Row>,
+    </Row>
 );
 
 export class TableOfContentsComp extends React.Component<TableOfContents> {

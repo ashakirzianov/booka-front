@@ -22,7 +22,7 @@ export type LayoutProps = {
 export const Column = comp<LayoutProps>(props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
         {props.children}
-    </View>,
+    </View>
 );
 
 export const Row = comp<LayoutProps>(props =>
@@ -30,7 +30,7 @@ export const Row = comp<LayoutProps>(props =>
         style={{ ...convertStyle(props.style), flexDirection: 'row' }}
     >
         {props.children}
-    </View>,
+    </View>
 );
 
 // TODO: remove

@@ -39,7 +39,7 @@ export function partial<T>(Cmp: Comp<T>) {
         return props => React.createElement(
             Cmp,
             { ...(partials as any), ...(props as any) }, // TODO: investigate why we need 'as any'
-            props.children,
+            props.children
         );
     };
 }

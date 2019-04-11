@@ -17,7 +17,7 @@ export function computeRangeForPath(book: BookContent, path: BookPath): BookRang
 
     const range = bookRange(
         buildPath(chapter),
-        nextChapter && buildPath(nextChapter),
+        nextChapter && buildPath(nextChapter)
     );
 
     return range;

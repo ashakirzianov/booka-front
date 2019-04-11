@@ -8,5 +8,5 @@ export const TopComp = connectState('screen')((props) =>
         <Column style={{ alignItems: 'center' }}>
             {<ScreenComp {...props.screen} />}
         </Column>
-    </Layer>,
+    </Layer>
 );

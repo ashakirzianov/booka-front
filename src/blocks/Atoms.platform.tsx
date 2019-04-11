@@ -12,7 +12,7 @@ export const Text = hoverable<TextProps>(props =>
         }}
     >
         {props.children}
-    </span>,
+    </span>
 );
 
 export type LinkProps = {
@@ -40,7 +40,7 @@ export const Link = hoverable<LinkProps>(props =>
         }}
     >
         {props.children}
-    </a>,
+    </a>
 );
 
 export type ActionLinkProps = {
@@ -62,7 +62,7 @@ export const ActionLink = connectAll<ActionLinkProps>(props =>
         style={props.style}
     >
         {props.children}
-    </Link>,
+    </Link>
 );
 
 export function showAlert(message: string) {

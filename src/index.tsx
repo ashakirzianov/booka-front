@@ -9,6 +9,6 @@ import { wireHistoryNavigation } from './logic';
 wireHistoryNavigation();
 ReactDOM.render(
   <AppComp />,
-  document.getElementById('root') as HTMLElement,
+  document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

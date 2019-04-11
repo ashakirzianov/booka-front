@@ -94,7 +94,7 @@ export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
                 range: bookRange(),
             })
         }
-    </ThemedText>,
+    </ThemedText>
 );
 
 const ChapterTitle = comp<{ text?: string }>(props =>
@@ -110,7 +110,7 @@ const ChapterTitle = comp<{ text?: string }>(props =>
         }}>
             {props.text && props.text.toLocaleUpperCase()}
         </ThemedText>
-    </Row>,
+    </Row>
 );
 
 const PartTitle = comp<{ text?: string }>(props =>
@@ -125,7 +125,7 @@ const PartTitle = comp<{ text?: string }>(props =>
         }}>
             {props.text}
         </ThemedText>
-    </Row>,
+    </Row>
 );
 
 const SubpartTitle = comp<{ text?: string }>(props =>
@@ -136,7 +136,7 @@ const SubpartTitle = comp<{ text?: string }>(props =>
         }}>
             {props.text}
         </ThemedText>
-    </Row>,
+    </Row>
 );
 
 const BookTitle = comp<{ text?: string }>(props =>
@@ -147,7 +147,7 @@ const BookTitle = comp<{ text?: string }>(props =>
         }}>
             {props.text}
         </ThemedText>
-    </Row>,
+    </Row>
 );
 
 const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
@@ -159,13 +159,13 @@ const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
         }),
     }}>
         {props.children}
-    </PlainText>,
+    </PlainText>
 );
 
 const SimpleSpanComp = comp<{ s: SimpleSpan, first: boolean }>(props =>
     props.first
         ? <CapitalizeFirst text={props.s} />
-        : <TextRun text={props.s} />,
+        : <TextRun text={props.s} />
 );
 const AttributedSpanComp = comp<{ s: AttributedSpan, first: boolean }>(props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
@@ -173,32 +173,32 @@ const AttributedSpanComp = comp<{ s: AttributedSpan, first: boolean }>(props =>
             props.s.spans.map((childP, idx) =>
                 <SpanComp key={`${idx}`} s={childP} first={props.first && idx === 0} />)
         }
-    </StyledWithAttributes>,
+    </StyledWithAttributes>
 );
 const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(props =>
     <Link action={actionCreators.openFootnote(props.s.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
             {props.s.text}
         </ThemedText>
-    </Link>,
+    </Link>
 );
 const SpanComp = comp<{ s: Span, first: boolean }>(props =>
     isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
         : isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
             : isFootnote(props.s) ? <FootnoteSpanComp s={props.s} />
-                : assertNever(props.s),
+                : assertNever(props.s)
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
     <Pph textIndent={relative(props.first ? 0 : 2)}>
         <SpanComp s={props.p.span} first={props.first} />
-    </Pph>,
+    </Pph>
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
-            : <SubpartTitle text={props.title} />,
+            : <SubpartTitle text={props.title} />
 );
 
 const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
@@ -211,7 +211,7 @@ const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
         >
             {props.text}
         </LinkButton>
-    </Row>,
+    </Row>
 );
 
 type Params = {

@@ -43,7 +43,7 @@ export function keys<T>(obj: T): Array<keyof T> {
 
 export function mapObject<T, U>(
     obj: T,
-    f: <K extends keyof T, V extends T[K]>(k: K, v: V) => U,
+    f: <K extends keyof T, V extends T[K]>(k: K, v: V) => U
 ): { [k in keyof T]: U } {
     return keys(obj).reduce((acc, key) =>
         ({ ...acc, [key]: f(key, obj[key]) }), {} as any); // NOTE: need to cast so reducer infer 'any' as type arg

@@ -11,7 +11,7 @@ export const Text = comp<TextProps>(props =>
         style={convertStyle(props.style)}
     >
         {props.children}
-    </NativeText>,
+    </NativeText>
 );
 
 export function showAlert(message: string) {

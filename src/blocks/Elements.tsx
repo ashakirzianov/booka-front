@@ -27,7 +27,7 @@ export const ThemedText = themed<TextProps>(props =>
         ...props.style,
     }}>
         {props.children}
-    </Atoms.Text>,
+    </Atoms.Text>
 );
 
 export const PlainText = Atoms.Text;
@@ -47,13 +47,13 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
         }}
     >
         {props.children}
-    </Atoms.ActionLink>,
+    </Atoms.ActionLink>
 );
 
 export const Label = comp<{ text: string, margin?: string }>(props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
-    </ThemedText>,
+    </ThemedText>
 );
 
 export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
@@ -67,7 +67,7 @@ export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props 
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
-    </Link>,
+    </Link>
 );
 
 export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
@@ -85,7 +85,7 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
                 {props.children}
             </div>
         </Link>
-    </View>,
+    </View>
 );
 
 export const Line = comp(props =>
@@ -94,5 +94,5 @@ export const Line = comp(props =>
         justifyContent: 'space-between',
     }}>
         {props.children}
-    </Atoms.Row>,
+    </Atoms.Row>
 );

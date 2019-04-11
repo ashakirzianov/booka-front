@@ -7,9 +7,9 @@ import { LibraryComp } from './LibraryComp';
 export const LibraryScreenHeader = comp(props =>
     <Row style={{ flex: 1, justifyContent: 'center' }}>
         <Label text='Library' />
-    </Row>,
+    </Row>
 );
 
 export const LibraryScreenComp = comp<LibraryScreen>(props =>
-    <LibraryComp {...props.library} />,
+    <LibraryComp {...props.library} />
 );

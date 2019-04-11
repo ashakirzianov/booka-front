@@ -24,5 +24,5 @@ function iconForName(name: IconName) {
 }
 
 export const Icon = comp<{ name: IconName, size?: string }>(props =>
-    React.createElement(iconForName(props.name), props),
+    React.createElement(iconForName(props.name), props)
 );

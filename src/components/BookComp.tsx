@@ -40,7 +40,7 @@ const LoadedBookComp = connect(['pathToOpen'], ['updateBookPosition'])<LoadedBoo
 });
 
 const ErrorBookComp = comp<ErrorBook>(props =>
-    <Label text={'Error: ' + props.error} />,
+    <Label text={'Error: ' + props.error} />
 );
 
 function buildPaths(path: BookPath, toc: TableOfContents): {

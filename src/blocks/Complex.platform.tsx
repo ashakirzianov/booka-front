@@ -76,7 +76,7 @@ export const Modal = comp<ModalBoxProps>(props =>
 
             </div>
         }
-    </Transition>,
+    </Transition>
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>
@@ -95,7 +95,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
         }}>
             {props.children}
         </div >
-    </FadeIn >,
+    </FadeIn >
 );
 
 export type WithPopoverProps = {

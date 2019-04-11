@@ -16,14 +16,14 @@ export const Layer = themed(props =>
         backgroundColor: palette(props).primary,
     }}>
         {props.children}
-    </View>,
+    </View>
 );
 
 export const ActivityIndicator = themed(props =>
     <NativeActivityIndicator
         size='large'
         color={palette(props).primary}
-    />,
+    />
 );
 
 export const FullScreenActivityIndicator = comp(props =>
@@ -39,5 +39,5 @@ export const FullScreenActivityIndicator = comp(props =>
         zIndex: 10,
     }}>
         <ActivityIndicator />
-    </View>,
+    </View>
 );

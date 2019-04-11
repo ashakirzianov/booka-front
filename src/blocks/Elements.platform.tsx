@@ -11,11 +11,11 @@ export const Pph = comp<{ textIndent: string }>(props =>
         textIndent: props.textIndent,
     }}>
         {props.children}
-    </span>,
+    </span>
 );
 
 export const Tab = comp(props =>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 );
 
 export const NewLine = comp(props => <br />);
@@ -25,11 +25,11 @@ export const DottedLine = comp(props =>
         flex: 1,
         // TODO: consider properly implementing dotted line
         // borderBottom: 'dotted 2px',
-    }} />,
+    }} />
 );
 
 export const Separator = comp(() =>
-    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />,
+    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
 );
 
 export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
@@ -48,13 +48,13 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
         }}>
             {props.children}
         </div>
-    </Atoms.ActionLink>,
+    </Atoms.ActionLink>
 ));
 
 export const Clickable = comp<{ onClick: () => void }>(props =>
     <div onClick={props.onClick}>
         {props.children}
-    </div>,
+    </div>
 );
 
 export type OverlayBoxProps = {
@@ -80,7 +80,7 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
     }}
     >
         {props.children}
-    </View>,
+    </View>
 );
 
 export const CapitalizeFirst = comp<{ text: string }>(props => {
@@ -102,11 +102,11 @@ export const CapitalizeFirst = comp<{ text: string }>(props => {
 export const TextRun = comp<{ text: string }>(props =>
     <span>
         {props.text}
-    </span>,
+    </span>
 );
 
 export const Article = comp(props =>
     <article>
         {props.children}
-    </article>,
+    </article>
 );

@@ -14,13 +14,13 @@ export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(
         </TopBar>
         <Row style={{ margin: relative(2) }} />
         <Content {...props} />
-    </Column>,
+    </Column>
 );
 
 const Content = comp<AppScreen>(props =>
     props.screen === 'book' ? <BookScreenComp {...props} />
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
-            : assertNever(props),
+            : assertNever(props)
 );
 
 const Header = comp<AppScreen>(props =>
@@ -30,5 +30,5 @@ const Header = comp<AppScreen>(props =>
                 : props.screen === 'book' ? <BookScreenHeader {...props} />
                     : assertNever(props)
         }
-    </Row>,
+    </Row>
 );

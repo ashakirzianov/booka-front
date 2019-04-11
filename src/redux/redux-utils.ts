@@ -21,12 +21,12 @@ export function combineReducers<State, Action extends ReduxAction>(map: Reducers
 
 export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, middlewares: Array<Middleware<{}, State, any>> | undefined = []) {
     const middlewareEnhancer = applyMiddleware(
-        ...middlewares,
+        ...middlewares
     );
     const loopEnhancer = install();
     return createStore(reducer, compose(
         loopEnhancer,
-        middlewareEnhancer,
+        middlewareEnhancer
     ));
 }
 

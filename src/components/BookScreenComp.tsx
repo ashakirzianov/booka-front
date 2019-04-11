@@ -21,15 +21,15 @@ export const BookScreenHeader = comp<BookScreen>(props =>
         <Row>
             <AppearanceButton key='appearance' />
         </Row>
-    </Line>,
+    </Line>
 );
 
 const LibButton = comp(() =>
-    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />,
+    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
 );
 
 const OpenTocButton = comp<{ bi: BookId }>(props =>
-    <PanelLink icon='items' action={actionCreators.toggleToc()} />,
+    <PanelLink icon='items' action={actionCreators.toggleToc()} />
 );
 
 const AppearanceButton = comp(() =>
@@ -38,7 +38,7 @@ const AppearanceButton = comp(() =>
         body={<ThemePicker />}
     >
         {onClick => <PanelLink icon='letter' onClick={onClick} />}
-    </WithPopover>,
+    </WithPopover>
 );
 
 export const BookScreenComp = comp<BookScreen>(props =>
@@ -54,7 +54,7 @@ export const BookScreenComp = comp<BookScreen>(props =>
                 ? <FootnoteBox footnote={footnoteForId(props.book.content, props.footnoteId)} />
                 : null
         }
-    </>,
+    </>
 );
 const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
     <Row style={{
@@ -66,7 +66,7 @@ const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
         <Clickable key='book' onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
         </Clickable>
-    </Row>,
+    </Row>
 
 );
 
@@ -76,11 +76,11 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
         </Row>
-    </Modal>,
+    </Modal>
 );
 
 const FootnoteComp = comp<Footnote>(props =>
-    <BookNodesComp nodes={props.content} />,
+    <BookNodesComp nodes={props.content} />
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(props =>
@@ -95,7 +95,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(prop
                     <FootnoteComp {...props.footnote} />
                 </Row>
         }
-    </Modal>,
+    </Modal>
 );
 
 const ThemePicker = comp(props =>
@@ -105,7 +105,7 @@ const ThemePicker = comp(props =>
         <FontScale />
         <Separator />
         <PalettePicker />
-    </Column>,
+    </Column>
 );
 
 const FontScale = comp(() =>
@@ -117,7 +117,7 @@ const FontScale = comp(() =>
             <FontScaleButton increment={-0.1} size={18} />
             <FontScaleButton increment={0.1} size={36} />
         </Row>
-    </Column>,
+    </Column>
 );
 
 const FontScaleButton = connectActions('incrementScale')<{
@@ -130,7 +130,7 @@ const FontScaleButton = connectActions('incrementScale')<{
         <Link action={actionCreators.incrementScale(props.increment)}>
             <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
         </Link>
-    </Column>,
+    </Column>
 );
 
 const PalettePicker = comp(() =>
@@ -143,7 +143,7 @@ const PalettePicker = comp(() =>
             <PaletteButton name='sepia' text='S' />
             <PaletteButton name='dark' text='D' />
         </Row>
-    </Column>,
+    </Column>
 );
 
 const HoverableView = hoverable(View);
@@ -175,5 +175,5 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
             </Row>
         </HoverableView>
     </Link>;
-},
+}
 );
