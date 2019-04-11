@@ -4,15 +4,21 @@ import * as Atoms from './Atoms';
 import { themed, comp, relative, hoverable, palette } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 
-export const Inline = comp(props =>
-    <div style={{ display: 'inline' }}>{props.children}</div>,
+export const Pph = comp<{ textIndent: string }>(props =>
+    <span style={{
+        display: 'inline',
+        float: 'left',
+        textIndent: props.textIndent,
+    }}>
+        {props.children}
+    </span>,
 );
-
-export const NewLine = comp(props => <br />);
 
 export const Tab = comp(props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
 );
+
+export const NewLine = comp(props => <br />);
 
 export const DottedLine = comp(props =>
     <div style={{
@@ -79,7 +85,7 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
 
 export const CapitalizeFirst = comp<{ text: string }>(props => {
     const text = props.text.trimStart();
-    return <p>
+    return <span>
         <span style={{
             float: 'left',
             fontSize: '400%',
@@ -90,8 +96,14 @@ export const CapitalizeFirst = comp<{ text: string }>(props => {
         <span>
             {text.slice(1)}
         </span>
-    </p>;
+    </span>;
 });
+
+export const TextRun = comp<{ text: string }>(props =>
+    <span>
+        {props.text}
+    </span>,
+);
 
 export const Article = comp(props =>
     <article>

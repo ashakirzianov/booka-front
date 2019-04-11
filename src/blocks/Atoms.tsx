@@ -38,7 +38,7 @@ export type TextPropsStyle = React.CSSProperties;
 export type AllowedTextStyle = Pick<TextPropsStyle,
     | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
-    | 'letterSpacing'
+    | 'letterSpacing' | 'textIndent' | 'alignSelf'
 >;
 export type TextProps = {
     style?: AllowedTextStyle,

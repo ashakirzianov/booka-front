@@ -28,5 +28,5 @@ class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
-debug(() => clearAllStores());
+debug(() => false ? clearAllStores() : null);
 const store = createEnhancedStore(reducer);

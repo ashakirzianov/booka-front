@@ -75,6 +75,7 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
         <Link action={props.action} style={{
             margin: relative(0.5),
             alignSelf: 'stretch',
+            ...props.style,
         }}>
             <div style={{
                 display: 'flex',
@@ -94,8 +95,4 @@ export const Line = comp(props =>
     }}>
         {props.children}
     </Atoms.Row>,
-);
-
-export const TextRun = comp<{ text: string }>(props =>
-    <PlainText>{props.text}</PlainText>,
 );

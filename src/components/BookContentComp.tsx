@@ -9,7 +9,7 @@ import {
 import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
-    Row, NewLine, Tab, Inline, ThemedText,
+    Row, NewLine, Pph, ThemedText,
     ScrollView, IncrementalLoad, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
@@ -125,6 +125,7 @@ const PartTitle = comp<{ text?: string }>(props =>
     }}>
         <ThemedText size='large' style={{
             fontWeight: 'bold',
+            textAlign: 'center',
             margin: relative(1),
         }}>
             {props.text}
@@ -156,7 +157,7 @@ const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
         {props.children}
         {
             props.attrs.line
-                ? [<NewLine key='nl' />, <Tab key='tab' />]
+                ? <NewLine key='nl' />
                 : null
         }
     </PlainText>,
@@ -183,16 +184,16 @@ const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(pro
     </Link>,
 );
 const SpanComp = comp<{ s: Span, first: boolean }>(props =>
-    isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
-        : isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
+    isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
+        : isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
             : isFootnote(props.s) ? <FootnoteSpanComp s={props.s} />
                 : assertNever(props.s),
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
-    <Inline>
-        <Tab /><SpanComp s={props.p.span} first={props.first} />
-    </Inline>,
+    <Pph textIndent={relative(props.first ? 0 : 2)}>
+        <SpanComp s={props.p.span} first={props.first} />
+    </Pph>,
 );
 
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
