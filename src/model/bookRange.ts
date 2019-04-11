@@ -30,7 +30,7 @@ export function pathLessThan(left: BookPath, right: BookPath): boolean {
     for (let idx = 0; idx < right.length; idx++) {
         const leftElement = left[idx];
         const rightElement = right[idx];
-        if (leftElement === undefined && rightElement) {
+        if (leftElement === undefined) {
             return true;
         }
         if (leftElement !== rightElement) {
@@ -39,6 +39,24 @@ export function pathLessThan(left: BookPath, right: BookPath): boolean {
     }
 
     return false;
+}
+
+export function isPrefix(left: BookPath, right: BookPath) {
+    if (left.length <= right.length) {
+        return left.every((p, i) => p === right[i]);
+    } else {
+        return false;
+    }
+}
+
+export function isFirstSubpath(left: BookPath, right: BookPath) {
+    if (!isPrefix(left, right)) {
+        return false;
+    }
+
+    return right
+        .slice(left.length)
+        .every(p => p === 0);
 }
 
 export type BookRange = {
