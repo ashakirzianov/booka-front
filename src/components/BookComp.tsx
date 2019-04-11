@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { comp, ActivityIndicator, connect, Label } from '../blocks';
+import { Comp, ActivityIndicator, connect, Label } from '../blocks';
 import {
     Book, ErrorBook, LoadedBook, BookPath,
     inRange, bookRange, emptyPath, isFirstSubpath,
@@ -9,7 +9,7 @@ import { assertNever } from '../utils';
 import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { BookContentComp } from './BookContentComp';
 
-export const BookComp = comp<Book>(props => {
+export const BookComp: Comp<Book> = (props => {
     switch (props.book) {
         case 'error':
             return <ErrorBookComp {...props} />;
@@ -39,7 +39,7 @@ const LoadedBookComp = connect(['pathToOpen'], ['updateBookPosition'])<LoadedBoo
     />;
 });
 
-const ErrorBookComp = comp<ErrorBook>(props =>
+const ErrorBookComp: Comp<ErrorBook> = (props =>
     <Label text={'Error: ' + props.error} />
 );
 

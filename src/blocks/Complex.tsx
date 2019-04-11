@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, palette, comp } from './comp-utils';
+import { themed, palette, Comp } from './comp-utils';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { platformValue } from '../utils';
 import { defaults } from './defaults';
@@ -26,7 +26,7 @@ export const ActivityIndicator = themed(props =>
     />
 );
 
-export const FullScreenActivityIndicator = comp(props =>
+export const FullScreenActivityIndicator: Comp = (props =>
     <View style={{
         position: 'fixed' as any,
         top: 0, left: 0,

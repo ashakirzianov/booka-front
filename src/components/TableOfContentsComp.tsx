@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    comp, Row, Tab, relative,
+    Comp, Row, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
 import { bookLocator, pathToString, locationPath } from '../model';
@@ -9,7 +9,10 @@ import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
 import { nums } from '../utils';
 import { actionCreators } from '../redux/actions';
 
-const TocItemComp = comp<TableOfContentsItem & { tabs: number }>(props =>
+type TocItemProps = TableOfContentsItem & {
+    tabs: number,
+};
+const TocItemComp: Comp<TocItemProps> = (props =>
     <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
         <StretchLink action={actionCreators

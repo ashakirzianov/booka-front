@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
+    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { BookNodesComp } from './BookContentComp';
@@ -12,7 +12,7 @@ import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../redux/actions';
 
-export const BookScreenHeader = comp<BookScreen>(props =>
+export const BookScreenHeader: Comp<BookScreen> = (props =>
     <Line>
         <Row>
             <LibButton key='back' />
@@ -24,15 +24,15 @@ export const BookScreenHeader = comp<BookScreen>(props =>
     </Line>
 );
 
-const LibButton = comp(() =>
+const LibButton: Comp = (() =>
     <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
 );
 
-const OpenTocButton = comp<{ bi: BookId }>(props =>
+const OpenTocButton: Comp<{ bi: BookId }> = (props =>
     <PanelLink icon='items' action={actionCreators.toggleToc()} />
 );
 
-const AppearanceButton = comp(() =>
+const AppearanceButton: Comp = (() =>
     <WithPopover
         placement='bottom'
         body={<ThemePicker />}
@@ -41,7 +41,7 @@ const AppearanceButton = comp(() =>
     </WithPopover>
 );
 
-export const BookScreenComp = comp<BookScreen>(props =>
+export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
         <BookText book={props.book} />
         {
@@ -79,7 +79,7 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-const FootnoteComp = comp<Footnote>(props =>
+const FootnoteComp: Comp<Footnote> = (props =>
     <BookNodesComp nodes={props.content} />
 );
 
@@ -98,7 +98,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(prop
     </Modal>
 );
 
-const ThemePicker = comp(props =>
+const ThemePicker: Comp = (props =>
     <Column style={{
         width: relative(14),
     }}>
@@ -108,7 +108,7 @@ const ThemePicker = comp(props =>
     </Column>
 );
 
-const FontScale = comp(() =>
+const FontScale: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(5),
@@ -133,7 +133,7 @@ const FontScaleButton = connectActions('incrementScale')<{
     </Column>
 );
 
-const PalettePicker = comp(() =>
+const PalettePicker: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(5),

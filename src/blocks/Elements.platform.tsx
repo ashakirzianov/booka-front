@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { themed, comp, relative, hoverable, palette } from './comp-utils';
+import { themed, Comp, relative, hoverable, palette } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 
-export const Pph = comp<{ textIndent: string }>(props =>
+export const Pph: Comp<{ textIndent: string }> = (props =>
     <span style={{
         display: 'inline',
         float: 'left',
@@ -14,13 +14,13 @@ export const Pph = comp<{ textIndent: string }>(props =>
     </span>
 );
 
-export const Tab = comp(props =>
+export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 );
 
-export const NewLine = comp(props => <br />);
+export const NewLine: Comp = (props => <br />);
 
-export const DottedLine = comp(props =>
+export const DottedLine: Comp = (props =>
     <div style={{
         flex: 1,
         // TODO: consider properly implementing dotted line
@@ -28,7 +28,7 @@ export const DottedLine = comp(props =>
     }} />
 );
 
-export const Separator = comp(() =>
+export const Separator: Comp = (() =>
     <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
 );
 
@@ -51,7 +51,7 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
     </Atoms.ActionLink>
 ));
 
-export const Clickable = comp<{ onClick: () => void }>(props =>
+export const Clickable: Comp<{ onClick: () => void }> = (props =>
     <div onClick={props.onClick}>
         {props.children}
     </div>
@@ -83,7 +83,7 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
     </View>
 );
 
-export const CapitalizeFirst = comp<{ text: string }>(props => {
+export const CapitalizeFirst: Comp<{ text: string }> = (props => {
     const text = props.text.trimStart();
     return <span>
         <span style={{
@@ -99,13 +99,13 @@ export const CapitalizeFirst = comp<{ text: string }>(props => {
     </span>;
 });
 
-export const TextRun = comp<{ text: string }>(props =>
+export const TextRun: Comp<{ text: string }> = (props =>
     <span>
         {props.text}
     </span>
 );
 
-export const Article = comp(props =>
+export const Article: Comp = (props =>
     <article>
         {props.children}
     </article>

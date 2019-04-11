@@ -4,7 +4,7 @@ import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
-import { comp } from './comp-utils';
+import { Comp } from './comp-utils';
 
 export type IconName = 'close' | 'left' | 'items' | 'letter';
 
@@ -23,6 +23,11 @@ function iconForName(name: IconName) {
     }
 }
 
-export const Icon = comp<{ name: IconName, size?: string }>(props =>
+export type IconProps = {
+    name: IconName,
+    size?: string,
+};
+export const Icon: Comp<IconProps> = (props =>
     React.createElement(iconForName(props.name), props)
 );
+

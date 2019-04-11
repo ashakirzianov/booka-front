@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ViewStyle } from 'react-native';
-import { comp } from './comp-utils';
+import { Comp } from './comp-utils';
 
 export * from './Atoms.platform';
 
@@ -19,13 +19,13 @@ export type AllowedViewStyle = Pick<ViewStyle,
 export type LayoutProps = {
     style?: AllowedViewStyle,
 };
-export const Column = comp<LayoutProps>(props =>
+export const Column: Comp<LayoutProps> = (props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
         {props.children}
     </View>
 );
 
-export const Row = comp<LayoutProps>(props =>
+export const Row: Comp<LayoutProps> = (props =>
     <View
         style={{ ...convertStyle(props.style), flexDirection: 'row' }}
     >

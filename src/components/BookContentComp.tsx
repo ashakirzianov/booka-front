@@ -8,7 +8,7 @@ import {
 } from '../model';
 import { assertNever, last } from '../utils';
 import {
-    comp, Callback, relative, connectActions,
+    Comp, Callback, relative, connectActions,
     Row, Pph, ThemedText,
     ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
@@ -86,7 +86,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     }
 }
 
-export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
+export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
     <ThemedText>
         {
             buildNodes(props.nodes, [], {
@@ -97,7 +97,7 @@ export const BookNodesComp = comp<{ nodes: BookNode[] }>(props =>
     </ThemedText>
 );
 
-const ChapterTitle = comp<{ text?: string }>(props =>
+const ChapterTitle: Comp<{ text?: string }> = (props =>
     <Row style={{
         justifyContent: 'center',
         width: '100%',
@@ -113,7 +113,7 @@ const ChapterTitle = comp<{ text?: string }>(props =>
     </Row>
 );
 
-const PartTitle = comp<{ text?: string }>(props =>
+const PartTitle: Comp<{ text?: string }> = (props =>
     <Row style={{
         justifyContent: 'center',
         width: '100%',
@@ -128,7 +128,7 @@ const PartTitle = comp<{ text?: string }>(props =>
     </Row>
 );
 
-const SubpartTitle = comp<{ text?: string }>(props =>
+const SubpartTitle: Comp<{ text?: string }> = (props =>
     <Row style={{ justifyContent: 'flex-start' }}>
         <ThemedText style={{
             fontStyle: 'italic',
@@ -139,7 +139,7 @@ const SubpartTitle = comp<{ text?: string }>(props =>
     </Row>
 );
 
-const BookTitle = comp<{ text?: string }>(props =>
+const BookTitle: Comp<{ text?: string }> = (props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
         <ThemedText size='largest' style={{
             fontWeight: 'bold',
@@ -150,7 +150,7 @@ const BookTitle = comp<{ text?: string }>(props =>
     </Row>
 );
 
-const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
+const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
     <PlainText style={{
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
         ...(props.attrs.line && {
@@ -162,12 +162,12 @@ const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
     </PlainText>
 );
 
-const SimpleSpanComp = comp<{ s: SimpleSpan, first: boolean }>(props =>
+const SimpleSpanComp: Comp<{ s: SimpleSpan, first: boolean }> = (props =>
     props.first
         ? <CapitalizeFirst text={props.s} />
         : <TextRun text={props.s} />
 );
-const AttributedSpanComp = comp<{ s: AttributedSpan, first: boolean }>(props =>
+const AttributedSpanComp: Comp<{ s: AttributedSpan, first: boolean }> = (props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
         {
             props.s.spans.map((childP, idx) =>
@@ -182,7 +182,7 @@ const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(pro
         </ThemedText>
     </Link>
 );
-const SpanComp = comp<{ s: Span, first: boolean }>(props =>
+const SpanComp: Comp<{ s: Span, first: boolean }> = (props =>
     isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
         : isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
             : isFootnote(props.s) ? <FootnoteSpanComp s={props.s} />
@@ -201,7 +201,12 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
             : <SubpartTitle text={props.title} />
 );
 
-const PathLink = comp<{ path: BookPath, id: BookId, text: string }>(props =>
+type PathLinkProps = {
+    path: BookPath,
+    id: BookId,
+    text: string,
+};
+const PathLink: Comp<PathLinkProps> = (props =>
     <Row style={{
         justifyContent: 'center',
         margin: relative(2),

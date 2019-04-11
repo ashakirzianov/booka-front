@@ -4,9 +4,9 @@ import {
 } from 'react-native';
 import { Defined } from '../utils';
 import { TextProps } from './Atoms';
-import { comp } from './comp-utils';
+import { Comp } from './comp-utils';
 
-export const Text = comp<TextProps>(props =>
+export const Text: Comp<TextProps> = (props =>
     <NativeText
         style={convertStyle(props.style)}
     >

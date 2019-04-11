@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { comp, themed, relative, palette } from './comp-utils';
+import { Comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme, Palette } from '../model';
@@ -50,13 +50,14 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
     </Atoms.ActionLink>
 );
 
-export const Label = comp<{ text: string, margin?: string }>(props =>
+export const Label: Comp<{ text: string, margin?: string }> = (props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
     </ThemedText>
 );
 
-export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
+export type PanelLinkProps = Atoms.ActionLinkProps & { icon: IconName };
+export const PanelLink: Comp<PanelLinkProps> = (props =>
     <Link
         action={props.action}
         onClick={props.onClick}
@@ -88,7 +89,7 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
     </View>
 );
 
-export const Line = comp(props =>
+export const Line: Comp = (props =>
     <Atoms.Row style={{
         width: '100%',
         justifyContent: 'space-between',

@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import { Transition } from 'react-transition-group';
-import { comp } from './comp-utils';
+import { Comp } from './comp-utils';
 import { defaults } from './defaults';
 
 export type FadeInProps = {
     visible: boolean,
 };
-export const FadeIn = comp<FadeInProps>(props =>
+export const FadeIn: Comp<FadeInProps> = (props =>
     <Animated
         in={props.visible}
         start={{ opacity: 0.01 }}
@@ -36,7 +36,7 @@ export class FadeOnMount extends React.Component<{}, { in: boolean }> {
     }
 }
 
-export const PopUp = comp<{ in: boolean }>(props =>
+export const PopUp: Comp<{ in: boolean }> = (props =>
     <Animated
         in={props.in}
         start={{ transform: 'translate(0%, 100%)', opacity: 0.01 }}
@@ -56,7 +56,7 @@ export type AnimatedProps = {
     start: AnimationStyles,
     end: AnimationStyles,
 };
-export const Animated = comp<AnimatedProps>(props => {
+export const Animated: Comp<AnimatedProps> = (props => {
     const duration = props.duration || defaults.animationDuration;
     return <Transition in={props.in} timeout={duration}>
         {state =>
