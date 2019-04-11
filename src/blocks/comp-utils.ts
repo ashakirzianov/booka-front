@@ -3,7 +3,7 @@ import Radium from 'radium';
 import { KeyRestriction, ExcludeKeys, Func, platformValue } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
 export * from './comp-utils.platform';
 

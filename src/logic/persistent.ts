@@ -4,7 +4,7 @@ import {
     Library, BookInfo, Theme,
 } from '../model';
 import { smartStore, forEach, singleValueStore } from '../utils';
-import { subscribe } from '../redux/store';
+import { subscribe } from '../redux';
 
 const stores = {
     books: smartStore<LoadedBook>('books'),

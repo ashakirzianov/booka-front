@@ -6,7 +6,7 @@ import {
     inRange, bookRange, emptyPath, isFirstSubpath,
 } from '../model';
 import { assertNever } from '../utils';
-import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
+import { TableOfContents, TableOfContentsItem } from '../model';
 import { BookContentComp } from './BookContentComp';
 
 export const BookComp: Comp<Book> = (props => {

@@ -12,7 +12,7 @@ import {
     Row, Pph, ThemedText,
     ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
 type RefMap = { [k in string]?: RefType };
 type BookContentCompProps = {

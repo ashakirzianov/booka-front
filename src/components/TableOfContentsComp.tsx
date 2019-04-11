@@ -5,9 +5,9 @@ import {
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
 import { bookLocator, pathToString, locationPath } from '../model';
-import { TableOfContents, TableOfContentsItem } from '../model/tableOfContent';
+import { TableOfContents, TableOfContentsItem } from '../model';
 import { nums } from '../utils';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
 type TocItemProps = TableOfContentsItem & {
     tabs: number,

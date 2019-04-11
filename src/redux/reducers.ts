@@ -4,7 +4,7 @@ import {
 import { buildLibraryScreen, buildBookScreen } from '../logic';
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
-import { restoreTheme } from '../logic/persistent';
+import { restoreTheme } from '../logic';
 
 function theme(state: Theme | undefined = restoreTheme(), action: Action): Theme {
     switch (action.type) {

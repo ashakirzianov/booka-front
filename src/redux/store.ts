@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { reducer } from './reducers';
 import { createEnhancedStore } from './redux-utils';
 import { Action } from './actions';
-import { urlToAction } from '../logic/urlConversion';
+import { urlToAction } from '../logic';
 import { App } from '../model';
 import { debug, clearAllStores } from '../utils';
 

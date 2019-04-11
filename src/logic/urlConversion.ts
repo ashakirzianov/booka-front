@@ -1,4 +1,4 @@
-import { Action, actionCreators } from '../redux/actions';
+import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote,

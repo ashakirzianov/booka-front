@@ -6,11 +6,11 @@ import {
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { BookNodesComp } from './BookContentComp';
-import { footnoteForId } from '../model/book.utils';
+import { footnoteForId } from '../model';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
 export const BookScreenHeader: Comp<BookScreen> = (props =>
     <Line>
