@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import { debug, clearAllStores } from '../utils';
+import { App } from '../model';
+import { urlToAction } from '../logic';
 import { reducer } from './reducers';
 import { createEnhancedStore } from './redux-utils';
 import { Action } from './actions';
-import { urlToAction } from '../logic';
-import { App } from '../model';
-import { debug, clearAllStores } from '../utils';
 
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);

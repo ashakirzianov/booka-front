@@ -17,12 +17,12 @@ export function wireHistoryNavigation() {
             dispatchUrlNavigation(fullUrl(l));
         }
     });
-}
 
-subscribe(throttle(state => {
-    const urlFromState = stateToUrl(state);
-    const fullCurrentUrl = fullUrl(history.location);
-    if (fullCurrentUrl !== urlFromState) {
-        history.replace(urlFromState);
-    }
-}, 250));
+    subscribe(throttle(state => {
+        const urlFromState = stateToUrl(state);
+        const fullCurrentUrl = fullUrl(history.location);
+        if (fullCurrentUrl !== urlFromState) {
+            history.replace(urlFromState);
+        }
+    }, 250));
+}

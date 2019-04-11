@@ -37,14 +37,14 @@ export function setCurrentPosition(bookId: BookId, path: BookPath) {
     stores.positions.set(bookId.name, path);
 }
 
-subscribe(state => {
+setTimeout(() => subscribe(state => {
     const { screen } = state;
     if (screen.screen === 'book' && screen.bl.location.location === 'path') {
         const id = screen.book.id;
         const position = screen.bl.location.path;
         setCurrentPosition(id, position);
     }
-});
+}));
 
 // ---- Theme
 
@@ -90,6 +90,6 @@ export function restoreTheme(): Theme {
     return stores.theme.get() || defaultTheme;
 }
 
-subscribe(state => {
+setTimeout(() => subscribe(state => {
     stores.theme.set(state.theme);
-});
+}));

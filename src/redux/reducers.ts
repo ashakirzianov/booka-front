@@ -1,10 +1,11 @@
+import { combineReducers, loop } from './redux-utils';
+import { Action, actionCreators } from './actions';
 import {
     App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath,
 } from '../model';
 import { buildLibraryScreen, buildBookScreen } from '../logic';
-import { combineReducers, loop } from './redux-utils';
-import { Action, actionCreators } from './actions';
-import { restoreTheme } from '../logic';
+// TODO: remove this second-level import
+import { restoreTheme } from '../logic/persistent';
 
 function theme(state: Theme | undefined = restoreTheme(), action: Action): Theme {
     switch (action.type) {
