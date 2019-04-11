@@ -9,7 +9,7 @@ import {
 import { assertNever, last } from '../utils';
 import {
     comp, Callback, relative, connectActions,
-    Row, NewLine, Pph, ThemedText,
+    Row, Pph, ThemedText,
     ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
 } from '../blocks';
 import { actionCreators } from '../redux/actions';
@@ -148,13 +148,12 @@ const BookTitle = comp<{ text?: string }>(props =>
 const StyledWithAttributes = comp<{ attrs: AttributesObject }>(props =>
     <PlainText style={{
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
+        ...(props.attrs.line && {
+            textIndent: relative(2),
+            display: 'block',
+        }),
     }}>
         {props.children}
-        {
-            props.attrs.line
-                ? <NewLine key='nl' />
-                : null
-        }
     </PlainText>,
 );
 
