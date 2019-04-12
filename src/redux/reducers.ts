@@ -1,7 +1,7 @@
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
 import {
-    App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath,
+    App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath, locationToc, locationFootnote,
 } from '../model';
 import { buildLibraryScreen, buildBookScreen } from '../core';
 // TODO: remove this second-level import
@@ -53,6 +53,8 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
                 book: bs => ({
                     ...bs,
                     tocOpen: !bs.tocOpen,
+                    bl: bookLocator(bs.bl.id,
+                        locationToc(bs.bl.location.path)),
                 }),
                 default: () => state,
             });
@@ -61,6 +63,10 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
                 book: bs => ({
                     ...bs,
                     footnoteId: action.payload,
+                    bl: action.payload !== null
+                        ? bookLocator(bs.bl.id,
+                            locationFootnote(action.payload, bs.bl.location.path))
+                        : bs.bl,
                 }),
                 default: () => state,
             });
@@ -73,7 +79,7 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
     switch (action.type) {
         case 'pushScreen':
             const { payload } = action;
-            if (payload.screen === 'book' && payload.bl.location.location === 'path') {
+            if (payload.screen === 'book' && payload.bl.location.path) {
                 return payload.bl.location.path;
             } else {
                 return null;

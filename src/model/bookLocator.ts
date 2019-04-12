@@ -31,19 +31,22 @@ export function locationPath(path: BookPath) {
 export function locationCurrent() {
     return {
         location: 'current' as 'current',
+        path: undefined,
     };
 }
 
-export function locationToc() {
+export function locationToc(path?: BookPath) {
     return {
         location: 'toc' as 'toc',
+        path,
     };
 }
 
-export function locationFootnote(id: string) {
+export function locationFootnote(id: string, path?: BookPath) {
     return {
         location: 'footnote' as 'footnote',
         id,
+        path,
     };
 }
 
