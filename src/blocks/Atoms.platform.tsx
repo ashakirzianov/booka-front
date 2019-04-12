@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TextProps, AtomTextStyle } from './Atoms';
 import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
 import { Action } from '../redux';
-import { actionToUrl } from '../logic';
+import { actionToUrl } from '../core';
 
 export const Text = hoverable<TextProps>(props =>
     <span

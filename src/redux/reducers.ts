@@ -3,9 +3,9 @@ import { Action, actionCreators } from './actions';
 import {
     App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath,
 } from '../model';
-import { buildLibraryScreen, buildBookScreen } from '../logic';
+import { buildLibraryScreen, buildBookScreen } from '../core';
 // TODO: remove this second-level import
-import { restoreTheme } from '../logic/persistent';
+import { restoreTheme } from '../core/persistent';
 
 function theme(state: Theme | undefined = restoreTheme(), action: Action): Theme {
     switch (action.type) {

@@ -1,11 +1,11 @@
 import {
-    bookScreen, libraryScreen, AppScreen,
+    bookScreen, libraryScreen, BookScreen, LibraryScreen,
     BookLocator, bookLocator, locationPath,
 } from '../model';
 import { bookForId, currentLibrary } from './dataAccess';
 import { resolveCurrentPosition } from './persistent';
 
-export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
+export async function buildBookScreen(bl: BookLocator): Promise<BookScreen> {
     const book = bookForId(bl.id);
     if (bl.location.location === 'current') {
         const position = await resolveCurrentPosition(bl.id);
@@ -20,7 +20,7 @@ export async function buildBookScreen(bl: BookLocator): Promise<AppScreen> {
     return bookScreen(await book, bl, toc, fid);
 }
 
-export async function buildLibraryScreen(): Promise<AppScreen> {
+export async function buildLibraryScreen(): Promise<LibraryScreen> {
     const lib = await currentLibrary();
     return libraryScreen(lib);
 }
