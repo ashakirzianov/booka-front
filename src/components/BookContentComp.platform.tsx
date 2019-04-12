@@ -1,28 +1,9 @@
 import * as React from 'react';
 
 import { Comp, Callback } from '../blocks';
-import { SpanInfo, pathToString, stringToPath } from './BookContentComp';
-import { BookRange, BookPath, bookRangeUnordered } from '../model';
+import { SpanInfo, pathToString, stringToPath, BookSelection } from './BookContentComp';
+import { BookPath, bookRangeUnordered } from '../model';
 
-export function subscribeScroll(handler: Callback<void>) {
-    window.addEventListener('scroll', handler);
-}
-
-export function unsubscribeScroll(handler: Callback<void>) {
-    window.removeEventListener('scroll', handler);
-}
-
-export function subscribeSelection(handler: Callback<void>) {
-    window.addEventListener('mouseup', handler);
-    window.addEventListener('keydown', handler);
-}
-
-export function unsubscribeSelection(handler: Callback<void>) {
-    window.removeEventListener('mouseup', handler);
-    window.removeEventListener('keydown', handler);
-}
-
-// TODO: add id
 export const CapitalizeFirst: Comp<{ text: string, info: SpanInfo }> = (props => {
     const text = props.text.trimStart();
     const firstInfo = props.info;
@@ -53,7 +34,7 @@ export const TextRun: Comp<{ text: string, info: SpanInfo }> = (props =>
     </span>
 );
 
-export function getSelectionRange(): BookRange | undefined {
+export function getSelectionRange(): BookSelection | undefined {
     const selection = window.getSelection();
     if (!selection) {
         return undefined;
@@ -65,7 +46,9 @@ export function getSelectionRange(): BookRange | undefined {
     if (anchorPath && focusPath) {
         anchorPath[anchorPath.length - 1] += selection.anchorOffset;
         focusPath[focusPath.length - 1] += selection.focusOffset;
-        return bookRangeUnordered(anchorPath, focusPath);
+        const range = bookRangeUnordered(anchorPath, focusPath);
+        const text = selection.toString();
+        return { range, text };
     } else {
         return undefined;
     }
@@ -103,4 +86,30 @@ function idToInfo(str: string): SpanInfo | undefined {
     const path = stringToPath(comps[1]);
 
     return { path };
+}
+
+export function subscribeScroll(handler: Callback<Event>) {
+    window.addEventListener('scroll', handler);
+}
+
+export function unsubscribeScroll(handler: Callback<Event>) {
+    window.removeEventListener('scroll', handler);
+}
+
+export function subscribeSelection(handler: Callback<Event>) {
+    window.addEventListener('mouseup', handler);
+    window.addEventListener('keydown', handler);
+}
+
+export function unsubscribeSelection(handler: Callback<Event>) {
+    window.removeEventListener('mouseup', handler);
+    window.removeEventListener('keydown', handler);
+}
+
+export function subscribeCopy(handler: Callback<ClipboardEvent>) {
+    window.addEventListener('copy', handler as any);
+}
+
+export function unsubscribeCopy(handler: Callback<ClipboardEvent>) {
+    window.removeEventListener('copy', handler as any);
 }

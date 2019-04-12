@@ -13,7 +13,12 @@ import {
     ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
 import { actionCreators } from '../redux';
-import { CapitalizeFirst, TextRun, getSelectionRange, subscribeScroll, subscribeSelection, unsubscribeScroll, unsubscribeSelection } from './BookContentComp.platform';
+import { CapitalizeFirst, TextRun, getSelectionRange, subscribeScroll, subscribeSelection, unsubscribeScroll, unsubscribeSelection, subscribeCopy, unsubscribeCopy } from './BookContentComp.platform';
+
+export type BookSelection = {
+    text: string,
+    range: BookRange,
+};
 
 type RefMap = { [k in string]?: RefType };
 type BookContentCompProps = {
@@ -27,6 +32,7 @@ type BookContentCompProps = {
 };
 export class BookContentComp extends React.Component<BookContentCompProps> {
     public refMap: RefMap = {};
+    public selectedRange: BookSelection | undefined = undefined;
 
     public handleScroll = () => {
         const newCurrentPath = Object.entries(this.refMap)
@@ -40,10 +46,13 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     }
 
     public handleSelection = () => {
-        const range = getSelectionRange();
-        if (range) {
-            // tslint:disable-next-line:no-console
-            console.log(range);
+        this.selectedRange = getSelectionRange();
+    }
+
+    public handleCopy = (e: ClipboardEvent) => {
+        if (this.selectedRange && e.clipboardData) {
+            e.preventDefault();
+            e.clipboardData.setData('text/plain', this.selectedRange.text);
         }
     }
 
@@ -61,6 +70,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     public componentDidMount() {
         subscribeScroll(this.handleScroll);
         subscribeSelection(this.handleSelection);
+        subscribeCopy(this.handleCopy);
         this.scrollToCurrentPath();
 
     }
@@ -72,6 +82,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     public componentWillUnmount() {
         unsubscribeScroll(this.handleScroll);
         unsubscribeSelection(this.handleSelection);
+        unsubscribeCopy(this.handleCopy);
     }
 
     public render() {
@@ -345,4 +356,3 @@ export function stringToPath(str: string): BookPath {
 export type SpanInfo = {
     path: BookPath,
 };
-
