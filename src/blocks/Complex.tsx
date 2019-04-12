@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, palette, comp } from './comp-utils';
+import { themed, palette, Comp } from './comp-utils';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { platformValue } from '../utils';
 import { defaults } from './defaults';
@@ -16,17 +16,17 @@ export const Layer = themed(props =>
         backgroundColor: palette(props).primary,
     }}>
         {props.children}
-    </View>,
+    </View>
 );
 
 export const ActivityIndicator = themed(props =>
     <NativeActivityIndicator
         size='large'
         color={palette(props).primary}
-    />,
+    />
 );
 
-export const FullScreenActivityIndicator = comp(props =>
+export const FullScreenActivityIndicator: Comp = (props =>
     <View style={{
         position: 'fixed' as any,
         top: 0, left: 0,
@@ -39,5 +39,5 @@ export const FullScreenActivityIndicator = comp(props =>
         zIndex: 10,
     }}>
         <ActivityIndicator />
-    </View>,
+    </View>
 );

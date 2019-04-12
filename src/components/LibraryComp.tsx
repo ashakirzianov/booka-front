@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
-import { comp, Row, Link, SafeAreaView, Column, ThemedText } from '../blocks';
-import { actionCreators } from '../redux/actions';
+import { Comp, Row, Link, SafeAreaView, Column, ThemedText } from '../blocks';
+import { actionCreators } from '../redux';
 
-const BookMetaComp = comp<{ meta: BookInfo, id: string }>(props =>
+const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>
         <Link action={actionCreators.navigateToBook(bookLocator(remoteBookId(props.id), locationCurrent()))}>
             <ThemedText>{props.meta.title}</ThemedText>
         </Link>
-    </Row>,
+    </Row>
 );
 
-export const LibraryComp = comp<Library>(props =>
+export const LibraryComp: Comp<Library> = (props =>
     <SafeAreaView>
         <Column>
             {
@@ -22,5 +22,5 @@ export const LibraryComp = comp<Library>(props =>
                     />)
             }
         </Column>
-    </SafeAreaView>,
+    </SafeAreaView>
 );

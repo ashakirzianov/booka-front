@@ -78,12 +78,10 @@ export type AppScreen =
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
 
-export function bookScreen(book: Book, bl: BookLocator, tocOpen?: boolean, footnoteId?: string) {
+export function bookScreen(book: Book, bl: BookLocator) {
     return {
         screen: 'book' as 'book',
         book: book,
-        footnoteId: footnoteId || null,
-        tocOpen: tocOpen ? true : false,
         bl: bl,
     };
 }

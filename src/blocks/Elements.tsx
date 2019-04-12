@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { comp, themed, relative, palette } from './comp-utils';
+import { Comp, themed, relative, palette } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme, Palette } from '../model';
@@ -9,7 +9,7 @@ import { IconName, Icon } from './Icons';
 export * from './Elements.platform';
 
 type TextProps = {
-    style?: Atoms.AllowedTextStyle,
+    style?: Atoms.AtomTextStyle,
     size?: keyof Theme['fontSize'],
     color?: keyof Palette,
     hoverColor?: keyof Palette,
@@ -27,7 +27,7 @@ export const ThemedText = themed<TextProps>(props =>
         ...props.style,
     }}>
         {props.children}
-    </Atoms.Text>,
+    </Atoms.Text>
 );
 
 export const PlainText = Atoms.Text;
@@ -47,16 +47,17 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
         }}
     >
         {props.children}
-    </Atoms.ActionLink>,
+    </Atoms.ActionLink>
 );
 
-export const Label = comp<{ text: string, margin?: string }>(props =>
+export const Label: Comp<{ text: string, margin?: string }> = (props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
-    </ThemedText>,
+    </ThemedText>
 );
 
-export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props =>
+export type PanelLinkProps = Atoms.ActionLinkProps & { icon: IconName };
+export const PanelLink: Comp<PanelLinkProps> = (props =>
     <Link
         action={props.action}
         onClick={props.onClick}
@@ -67,7 +68,7 @@ export const PanelLink = comp<Atoms.ActionLinkProps & { icon: IconName }>(props 
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
-    </Link>,
+    </Link>
 );
 
 export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
@@ -85,14 +86,14 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
                 {props.children}
             </div>
         </Link>
-    </View>,
+    </View>
 );
 
-export const Line = comp(props =>
+export const Line: Comp = (props =>
     <Atoms.Row style={{
         width: '100%',
         justifyContent: 'space-between',
     }}>
         {props.children}
-    </Atoms.Row>,
+    </Atoms.Row>
 );

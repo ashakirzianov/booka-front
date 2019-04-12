@@ -16,7 +16,7 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
         StateKs extends keyof State,
         ActionKs extends Exclude<keyof ACs, StateKs> = never>(
             stateKs: StateKs[],
-            actionKs: ActionKs[] = [],
+            actionKs: ActionKs[] = []
     ) {
         type ComponentProps = Pick<State, StateKs> & {
             [k in ActionKs]: ActionDispatcher<PayloadType<ACs[k]>>;
@@ -32,7 +32,7 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
                 const callbacks = mapObject(
                     ac,
                     (key, value) =>
-                        ((x: any) => { dispatch(value(x) as any); }),
+                        ((x: any) => { dispatch(value(x) as any); })
                 );
                 return callbacks;
             }

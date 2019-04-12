@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { TextProps, AllowedTextStyle } from './Atoms';
+import { TextProps, AtomTextStyle } from './Atoms';
 import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
-import { Action } from '../redux/actions';
-import { actionToUrl } from '../logic/urlConversion';
+import { Action } from '../redux';
+import { actionToUrl } from '../core';
 
 export const Text = hoverable<TextProps>(props =>
     <span
@@ -12,13 +12,13 @@ export const Text = hoverable<TextProps>(props =>
         }}
     >
         {props.children}
-    </span>,
+    </span>
 );
 
 export type LinkProps = {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
-    style?: Hoverable<AllowedTextStyle>,
+    style?: Hoverable<AtomTextStyle>,
 };
 export const Link = hoverable<LinkProps>(props =>
     <a
@@ -40,13 +40,13 @@ export const Link = hoverable<LinkProps>(props =>
         }}
     >
         {props.children}
-    </a>,
+    </a>
 );
 
 export type ActionLinkProps = {
     action?: Action,
     onClick?: Callback<void>,
-    style?: Hoverable<AllowedTextStyle>,
+    style?: Hoverable<AtomTextStyle>,
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Link
@@ -62,7 +62,7 @@ export const ActionLink = connectAll<ActionLinkProps>(props =>
         style={props.style}
     >
         {props.children}
-    </Link>,
+    </Link>
 );
 
 export function showAlert(message: string) {

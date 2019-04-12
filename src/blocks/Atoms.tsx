@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { View, ViewStyle } from 'react-native';
-import { comp } from './comp-utils';
-
-export * from './Atoms.platform';
+import { View, ViewStyle, TextStyle } from 'react-native';
+import { Comp } from './comp-utils';
 
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
@@ -19,27 +17,34 @@ export type AllowedViewStyle = Pick<ViewStyle,
 export type LayoutProps = {
     style?: AllowedViewStyle,
 };
-export const Column = comp<LayoutProps>(props =>
+export const Column: Comp<LayoutProps> = (props =>
     <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
         {props.children}
-    </View>,
+    </View>
 );
 
-export const Row = comp<LayoutProps>(props =>
+export const Row: Comp<LayoutProps> = (props =>
     <View
         style={{ ...convertStyle(props.style), flexDirection: 'row' }}
     >
         {props.children}
-    </View>,
+    </View>
 );
 
 // TODO: remove
-export type TextPropsStyle = React.CSSProperties;
-export type AllowedTextStyle = Pick<TextPropsStyle,
-    | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
+export type CssTextStyle = React.CSSProperties;
+export type AtomTextStyle = Pick<CssTextStyle,
+    | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
->;
-export type TextProps = {
-    style?: AllowedTextStyle,
+> & Pick<TextStyle,
+    never
+> & {
+    fontWeight?: 'bold' | 'normal',
 };
+
+export type TextProps = {
+    style?: AtomTextStyle,
+};
+
+export * from './Atoms.platform';

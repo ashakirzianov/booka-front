@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { named } from './comp-utils';
 
 export function isOpenNewTabEvent(e: React.MouseEvent) {
     return isMacOs()
@@ -12,12 +13,12 @@ function isMacOs(): boolean {
 
 export type RefType = HTMLDivElement | null;
 export type RefHandler = (ref: RefType) => void;
-export function refable<P = {}>(C: React.ComponentType<P>) {
-    return React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>
+export function refable<P = {}>(C: React.ComponentType<P>, name: string) {
+    return named(React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>
         <div ref={ref} style={{ display: 'flex' }}>
             <C {...props} />
-        </div>,
-    );
+        </div>
+    ), name);
 }
 
-export const Refable = refable(props => <>{props.children}</>);
+export const Refable = refable(props => <>{props.children}</>, 'Refable');

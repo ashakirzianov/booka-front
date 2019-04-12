@@ -18,7 +18,14 @@
     "trailing-comma": [
       true,
       {
-        "multiline": "always"
+        "multiline": {
+          "arrays": "always",
+          "objects": "always",
+          "imports": "always",
+          "exports": "always",
+          "typeLiterals": "always",
+          "functions": "ignore"
+        }
       }
     ],
     "whitespace": true,

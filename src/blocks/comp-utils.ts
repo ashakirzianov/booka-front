@@ -3,7 +3,7 @@ import Radium from 'radium';
 import { KeyRestriction, ExcludeKeys, Func, platformValue } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
 export * from './comp-utils.platform';
 
@@ -39,7 +39,7 @@ export function partial<T>(Cmp: Comp<T>) {
         return props => React.createElement(
             Cmp,
             { ...(partials as any), ...(props as any) }, // TODO: investigate why we need 'as any'
-            props.children,
+            props.children
         );
     };
 }
@@ -57,4 +57,9 @@ export function themed<T = {}>(C: ThemeableComp<T>) {
 }
 export function palette(themeable: Themeable): Palette {
     return themeable.theme.palettes[themeable.theme.currentPalette];
+}
+
+export function named<P>(C: Comp<P>, name: string): Comp<P> {
+    C.displayName = name;
+    return C;
 }

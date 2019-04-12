@@ -2,17 +2,17 @@ import * as React from 'react';
 
 import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
-    comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
+    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
 import { BookNodesComp } from './BookContentComp';
-import { footnoteForId } from '../model/book.utils';
+import { footnoteForId } from '../model';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { actionCreators } from '../redux/actions';
+import { actionCreators } from '../redux';
 
-export const BookScreenHeader = comp<BookScreen>(props =>
+export const BookScreenHeader: Comp<BookScreen> = (props =>
     <Line>
         <Row>
             <LibButton key='back' />
@@ -21,40 +21,40 @@ export const BookScreenHeader = comp<BookScreen>(props =>
         <Row>
             <AppearanceButton key='appearance' />
         </Row>
-    </Line>,
+    </Line>
 );
 
-const LibButton = comp(() =>
-    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />,
+const LibButton: Comp = (() =>
+    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
 );
 
-const OpenTocButton = comp<{ bi: BookId }>(props =>
-    <PanelLink icon='items' action={actionCreators.toggleToc()} />,
+const OpenTocButton: Comp<{ bi: BookId }> = (props =>
+    <PanelLink icon='items' action={actionCreators.toggleToc()} />
 );
 
-const AppearanceButton = comp(() =>
+const AppearanceButton: Comp = (() =>
     <WithPopover
         placement='bottom'
         body={<ThemePicker />}
     >
         {onClick => <PanelLink icon='letter' onClick={onClick} />}
-    </WithPopover>,
+    </WithPopover>
 );
 
-export const BookScreenComp = comp<BookScreen>(props =>
+export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
         <BookText book={props.book} />
-        {
-            props.book.book === 'book'
-                ? <TableOfContentsBox toc={props.book.toc} open={props.tocOpen} />
-                : null
-        }
-        {
-            props.book.book === 'book'
-                ? <FootnoteBox footnote={footnoteForId(props.book.content, props.footnoteId)} />
-                : null
-        }
-    </>,
+        <TableOfContentsBox
+            toc={props.book.toc}
+            open={props.bl.location.location === 'toc'}
+        />
+        <FootnoteBox
+            footnote={
+                props.bl.location.location === 'footnote'
+                    ? footnoteForId(props.book.content, props.bl.location.id)
+                    : undefined}
+        />
+    </>
 );
 const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
     <Row style={{
@@ -66,7 +66,7 @@ const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
         <Clickable key='book' onClick={() => props.toggleControls()}>
             <BookComp {...props.book} />
         </Clickable>
-    </Row>,
+    </Row>
 
 );
 
@@ -76,11 +76,11 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
         <Row style={{ overflow: 'scroll' }}>
             <TableOfContentsComp {...props.toc} />
         </Row>
-    </Modal>,
+    </Modal>
 );
 
-const FootnoteComp = comp<Footnote>(props =>
-    <BookNodesComp nodes={props.content} />,
+const FootnoteComp: Comp<Footnote> = (props =>
+    <BookNodesComp nodes={props.content} />
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(props =>
@@ -95,20 +95,20 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(prop
                     <FootnoteComp {...props.footnote} />
                 </Row>
         }
-    </Modal>,
+    </Modal>
 );
 
-const ThemePicker = comp(props =>
+const ThemePicker: Comp = (props =>
     <Column style={{
         width: relative(14),
     }}>
         <FontScale />
         <Separator />
         <PalettePicker />
-    </Column>,
+    </Column>
 );
 
-const FontScale = comp(() =>
+const FontScale: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(5),
@@ -117,7 +117,7 @@ const FontScale = comp(() =>
             <FontScaleButton increment={-0.1} size={18} />
             <FontScaleButton increment={0.1} size={36} />
         </Row>
-    </Column>,
+    </Column>
 );
 
 const FontScaleButton = connectActions('incrementScale')<{
@@ -130,10 +130,10 @@ const FontScaleButton = connectActions('incrementScale')<{
         <Link action={actionCreators.incrementScale(props.increment)}>
             <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
         </Link>
-    </Column>,
+    </Column>
 );
 
-const PalettePicker = comp(() =>
+const PalettePicker: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
         height: relative(5),
@@ -143,7 +143,7 @@ const PalettePicker = comp(() =>
             <PaletteButton name='sepia' text='S' />
             <PaletteButton name='dark' text='D' />
         </Row>
-    </Column>,
+    </Column>
 );
 
 const HoverableView = hoverable(View);
@@ -175,5 +175,5 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
             </Row>
         </HoverableView>
     </Link>;
-},
+}
 );

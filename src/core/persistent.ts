@@ -1,23 +1,22 @@
-// import * as store from 'store';
 import {
-    BookId, BookPath, library, LoadedBook,
-    Library, BookInfo, Theme,
+    BookId, BookPath, library, Book,
+    Library, BookInfo, Theme, emptyPath,
 } from '../model';
 import { smartStore, forEach, singleValueStore } from '../utils';
-import { subscribe } from '../redux/store';
+import { subscribe } from '../redux';
 
 const stores = {
-    books: smartStore<LoadedBook>('books'),
+    books: smartStore<Book>('books'),
     library: smartStore<BookInfo>('library'),
     positions: smartStore<BookPath>('positions'),
     theme: singleValueStore<Theme>('theme'),
 };
 
-export function bookFromStore(bi: BookId): LoadedBook | undefined {
+export function bookFromStore(bi: BookId): Book | undefined {
     return stores.books.get(bi.name);
 }
 
-export function storeBook(book: LoadedBook) {
+export function storeBook(book: Book) {
     stores.books.set(book.id.name, book);
 }
 
@@ -37,14 +36,14 @@ export function setCurrentPosition(bookId: BookId, path: BookPath) {
     stores.positions.set(bookId.name, path);
 }
 
-subscribe(state => {
+setTimeout(() => subscribe(state => {
     const { screen } = state;
     if (screen.screen === 'book' && screen.bl.location.location === 'path') {
         const id = screen.book.id;
-        const position = screen.bl.location.path;
+        const position = screen.bl.location.path || emptyPath();
         setCurrentPosition(id, position);
     }
-});
+}));
 
 // ---- Theme
 
@@ -90,6 +89,6 @@ export function restoreTheme(): Theme {
     return stores.theme.get() || defaultTheme;
 }
 
-subscribe(state => {
+setTimeout(() => subscribe(state => {
     stores.theme.set(state.theme);
-});
+}));

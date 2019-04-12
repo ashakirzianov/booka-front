@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, comp, relative, palette } from './comp-utils';
+import { Callback, themed, ReactContent, Comp, relative, palette } from './comp-utils';
 import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations.platform';
@@ -15,7 +15,7 @@ type ModalBoxProps = {
     title?: string,
     toggle: Callback<void>,
 };
-export const Modal = comp<ModalBoxProps>(props =>
+export const Modal: Comp<ModalBoxProps> = (props =>
     <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{
@@ -76,7 +76,7 @@ export const Modal = comp<ModalBoxProps>(props =>
 
             </div>
         }
-    </Transition>,
+    </Transition>
 );
 
 export const TopBar = themed<{ open: boolean }>(props =>
@@ -95,7 +95,7 @@ export const TopBar = themed<{ open: boolean }>(props =>
         }}>
             {props.children}
         </div >
-    </FadeIn >,
+    </FadeIn >
 );
 
 export type WithPopoverProps = {
