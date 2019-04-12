@@ -1,6 +1,6 @@
 import {
     BookId, BookPath, library, Book,
-    Library, BookInfo, Theme,
+    Library, BookInfo, Theme, emptyPath,
 } from '../model';
 import { smartStore, forEach, singleValueStore } from '../utils';
 import { subscribe } from '../redux';
@@ -40,7 +40,7 @@ setTimeout(() => subscribe(state => {
     const { screen } = state;
     if (screen.screen === 'book' && screen.bl.location.location === 'path') {
         const id = screen.book.id;
-        const position = screen.bl.location.path;
+        const position = screen.bl.location.path || emptyPath();
         setCurrentPosition(id, position);
     }
 }));

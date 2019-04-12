@@ -52,9 +52,11 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    tocOpen: !bs.tocOpen,
-                    bl: bookLocator(bs.bl.id,
-                        locationToc(bs.bl.location.path)),
+                    bl: bs.bl.location.location === 'toc'
+                        ? bookLocator(bs.bl.id,
+                            locationPath(bs.bl.location.path))
+                        : bookLocator(bs.bl.id,
+                            locationToc(bs.bl.location.path)),
                 }),
                 default: () => state,
             });
@@ -62,11 +64,11 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    footnoteId: action.payload,
                     bl: action.payload !== null
                         ? bookLocator(bs.bl.id,
                             locationFootnote(action.payload, bs.bl.location.path))
-                        : bs.bl,
+                        : bookLocator(bs.bl.id,
+                            locationPath(bs.bl.location.path)),
                 }),
                 default: () => state,
             });

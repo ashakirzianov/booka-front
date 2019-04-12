@@ -21,7 +21,7 @@ export type BookLocation =
     | ReturnType<typeof locationFootnote>
     ;
 
-export function locationPath(path: BookPath) {
+export function locationPath(path?: BookPath) {
     return {
         location: 'path' as 'path',
         path,

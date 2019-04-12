@@ -45,9 +45,15 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
         <BookText book={props.book} />
         <TableOfContentsBox
-            toc={props.book.toc} open={props.tocOpen} />
+            toc={props.book.toc}
+            open={props.bl.location.location === 'toc'}
+        />
         <FootnoteBox
-            footnote={footnoteForId(props.book.content, props.footnoteId)} />
+            footnote={
+                props.bl.location.location === 'footnote'
+                    ? footnoteForId(props.book.content, props.bl.location.id)
+                    : undefined}
+        />
     </>
 );
 const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
