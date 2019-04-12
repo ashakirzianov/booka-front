@@ -17,8 +17,6 @@ export function remoteBookId(name: string): RemoteBookId {
 export type BookLocation =
     | ReturnType<typeof locationPath>
     | ReturnType<typeof locationCurrent>
-    | ReturnType<typeof locationToc>
-    | ReturnType<typeof locationFootnote>
     ;
 
 export function locationPath(path?: BookPath) {
@@ -35,41 +33,22 @@ export function locationCurrent() {
     };
 }
 
-export function locationToc(path?: BookPath) {
-    return {
-        location: 'toc' as 'toc',
-        path,
-    };
-}
-
-export function locationFootnote(id: string, path?: BookPath) {
-    return {
-        location: 'footnote' as 'footnote',
-        id,
-        path,
-    };
-}
-
 export type BookLocator = {
     id: BookId,
+    toc: boolean,
+    footnoteId: string | undefined,
     location: BookLocation,
 };
 
-export function bookLocator(id: BookId, location?: BookLocation): BookLocator {
+export function bookLocator(id: BookId, location: BookLocation, toc?: boolean, footnoteId?: string): BookLocator {
     return {
         id: id,
+        toc: toc === true ? true : false,
+        footnoteId,
         location: location || locationPath([]),
     };
 }
 
 export function pointToSameBook(bl1: BookLocator, bl2: BookLocator): boolean {
     return sameId(bl1.id, bl2.id);
-}
-
-export function updatePath(bl: BookLocator, path: BookPath): BookLocator {
-    return bookLocator(bl.id, locationPath(path));
-}
-
-export function updateLocation(bl: BookLocator, location: BookLocation): BookLocator {
-    return bookLocator(bl.id, location);
 }

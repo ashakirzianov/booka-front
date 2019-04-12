@@ -4,7 +4,7 @@ import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
 import { Footnote } from '../contracts';
 
-export function footnoteForId(book: BookContent, id: string | null): Footnote | undefined {
+export function footnoteForId(book: BookContent, id: string | undefined): Footnote | undefined {
     return book.footnotes
         .find(f => f.id === id);
 }

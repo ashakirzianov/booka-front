@@ -1,9 +1,9 @@
 import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote,
+    locationPath, BookLocation, stringToPath, BookLocator, pathToString,
 } from '../model';
-import { assertNever, parsePartialUrl, ParsedUrl } from '../utils';
+import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined } from '../utils';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {
@@ -16,16 +16,21 @@ export function actionToUrl(action: Action | undefined, state: App): string | un
             return blToUrl(action.payload);
         case 'openFootnote':
             if (screen.screen === 'book' && action.payload) {
-                const loc = locationFootnote(action.payload, screen.bl.location.path);
-                return blToUrl(
-                    bookLocator(screen.bl.id, loc));
+                const bl = {
+                    ...screen.bl,
+                    footnoteId: action.payload,
+                };
+                return blToUrl(bl);
             } else {
                 return undefined;
             }
         case 'toggleToc':
             if (screen.screen === 'book') {
-                const loc = locationToc(screen.bl.location.path);
-                return blToUrl(bookLocator(screen.bl.id, loc));
+                const bl = {
+                    ...screen.bl,
+                    toc: !screen.bl.toc,
+                };
+                return blToUrl(bl);
             } else {
                 return undefined;
             }
@@ -66,13 +71,11 @@ function parsedUrlToBL(parsedUrl: ParsedUrl): BookLocator | undefined {
         return bookLocator(remoteBookId(name), locationCurrent());
     } else {
         const bookPath = stringToPath(head) || [];
-        if (parsedUrl.search.toc !== undefined) {
-            return bookLocator(remoteBookId(name), locationToc(bookPath));
-        } else if (parsedUrl.search.fid !== undefined) {
-            return bookLocator(remoteBookId(name), locationFootnote(parsedUrl.search.fid, bookPath));
-        } else {
-            return bookLocator(remoteBookId(name), locationPath(bookPath));
-        }
+        const id = remoteBookId(name);
+        const loc = locationPath(bookPath);
+        const toc = parsedUrl.search.toc !== undefined;
+        const footnoteId = parsedUrl.search.fid;
+        return bookLocator(id, loc, toc, footnoteId);
     }
 }
 
@@ -90,7 +93,16 @@ export function stateToUrl(state: App) {
 }
 
 function blToUrl(bl: BookLocator): string {
-    return `/book/${bl.id.name}/${locationToString(bl.location)}`;
+    return `/book/${bl.id.name}/${locationToString(bl.location)}${search(bl)}`;
+}
+
+function search(bl: BookLocator): string {
+    const toc = bl.toc ? 'toc' : undefined;
+    const fid = bl.footnoteId ? `fid=${bl.footnoteId}` : undefined;
+
+    const all = filterUndefined([toc, fid]).join('&');
+
+    return all ? `?${all}` : '';
 }
 
 function locationToString(l: BookLocation) {
@@ -99,10 +111,6 @@ function locationToString(l: BookLocation) {
             return pathToString(l.path);
         case 'current':
             return 'current';
-        case 'toc':
-            return `${pathToString(l.path)}?toc`;
-        case 'footnote':
-            return `${pathToString(l.path)}?fid=${l.id}`;
         default:
             return assertNever(l);
     }

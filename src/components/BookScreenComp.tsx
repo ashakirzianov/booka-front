@@ -46,13 +46,10 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         <BookText book={props.book} />
         <TableOfContentsBox
             toc={props.book.toc}
-            open={props.bl.location.location === 'toc'}
+            open={props.bl.toc}
         />
         <FootnoteBox
-            footnote={
-                props.bl.location.location === 'footnote'
-                    ? footnoteForId(props.book.content, props.bl.location.id)
-                    : undefined}
+            footnote={footnoteForId(props.book.content, props.bl.footnoteId)}
         />
     </>
 );
