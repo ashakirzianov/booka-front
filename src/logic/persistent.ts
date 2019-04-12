@@ -1,23 +1,22 @@
-// import * as store from 'store';
 import {
-    BookId, BookPath, library, LoadedBook,
+    BookId, BookPath, library, Book,
     Library, BookInfo, Theme,
 } from '../model';
 import { smartStore, forEach, singleValueStore } from '../utils';
 import { subscribe } from '../redux';
 
 const stores = {
-    books: smartStore<LoadedBook>('books'),
+    books: smartStore<Book>('books'),
     library: smartStore<BookInfo>('library'),
     positions: smartStore<BookPath>('positions'),
     theme: singleValueStore<Theme>('theme'),
 };
 
-export function bookFromStore(bi: BookId): LoadedBook | undefined {
+export function bookFromStore(bi: BookId): Book | undefined {
     return stores.books.get(bi.name);
 }
 
-export function storeBook(book: LoadedBook) {
+export function storeBook(book: Book) {
     stores.books.set(book.id.name, book);
 }
 

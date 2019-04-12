@@ -1,28 +1,14 @@
 import * as React from 'react';
 
-import { Comp, ActivityIndicator, connect, Label } from '../blocks';
+import { connect } from '../blocks';
 import {
-    Book, ErrorBook, LoadedBook, BookPath,
+    Book, BookPath,
     inRange, bookRange, emptyPath, isFirstSubpath,
 } from '../model';
-import { assertNever } from '../utils';
 import { TableOfContents, TableOfContentsItem } from '../model';
 import { BookContentComp } from './BookContentComp';
 
-export const BookComp: Comp<Book> = (props => {
-    switch (props.book) {
-        case 'error':
-            return <ErrorBookComp {...props} />;
-        case 'book':
-            return <LoadedBookComp {...props} />;
-        case 'loading':
-            return <ActivityIndicator />;
-        default:
-            return assertNever(props);
-    }
-});
-
-const LoadedBookComp = connect(['pathToOpen'], ['updateBookPosition'])<LoadedBook>(props => {
+export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(props => {
     const {
         pathToOpen, updateBookPosition,
         content, id, toc,
@@ -38,10 +24,6 @@ const LoadedBookComp = connect(['pathToOpen'], ['updateBookPosition'])<LoadedBoo
         id={id}
     />;
 });
-
-const ErrorBookComp: Comp<ErrorBook> = (props =>
-    <Label text={'Error: ' + props.error} />
-);
 
 function buildPaths(path: BookPath, toc: TableOfContents): {
     prev?: BookPath,

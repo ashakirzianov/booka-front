@@ -44,16 +44,10 @@ const AppearanceButton: Comp = (() =>
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
         <BookText book={props.book} />
-        {
-            props.book.book === 'book'
-                ? <TableOfContentsBox toc={props.book.toc} open={props.tocOpen} />
-                : null
-        }
-        {
-            props.book.book === 'book'
-                ? <FootnoteBox footnote={footnoteForId(props.book.content, props.footnoteId)} />
-                : null
-        }
+        <TableOfContentsBox
+            toc={props.book.toc} open={props.tocOpen} />
+        <FootnoteBox
+            footnote={footnoteForId(props.book.content, props.footnoteId)} />
     </>
 );
 const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
