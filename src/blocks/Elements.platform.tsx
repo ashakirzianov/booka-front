@@ -83,28 +83,6 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
     </View>
 );
 
-export const CapitalizeFirst: Comp<{ text: string }> = (props => {
-    const text = props.text.trimStart();
-    return <span>
-        <span style={{
-            float: 'left',
-            fontSize: '400%',
-            lineHeight: '80%',
-        }}>
-            {text[0]}
-        </span>
-        <span>
-            {text.slice(1)}
-        </span>
-    </span>;
-});
-
-export const TextRun: Comp<{ text: string }> = (props =>
-    <span>
-        {props.text}
-    </span>
-);
-
 export const Article: Comp = (props =>
     <article>
         {props.children}

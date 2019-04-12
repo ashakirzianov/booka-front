@@ -71,6 +71,14 @@ export function bookRange(start?: BookPath, end?: BookPath): BookRange {
     };
 }
 
+export function bookRangeUnordered(f: BookPath, s: BookPath): BookRange {
+    if (pathLessThan(s, f)) {
+        return bookRange(s, f);
+    } else {
+        return bookRange(f, s);
+    }
+}
+
 export function inRange(path: BookPath, range: BookRange): boolean {
     if (pathLessThan(path, range.start)) {
         return false;

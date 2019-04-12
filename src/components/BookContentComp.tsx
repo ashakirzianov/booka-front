@@ -4,15 +4,16 @@ import {
     BookNode, isParagraph, isChapter, inRange, BookContent,
     subpathCouldBeInRange, AttributesObject, SimpleSpan,
     AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
-    isFootnote, FootnoteSpan, bookRange, locationPath,
+    isFootnote, FootnoteSpan, bookRange, locationPath, spanLength,
 } from '../model';
 import { assertNever, last } from '../utils';
 import {
     Comp, Callback, relative, connectActions,
     Row, Pph, ThemedText,
-    ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText, CapitalizeFirst, TextRun,
+    ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
 } from '../blocks';
 import { actionCreators } from '../redux';
+import { CapitalizeFirst, TextRun, getSelectionRange, subscribeScroll, subscribeSelection, unsubscribeScroll, unsubscribeSelection } from './BookContentComp.platform';
 
 type RefMap = { [k in string]?: RefType };
 type BookContentCompProps = {
@@ -38,6 +39,14 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
         }
     }
 
+    public handleSelection = () => {
+        const range = getSelectionRange();
+        if (range) {
+            // tslint:disable-next-line:no-console
+            console.log(range);
+        }
+    }
+
     public scrollToCurrentPath = () => {
         const props = this.props;
         const refMap = this.refMap;
@@ -50,7 +59,8 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     }
 
     public componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
+        subscribeScroll(this.handleScroll);
+        subscribeSelection(this.handleSelection);
         this.scrollToCurrentPath();
 
     }
@@ -60,7 +70,8 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     }
 
     public componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
+        unsubscribeScroll(this.handleScroll);
+        unsubscribeSelection(this.handleSelection);
     }
 
     public render() {
@@ -161,36 +172,81 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
     </PlainText>
 );
 
-const SimpleSpanComp: Comp<{ s: SimpleSpan, first: boolean }> = (props =>
-    props.first
-        ? <CapitalizeFirst text={props.s} />
-        : <TextRun text={props.s} />
-);
-const AttributedSpanComp: Comp<{ s: AttributedSpan, first: boolean }> = (props =>
+type SimpleSpanProps = {
+    s: SimpleSpan,
+    first: boolean,
+    path: BookPath,
+};
+const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
+    const info = {
+        path: props.path,
+    };
+    return props.first
+        ? <CapitalizeFirst text={props.s} info={info} />
+        : <TextRun text={props.s} info={info} />;
+});
+type AttributedSpanProps = {
+    s: AttributedSpan,
+    first: boolean,
+    path: BookPath,
+};
+const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
     <StyledWithAttributes attrs={attrs(props.s)}>
         {
-            props.s.spans.map((childP, idx) =>
-                <SpanComp key={`${idx}`} s={childP} first={props.first && idx === 0} />)
+            props.s.spans.reduce(
+                (result, childS, idx) => {
+                    const path = props.path.concat([result.offset]);
+                    const child = <SpanComp
+                        key={`${idx}`}
+                        s={childS}
+                        first={props.first && idx === 0}
+                        path={path}
+                    />;
+                    result.children.push(child);
+                    result.offset += spanLength(childS);
+                    return result;
+                },
+                {
+                    children: [] as JSX.Element[],
+                    offset: 0,
+                }
+            ).children
         }
     </StyledWithAttributes>
 );
-const FootnoteSpanComp = connectActions('openFootnote')<{ s: FootnoteSpan }>(props =>
+type FootnoteSpanProps = {
+    s: FootnoteSpan,
+    path: BookPath,
+};
+const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
     <Link action={actionCreators.openFootnote(props.s.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
-            {props.s.text}
+            <TextRun text={props.s.text || ''} info={{ path: props.path }} />
         </ThemedText>
     </Link>
 );
-const SpanComp: Comp<{ s: Span, first: boolean }> = (props =>
-    isSimple(props.s) ? <SimpleSpanComp s={props.s} first={props.first} />
-        : isAttributed(props.s) ? <AttributedSpanComp s={props.s} first={props.first} />
-            : isFootnote(props.s) ? <FootnoteSpanComp s={props.s} />
+type SpanProps = {
+    s: Span,
+    first: boolean,
+    path: BookPath,
+};
+const SpanComp: Comp<SpanProps> = (props =>
+    isSimple(props.s) ? <SimpleSpanComp
+        s={props.s} first={props.first} path={props.path} />
+        : isAttributed(props.s) ? <AttributedSpanComp
+            s={props.s} first={props.first} path={props.path} />
+            : isFootnote(props.s) ? <FootnoteSpanComp
+                s={props.s} path={props.path} />
                 : assertNever(props.s)
 );
 
 const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
     <Pph textIndent={relative(props.first ? 0 : 2)}>
-        <SpanComp s={props.p.span} first={props.first} />
+        <SpanComp
+            s={props.p.span}
+            first={props.first}
+            path={props.path}
+        />
     </Pph>,
     'ParagraphComp'
 );
@@ -275,13 +331,18 @@ function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
         .concat(buildNodes(chapter.nodes, path, params));
 }
 
-function pathToString(path: BookPath): string {
+export function pathToString(path: BookPath): string {
     return path.join('-');
 }
 
-function stringToPath(str: string): BookPath {
+export function stringToPath(str: string): BookPath {
     const path = str.split('-')
         .map(p => parseInt(p, 10));
 
     return path;
 }
+
+export type SpanInfo = {
+    path: BookPath,
+};
+
