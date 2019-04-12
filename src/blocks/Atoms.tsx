@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { View, ViewStyle, TextStyle } from 'react-native';
 import { Comp } from './comp-utils';
-
-export * from './Atoms.platform';
 
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
@@ -34,12 +32,19 @@ export const Row: Comp<LayoutProps> = (props =>
 );
 
 // TODO: remove
-export type TextPropsStyle = React.CSSProperties;
-export type AllowedTextStyle = Pick<TextPropsStyle,
-    | 'fontWeight' | 'fontStyle' | 'textAlign' | 'margin'
+export type CssTextStyle = React.CSSProperties;
+export type AtomTextStyle = Pick<CssTextStyle,
+    | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
->;
-export type TextProps = {
-    style?: AllowedTextStyle,
+> & Pick<TextStyle,
+    never
+> & {
+    fontWeight?: 'bold' | 'normal',
 };
+
+export type TextProps = {
+    style?: AtomTextStyle,
+};
+
+export * from './Atoms.platform';

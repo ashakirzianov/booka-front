@@ -9,7 +9,7 @@ import { IconName, Icon } from './Icons';
 export * from './Elements.platform';
 
 type TextProps = {
-    style?: Atoms.AllowedTextStyle,
+    style?: Atoms.AtomTextStyle,
     size?: keyof Theme['fontSize'],
     color?: keyof Palette,
     hoverColor?: keyof Palette,

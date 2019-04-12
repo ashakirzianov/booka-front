@@ -104,7 +104,6 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
     }}>
         <ThemedText style={{
             letterSpacing: relative(0.15),
-            fontWeight: 'lighter',
             textAlign: 'center',
             margin: relative(1),
         }}>
