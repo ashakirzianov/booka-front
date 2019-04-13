@@ -47,28 +47,28 @@ function pathForHtmlElement(element: HTMLElement | null): BookPath | undefined {
     }
 }
 
-export function subscribeScroll(handler: Callback<Event>) {
-    window.addEventListener('scroll', handler);
-}
+export const subscribe = {
+    scroll(handler: Callback<Event>) {
+        window.addEventListener('scroll', handler);
+    },
+    selection(handler: Callback<Event>) {
+        window.addEventListener('mouseup', handler);
+        window.addEventListener('keydown', handler);
+    },
+    copy(handler: Callback<ClipboardEvent>) {
+        window.addEventListener('copy', handler as any);
+    },
+};
 
-export function unsubscribeScroll(handler: Callback<Event>) {
-    window.removeEventListener('scroll', handler);
-}
-
-export function subscribeSelection(handler: Callback<Event>) {
-    window.addEventListener('mouseup', handler);
-    window.addEventListener('keydown', handler);
-}
-
-export function unsubscribeSelection(handler: Callback<Event>) {
-    window.removeEventListener('mouseup', handler);
-    window.removeEventListener('keydown', handler);
-}
-
-export function subscribeCopy(handler: Callback<ClipboardEvent>) {
-    window.addEventListener('copy', handler as any);
-}
-
-export function unsubscribeCopy(handler: Callback<ClipboardEvent>) {
-    window.removeEventListener('copy', handler as any);
-}
+export const unsubscribe = {
+    copy(handler: Callback<ClipboardEvent>) {
+        window.removeEventListener('copy', handler as any);
+    },
+    selection(handler: Callback<Event>) {
+        window.removeEventListener('mouseup', handler);
+        window.removeEventListener('keydown', handler);
+    },
+    scroll(handler: Callback<Event>) {
+        window.removeEventListener('scroll', handler);
+    },
+};

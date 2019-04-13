@@ -10,10 +10,7 @@ import {
 } from '../blocks';
 import { actionCreators } from '../redux';
 import {
-    getSelectionRange, subscribeScroll, subscribeSelection,
-    unsubscribeScroll, unsubscribeSelection, subscribeCopy,
-    unsubscribeCopy,
-    BookSelection,
+    getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
 import { generateQuoteLink } from '../core/urlConversion';
 import { buildNodes, buildBook, Params } from './bookRender';
@@ -50,7 +47,7 @@ export class Reader extends React.Component<ReaderProps> {
     public handleCopy = (e: ClipboardEvent) => {
         if (this.selectedRange && e.clipboardData) {
             e.preventDefault();
-            const selectionText = buildSelection(this.selectedRange, this.props.id);
+            const selectionText = composeSelection(this.selectedRange, this.props.id);
             e.clipboardData.setData('text/plain', selectionText);
         }
     }
@@ -72,9 +69,9 @@ export class Reader extends React.Component<ReaderProps> {
     }
 
     public componentDidMount() {
-        subscribeScroll(this.handleScroll);
-        subscribeSelection(this.handleSelection);
-        subscribeCopy(this.handleCopy);
+        subscribe.scroll(this.handleScroll);
+        subscribe.selection(this.handleSelection);
+        subscribe.copy(this.handleCopy);
         this.scrollToCurrentPath();
 
     }
@@ -84,9 +81,9 @@ export class Reader extends React.Component<ReaderProps> {
     }
 
     public componentWillUnmount() {
-        unsubscribeScroll(this.handleScroll);
-        unsubscribeSelection(this.handleSelection);
-        unsubscribeCopy(this.handleCopy);
+        unsubscribe.scroll(this.handleScroll);
+        unsubscribe.selection(this.handleSelection);
+        unsubscribe.copy(this.handleCopy);
     }
 
     public render() {
@@ -141,6 +138,6 @@ const PathLink: Comp<PathLinkProps> = (props =>
     </Row>
 );
 
-function buildSelection(selection: BookSelection, id: BookId) {
+function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
 }
