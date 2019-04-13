@@ -1,20 +1,24 @@
 import * as React from 'react';
 import {
-    Span, BookPath, ChapterNode, BookId, bookLocator, BookRange,
+    BookPath, ChapterNode, BookId, bookLocator, BookRange,
     BookNode, isParagraph, isChapter, inRange, BookContent,
-    subpathCouldBeInRange, AttributesObject, SimpleSpan,
-    AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
-    isFootnote, FootnoteSpan, bookRange, locationPath, spanLength, parentPath,
+    subpathCouldBeInRange, ParagraphNode, bookRange,
+    locationPath, parentPath, pathToString, parsePath,
 } from '../model';
 import { assertNever, last } from '../utils';
 import {
-    Comp, Callback, relative, connectActions,
-    Row, Pph, ThemedText,
-    ScrollView, refable, RefType, isPartiallyVisible, scrollToRef, LinkButton, Link, PlainText,
+    Comp, Callback, relative, Row, ThemedText,
+    ScrollView, refable, RefType, isPartiallyVisible,
+    scrollToRef, LinkButton,
 } from '../blocks';
 import { actionCreators } from '../redux';
-import { CapitalizeFirst, TextRun, getSelectionRange, subscribeScroll, subscribeSelection, unsubscribeScroll, unsubscribeSelection, subscribeCopy, unsubscribeCopy } from './BookContentComp.platform';
+import {
+    getSelectionRange, subscribeScroll, subscribeSelection,
+    unsubscribeScroll, unsubscribeSelection, subscribeCopy,
+    unsubscribeCopy,
+} from './BookContentComp.platform';
 import { generateQuoteLink } from '../core/urlConversion';
+import { ParagraphComp } from './ParagraphComp';
 
 export type BookSelection = {
     text: string,
@@ -40,7 +44,7 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
             .reduce<BookPath | undefined>((path, [key, ref]) =>
                 path || !isPartiallyVisible(ref)
                     ? path
-                    : stringToPath(key), undefined);
+                    : parsePath(key), undefined);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -178,97 +182,6 @@ const BookTitle: Comp<{ text?: string }> = (props =>
     </Row>
 );
 
-const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
-    <PlainText style={{
-        fontStyle: props.attrs.italic ? 'italic' : 'normal',
-        ...(props.attrs.line && {
-            textIndent: relative(2),
-            display: 'block',
-        }),
-    }}>
-        {props.children}
-    </PlainText>
-);
-
-type SimpleSpanProps = {
-    s: SimpleSpan,
-    first: boolean,
-    path: BookPath,
-};
-const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
-    const info = {
-        path: props.path,
-    };
-    return props.first
-        ? <CapitalizeFirst text={props.s} info={info} />
-        : <TextRun text={props.s} info={info} />;
-});
-type AttributedSpanProps = {
-    s: AttributedSpan,
-    first: boolean,
-    path: BookPath,
-};
-const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
-    <StyledWithAttributes attrs={attrs(props.s)}>
-        {
-            props.s.spans.reduce(
-                (result, childS, idx) => {
-                    const path = props.path.concat([result.offset]);
-                    const child = <SpanComp
-                        key={`${idx}`}
-                        s={childS}
-                        first={props.first && idx === 0}
-                        path={path}
-                    />;
-                    result.children.push(child);
-                    result.offset += spanLength(childS);
-                    return result;
-                },
-                {
-                    children: [] as JSX.Element[],
-                    offset: 0,
-                }
-            ).children
-        }
-    </StyledWithAttributes>
-);
-type FootnoteSpanProps = {
-    s: FootnoteSpan,
-    path: BookPath,
-};
-const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
-    <Link action={actionCreators.openFootnote(props.s.id)}>
-        <ThemedText color='accent' hoverColor='highlight'>
-            <TextRun text={props.s.text || ''} info={{ path: props.path }} />
-        </ThemedText>
-    </Link>
-);
-type SpanProps = {
-    s: Span,
-    first: boolean,
-    path: BookPath,
-};
-const SpanComp: Comp<SpanProps> = (props =>
-    isSimple(props.s) ? <SimpleSpanComp
-        s={props.s} first={props.first} path={props.path} />
-        : isAttributed(props.s) ? <AttributedSpanComp
-            s={props.s} first={props.first} path={props.path} />
-            : isFootnote(props.s) ? <FootnoteSpanComp
-                s={props.s} path={props.path} />
-                : assertNever(props.s)
-);
-
-const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
-    <Pph textIndent={relative(props.first ? 0 : 2)}>
-        <SpanComp
-            s={props.p.span}
-            first={props.first}
-            path={props.path}
-        />
-    </Pph>,
-    'ParagraphComp'
-);
-
 const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
     props.level === 0 ? <ChapterTitle text={props.title} />
         : props.level > 0 ? <PartTitle text={props.title} />
@@ -352,18 +265,3 @@ function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
 function buildSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
 }
-
-export function pathToString(path: BookPath): string {
-    return path.join('-');
-}
-
-export function stringToPath(str: string): BookPath {
-    const path = str.split('-')
-        .map(p => parseInt(p, 10));
-
-    return path;
-}
-
-export type SpanInfo = {
-    path: BookPath,
-};
