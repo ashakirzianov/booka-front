@@ -18,7 +18,7 @@ export const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: 
         <SpanComp
             s={props.p.span}
             first={props.first}
-            path={props.path}
+            path={props.path.concat(0)}
         />
     </Pph>,
     'ParagraphComp'
@@ -59,7 +59,8 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
         {
             props.s.spans.reduce(
                 (result, childS, idx) => {
-                    const path = props.path.concat([result.offset]);
+                    const path = props.path.slice();
+                    path[path.length - 1] += result.offset;
                     const child = <SpanComp
                         key={`${idx}`}
                         s={childS}
