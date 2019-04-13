@@ -100,14 +100,36 @@ export function subpathCouldBeInRange(path: BookPath, range: BookRange): boolean
     return could;
 }
 
+export const RANGE_DELIM = '_';
+export const PATH_DELIM = '-';
+
 export function rangeToString(br: BookRange): string {
-    return `${pathToString(br.start)}${br.end ? ':' + pathToString(br.end) : ''}`;
+    return `${parsePath(br.start)}${br.end ? RANGE_DELIM + parsePath(br.end) : ''}`;
 }
 
-export function pathToString(path: BookPath | undefined): string {
+export function parseRange(s: string | undefined): BookRange | undefined {
+    if (!s) {
+        return undefined;
+    }
+
+    const paths = s
+        .split(RANGE_DELIM)
+        .map(stringToPath);
+
+    if (paths[0] === undefined || paths.length > 2) {
+        return undefined;
+    }
+
+    const start = paths[0];
+    const end = paths[1];
+
+    return bookRange(start, end);
+}
+
+export function parsePath(path: BookPath | undefined): string {
     return path === undefined || path.length === 0 || (path.length === 1 && path[0] === 0)
         ? ''
-        : `${path.join('-')}`
+        : `${path.join(PATH_DELIM)}`
         ;
 }
 
@@ -117,7 +139,7 @@ export function stringToPath(pathString: string | undefined): BookPath | undefin
     }
 
     const path = pathString
-        .split('-')
+        .split(PATH_DELIM)
         .map(pc => parseInt(pc, 10))
         ;
     return path.some(p => isNaN(p))

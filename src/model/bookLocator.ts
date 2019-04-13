@@ -1,4 +1,4 @@
-import { BookPath } from './bookRange';
+import { BookPath, BookRange } from './bookRange';
 
 export type RemoteBookId = {
     name: string,
@@ -19,7 +19,7 @@ export type BookLocation =
     | ReturnType<typeof locationCurrent>
     ;
 
-export function locationPath(path?: BookPath) {
+export function locationPath(path: BookPath) {
     return {
         location: 'path' as 'path',
         path,
@@ -29,7 +29,6 @@ export function locationPath(path?: BookPath) {
 export function locationCurrent() {
     return {
         location: 'current' as 'current',
-        path: undefined,
     };
 }
 
@@ -38,14 +37,16 @@ export type BookLocator = {
     toc: boolean,
     footnoteId: string | undefined,
     location: BookLocation,
+    quote?: BookRange,
 };
 
-export function bookLocator(id: BookId, location: BookLocation, toc?: boolean, footnoteId?: string): BookLocator {
+export function bookLocator(id: BookId, location: BookLocation, toc?: boolean, footnoteId?: string, quote?: BookRange): BookLocator {
     return {
         id: id,
         toc: toc === true ? true : false,
         footnoteId,
         location: location || locationPath([]),
+        quote,
     };
 }
 
