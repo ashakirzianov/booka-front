@@ -18,6 +18,7 @@ export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(pr
         pathToNavigate={pathToOpen}
         updateBookPosition={updateBookPosition}
         range={bookRange(current, next)}
+        quoteRange={undefined}
         prevPath={prev}
         nextPath={next}
         content={content}

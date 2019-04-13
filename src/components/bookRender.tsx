@@ -12,11 +12,12 @@ import { ParagraphComp } from './ParagraphComp';
 
 export type Params = {
     refHandler: (ref: RefType, path: BookPath) => void,
-    range: BookRange,
+    pageRange: BookRange,
+    quoteRange?: BookRange,
 };
 
 export function buildBook(book: BookContent, params: Params) {
-    const head = params.range.start.length === 0
+    const head = params.pageRange.start.length === 0
         ? [<BookTitle key={`bt`} text={book.meta.title} />]
         : [];
 
@@ -32,7 +33,7 @@ export function buildNodes(nodes: BookNode[], headPath: BookPath, params: Params
 }
 
 function buildNode(node: BookNode, path: BookPath, params: Params) {
-    if (!subpathCouldBeInRange(path, params.range)) {
+    if (!subpathCouldBeInRange(path, params.pageRange)) {
         return [];
     }
 
@@ -46,19 +47,22 @@ function buildNode(node: BookNode, path: BookPath, params: Params) {
 }
 
 function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
-    return inRange(path, params.range)
+    return inRange(path, params.pageRange)
         ? [<ParagraphComp
             key={`p-${pathToString(path)}`}
-            p={paragraph}
+            span={paragraph}
             path={path}
             first={last(path) === 0}
+            highlight={{
+                quote: params.quoteRange && { range: params.quoteRange },
+            }}
             ref={ref => params.refHandler(ref, path)}
         />]
         : [];
 }
 
 function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
-    const head = inRange(path, params.range)
+    const head = inRange(path, params.pageRange)
         ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];
     return head

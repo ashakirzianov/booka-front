@@ -22,6 +22,7 @@ export type ReaderProps = {
     range: BookRange,
     prevPath?: BookPath,
     nextPath?: BookPath,
+    quoteRange: BookRange | undefined,
     id: BookId,
 };
 export class Reader extends React.Component<ReaderProps> {
@@ -88,13 +89,14 @@ export class Reader extends React.Component<ReaderProps> {
     public render() {
         const { range, prevPath, nextPath, id, content } = this.props;
         const params: Params = {
-            range,
+            pageRange: range,
             refHandler: (ref, path) => {
                 this.refMap = {
                     ...this.refMap,
                     [pathToString(path)]: ref,
                 };
             },
+            quoteRange: this.props.quoteRange,
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
@@ -113,7 +115,7 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
         {
             buildNodes(props.nodes, [], {
                 refHandler: () => undefined,
-                range: bookRange(),
+                pageRange: bookRange(),
             })
         }
     </ThemedText>
