@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     ParagraphNode, BookPath, BookRange, BookContent,
     BookNode, subpathCouldBeInRange, isParagraph,
-    isChapter, inRange, pathToString, ChapterNode,
+    isChapter, inRange, ChapterNode,
 } from '../model';
 import {
     RefType, Comp, Row, ThemedText, relative, refable,
@@ -123,3 +123,17 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
             : <SubpartTitle text={props.title} />,
     'ChapterHeader'
 );
+
+export function pathToString(path: BookPath): string {
+    return `${path.join('-')}`;
+}
+
+export function parsePath(pathString: string): BookPath | undefined {
+    const path = pathString
+        .split('-')
+        .map(pc => parseInt(pc, 10))
+        ;
+    return path.some(p => isNaN(p))
+        ? undefined
+        : path;
+}

@@ -1,8 +1,8 @@
 import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, parsePath, BookLocator,
-    pathToString, parseRange, rangeToString, BookRange, BookId, locationNone,
+    locationPath, BookLocation, BookLocator,
+    BookRange, BookId, locationNone, BookPath, bookRange,
 } from '../model';
 import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined, frontendBase } from '../utils';
 
@@ -125,4 +125,51 @@ function locationToString(l: BookLocation) {
         default:
             return assertNever(l);
     }
+}
+
+const RANGE_DELIM = '_';
+const PATH_DELIM = '-';
+
+function rangeToString(br: BookRange): string {
+    return `${pathToString(br.start)}${br.end ? RANGE_DELIM + pathToString(br.end) : ''}`;
+}
+
+function parseRange(s: string | undefined): BookRange | undefined {
+    if (!s) {
+        return undefined;
+    }
+
+    const paths = s
+        .split(RANGE_DELIM)
+        .map(parsePath);
+
+    if (paths[0] === undefined || paths.length > 2) {
+        return undefined;
+    }
+
+    const start = paths[0];
+    const end = paths[1];
+
+    return bookRange(start, end);
+}
+
+function pathToString(path: BookPath | undefined): string {
+    return path === undefined || path.length === 0 || (path.length === 1 && path[0] === 0)
+        ? ''
+        : `${path.join(PATH_DELIM)}`
+        ;
+}
+
+function parsePath(pathString: string | undefined): BookPath | undefined {
+    if (!pathString) {
+        return undefined;
+    }
+
+    const path = pathString
+        .split(PATH_DELIM)
+        .map(pc => parseInt(pc, 10))
+        ;
+    return path.some(p => isNaN(p))
+        ? undefined
+        : path;
 }

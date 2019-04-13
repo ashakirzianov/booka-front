@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
     BookPath, BookId, bookLocator, BookRange, BookNode,
     BookContent, bookRange, locationPath, parentPath,
-    pathToString, parsePath,
 } from '../model';
 import {
     Comp, Callback, relative, Row, ThemedText, ScrollView,
@@ -13,7 +12,7 @@ import {
     getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
 import { generateQuoteLink } from '../core/urlConversion';
-import { buildNodes, buildBook, Params } from './bookRender';
+import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRender';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {

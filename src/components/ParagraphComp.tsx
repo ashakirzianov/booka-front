@@ -7,10 +7,11 @@ import { assertNever } from '../utils';
 import {
     isSimple, isAttributed, isFootnote, ParagraphNode,
     BookPath, AttributesObject, SimpleSpan, AttributedSpan,
-    attrs, spanLength, FootnoteSpan, Span, pathToString, parsePath,
+    attrs, spanLength, FootnoteSpan, Span,
 } from '../model';
 import { actionCreators } from '../redux';
 import { TextRun, CapitalizeFirst } from './ParagraphComp.platform';
+import { parsePath, pathToString } from './bookRender';
 
 export const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
     <Pph textIndent={relative(props.first ? 0 : 2)}>
