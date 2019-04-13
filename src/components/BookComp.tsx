@@ -3,12 +3,15 @@ import * as React from 'react';
 import { connect } from '../blocks';
 import {
     Book, BookPath,
-    inRange, bookRange, emptyPath, isFirstSubpath,
+    inRange, bookRange, emptyPath, isFirstSubpath, BookRange,
 } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model';
 import { Reader } from './Reader';
 
-export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(props => {
+export type BookProps = Book & {
+    quoteRange: BookRange | undefined,
+};
+export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProps>(props => {
     const {
         pathToOpen, updateBookPosition,
         content, id, toc,
@@ -18,7 +21,7 @@ export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(pr
         pathToNavigate={pathToOpen}
         updateBookPosition={updateBookPosition}
         range={bookRange(current, next)}
-        quoteRange={undefined}
+        quoteRange={props.quoteRange}
         prevPath={prev}
         nextPath={next}
         content={content}

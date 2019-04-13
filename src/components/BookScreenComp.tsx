@@ -4,7 +4,7 @@ import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
     Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
+import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName, BookRange } from '../model';
 import { BookNodesComp } from './Reader';
 import { footnoteForId } from '../model';
 
@@ -43,7 +43,10 @@ const AppearanceButton: Comp = (() =>
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
-        <BookText book={props.book} />
+        <BookText
+            book={props.book}
+            quoteRange={props.bl.quote}
+        />
         <TableOfContentsBox
             toc={props.book.toc}
             open={props.bl.toc}
@@ -53,7 +56,11 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         />
     </>
 );
-const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
+type BookTextProps = {
+    book: Book,
+    quoteRange: BookRange | undefined,
+};
+const BookText = connectActions('toggleControls')<BookTextProps>(props =>
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
@@ -61,7 +68,7 @@ const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
     }}
     >
         <Clickable key='book' onClick={() => props.toggleControls()}>
-            <BookComp {...props.book} />
+            <BookComp {...props.book} quoteRange={props.quoteRange} />
         </Clickable>
     </Row>
 
