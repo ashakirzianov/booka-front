@@ -16,6 +16,10 @@ export function pathTail(path: BookPath) {
     return path.slice(1);
 }
 
+export function parentPath(path: BookPath) {
+    return path.slice(0, path.length - 1);
+}
+
 export function appendPath(path: BookPath, last: number): BookPath {
     return path.concat([last]);
 }

@@ -84,8 +84,14 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
     switch (action.type) {
         case 'pushScreen':
             const { payload } = action;
-            if (payload.screen === 'book' && payload.bl.location.location === 'path') {
-                return payload.bl.location.path;
+            if (payload.screen === 'book') {
+                if (payload.bl.location.location === 'path') {
+                    return payload.bl.location.path;
+                } else if (payload.bl.quote) {
+                    return payload.bl.quote.start;
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }

@@ -4,7 +4,7 @@ import {
     BookNode, isParagraph, isChapter, inRange, BookContent,
     subpathCouldBeInRange, AttributesObject, SimpleSpan,
     AttributedSpan, attrs, isAttributed, isSimple, ParagraphNode,
-    isFootnote, FootnoteSpan, bookRange, locationPath, spanLength,
+    isFootnote, FootnoteSpan, bookRange, locationPath, spanLength, parentPath,
 } from '../model';
 import { assertNever, last } from '../utils';
 import {
@@ -62,7 +62,12 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
         const props = this.props;
         const refMap = this.refMap;
         if (props && props.pathToNavigate) {
-            const refToNavigate = refMap[pathToString(props.pathToNavigate)];
+            const refToNavigate =
+                refMap[pathToString(props.pathToNavigate)]
+                // TODO: find better solution
+                // In case we navigate to character
+                || refMap[pathToString(parentPath(props.pathToNavigate))]
+                ;
             if (!scrollToRef(refToNavigate)) {
                 setTimeout(this.scrollToCurrentPath.bind(this), 250);
             }

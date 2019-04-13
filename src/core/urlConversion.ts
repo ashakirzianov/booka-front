@@ -71,9 +71,11 @@ function parsedUrlToBL(parsedUrl: ParsedUrl): BookLocator | undefined {
     if (head === 'current') {
         return bookLocator(remoteBookId(name), locationCurrent());
     } else {
-        const bookPath = parsePath(head) || [];
+        const bookPath = parsePath(head);
+        const loc = bookPath
+            ? locationPath(bookPath)
+            : locationNone();
         const id = remoteBookId(name);
-        const loc = locationPath(bookPath);
         const toc = parsedUrl.search.toc !== undefined;
         const footnoteId = parsedUrl.search.fid;
         const quote = parseRange(parsedUrl.search.q);
