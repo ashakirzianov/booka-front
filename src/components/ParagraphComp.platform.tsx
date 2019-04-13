@@ -2,6 +2,16 @@ import * as React from 'react';
 import { Comp } from '../blocks';
 import { SpanInfo, infoToId } from './ParagraphComp';
 
+export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
+    <span style={{
+        display: 'inline',
+        float: 'left',
+        textIndent: props.textIndent,
+    }}>
+        {props.children}
+    </span>
+);
+
 export const CapitalizeFirst: Comp<{ text: string, info: SpanInfo }> = (props => {
     const text = props.text.trimStart();
     const firstInfo = props.info;

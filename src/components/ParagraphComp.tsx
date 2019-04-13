@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    Comp, refable, Pph, relative, PlainText,
+    Comp, refable, relative, PlainText,
     connectActions, Link, ThemedText,
 } from '../blocks';
 import { assertNever } from '../utils';
@@ -10,17 +10,17 @@ import {
     attrs, spanLength, FootnoteSpan, Span,
 } from '../model';
 import { actionCreators } from '../redux';
-import { TextRun, CapitalizeFirst } from './ParagraphComp.platform';
+import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
 import { parsePath, pathToString } from './bookRender';
 
 export const ParagraphComp = refable<{ p: ParagraphNode, path: BookPath, first: boolean }>(props =>
-    <Pph textIndent={relative(props.first ? 0 : 2)}>
+    <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
         <SpanComp
             s={props.p.span}
             first={props.first}
             path={props.path.concat(0)}
         />
-    </Pph>,
+    </ParagraphContainer>,
     'ParagraphComp'
 );
 

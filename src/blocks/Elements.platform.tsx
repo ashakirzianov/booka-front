@@ -4,16 +4,6 @@ import * as Atoms from './Atoms';
 import { themed, Comp, relative, hoverable, palette } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 
-export const Pph: Comp<{ textIndent: string }> = (props =>
-    <span style={{
-        display: 'inline',
-        float: 'left',
-        textIndent: props.textIndent,
-    }}>
-        {props.children}
-    </span>
-);
-
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 );
