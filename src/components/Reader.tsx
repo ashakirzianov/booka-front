@@ -16,17 +16,13 @@ import {
     getSelectionRange, subscribeScroll, subscribeSelection,
     unsubscribeScroll, unsubscribeSelection, subscribeCopy,
     unsubscribeCopy,
-} from './BookContentComp.platform';
+    BookSelection,
+} from './Reader.platform';
 import { generateQuoteLink } from '../core/urlConversion';
 import { ParagraphComp } from './ParagraphComp';
 
-export type BookSelection = {
-    text: string,
-    range: BookRange,
-};
-
 type RefMap = { [k in string]?: RefType };
-type BookContentCompProps = {
+export type ReaderProps = {
     content: BookContent,
     pathToNavigate: BookPath | null,
     updateBookPosition: Callback<BookPath>,
@@ -35,7 +31,7 @@ type BookContentCompProps = {
     nextPath?: BookPath,
     id: BookId,
 };
-export class BookContentComp extends React.Component<BookContentCompProps> {
+export class Reader extends React.Component<ReaderProps> {
     public refMap: RefMap = {};
     public selectedRange: BookSelection | undefined = undefined;
 

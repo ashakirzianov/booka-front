@@ -5,7 +5,7 @@ import {
     Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
 import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
-import { BookNodesComp } from './BookContentComp';
+import { BookNodesComp } from './Reader';
 import { footnoteForId } from '../model';
 
 import { BookComp } from './BookComp';

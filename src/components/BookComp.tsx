@@ -6,7 +6,7 @@ import {
     inRange, bookRange, emptyPath, isFirstSubpath,
 } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model';
-import { BookContentComp } from './BookContentComp';
+import { Reader } from './Reader';
 
 export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(props => {
     const {
@@ -14,7 +14,7 @@ export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(pr
         content, id, toc,
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
-    return <BookContentComp
+    return <Reader
         pathToNavigate={pathToOpen}
         updateBookPosition={updateBookPosition}
         range={bookRange(current, next)}
