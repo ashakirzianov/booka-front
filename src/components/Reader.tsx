@@ -1,15 +1,12 @@
 import * as React from 'react';
 import {
-    BookPath, ChapterNode, BookId, bookLocator, BookRange,
-    BookNode, isParagraph, isChapter, inRange, BookContent,
-    subpathCouldBeInRange, ParagraphNode, bookRange,
-    locationPath, parentPath, pathToString, parsePath,
+    BookPath, BookId, bookLocator, BookRange, BookNode,
+    BookContent, bookRange, locationPath, parentPath,
+    pathToString, parsePath,
 } from '../model';
-import { assertNever, last } from '../utils';
 import {
-    Comp, Callback, relative, Row, ThemedText,
-    ScrollView, refable, RefType, isPartiallyVisible,
-    scrollToRef, LinkButton,
+    Comp, Callback, relative, Row, ThemedText, ScrollView,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton,
 } from '../blocks';
 import { actionCreators } from '../redux';
 import {
@@ -19,7 +16,7 @@ import {
     BookSelection,
 } from './Reader.platform';
 import { generateQuoteLink } from '../core/urlConversion';
-import { ParagraphComp } from './ParagraphComp';
+import { buildNodes, buildBook, Params } from './bookRender';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -126,65 +123,6 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
     </ThemedText>
 );
 
-const ChapterTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
-        <ThemedText style={{
-            letterSpacing: relative(0.15),
-            textAlign: 'center',
-            margin: relative(1),
-        }}>
-            {props.text && props.text.toLocaleUpperCase()}
-        </ThemedText>
-    </Row>
-);
-
-const PartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
-        <ThemedText size='large' style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-            margin: relative(1),
-        }}>
-            {props.text}
-        </ThemedText>
-    </Row>
-);
-
-const SubpartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{ justifyContent: 'flex-start' }}>
-        <ThemedText style={{
-            fontStyle: 'italic',
-            margin: relative(1),
-        }}>
-            {props.text}
-        </ThemedText>
-    </Row>
-);
-
-const BookTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <ThemedText size='largest' style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-        }}>
-            {props.text}
-        </ThemedText>
-    </Row>
-);
-
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
-    props.level === 0 ? <ChapterTitle text={props.title} />
-        : props.level > 0 ? <PartTitle text={props.title} />
-            : <SubpartTitle text={props.title} />,
-    'ChapterHeader'
-);
-
 type PathLinkProps = {
     path: BookPath,
     id: BookId,
@@ -202,61 +140,6 @@ const PathLink: Comp<PathLinkProps> = (props =>
         </LinkButton>
     </Row>
 );
-
-type Params = {
-    refHandler: (ref: RefType, path: BookPath) => void,
-    range: BookRange,
-};
-
-function buildBook(book: BookContent, params: Params) {
-    const head = params.range.start.length === 0
-        ? [<BookTitle key={`bt`} text={book.meta.title} />]
-        : [];
-
-    return head
-        .concat(buildNodes(book.nodes, [], params));
-}
-
-function buildNodes(nodes: BookNode[], headPath: BookPath, params: Params): JSX.Element[] {
-    return nodes
-        .map((bn, i) => buildNode(bn, headPath.concat([i]), params))
-        .reduce((acc, arr) => acc.concat(arr))
-        ;
-}
-
-function buildNode(node: BookNode, path: BookPath, params: Params) {
-    if (!subpathCouldBeInRange(path, params.range)) {
-        return [];
-    }
-
-    if (isParagraph(node)) {
-        return buildParagraph(node, path, params);
-    } else if (isChapter(node)) {
-        return buildChapter(node, path, params);
-    } else {
-        return assertNever(node, path.toString());
-    }
-}
-
-function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
-    return inRange(path, params.range)
-        ? [<ParagraphComp
-            key={`p-${pathToString(path)}`}
-            p={paragraph}
-            path={path}
-            first={last(path) === 0}
-            ref={ref => params.refHandler(ref, path)}
-        />]
-        : [];
-}
-
-function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
-    const head = inRange(path, params.range)
-        ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
-        : [];
-    return head
-        .concat(buildNodes(chapter.nodes, path, params));
-}
 
 function buildSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
