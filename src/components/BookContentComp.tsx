@@ -14,6 +14,7 @@ import {
 } from '../blocks';
 import { actionCreators } from '../redux';
 import { CapitalizeFirst, TextRun, getSelectionRange, subscribeScroll, subscribeSelection, unsubscribeScroll, unsubscribeSelection, subscribeCopy, unsubscribeCopy } from './BookContentComp.platform';
+import { generateQuoteLink } from '../core/urlConversion';
 
 export type BookSelection = {
     text: string,
@@ -52,7 +53,8 @@ export class BookContentComp extends React.Component<BookContentCompProps> {
     public handleCopy = (e: ClipboardEvent) => {
         if (this.selectedRange && e.clipboardData) {
             e.preventDefault();
-            e.clipboardData.setData('text/plain', this.selectedRange.text);
+            const selectionText = buildSelection(this.selectedRange, this.props.id);
+            e.clipboardData.setData('text/plain', selectionText);
         }
     }
 
@@ -340,6 +342,10 @@ function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
         : [];
     return head
         .concat(buildNodes(chapter.nodes, path, params));
+}
+
+function buildSelection(selection: BookSelection, id: BookId) {
+    return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
 }
 
 export function pathToString(path: BookPath): string {

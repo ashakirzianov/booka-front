@@ -4,7 +4,7 @@ import {
     Comp, Row, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
-import { bookLocator, parsePath, locationPath } from '../model';
+import { bookLocator, pathToString, locationPath } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model';
 import { nums } from '../utils';
 import { actionCreators } from '../redux';
@@ -32,7 +32,7 @@ export class TableOfContentsComp extends React.Component<TableOfContents> {
         return <ScrollView>
             <Column style={{ margin: relative(2) }}>
                 {props.items.map(i =>
-                    <TocItemComp key={parsePath(i.path)} tabs={maxLevel - i.level} {...i} />)}
+                    <TocItemComp key={pathToString(i.path)} tabs={maxLevel - i.level} {...i} />)}
             </Column>
         </ScrollView>;
     }

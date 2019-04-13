@@ -3,3 +3,4 @@ export * from './parseUrl';
 export * from './platform';
 export * from './smartStore';
 export * from './debug';
+export * from './const';

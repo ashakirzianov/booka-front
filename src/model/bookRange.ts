@@ -104,7 +104,7 @@ export const RANGE_DELIM = '_';
 export const PATH_DELIM = '-';
 
 export function rangeToString(br: BookRange): string {
-    return `${parsePath(br.start)}${br.end ? RANGE_DELIM + parsePath(br.end) : ''}`;
+    return `${pathToString(br.start)}${br.end ? RANGE_DELIM + pathToString(br.end) : ''}`;
 }
 
 export function parseRange(s: string | undefined): BookRange | undefined {
@@ -114,7 +114,7 @@ export function parseRange(s: string | undefined): BookRange | undefined {
 
     const paths = s
         .split(RANGE_DELIM)
-        .map(stringToPath);
+        .map(parsePath);
 
     if (paths[0] === undefined || paths.length > 2) {
         return undefined;
@@ -126,14 +126,14 @@ export function parseRange(s: string | undefined): BookRange | undefined {
     return bookRange(start, end);
 }
 
-export function parsePath(path: BookPath | undefined): string {
+export function pathToString(path: BookPath | undefined): string {
     return path === undefined || path.length === 0 || (path.length === 1 && path[0] === 0)
         ? ''
         : `${path.join(PATH_DELIM)}`
         ;
 }
 
-export function stringToPath(pathString: string | undefined): BookPath | undefined {
+export function parsePath(pathString: string | undefined): BookPath | undefined {
     if (!pathString) {
         return undefined;
     }

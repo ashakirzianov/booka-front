@@ -1,10 +1,10 @@
 import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, stringToPath, BookLocator,
-    parsePath, parseRange, rangeToString,
+    locationPath, BookLocation, parsePath, BookLocator,
+    pathToString, parseRange, rangeToString, BookRange, BookId, locationNone,
 } from '../model';
-import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined } from '../utils';
+import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined, frontendBase } from '../utils';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {
@@ -71,7 +71,7 @@ function parsedUrlToBL(parsedUrl: ParsedUrl): BookLocator | undefined {
     if (head === 'current') {
         return bookLocator(remoteBookId(name), locationCurrent());
     } else {
-        const bookPath = stringToPath(head) || [];
+        const bookPath = parsePath(head) || [];
         const id = remoteBookId(name);
         const loc = locationPath(bookPath);
         const toc = parsedUrl.search.toc !== undefined;
@@ -94,6 +94,10 @@ export function stateToUrl(state: App) {
     }
 }
 
+export function generateQuoteLink(id: BookId, quote: BookRange) {
+    return frontendBase() + blToUrl(bookLocator(id, locationNone(), false, undefined, quote));
+}
+
 function blToUrl(bl: BookLocator): string {
     return `/book/${bl.id.name}/${locationToString(bl.location)}${search(bl)}`;
 }
@@ -111,9 +115,11 @@ function search(bl: BookLocator): string {
 function locationToString(l: BookLocation) {
     switch (l.location) {
         case 'path':
-            return parsePath(l.path);
+            return pathToString(l.path);
         case 'current':
             return 'current';
+        case 'none':
+            return '';
         default:
             return assertNever(l);
     }
