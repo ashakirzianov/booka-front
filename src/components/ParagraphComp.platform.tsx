@@ -75,7 +75,6 @@ function buildHighlightedSpans(text: string, highlight: HighlightData, info: Spa
     }
 
     const os = Array.from(overlaps([{
-        tag: 'normal',
         range: spanRange,
     }, {
         tag: 'highlighted',
@@ -86,9 +85,9 @@ function buildHighlightedSpans(text: string, highlight: HighlightData, info: Spa
         const spanText = subsForRange(text, info.path, tagged.range);
         return !spanText ? undefined : {
             text: spanText,
-            color: tagged.tag === 'normal'
-                ? undefined
-                : 'red',
+            color: tagged.tags.some(t => t === 'highlighted')
+                ? 'red'
+                : undefined,
             info: { path: tagged.range.start },
         };
     });

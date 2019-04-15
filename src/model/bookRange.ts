@@ -1,3 +1,5 @@
+import { filterUndefined } from '../utils';
+
 export type BookPath = number[];
 
 export function leadPath(): BookPath {
@@ -139,36 +141,33 @@ export function isOverlap(left: BookRange, right: BookRange): boolean {
 }
 
 export type TaggedRange<T> = {
-    tag: T,
+    tag?: T,
     range: BookRange,
 };
 export function* overlaps<T>(taggedRanges: Array<TaggedRange<T>>) {
-    const sorted = taggedRanges
-        .sort((a, b) =>
-            comparePaths(a.range.start, b.range.start));
-
-    let prev = sorted[0];
-    for (let idx = 1; idx < sorted.length; idx++) {
-        const curr = sorted[idx];
-        if (comparePaths(prev.range.end, curr.range.start) <= 0) {
-            yield prev;
-            prev = curr;
-        } else {
-            yield {
-                tag: prev.tag,
-                range: bookRange(prev.range.start, curr.range.start),
-            };
-            if (comparePaths(prev.range.end, curr.range.end) <= 0) {
-                prev = curr;
-            } else {
-                yield curr;
-                prev = {
-                    ...prev,
-                    range: bookRange(curr.range.end, prev.range.end),
-                };
-            }
+    const points = taggedRanges.reduce((pts, tagged) => {
+        pts.push(tagged.range.start);
+        if (tagged.range.end) {
+            pts.push(tagged.range.end);
         }
-    }
+        return pts;
+    }, [] as BookPath[]);
 
-    yield prev;
+    for (let idx = 1; idx <= points.length; idx++) {
+        const prevPoint = points[idx - 1];
+        const point = points[idx];
+        const tags = filterUndefined(taggedRanges
+            .filter(tr => inRange(prevPoint, tr.range))
+            .map(tr => tr.tag));
+        yield {
+            tags,
+            range: bookRange(prevPoint, point),
+        };
+    }
+}
+
+export function overlapWith<T>(r: BookRange, tagged: Array<TaggedRange<T>>) {
+    const result = tagged.filter(tr => isOverlap(r, tr.range));
+
+    return result;
 }
