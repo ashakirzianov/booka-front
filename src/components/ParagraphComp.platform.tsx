@@ -43,7 +43,7 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
         >
             {text[0]}
         </span>
-        <TextRun {...props} text={props.text.slice(1)} />
+        <TextRun {...props} text={text.slice(1)} />
     </span>;
 });
 
