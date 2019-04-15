@@ -53,8 +53,8 @@ function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params
             span={paragraph}
             path={path}
             first={last(path) === 0}
-            highlight={{
-                quote: params.quoteRange && { range: params.quoteRange },
+            highlight={params.quoteRange && {
+                quote: { range: params.quoteRange },
             }}
             ref={ref => params.refHandler(ref, path)}
         />]

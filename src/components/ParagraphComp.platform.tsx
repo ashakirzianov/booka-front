@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Comp } from '../blocks';
 import { SpanInfo, infoToId, HighlightData } from './ParagraphComp';
 import {
-    Color, bookRange, incrementPath, isOverlap,
-    overlaps, BookRange, BookPath, pathLessThan, sameParent,
+    Color, bookRange, incrementPath,
+    overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith,
 } from '../model';
 import { last, filterUndefined } from '../utils';
 
@@ -20,7 +20,7 @@ export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
 export type TextRunProps = {
     text: string,
     info: SpanInfo,
-    highlight: HighlightData,
+    highlight?: HighlightData,
 };
 export const CapitalizeFirst: Comp<TextRunProps> = (props => {
     const text = props.text.trimStart();
@@ -47,7 +47,7 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
 });
 
 export const TextRun: Comp<TextRunProps> = (props => {
-    const spans = buildHighlightedSpans(props.text, props.highlight, props.info);
+    const spans = buildHighlightedSpans(props.text, props.info, props.highlight);
     const children = spans.map(
         (s, idx) => !s ? null :
             <span key={idx} id={infoToId(s.info)} style={s.color !== undefined ? {
@@ -68,24 +68,25 @@ type StyledSpan = {
     info: SpanInfo,
 };
 
-function buildHighlightedSpans(text: string, highlight: HighlightData, info: SpanInfo): StyledSpan[] {
-    const spanRange = bookRange(info.path, incrementPath(info.path, text.length));
-    if (!highlight.quote || !isOverlap(spanRange, highlight.quote.range)) {
+function buildHighlightedSpans(text: string, info: SpanInfo, highlight?: HighlightData): StyledSpan[] {
+    if (!highlight || !highlight.quote) {
         return [{ text, info }];
     }
 
-    const os = Array.from(overlaps([{
-        range: spanRange,
-    }, {
-        tag: 'highlighted',
+    const spanRange = bookRange(info.path, incrementPath(info.path, text.length));
+    const relevant = overlapWith(spanRange, [{
+        tag: highlight.quote,
         range: highlight.quote.range,
-    }]));
+    }]);
+    relevant.push({ range: spanRange });
+
+    const os = Array.from(overlaps(relevant));
 
     const result = os.map(tagged => {
         const spanText = subsForRange(text, info.path, tagged.range);
         return !spanText ? undefined : {
             text: spanText,
-            color: tagged.tags.some(t => t === 'highlighted')
+            color: tagged.tags.length > 0
                 ? 'red'
                 : undefined,
             info: { path: tagged.range.start },

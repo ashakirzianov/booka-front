@@ -17,7 +17,7 @@ type SpanType<T> = {
     span: T,
     path: BookPath,
     first: boolean,
-    highlight: HighlightData,
+    highlight?: HighlightData,
 };
 
 export type Highlight = {
@@ -54,7 +54,7 @@ type SimpleSpanProps = {
     s: SimpleSpan,
     first: boolean,
     path: BookPath,
-    highlight: HighlightData,
+    highlight?: HighlightData,
 };
 const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
     const info = {
