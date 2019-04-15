@@ -37,6 +37,12 @@ export function samePath(p1: BookPath, p2: BookPath) {
         ;
 }
 
+export function sameParent(p1: BookPath, p2: BookPath) {
+    return p1.length === p2.length
+        && p1.every((p1c, idx) => p1c === p2[idx] || idx === p1.length - 1)
+        ;
+}
+
 export function comparePaths(left?: BookPath, right?: BookPath): number {
     if (left === undefined) {
         return right === undefined ? 0 : 1;

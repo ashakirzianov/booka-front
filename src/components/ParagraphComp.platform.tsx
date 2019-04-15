@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Comp } from '../blocks';
 import { SpanInfo, infoToId, HighlightData } from './ParagraphComp';
-import { Color, bookRange, incrementPath, isOverlap, overlaps, BookRange, parentPath, samePath, BookPath, pathLessThan } from '../model';
+import {
+    Color, bookRange, incrementPath, isOverlap,
+    overlaps, BookRange, BookPath, pathLessThan, sameParent,
+} from '../model';
 import { last, filterUndefined } from '../utils';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
@@ -80,7 +83,7 @@ function buildHighlightedSpans(text: string, highlight: HighlightData, info: Spa
     }]));
 
     const result = os.map(tagged => {
-        const spanText = subsForRange(text, spanRange.start, tagged.range);
+        const spanText = subsForRange(text, info.path, tagged.range);
         return !spanText ? undefined : {
             text: spanText,
             color: tagged.tag === 'normal'
@@ -94,19 +97,23 @@ function buildHighlightedSpans(text: string, highlight: HighlightData, info: Spa
 }
 
 function subsForRange(s: string, path: BookPath, r: BookRange): string | undefined {
-    const stringParent = parentPath(path);
-    const rangeStartParent = parentPath(r.start);
     let from = 0;
-    if (samePath(rangeStartParent, stringParent)) {
+    if (sameParent(r.start, path)) {
         from = last(r.start) - last(path);
-    } else if (!pathLessThan(rangeStartParent, stringParent)) {
+    } else if (!pathLessThan(r.start, path)) {
         return undefined;
     }
 
-    if (!r.end || !samePath(stringParent, parentPath(r.end))) {
+    if (!r.end) {
         return s.substring(from);
     }
 
-    const to = last(r.end) - last(path);
-    return s.substring(from, to);
+    if (sameParent(path, r.end)) {
+        const to = last(r.end) - last(path);
+        return s.substring(from, to);
+    } else if (pathLessThan(path, r.end)) {
+        return s.substring(from);
+    } else {
+        return undefined;
+    }
 }
