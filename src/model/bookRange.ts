@@ -144,26 +144,33 @@ export type TaggedRange<T> = {
     tag?: T,
     range: BookRange,
 };
-export function* overlaps<T>(taggedRanges: Array<TaggedRange<T>>) {
+export function overlaps<T>(taggedRanges: Array<TaggedRange<T>>) {
     const points = taggedRanges.reduce((pts, tagged) => {
         pts.push(tagged.range.start);
         if (tagged.range.end) {
             pts.push(tagged.range.end);
         }
         return pts;
-    }, [] as BookPath[]);
+    }, [] as BookPath[])
+        .sort(comparePaths);
 
+    const result: Array<{
+        tags: T[],
+        range: BookRange,
+    }> = [];
     for (let idx = 1; idx <= points.length; idx++) {
         const prevPoint = points[idx - 1];
         const point = points[idx];
         const tags = filterUndefined(taggedRanges
             .filter(tr => inRange(prevPoint, tr.range))
             .map(tr => tr.tag));
-        yield {
+        result.push({
             tags,
             range: bookRange(prevPoint, point),
-        };
+        });
     }
+
+    return result;
 }
 
 export function overlapWith<T>(r: BookRange, tagged: Array<TaggedRange<T>>) {

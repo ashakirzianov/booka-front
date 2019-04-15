@@ -78,7 +78,7 @@ function buildHighlightedSpans(text: string, path: BookPath, highlight?: Highlig
     }]);
     relevant.push({ range: spanRange });
 
-    const os = Array.from(overlaps(relevant));
+    const os = overlaps(relevant);
 
     const result = os.map(tagged => {
         const spanText = subsForRange(text, path, tagged.range);
