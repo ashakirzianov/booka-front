@@ -3,12 +3,17 @@ export type FontSize = number;
 export type Color = string;
 
 export type Palette = {
-    text: Color,
-    primary: Color,
-    secondary: Color,
-    accent: Color,
-    highlight: Color,
-    shadow: Color,
+    colors: {
+        text: Color,
+        primary: Color,
+        secondary: Color,
+        accent: Color,
+        highlight: Color,
+        shadow: Color,
+    },
+    highlights: {
+        quote: Color,
+    },
 };
 export type FontSizes = {
     normal: FontSize,

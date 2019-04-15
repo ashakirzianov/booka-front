@@ -55,8 +55,8 @@ type ThemeableComp<T> = Comp<T & Themeable>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
     return connectState('theme')(C);
 }
-export function palette(themeable: Themeable): Palette {
-    return themeable.theme.palettes[themeable.theme.currentPalette];
+export function colors(themeable: Themeable): Palette['colors'] {
+    return themeable.theme.palettes[themeable.theme.currentPalette].colors;
 }
 
 export function named<P>(C: Comp<P>, name: string): Comp<P> {

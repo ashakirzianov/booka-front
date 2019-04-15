@@ -1,10 +1,10 @@
-import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
+import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
-import { Footnote } from '../contracts';
+import { Footnote, isSimple, isAttributed, isFootnote } from '../contracts';
 
-export function footnoteForId(book: BookContent, id: string | null): Footnote | undefined {
+export function footnoteForId(book: BookContent, id: string | undefined): Footnote | undefined {
     return book.footnotes
         .find(f => f.id === id);
 }
@@ -62,5 +62,18 @@ function countElements(node: BookNode): number {
             .reduce((total, curr) => total + curr);
     } else {
         return assertNever(node);
+    }
+}
+
+export function spanLength(span: Span): number {
+    if (isSimple(span)) {
+        return span.length;
+    } else if (isAttributed(span)) {
+        return span.spans
+            .reduce((res, s) => res + spanLength(s), 0);
+    } else if (isFootnote(span)) {
+        return span.text ? span.text.length : 0;
+    } else {
+        return assertNever(span);
     }
 }

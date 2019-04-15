@@ -4,8 +4,8 @@ import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
     Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName } from '../model';
-import { BookNodesComp } from './BookContentComp';
+import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName, BookRange } from '../model';
+import { BookNodesComp } from './Reader';
 import { footnoteForId } from '../model';
 
 import { BookComp } from './BookComp';
@@ -43,20 +43,24 @@ const AppearanceButton: Comp = (() =>
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
-        <BookText book={props.book} />
+        <BookText
+            book={props.book}
+            quoteRange={props.bl.quote}
+        />
         <TableOfContentsBox
             toc={props.book.toc}
-            open={props.bl.location.location === 'toc'}
+            open={props.bl.toc}
         />
         <FootnoteBox
-            footnote={
-                props.bl.location.location === 'footnote'
-                    ? footnoteForId(props.book.content, props.bl.location.id)
-                    : undefined}
+            footnote={footnoteForId(props.book.content, props.bl.footnoteId)}
         />
     </>
 );
-const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
+type BookTextProps = {
+    book: Book,
+    quoteRange: BookRange | undefined,
+};
+const BookText = connectActions('toggleControls')<BookTextProps>(props =>
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
@@ -64,7 +68,7 @@ const BookText = connectActions('toggleControls')<{ book: Book }>(props =>
     }}
     >
         <Clickable key='book' onClick={() => props.toggleControls()}>
-            <BookComp {...props.book} />
+            <BookComp {...props.book} quoteRange={props.quoteRange} />
         </Clickable>
     </Row>
 
@@ -151,7 +155,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
     name: PaletteName,
     text: string,
 }>(props => {
-    const palette = props.theme.palettes[props.name];
+    const palette = props.theme.palettes[props.name].colors;
     return <Link action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,

@@ -3,25 +3,30 @@ import * as React from 'react';
 import { connect } from '../blocks';
 import {
     Book, BookPath,
-    inRange, bookRange, emptyPath, isFirstSubpath,
+    inRange, bookRange, emptyPath, isFirstSubpath, BookRange,
 } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model';
-import { BookContentComp } from './BookContentComp';
+import { Reader } from './Reader';
 
-export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<Book>(props => {
+export type BookProps = Book & {
+    quoteRange: BookRange | undefined,
+};
+export const BookComp = connect(['pathToOpen', 'theme'], ['updateBookPosition'])<BookProps>(props => {
     const {
         pathToOpen, updateBookPosition,
-        content, id, toc,
+        content, id, toc, theme,
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
-    return <BookContentComp
+    return <Reader
         pathToNavigate={pathToOpen}
         updateBookPosition={updateBookPosition}
         range={bookRange(current, next)}
+        quoteRange={props.quoteRange}
         prevPath={prev}
         nextPath={next}
         content={content}
         id={id}
+        palette={theme.palettes[theme.currentPalette]}
     />;
 });
 

@@ -11,7 +11,7 @@ function isMacOs(): boolean {
     return navigator.platform.startsWith('Mac');
 }
 
-export type RefType = HTMLDivElement | null;
+export type RefType = HTMLElement | null;
 export type RefHandler = (ref: RefType) => void;
 export function refable<P = {}>(C: React.ComponentType<P>, name: string) {
     return named(React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>

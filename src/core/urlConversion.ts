@@ -1,9 +1,10 @@
 import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
-    locationPath, BookLocation, stringToPath, BookLocator, pathToString, locationToc, locationFootnote,
+    locationPath, BookLocation, BookLocator,
+    BookRange, BookId, locationNone, BookPath, bookRange,
 } from '../model';
-import { assertNever, parsePartialUrl, ParsedUrl } from '../utils';
+import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined, frontendBase } from '../utils';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {
@@ -16,16 +17,21 @@ export function actionToUrl(action: Action | undefined, state: App): string | un
             return blToUrl(action.payload);
         case 'openFootnote':
             if (screen.screen === 'book' && action.payload) {
-                const loc = locationFootnote(action.payload, screen.bl.location.path);
-                return blToUrl(
-                    bookLocator(screen.bl.id, loc));
+                const bl = {
+                    ...screen.bl,
+                    footnoteId: action.payload,
+                };
+                return blToUrl(bl);
             } else {
                 return undefined;
             }
         case 'toggleToc':
             if (screen.screen === 'book') {
-                const loc = locationToc(screen.bl.location.path);
-                return blToUrl(bookLocator(screen.bl.id, loc));
+                const bl = {
+                    ...screen.bl,
+                    toc: !screen.bl.toc,
+                };
+                return blToUrl(bl);
             } else {
                 return undefined;
             }
@@ -65,14 +71,15 @@ function parsedUrlToBL(parsedUrl: ParsedUrl): BookLocator | undefined {
     if (head === 'current') {
         return bookLocator(remoteBookId(name), locationCurrent());
     } else {
-        const bookPath = stringToPath(head) || [];
-        if (parsedUrl.search.toc !== undefined) {
-            return bookLocator(remoteBookId(name), locationToc(bookPath));
-        } else if (parsedUrl.search.fid !== undefined) {
-            return bookLocator(remoteBookId(name), locationFootnote(parsedUrl.search.fid, bookPath));
-        } else {
-            return bookLocator(remoteBookId(name), locationPath(bookPath));
-        }
+        const bookPath = parsePath(head);
+        const loc = bookPath
+            ? locationPath(bookPath)
+            : locationNone();
+        const id = remoteBookId(name);
+        const toc = parsedUrl.search.toc !== undefined;
+        const footnoteId = parsedUrl.search.fid;
+        const quote = parseRange(parsedUrl.search.q);
+        return bookLocator(id, loc, toc, footnoteId, quote);
     }
 }
 
@@ -89,8 +96,22 @@ export function stateToUrl(state: App) {
     }
 }
 
+export function generateQuoteLink(id: BookId, quote: BookRange) {
+    return frontendBase() + blToUrl(bookLocator(id, locationNone(), false, undefined, quote));
+}
+
 function blToUrl(bl: BookLocator): string {
-    return `/book/${bl.id.name}/${locationToString(bl.location)}`;
+    return `/book/${bl.id.name}/${locationToString(bl.location)}${search(bl)}`;
+}
+
+function search(bl: BookLocator): string {
+    const toc = bl.toc ? 'toc' : undefined;
+    const fid = bl.footnoteId ? `fid=${bl.footnoteId}` : undefined;
+    const q = bl.quote ? `q=${rangeToString(bl.quote)}` : undefined;
+
+    const all = filterUndefined([toc, fid, q]).join('&');
+
+    return all ? `?${all}` : '';
 }
 
 function locationToString(l: BookLocation) {
@@ -99,11 +120,56 @@ function locationToString(l: BookLocation) {
             return pathToString(l.path);
         case 'current':
             return 'current';
-        case 'toc':
-            return `${pathToString(l.path)}?toc`;
-        case 'footnote':
-            return `${pathToString(l.path)}?fid=${l.id}`;
+        case 'none':
+            return '';
         default:
             return assertNever(l);
     }
+}
+
+const RANGE_DELIM = '_';
+const PATH_DELIM = '-';
+
+function rangeToString(br: BookRange): string {
+    return `${pathToString(br.start)}${br.end ? RANGE_DELIM + pathToString(br.end) : ''}`;
+}
+
+function parseRange(s: string | undefined): BookRange | undefined {
+    if (!s) {
+        return undefined;
+    }
+
+    const paths = s
+        .split(RANGE_DELIM)
+        .map(parsePath);
+
+    if (paths[0] === undefined || paths.length > 2) {
+        return undefined;
+    }
+
+    const start = paths[0];
+    const end = paths[1];
+
+    return bookRange(start, end);
+}
+
+function pathToString(path: BookPath | undefined): string {
+    return path === undefined || path.length === 0 || (path.length === 1 && path[0] === 0)
+        ? ''
+        : `${path.join(PATH_DELIM)}`
+        ;
+}
+
+function parsePath(pathString: string | undefined): BookPath | undefined {
+    if (!pathString) {
+        return undefined;
+    }
+
+    const path = pathString
+        .split(PATH_DELIM)
+        .map(pc => parseInt(pc, 10))
+        ;
+    return path.some(p => isNaN(p))
+        ? undefined
+        : path;
 }

@@ -1,18 +1,8 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { themed, Comp, relative, hoverable, palette } from './comp-utils';
+import { themed, Comp, relative, hoverable, colors } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
-
-export const Pph: Comp<{ textIndent: string }> = (props =>
-    <span style={{
-        display: 'inline',
-        float: 'left',
-        textIndent: props.textIndent,
-    }}>
-        {props.children}
-    </span>
-);
 
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -36,14 +26,14 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
     <Atoms.ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',
-            borderColor: palette(props).accent,
-            color: palette(props).accent,
+            borderColor: colors(props).accent,
+            color: colors(props).accent,
             fontSize: props.theme.fontSize.normal,
             borderRadius: 10,
             padding: relative(0.3), // TODO: extract somewhere ?
             [':hover']: {
-                borderColor: palette(props).highlight,
-                color: palette(props).highlight,
+                borderColor: colors(props).highlight,
+                color: colors(props).highlight,
             },
         }}>
             {props.children}
@@ -67,42 +57,20 @@ export type OverlayBoxProps = {
 export const OverlayBox = themed<OverlayBoxProps>(props =>
     <View style={{
         alignSelf: 'center',
-        backgroundColor: palette(props).secondary,
+        backgroundColor: colors(props).secondary,
         width: '100%',
         maxWidth: '50em',
         maxHeight: '100%',
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 10px ${palette(props).shadow}`,
+        boxShadow: `0px 0px 10px ${colors(props).shadow}`,
         padding: relative(1),
         ...props.style as any,
     }}
     >
         {props.children}
     </View>
-);
-
-export const CapitalizeFirst: Comp<{ text: string }> = (props => {
-    const text = props.text.trimStart();
-    return <span>
-        <span style={{
-            float: 'left',
-            fontSize: '400%',
-            lineHeight: '80%',
-        }}>
-            {text[0]}
-        </span>
-        <span>
-            {text.slice(1)}
-        </span>
-    </span>;
-});
-
-export const TextRun: Comp<{ text: string }> = (props =>
-    <span>
-        {props.text}
-    </span>
 );
 
 export const Article: Comp = (props =>

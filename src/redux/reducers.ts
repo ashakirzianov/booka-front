@@ -1,7 +1,7 @@
 import { combineReducers, loop } from './redux-utils';
 import { Action, actionCreators } from './actions';
 import {
-    App, forScreen, bookLocator, Theme, libraryScreen, library, AppScreen, locationPath, locationToc, locationFootnote,
+    App, forScreen, Theme, libraryScreen, library, AppScreen, locationPath,
 } from '../model';
 import { buildLibraryScreen, buildBookScreen } from '../core';
 // TODO: remove this second-level import
@@ -44,7 +44,10 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: bookLocator(bs.bl.id, locationPath(action.payload)),
+                    bl: {
+                        ...bs.bl,
+                        location: locationPath(action.payload),
+                    },
                 }),
                 default: () => state,
             });
@@ -52,23 +55,23 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: bs.bl.location.location === 'toc'
-                        ? bookLocator(bs.bl.id,
-                            locationPath(bs.bl.location.path))
-                        : bookLocator(bs.bl.id,
-                            locationToc(bs.bl.location.path)),
+                    bl: {
+                        ...bs.bl,
+                        toc: !bs.bl.toc,
+                    },
                 }),
                 default: () => state,
             });
         case 'openFootnote':
+            // tslint:disable-next-line:no-console
+            console.log('OPEN: ' + action.payload);
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
-                    bl: action.payload !== null
-                        ? bookLocator(bs.bl.id,
-                            locationFootnote(action.payload, bs.bl.location.path))
-                        : bookLocator(bs.bl.id,
-                            locationPath(bs.bl.location.path)),
+                    bl: {
+                        ...bs.bl,
+                        footnoteId: action.payload || undefined,
+                    },
                 }),
                 default: () => state,
             });
@@ -81,8 +84,14 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
     switch (action.type) {
         case 'pushScreen':
             const { payload } = action;
-            if (payload.screen === 'book' && payload.bl.location.path) {
-                return payload.bl.location.path;
+            if (payload.screen === 'book') {
+                if (payload.bl.location.location === 'path') {
+                    return payload.bl.location.path;
+                } else if (payload.bl.quote) {
+                    return payload.bl.quote.start;
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }

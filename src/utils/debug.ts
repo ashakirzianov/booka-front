@@ -24,14 +24,6 @@ export function configValue<T>(pv: ConfigValue<T>): T | undefined {
     }
 }
 
-export function debugBackendBase() {
-    // const result = 'http://localhost:3042/';
-    // TODO: this is not reliable solution, think of something else
-    const result = 'http://192.168.1.190:3042/';
-
-    return result;
-}
-
 export function noOp() { return; }
 
 function logDebug(msg: string) {

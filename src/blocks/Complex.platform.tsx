@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, Comp, relative, palette } from './comp-utils';
+import { Callback, themed, ReactContent, Comp, relative, colors } from './comp-utils';
 import { ThemedText, PanelLink, OverlayBox } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations.platform';
@@ -90,8 +90,8 @@ export const TopBar = themed<{ open: boolean }>(props =>
             position: 'fixed',
             top: 0, left: 0,
             zIndex: 5,
-            boxShadow: `0px 0px 2px ${palette(props).shadow}`,
-            backgroundColor: palette(props).secondary,
+            boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+            backgroundColor: colors(props).secondary,
         }}>
             {props.children}
         </div >
