@@ -57,12 +57,9 @@ type SimpleSpanProps = {
     highlight?: HighlightData,
 };
 const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
-    const info = {
-        path: props.path,
-    };
     return props.first
-        ? <CapitalizeFirst text={props.s} info={info} highlight={props.highlight} />
-        : <TextRun text={props.s} info={info} highlight={props.highlight} />;
+        ? <CapitalizeFirst text={props.s} path={props.path} highlight={props.highlight} />
+        : <TextRun text={props.s} path={props.path} highlight={props.highlight} />;
 });
 type AttributedSpanProps = SpanType<AttributedSpan>;
 const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
@@ -95,7 +92,7 @@ type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
     <Link action={actionCreators.openFootnote(props.span.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
-            <TextRun text={props.span.text || ''} info={{ path: props.path }} highlight={props.highlight} />
+            <TextRun text={props.span.text || ''} path={props.path} highlight={props.highlight} />
         </ThemedText>
     </Link>
 );
@@ -108,22 +105,17 @@ const SpanComp: Comp<SpanProps> = (props =>
 );
 
 // TODO: rethink this solution
-export type SpanInfo = {
-    path: BookPath,
-};
 
-export function infoToId(id: SpanInfo): string {
-    return `id:${pathToString(id.path)}`;
+export function pathToId(path: BookPath): string {
+    return `id:${pathToString(path)}`;
 }
 
-export function idToInfo(str: string): SpanInfo | undefined {
+export function idToPath(str: string): BookPath | undefined {
     const comps = str.split(':');
     if (comps.length !== 2 || comps[0] !== 'id') {
         return undefined;
     }
     const path = parsePath(comps[1]);
 
-    return path
-        ? { path }
-        : undefined;
+    return path;
 }

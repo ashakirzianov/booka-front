@@ -1,6 +1,6 @@
 import { Callback } from '../blocks';
 import { BookPath, bookRangeUnordered, BookRange } from '../model';
-import { idToInfo } from './ParagraphComp';
+import { idToPath } from './ParagraphComp';
 
 export type BookSelection = {
     text: string,
@@ -39,9 +39,9 @@ function pathForHtmlElement(element: HTMLElement | null): BookPath | undefined {
     }
 
     const idString = element.id;
-    const id = idToInfo(idString);
-    if (id) {
-        return id.path;
+    const path = idToPath(idString);
+    if (path) {
+        return path;
     } else {
         return pathForHtmlElement(element.parentElement);
     }

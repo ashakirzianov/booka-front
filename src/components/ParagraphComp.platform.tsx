@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Comp } from '../blocks';
-import { SpanInfo, infoToId, HighlightData } from './ParagraphComp';
+import { pathToId, HighlightData } from './ParagraphComp';
 import {
     Color, bookRange, incrementPath,
     overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith,
@@ -19,19 +19,17 @@ export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
 
 export type TextRunProps = {
     text: string,
-    info: SpanInfo,
+    path: BookPath,
     highlight?: HighlightData,
 };
 export const CapitalizeFirst: Comp<TextRunProps> = (props => {
     const text = props.text.trimStart();
-    const firstInfo = props.info;
-    const secondInfo = {
-        path: props.info.path.slice(),
-    };
-    secondInfo.path[secondInfo.path.length - 1] += 1;
+    const firstPath = props.path;
+    const secondPath = props.path.slice();
+    secondPath[secondPath.length - 1] += 1;
     return <span>
         <span
-            id={infoToId(firstInfo)}
+            id={pathToId(firstPath)}
             style={{
                 float: 'left',
                 fontSize: '400%',
@@ -40,17 +38,17 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
         >
             {text[0]}
         </span>
-        <span id={infoToId(secondInfo)}>
+        <span id={pathToId(secondPath)}>
             {text.slice(1)}
         </span>
     </span>;
 });
 
 export const TextRun: Comp<TextRunProps> = (props => {
-    const spans = buildHighlightedSpans(props.text, props.info, props.highlight);
+    const spans = buildHighlightedSpans(props.text, props.path, props.highlight);
     const children = spans.map(
         (s, idx) => !s ? null :
-            <span key={idx} id={infoToId(s.info)} style={s.color !== undefined ? {
+            <span key={idx} id={pathToId(s.path)} style={s.color !== undefined ? {
                 background: s.color,
             } : undefined}>
                 {s.text}
@@ -65,15 +63,15 @@ export const TextRun: Comp<TextRunProps> = (props => {
 type StyledSpan = {
     text: string,
     color?: Color,
-    info: SpanInfo,
+    path: BookPath,
 };
 
-function buildHighlightedSpans(text: string, info: SpanInfo, highlight?: HighlightData): StyledSpan[] {
+function buildHighlightedSpans(text: string, path: BookPath, highlight?: HighlightData): StyledSpan[] {
     if (!highlight || !highlight.quote) {
-        return [{ text, info }];
+        return [{ text, path }];
     }
 
-    const spanRange = bookRange(info.path, incrementPath(info.path, text.length));
+    const spanRange = bookRange(path, incrementPath(path, text.length));
     const relevant = overlapWith(spanRange, [{
         tag: highlight.quote,
         range: highlight.quote.range,
@@ -83,13 +81,13 @@ function buildHighlightedSpans(text: string, info: SpanInfo, highlight?: Highlig
     const os = Array.from(overlaps(relevant));
 
     const result = os.map(tagged => {
-        const spanText = subsForRange(text, info.path, tagged.range);
+        const spanText = subsForRange(text, path, tagged.range);
         return !spanText ? undefined : {
             text: spanText,
             color: tagged.tags.length > 0
                 ? 'red'
                 : undefined,
-            info: { path: tagged.range.start },
+            path: tagged.range.start,
         };
     });
 
