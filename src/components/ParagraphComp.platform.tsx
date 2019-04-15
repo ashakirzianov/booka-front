@@ -6,6 +6,7 @@ import {
     overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith, inRange,
 } from '../model';
 import { last, filterUndefined } from '../utils';
+import { RefPathHandler } from './bookRender';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
     <span style={{
@@ -20,6 +21,7 @@ export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
 export type TextRunProps = {
     text: string,
     path: BookPath,
+    refPathHandler: RefPathHandler,
     highlight?: HighlightData,
 };
 export const CapitalizeFirst: Comp<TextRunProps> = (props => {
@@ -30,6 +32,7 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
     secondPath[secondPath.length - 1] += 1;
     return <span>
         <span
+            ref={ref => props.refPathHandler(ref, firstPath)}
             id={pathToId(firstPath)}
             style={{
                 float: 'left',
@@ -48,9 +51,14 @@ export const TextRun: Comp<TextRunProps> = (props => {
     const spans = buildHighlightedSpans(props.text, props.path, props.highlight);
     const children = spans.map(
         (s, idx) => !s ? null :
-            <span key={idx} id={pathToId(s.path)} style={s.color !== undefined ? {
-                background: s.color,
-            } : undefined}>
+            <span
+                key={idx}
+                id={pathToId(s.path)}
+                ref={ref => props.refPathHandler(ref, s.path)}
+                style={s.color !== undefined ? {
+                    background: s.color,
+                } : undefined}
+            >
                 {s.text}
             </span>
     );

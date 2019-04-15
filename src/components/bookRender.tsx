@@ -10,8 +10,9 @@ import {
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 
+export type RefPathHandler = (ref: RefType, path: BookPath) => void;
 export type Params = {
-    refHandler: (ref: RefType, path: BookPath) => void,
+    refPathHandler: RefPathHandler,
     pageRange: BookRange,
     quoteRange?: BookRange,
     palette?: Palette,
@@ -60,14 +61,14 @@ function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params
                     color: params.palette.highlights.quote,
                 },
             }}
-            ref={ref => params.refHandler(ref, path)}
+            refPathHandler={params.refPathHandler}
         />]
         : [];
 }
 
 function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
     const head = inRange(path, params.pageRange)
-        ? [<ChapterHeader ref={ref => params.refHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+        ? [<ChapterHeader ref={ref => params.refPathHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];
     return head
         .concat(buildNodes(chapter.nodes, path, params));

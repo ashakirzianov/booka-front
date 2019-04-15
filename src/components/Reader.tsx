@@ -91,7 +91,7 @@ export class Reader extends React.Component<ReaderProps> {
         const { range, prevPath, nextPath, id, content } = this.props;
         const params: Params = {
             pageRange: range,
-            refHandler: (ref, path) => {
+            refPathHandler: (ref, path) => {
                 this.refMap = {
                     ...this.refMap,
                     [pathToString(path)]: ref,
@@ -116,7 +116,7 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
     <ThemedText>
         {
             buildNodes(props.nodes, [], {
-                refHandler: () => undefined,
+                refPathHandler: () => undefined,
                 pageRange: bookRange(),
             })
         }

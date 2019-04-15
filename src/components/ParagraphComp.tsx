@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    Comp, refable, relative, PlainText,
+    Comp, relative, PlainText,
     connectActions, Link, ThemedText,
 } from '../blocks';
 import { assertNever } from '../utils';
@@ -11,12 +11,13 @@ import {
 } from '../model';
 import { actionCreators } from '../redux';
 import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
-import { parsePath, pathToString } from './bookRender';
+import { parsePath, pathToString, RefPathHandler } from './bookRender';
 
 type SpanType<T> = {
     span: T,
     path: BookPath,
     first: boolean,
+    refPathHandler: RefPathHandler,
     highlight?: HighlightData,
 };
 
@@ -28,15 +29,14 @@ export type HighlightData = {
     quote?: Highlight,
 };
 export type ParagraphProps = SpanType<ParagraphNode>;
-export const ParagraphComp = refable<ParagraphProps>(props =>
+export const ParagraphComp: Comp<ParagraphProps> = (props =>
     <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
         <SpanComp
             {...props}
             path={props.path.concat([0])}
             span={props.span.span}
         />
-    </ParagraphContainer>,
-    'ParagraphComp'
+    </ParagraphContainer>
 );
 
 const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
@@ -55,12 +55,13 @@ type SimpleSpanProps = {
     s: SimpleSpan,
     first: boolean,
     path: BookPath,
+    refPathHandler: RefPathHandler,
     highlight?: HighlightData,
 };
 const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
     return props.first
-        ? <CapitalizeFirst text={props.s} path={props.path} highlight={props.highlight} />
-        : <TextRun text={props.s} path={props.path} highlight={props.highlight} />;
+        ? <CapitalizeFirst text={props.s} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />
+        : <TextRun text={props.s} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />;
 });
 type AttributedSpanProps = SpanType<AttributedSpan>;
 const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
@@ -76,6 +77,7 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
                         first={props.first && idx === 0}
                         path={path}
                         highlight={props.highlight}
+                        refPathHandler={props.refPathHandler}
                     />;
                     result.children.push(child);
                     result.offset += spanLength(childS);
@@ -93,7 +95,7 @@ type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
     <Link action={actionCreators.openFootnote(props.span.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
-            <TextRun text={props.span.text || ''} path={props.path} highlight={props.highlight} />
+            <TextRun text={props.span.text || ''} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />
         </ThemedText>
     </Link>
 );
