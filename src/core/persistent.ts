@@ -85,7 +85,7 @@ const defaultTheme: Theme = {
                 shadow: '#000',
             },
             highlights: {
-                quote: '#fbe381',
+                quote: '#c8b050',
             },
         },
     },
