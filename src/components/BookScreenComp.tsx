@@ -155,7 +155,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
     name: PaletteName,
     text: string,
 }>(props => {
-    const palette = props.theme.palettes[props.name];
+    const palette = props.theme.palettes[props.name].colors;
     return <Link action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,

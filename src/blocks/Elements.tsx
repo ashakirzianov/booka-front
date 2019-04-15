@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Comp, themed, relative, palette } from './comp-utils';
+import { Comp, themed, relative, colors } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme, Palette } from '../model';
@@ -11,17 +11,17 @@ export * from './Elements.platform';
 type TextProps = {
     style?: Atoms.AtomTextStyle,
     size?: keyof Theme['fontSize'],
-    color?: keyof Palette,
-    hoverColor?: keyof Palette,
+    color?: keyof Palette['colors'],
+    hoverColor?: keyof Palette['colors'],
 };
 export const ThemedText = themed<TextProps>(props =>
     <Atoms.Text style={{
         fontFamily: props.theme.fontFamily,
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
-        color: palette(props)[props.color || 'text'],
+        color: colors(props)[props.color || 'text'],
         ...(props.hoverColor && {
             [':hover']: {
-                color: palette(props)[props.hoverColor],
+                color: colors(props)[props.hoverColor],
             },
         }),
         ...props.style,
@@ -40,9 +40,9 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
             ...props.style,
             fontSize: props.theme.fontSize.normal,
             fontFamily: props.theme.fontFamily,
-            color: palette(props).accent,
+            color: colors(props).accent,
             [':hover']: {
-                color: palette(props).highlight,
+                color: colors(props).highlight,
             },
         }}
     >

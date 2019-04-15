@@ -11,10 +11,10 @@ import { Reader } from './Reader';
 export type BookProps = Book & {
     quoteRange: BookRange | undefined,
 };
-export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProps>(props => {
+export const BookComp = connect(['pathToOpen', 'theme'], ['updateBookPosition'])<BookProps>(props => {
     const {
         pathToOpen, updateBookPosition,
-        content, id, toc,
+        content, id, toc, theme,
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
     return <Reader
@@ -26,6 +26,7 @@ export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProp
         nextPath={next}
         content={content}
         id={id}
+        palette={theme.palettes[theme.currentPalette]}
     />;
 });
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     ParagraphNode, BookPath, BookRange, BookContent,
     BookNode, subpathCouldBeInRange, isParagraph,
-    isChapter, inRange, ChapterNode,
+    isChapter, inRange, ChapterNode, Palette,
 } from '../model';
 import {
     RefType, Comp, Row, ThemedText, relative, refable,
@@ -14,6 +14,7 @@ export type Params = {
     refHandler: (ref: RefType, path: BookPath) => void,
     pageRange: BookRange,
     quoteRange?: BookRange,
+    palette?: Palette,
 };
 
 export function buildBook(book: BookContent, params: Params) {
@@ -53,8 +54,11 @@ function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params
             span={paragraph}
             path={path}
             first={last(path) === 0}
-            highlight={params.quoteRange && {
-                quote: { range: params.quoteRange },
+            highlight={params.quoteRange && params.palette && {
+                quote: {
+                    range: params.quoteRange,
+                    color: params.palette.highlights.quote,
+                },
             }}
             ref={ref => params.refHandler(ref, path)}
         />]

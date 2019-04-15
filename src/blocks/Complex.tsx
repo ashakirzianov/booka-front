@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, palette, Comp } from './comp-utils';
+import { themed, colors, Comp } from './comp-utils';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { platformValue } from '../utils';
 import { defaults } from './defaults';
@@ -13,7 +13,7 @@ export const Layer = themed(props =>
         minWidth: '100%',
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
-        backgroundColor: palette(props).primary,
+        backgroundColor: colors(props).primary,
     }}>
         {props.children}
     </View>
@@ -22,7 +22,7 @@ export const Layer = themed(props =>
 export const ActivityIndicator = themed(props =>
     <NativeActivityIndicator
         size='large'
-        color={palette(props).primary}
+        color={colors(props).primary}
     />
 );
 

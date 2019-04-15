@@ -85,7 +85,7 @@ function buildHighlightedSpans(text: string, path: BookPath, highlight?: Highlig
         return !spanText ? undefined : {
             text: spanText,
             color: tagged.tags.length > 0
-                ? 'red'
+                ? tagged.tags[0].color
                 : undefined,
             path: tagged.range.start,
         };

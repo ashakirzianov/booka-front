@@ -50,28 +50,43 @@ setTimeout(() => subscribe(state => {
 const defaultTheme: Theme = {
     palettes: {
         light: {
-            text: '#000',
-            primary: '#fff',
-            secondary: '#eee',
-            accent: '#777',
-            highlight: '#aaf',
-            shadow: '#000',
+            colors: {
+                text: '#000',
+                primary: '#fff',
+                secondary: '#eee',
+                accent: '#777',
+                highlight: '#aaf',
+                shadow: '#000',
+            },
+            highlights: {
+                quote: '#fbe381',
+            },
         },
         sepia: {
-            text: '#5f3e24',
-            primary: '#f9f3e9',
-            secondary: '#e6e0d6',
-            accent: '#987',
-            highlight: '#321',
-            shadow: '#000',
+            colors: {
+                text: '#5f3e24',
+                primary: '#f9f3e9',
+                secondary: '#e6e0d6',
+                accent: '#987',
+                highlight: '#321',
+                shadow: '#000',
+            },
+            highlights: {
+                quote: '#fbe381',
+            },
         },
         dark: {
-            text: '#999',
-            primary: '#000',
-            secondary: '#222',
-            accent: '#ddd',
-            highlight: '#fff',
-            shadow: '#000',
+            colors: {
+                text: '#999',
+                primary: '#000',
+                secondary: '#222',
+                accent: '#ddd',
+                highlight: '#fff',
+                shadow: '#000',
+            },
+            highlights: {
+                quote: '#fbe381',
+            },
         },
     },
     currentPalette: 'light',

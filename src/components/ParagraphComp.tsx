@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import {
     isSimple, isAttributed, isFootnote, ParagraphNode,
     BookPath, AttributesObject, SimpleSpan, AttributedSpan,
-    attrs, spanLength, FootnoteSpan, Span, BookRange,
+    attrs, spanLength, FootnoteSpan, Span, BookRange, Color,
 } from '../model';
 import { actionCreators } from '../redux';
 import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
@@ -21,6 +21,7 @@ type SpanType<T> = {
 };
 
 export type Highlight = {
+    color: Color,
     range: BookRange,
 };
 export type HighlightData = {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { themed, Comp, relative, hoverable, palette } from './comp-utils';
+import { themed, Comp, relative, hoverable, colors } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 
 export const Tab: Comp = (props =>
@@ -26,14 +26,14 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
     <Atoms.ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',
-            borderColor: palette(props).accent,
-            color: palette(props).accent,
+            borderColor: colors(props).accent,
+            color: colors(props).accent,
             fontSize: props.theme.fontSize.normal,
             borderRadius: 10,
             padding: relative(0.3), // TODO: extract somewhere ?
             [':hover']: {
-                borderColor: palette(props).highlight,
-                color: palette(props).highlight,
+                borderColor: colors(props).highlight,
+                color: colors(props).highlight,
             },
         }}>
             {props.children}
@@ -57,14 +57,14 @@ export type OverlayBoxProps = {
 export const OverlayBox = themed<OverlayBoxProps>(props =>
     <View style={{
         alignSelf: 'center',
-        backgroundColor: palette(props).secondary,
+        backgroundColor: colors(props).secondary,
         width: '100%',
         maxWidth: '50em',
         maxHeight: '100%',
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
-        boxShadow: `0px 0px 10px ${palette(props).shadow}`,
+        boxShadow: `0px 0px 10px ${colors(props).shadow}`,
         padding: relative(1),
         ...props.style as any,
     }}
