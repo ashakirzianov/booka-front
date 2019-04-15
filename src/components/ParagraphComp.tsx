@@ -31,6 +31,7 @@ export const ParagraphComp = refable<ParagraphProps>(props =>
     <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
         <SpanComp
             {...props}
+            path={props.path.concat([0])}
             span={props.span.span}
         />
     </ParagraphContainer>,

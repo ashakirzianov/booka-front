@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Comp } from '../blocks';
 import { SpanInfo, infoToId, HighlightData } from './ParagraphComp';
-import { Color, bookRange, incrementPath, isOverlap, overlaps, BookRange, parentPath, samePath, BookPath } from '../model';
-import { last } from '../utils';
+import { Color, bookRange, incrementPath, isOverlap, overlaps, BookRange, parentPath, samePath, BookPath, pathLessThan } from '../model';
+import { last, filterUndefined } from '../utils';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
     <span style={{
@@ -45,16 +45,17 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
 
 export const TextRun: Comp<TextRunProps> = (props => {
     const spans = buildHighlightedSpans(props.text, props.highlight, props.info);
+    const children = spans.map(
+        (s, idx) => !s ? null :
+            <span key={idx} id={infoToId(s.info)} style={s.color !== undefined ? {
+                background: s.color,
+            } : undefined}>
+                {s.text}
+            </span>
+    );
 
     return <span>
-        {
-            spans.map((s, idx) =>
-                <span key={idx} id={infoToId(s.info)} style={s.color !== undefined ? {
-                    background: s.color,
-                } : undefined}>
-                    {s.text}
-                </span>)
-        }
+        {children}
     </span>;
 });
 
@@ -78,24 +79,34 @@ function buildHighlightedSpans(text: string, highlight: HighlightData, info: Spa
         range: highlight.quote.range,
     }]));
 
-    return os.map(tagged => ({
-        text: subsForRange(text, spanRange.start, tagged.range),
-        color: tagged.tag === 'normal'
-            ? undefined
-            : 'red',
-        info: { path: tagged.range.start },
-    }));
+    const result = os.map(tagged => {
+        const spanText = subsForRange(text, spanRange.start, tagged.range);
+        return !spanText ? undefined : {
+            text: spanText,
+            color: tagged.tag === 'normal'
+                ? undefined
+                : 'red',
+            info: { path: tagged.range.start },
+        };
+    });
+
+    return filterUndefined(result);
 }
 
-function subsForRange(s: string, start: BookPath, r: BookRange): string {
-    const startParent = parentPath(start);
-    if (!samePath(startParent, parentPath(r.start))) {
-        return s;
+function subsForRange(s: string, path: BookPath, r: BookRange): string | undefined {
+    const stringParent = parentPath(path);
+    const rangeStartParent = parentPath(r.start);
+    let from = 0;
+    if (samePath(rangeStartParent, stringParent)) {
+        from = last(r.start) - last(path);
+    } else if (!pathLessThan(rangeStartParent, stringParent)) {
+        return undefined;
     }
-    const from = last(r.start) - last(start);
-    if (!r.end || !samePath(startParent, parentPath(r.end))) {
+
+    if (!r.end || !samePath(stringParent, parentPath(r.end))) {
         return s.substring(from);
     }
-    const to = last(r.end) - last(start);
+
+    const to = last(r.end) - last(path);
     return s.substring(from, to);
 }
