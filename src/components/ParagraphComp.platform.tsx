@@ -3,7 +3,7 @@ import { Comp } from '../blocks';
 import { pathToId, HighlightData } from './ParagraphComp';
 import {
     Color, bookRange, incrementPath,
-    overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith,
+    overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith, inRange,
 } from '../model';
 import { last, filterUndefined } from '../utils';
 
@@ -25,6 +25,7 @@ export type TextRunProps = {
 export const CapitalizeFirst: Comp<TextRunProps> = (props => {
     const text = props.text.trimStart();
     const firstPath = props.path;
+    const firstHighlight = highlightsForPath(firstPath, props.highlight)[0];
     const secondPath = props.path.slice();
     secondPath[secondPath.length - 1] += 1;
     return <span>
@@ -34,13 +35,12 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
                 float: 'left',
                 fontSize: '400%',
                 lineHeight: '80%',
+                background: firstHighlight,
             }}
         >
             {text[0]}
         </span>
-        <span id={pathToId(secondPath)}>
-            {text.slice(1)}
-        </span>
+        <TextRun {...props} text={props.text.slice(1)} />
     </span>;
 });
 
@@ -65,6 +65,18 @@ type StyledSpan = {
     color?: Color,
     path: BookPath,
 };
+
+function highlightsForPath(path: BookPath, highlight?: HighlightData) {
+    if (!highlight || !highlight.quote) {
+        return [];
+    }
+
+    if (inRange(path, highlight.quote.range)) {
+        return [highlight.quote.color];
+    } else {
+        return [];
+    }
+}
 
 function buildHighlightedSpans(text: string, path: BookPath, highlight?: HighlightData): StyledSpan[] {
     if (!highlight || !highlight.quote) {
