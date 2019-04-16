@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText, ScrollView,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, relative,
 } from '../blocks';
 import { actionCreators } from '../redux';
 import {
@@ -133,6 +133,7 @@ type PathLinkProps = {
 const PathLink: Comp<PathLinkProps> = (props =>
     <Row style={{
         justifyContent: 'center',
+        margin: relative(1),
     }}>
         <LinkButton action={actionCreators
             .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
