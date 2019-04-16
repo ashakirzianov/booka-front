@@ -22,7 +22,7 @@ export function comp<P = {}, A = {}>(c: Comp<P, A>) {
 export function relative(size: number) {
     return platformValue({
         web: `${size}em`,
-        mobile: `${size}%`,
+        default: `${size}%`,
     });
 }
 

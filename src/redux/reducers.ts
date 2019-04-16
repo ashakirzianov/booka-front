@@ -63,8 +63,6 @@ export function screen(state: AppScreen | undefined = defaultScreen, action: Act
                 default: () => state,
             });
         case 'openFootnote':
-            // tslint:disable-next-line:no-console
-            console.log('OPEN: ' + action.payload);
             return forScreen(state, {
                 book: bs => ({
                     ...bs,
