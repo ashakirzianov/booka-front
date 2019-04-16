@@ -67,25 +67,29 @@ export function platform(): Platform {
 export function webPlatform(): WebPlatform {
     const win = window as any;
     const navigator = window.navigator;
+
     const isChromium = win.chrome !== null
         && typeof win.chrome !== 'undefined'
         && navigator.vendor === 'Google Inc.';
     const isOpera = typeof win.opr !== 'undefined';
     const isEdge = navigator.userAgent.indexOf('Edge') > -1;
     const isIOSChrome = navigator.userAgent.match('CriOS');
-    const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !win.MSStream;
-    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-
     if (isIOSChrome || (isChromium && !isOpera && !isEdge)) {
         return 'chrome';
-    } else if (isSafari) {
-        return isIOS
+    }
+
+    const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    const isSafariMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) && !win.MSStream;
+    if (isSafari) {
+        return isSafariMobile
             ? 'safari-mobile'
             : 'safari-desktop';
-    } else if (isFirefox) {
-        return 'firefox';
-    } else {
-        return 'other-web';
     }
+
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    if (isFirefox) {
+        return 'firefox';
+    }
+
+    return 'other-web';
 }
