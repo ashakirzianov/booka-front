@@ -59,6 +59,10 @@ export function colors(themeable: Themeable): Palette['colors'] {
     return themeable.theme.palettes[themeable.theme.currentPalette].colors;
 }
 
+export function highlights(themeable: Themeable): Palette['highlights'] {
+    return themeable.theme.palettes[themeable.theme.currentPalette].highlights;
+}
+
 export function named<P>(C: Comp<P>, name: string): Comp<P> {
     C.displayName = name;
     return C;

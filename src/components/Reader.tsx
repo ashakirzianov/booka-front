@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     BookPath, BookId, bookLocator, BookRange, BookNode,
-    BookContent, bookRange, locationPath, parentPath, Palette,
+    BookContent, bookRange, locationPath, parentPath,
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText, ScrollView,
@@ -24,7 +24,6 @@ export type ReaderProps = {
     nextPath?: BookPath,
     quoteRange: BookRange | undefined,
     id: BookId,
-    palette: Palette,
 };
 export class Reader extends React.Component<ReaderProps> {
     public refMap: RefMap = {};
@@ -98,7 +97,6 @@ export class Reader extends React.Component<ReaderProps> {
                 };
             },
             quoteRange: this.props.quoteRange,
-            palette: this.props.palette,
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
