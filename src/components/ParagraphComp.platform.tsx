@@ -9,13 +9,14 @@ import { last, filterUndefined } from '../utils';
 import { RefPathHandler } from './bookRender';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
-    <span style={{
-        display: 'inline',
-        float: 'left',
-        textIndent: props.textIndent,
-    }}>
-        {props.children}
-    </span>
+    <div style={{ display: 'flex' }}>
+        <span style={{
+            float: 'left',
+            textIndent: props.textIndent,
+        }}>
+            {props.children}
+        </span>
+    </div>
 );
 
 export type TextRunProps = {

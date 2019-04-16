@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, relative, Row, ThemedText, ScrollView,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column,
 } from '../blocks';
 import { actionCreators } from '../redux';
 import {
@@ -102,11 +102,13 @@ export class Reader extends React.Component<ReaderProps> {
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
-            <ThemedText style={{
-                textAlign: 'justify',
-            }}>
-                {buildBook(content, params)}
-            </ThemedText>
+            <Column>
+                <ThemedText style={{
+                    textAlign: 'justify',
+                }}>
+                    {buildBook(content, params)}
+                </ThemedText>
+            </Column>
             {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
         </ScrollView>;
     }
