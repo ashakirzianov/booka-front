@@ -52,10 +52,7 @@ export const subscribe = {
         window.addEventListener('scroll', handler);
     },
     selection(handler: Callback<Event>) {
-        window.addEventListener('mouseup', handler);
-        window.addEventListener('keydown', handler);
-        window.addEventListener('click', handler);
-        window.addEventListener('touchend', handler);
+        window.document.addEventListener('selectionchange', handler);
     },
     copy(handler: Callback<ClipboardEvent>) {
         window.addEventListener('copy', handler as any);
@@ -67,10 +64,7 @@ export const unsubscribe = {
         window.removeEventListener('copy', handler as any);
     },
     selection(handler: Callback<Event>) {
-        window.removeEventListener('mouseup', handler);
-        window.removeEventListener('keydown', handler);
-        window.removeEventListener('click', handler);
-        window.removeEventListener('touchend', handler);
+        window.document.removeEventListener('selectionchange', handler);
     },
     scroll(handler: Callback<Event>) {
         window.removeEventListener('scroll', handler);
