@@ -7,7 +7,7 @@ export function smartStore<V>(key: string) {
     type Cache = {
         [k in K]?: V;
     };
-    let cache: Cache = store.get(key) || {};
+    let cache: Cache = store.get(key) as any || {};
     return {
         all() {
             return { ...cache };
@@ -60,4 +60,14 @@ export function singleValueStore<V extends object>(key: string) {
 
 export function clearAllStores() {
     store.clearAll();
+}
+
+const versionKey = '@version';
+const version = 1;
+export function validatePersistentStorage() {
+    const v = store.get(versionKey);
+    if (v !== version) {
+        clearAllStores();
+        store.set(versionKey, version);
+    }
 }

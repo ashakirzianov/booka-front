@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { debug, clearAllStores } from '../utils';
+import { validatePersistentStorage } from '../utils';
 import { App } from '../model';
 import { urlToAction } from '../core';
 import { reducer } from './reducers';
@@ -28,5 +28,5 @@ class AppProvider extends Provider<Action> { }
 export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
-debug(() => false ? clearAllStores() : null);
+validatePersistentStorage();
 const store = createEnhancedStore(reducer);
