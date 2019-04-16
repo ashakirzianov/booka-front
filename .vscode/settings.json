@@ -33,7 +33,8 @@
         "precached",
         "subpath",
         "succ",
-        "timeouted"
+        "timeouted",
+        "webfonts"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"
 }

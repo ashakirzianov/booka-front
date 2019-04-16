@@ -5,7 +5,7 @@ import { themed, Comp, relative, hoverable, colors } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 
 export const Tab: Comp = (props =>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span>&nbsp;&nbsp;</span>
 );
 
 export const NewLine: Comp = (props => <br />);

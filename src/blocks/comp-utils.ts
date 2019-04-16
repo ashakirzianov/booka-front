@@ -22,7 +22,7 @@ export function comp<P = {}, A = {}>(c: Comp<P, A>) {
 export function relative(size: number) {
     return platformValue({
         web: `${size}em`,
-        mobile: `${size}%`,
+        default: `${size}%`,
     });
 }
 
@@ -57,6 +57,10 @@ export function themed<T = {}>(C: ThemeableComp<T>) {
 }
 export function colors(themeable: Themeable): Palette['colors'] {
     return themeable.theme.palettes[themeable.theme.currentPalette].colors;
+}
+
+export function highlights(themeable: Themeable): Palette['highlights'] {
+    return themeable.theme.palettes[themeable.theme.currentPalette].highlights;
 }
 
 export function named<P>(C: Comp<P>, name: string): Comp<P> {

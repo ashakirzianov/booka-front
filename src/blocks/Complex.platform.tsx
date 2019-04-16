@@ -7,6 +7,7 @@ import { Manager, Reference, Popper, PopperProps } from 'react-popper';
 import { Refable } from './comp-utils.platform';
 import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
+import { platformValue } from '../utils';
 
 const headerHeight = relative(4);
 
@@ -109,11 +110,13 @@ export type WithPopoverState = {
 export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
     public state = { open: false };
 
-    public toggleVisibility = () => {
+    public toggleVisibility() {
         this.setState({ open: !this.state.open });
     }
 
-    public hide = () => this.setState({ open: false });
+    public hide() {
+        this.setState({ open: false });
+    }
 
     public render() {
         const props = this.props;
@@ -128,17 +131,23 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                                 top: 0, bottom: 0, left: 0, right: 0,
                                 zIndex: -10,
                             }}
-                                onClick={this.hide}
+                                onClick={this.hide.bind(this)}
                             />
                         }
                         <Refable ref={ref}>
-                            {props.children(this.toggleVisibility)}
+                            {props.children(this.toggleVisibility.bind(this))}
                         </Refable>
                     </>
                 }
             </Reference>
             <FadeIn visible={open}>
-                <Popper placement={props.placement}>
+                <Popper
+                    placement={props.placement}
+                    positionFixed={platformValue({
+                        firefox: true,
+                        default: false,
+                    })}
+                >
                     {
                         ({ ref, style, placement }) =>
                             <div ref={ref} style={{

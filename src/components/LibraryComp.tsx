@@ -1,12 +1,16 @@
 import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
-import { Comp, Row, Link, SafeAreaView, Column, ThemedText } from '../blocks';
+import { Comp, Row, Link, SafeAreaView, Column, ThemedText, relative } from '../blocks';
 import { actionCreators } from '../redux';
 
 const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>
-        <Link action={actionCreators.navigateToBook(bookLocator(remoteBookId(props.id), locationCurrent()))}>
+        <Link
+            style={{ margin: relative(0.5) }}
+            action={actionCreators.navigateToBook(
+                bookLocator(remoteBookId(props.id), locationCurrent()))}
+        >
             <ThemedText>{props.meta.title}</ThemedText>
         </Link>
     </Row>

@@ -64,7 +64,7 @@ const BookText = connectActions('toggleControls')<BookTextProps>(props =>
     <Row style={{
         alignItems: 'center',
         maxWidth: relative(50),
-        margin: relative(2),
+        marginHorizontal: relative(2),
     }}
     >
         <Clickable key='book' onClick={() => props.toggleControls()}>

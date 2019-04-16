@@ -1,42 +1,57 @@
 import * as React from 'react';
 import {
     Comp, relative, PlainText,
-    connectActions, Link, ThemedText,
+    connectActions, Link, ThemedText, themed, highlights, named,
 } from '../blocks';
 import { assertNever } from '../utils';
 import {
     isSimple, isAttributed, isFootnote, ParagraphNode,
     BookPath, AttributesObject, SimpleSpan, AttributedSpan,
-    attrs, spanLength, FootnoteSpan, Span, BookRange, Color,
+    attrs, spanLength, FootnoteSpan, Span, BookRange, Color, Highlights,
 } from '../model';
 import { actionCreators } from '../redux';
 import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
 import { parsePath, pathToString, RefPathHandler } from './bookRender';
 
-type SpanType<T> = {
-    span: T,
+type SpanTypeBase = {
     path: BookPath,
     first: boolean,
     refPathHandler: RefPathHandler,
-    highlight?: HighlightData,
+};
+type SpanType<T> = SpanTypeBase & {
+    span: T,
+    colorization?: Colorization,
 };
 
-export type Highlight = {
+export type ColorizedRange = {
     color: Color,
     range: BookRange,
 };
-export type HighlightData = {
-    quote?: Highlight,
+export type Colorization = {
+    ranges: ColorizedRange[],
 };
-export type ParagraphProps = SpanType<ParagraphNode>;
-export const ParagraphComp: Comp<ParagraphProps> = (props =>
-    <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
-        <SpanComp
-            {...props}
-            path={props.path.concat([0])}
-            span={props.span.span}
-        />
-    </ParagraphContainer>
+
+export type ParagraphProps = SpanTypeBase & {
+    p: ParagraphNode,
+    highlights?: Highlights,
+};
+export const ParagraphComp = named(
+    themed<ParagraphProps>(props =>
+        <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
+            <SpanComp
+                {...props}
+                path={props.path.concat([0])}
+                span={props.p.span}
+                colorization={props.highlights && props.highlights.quote && {
+                    ranges: [{
+                        color: highlights(props).quote,
+                        range: props.highlights.quote,
+                    }],
+                }}
+            />
+        </ParagraphContainer>
+    ),
+    'ParagraphComp'
 );
 
 const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
@@ -56,12 +71,12 @@ type SimpleSpanProps = {
     first: boolean,
     path: BookPath,
     refPathHandler: RefPathHandler,
-    highlight?: HighlightData,
+    colorization?: Colorization,
 };
 const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
     return props.first
-        ? <CapitalizeFirst text={props.s} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />
-        : <TextRun text={props.s} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />;
+        ? <CapitalizeFirst text={props.s} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
+        : <TextRun text={props.s} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />;
 });
 type AttributedSpanProps = SpanType<AttributedSpan>;
 const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
@@ -76,7 +91,7 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
                         span={childS}
                         first={props.first && idx === 0}
                         path={path}
-                        highlight={props.highlight}
+                        colorization={props.colorization}
                         refPathHandler={props.refPathHandler}
                     />;
                     result.children.push(child);
@@ -95,7 +110,7 @@ type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
     <Link action={actionCreators.openFootnote(props.span.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
-            <TextRun text={props.span.text || ''} path={props.path} highlight={props.highlight} refPathHandler={props.refPathHandler} />
+            <TextRun text={props.span.text || ''} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
         </ThemedText>
     </Link>
 );

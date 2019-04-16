@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Comp } from '../blocks';
-import { pathToId, HighlightData } from './ParagraphComp';
+import { pathToId, Colorization } from './ParagraphComp';
 import {
     Color, bookRange, incrementPath,
     overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith, inRange,
@@ -9,25 +9,26 @@ import { last, filterUndefined } from '../utils';
 import { RefPathHandler } from './bookRender';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
-    <span style={{
-        display: 'inline',
-        float: 'left',
-        textIndent: props.textIndent,
-    }}>
-        {props.children}
-    </span>
+    <div style={{ display: 'flex' }}>
+        <span style={{
+            float: 'left',
+            textIndent: props.textIndent,
+        }}>
+            {props.children}
+        </span>
+    </div>
 );
 
 export type TextRunProps = {
     text: string,
     path: BookPath,
     refPathHandler: RefPathHandler,
-    highlight?: HighlightData,
+    colorization?: Colorization,
 };
 export const CapitalizeFirst: Comp<TextRunProps> = (props => {
     const text = props.text.trimStart();
     const firstPath = props.path;
-    const firstHighlight = highlightsForPath(firstPath, props.highlight)[0];
+    const firstHighlight = colorsForPath(firstPath, props.colorization)[0];
     const secondPath = props.path.slice();
     secondPath[secondPath.length - 1] += 1;
     return <span>
@@ -48,7 +49,7 @@ export const CapitalizeFirst: Comp<TextRunProps> = (props => {
 });
 
 export const TextRun: Comp<TextRunProps> = (props => {
-    const spans = buildHighlightedSpans(props.text, props.path, props.highlight);
+    const spans = buildColorizedSpans(props.text, props.path, props.colorization);
     const children = spans.map(
         (s, idx) => !s ? null :
             <span
@@ -74,28 +75,27 @@ type StyledSpan = {
     path: BookPath,
 };
 
-function highlightsForPath(path: BookPath, highlight?: HighlightData) {
-    if (!highlight || !highlight.quote) {
+function colorsForPath(path: BookPath, colorization?: Colorization) {
+    if (!colorization) {
         return [];
     }
 
-    if (inRange(path, highlight.quote.range)) {
-        return [highlight.quote.color];
-    } else {
-        return [];
-    }
+    const colors = colorization.ranges.map(cr =>
+        inRange(path, cr.range) ? cr.color : undefined);
+
+    return filterUndefined(colors);
 }
 
-function buildHighlightedSpans(text: string, path: BookPath, highlight?: HighlightData): StyledSpan[] {
-    if (!highlight || !highlight.quote) {
+function buildColorizedSpans(text: string, path: BookPath, colorization?: Colorization): StyledSpan[] {
+    if (!colorization || colorization.ranges.length < 1) {
         return [{ text, path }];
     }
 
     const spanRange = bookRange(path, incrementPath(path, text.length));
-    const relevant = overlapWith(spanRange, [{
-        tag: highlight.quote,
-        range: highlight.quote.range,
-    }]);
+    const relevant = overlapWith(spanRange, colorization.ranges.map(cr => ({
+        tag: cr.color,
+        range: cr.range,
+    })));
     relevant.push({ range: spanRange });
 
     const os = overlaps(relevant);
@@ -105,7 +105,7 @@ function buildHighlightedSpans(text: string, path: BookPath, highlight?: Highlig
         return !spanText ? undefined : {
             text: spanText,
             color: tagged.tags.length > 0
-                ? tagged.tags[0].color
+                ? tagged.tags[0]
                 : undefined,
             path: tagged.range.start,
         };

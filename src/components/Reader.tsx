@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {
     BookPath, BookId, bookLocator, BookRange, BookNode,
-    BookContent, bookRange, locationPath, parentPath, Palette,
+    BookContent, bookRange, locationPath, parentPath,
 } from '../model';
 import {
-    Comp, Callback, relative, Row, ThemedText, ScrollView,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton,
+    Comp, Callback, Row, ThemedText, ScrollView,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, relative,
 } from '../blocks';
 import { actionCreators } from '../redux';
 import {
@@ -24,7 +24,6 @@ export type ReaderProps = {
     nextPath?: BookPath,
     quoteRange: BookRange | undefined,
     id: BookId,
-    palette: Palette,
 };
 export class Reader extends React.Component<ReaderProps> {
     public refMap: RefMap = {};
@@ -98,15 +97,16 @@ export class Reader extends React.Component<ReaderProps> {
                 };
             },
             quoteRange: this.props.quoteRange,
-            palette: this.props.palette,
         };
         return <ScrollView>
             {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
-            <ThemedText style={{
-                textAlign: 'justify',
-            }}>
-                {buildBook(content, params)}
-            </ThemedText>
+            <Column>
+                <ThemedText style={{
+                    textAlign: 'justify',
+                }}>
+                    {buildBook(content, params)}
+                </ThemedText>
+            </Column>
             {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
         </ScrollView>;
     }
@@ -131,7 +131,7 @@ type PathLinkProps = {
 const PathLink: Comp<PathLinkProps> = (props =>
     <Row style={{
         justifyContent: 'center',
-        margin: relative(2),
+        margin: relative(1),
     }}>
         <LinkButton action={actionCreators
             .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
