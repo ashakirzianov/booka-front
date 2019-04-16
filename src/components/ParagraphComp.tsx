@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     Comp, relative, PlainText,
-    connectActions, Link, ThemedText, themed, highlights,
+    connectActions, Link, ThemedText, themed, highlights, named,
 } from '../blocks';
 import { assertNever } from '../utils';
 import {
@@ -35,20 +35,23 @@ export type ParagraphProps = SpanTypeBase & {
     p: ParagraphNode,
     highlights?: Highlights,
 };
-export const ParagraphComp = themed<ParagraphProps>(props =>
-    <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
-        <SpanComp
-            {...props}
-            path={props.path.concat([0])}
-            span={props.p.span}
-            colorization={props.highlights && props.highlights.quote && {
-                ranges: [{
-                    color: highlights(props).quote,
-                    range: props.highlights.quote,
-                }],
-            }}
-        />
-    </ParagraphContainer>
+export const ParagraphComp = named(
+    themed<ParagraphProps>(props =>
+        <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
+            <SpanComp
+                {...props}
+                path={props.path.concat([0])}
+                span={props.p.span}
+                colorization={props.highlights && props.highlights.quote && {
+                    ranges: [{
+                        color: highlights(props).quote,
+                        range: props.highlights.quote,
+                    }],
+                }}
+            />
+        </ParagraphContainer>
+    ),
+    'ParagraphComp'
 );
 
 const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
