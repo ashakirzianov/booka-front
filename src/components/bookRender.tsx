@@ -29,7 +29,7 @@ export function buildBook(book: BookContent, params: Params) {
 export function buildNodes(nodes: BookNode[], headPath: BookPath, params: Params): JSX.Element[] {
     return nodes
         .map((bn, i) => buildNode(bn, headPath.concat([i]), params))
-        .reduce((acc, arr) => acc.concat(arr))
+        .reduce((acc, arr) => acc.concat(arr), [])
         ;
 }
 
