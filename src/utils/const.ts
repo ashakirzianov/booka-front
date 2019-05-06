@@ -1,20 +1,24 @@
 import { configValue } from './debug';
+import { platformValue } from './platform';
 
+const prodBack = 'https://reader-back.herokuapp.com';
 export function backendBase() {
     return configValue({
-        // debug: 'http://localhost:3042',
-        // TODO: this is not reliable solution, think of something else
-        debug: 'http://192.168.1.190:3042',
-        production: 'https://reader-back.herokuapp.com',
+        debug: platformValue({
+            web: `http://${window.location.hostname}:3042`,
+            default: prodBack,
+        }),
+        production: prodBack,
     });
 }
 
+const prodFront = 'http://booka.pub';
 export function frontendBase() {
-    // TODO: generate dynamically ?
     return configValue({
-        // TODO: this is not reliable solution, think of something else
-        debug: 'http://192.168.1.190:3000',
-        // debug: 'http://localhost:3000',
-        production: 'http://booka.pub',
+        debug: platformValue({
+            web: `http://${window.location.hostname}:3000`,
+            default: prodFront,
+        }),
+        production: prodFront,
     });
 }
