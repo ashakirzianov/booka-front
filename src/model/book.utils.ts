@@ -2,7 +2,7 @@ import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookConte
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
-import { Footnote, isSimple, isAttributed, isFootnote } from '../contracts';
+import { Footnote, isSimple, isAttributed, isFootnote, isCompound } from '../contracts';
 
 export function footnoteForId(book: BookContent, id: string | undefined): Footnote | undefined {
     return book.footnotes
@@ -68,11 +68,13 @@ function countElements(node: BookNode): number {
 export function spanLength(span: Span): number {
     if (isSimple(span)) {
         return span.length;
-    } else if (isAttributed(span)) {
+    } else if (isCompound(span)) {
         return span.spans
             .reduce((res, s) => res + spanLength(s), 0);
+    } else if (isAttributed(span)) {
+        return spanLength(span.content);
     } else if (isFootnote(span)) {
-        return span.text ? span.text.length : 0;
+        return spanLength(span.content);
     } else {
         return assertNever(span);
     }

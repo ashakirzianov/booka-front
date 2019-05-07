@@ -1,7 +1,7 @@
 import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
-import { isAttributed, isSimple, isFootnote } from '../contracts';
+import { isAttributed, isSimple, isFootnote, isCompound } from '../contracts';
 import { BookPath } from './bookRange';
 
 export type TableOfContentsItem = {
@@ -92,11 +92,13 @@ function lengthOfNode(node: BookNode): number {
 function lengthOfSpan(span: Span): number {
     if (isSimple(span)) {
         return span.length;
-    } else if (isAttributed(span)) {
+    } else if (isCompound(span)) {
         return span.spans.reduce((l, s) =>
             l + lengthOfSpan(s), 0);
+    } else if (isAttributed(span)) {
+        return lengthOfSpan(span.content);
     } else if (isFootnote(span)) {
-        return span.text ? span.text.length : 0;
+        return lengthOfSpan(span.content);
     } else {
         return assertNever(span);
     }

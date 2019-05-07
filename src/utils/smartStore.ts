@@ -19,7 +19,7 @@ export function smartStore<V>(key: string) {
         },
 
         get(k: K): V | undefined {
-            return cache[k];
+            return undefined; // cache[k];
         },
 
         set(k: K, value: V) {
@@ -63,7 +63,7 @@ export function clearAllStores() {
 }
 
 const versionKey = '@version';
-const version = 1;
+const version = 4;
 export function validatePersistentStorage() {
     const v = store.get(versionKey);
     if (v !== version) {
