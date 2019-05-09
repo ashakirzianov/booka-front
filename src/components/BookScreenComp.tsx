@@ -4,9 +4,8 @@ import {
     connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
     Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
 } from '../blocks';
-import { BookScreen, Book, Footnote, BookId, TableOfContents, PaletteName, BookRange } from '../model';
+import { BookScreen, Book, BookId, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
 import { BookNodesComp } from './Reader';
-import { footnoteForId } from '../model';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -52,7 +51,11 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
             open={props.bl.toc}
         />
         <FootnoteBox
-            footnote={footnoteForId(props.book.content, props.bl.footnoteId)}
+            footnote={
+                props.bl.footnoteId !== undefined
+                    ? footnoteForId(props.book.content, props.bl.footnoteId)
+                    : undefined
+            }
         />
     </>
 );
@@ -83,13 +86,16 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-const FootnoteComp: Comp<Footnote> = (props =>
-    <BookNodesComp nodes={props.content} />
+const FootnoteComp: Comp<FootnoteSpan> = (props =>
+    <BookNodesComp nodes={[{
+        node: 'paragraph',
+        span: props,
+    }]} />
 );
 
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: Footnote }>(props =>
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(props =>
     <Modal
-        title={props.footnote && props.footnote.title}
+        title='no title' // TODO: build title
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >

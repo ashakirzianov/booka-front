@@ -1,12 +1,33 @@
 import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookRange';
-import { assertNever } from '../utils';
+import { assertNever, firstDefined } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
-import { Footnote, isSimple, isAttributed, isFootnote, isCompound } from '../contracts';
+import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound } from '../contracts';
 
-export function footnoteForId(book: BookContent, id: string | undefined): Footnote | undefined {
-    return book.footnotes
-        .find(f => f.id === id);
+export function footnoteForId(book: BookContent, id: string): FootnoteSpan | undefined {
+    return firstDefined(book.nodes, n => footnoteFromNode(n, id));
+}
+
+function footnoteFromNode(bookNode: BookNode, id: string): FootnoteSpan | undefined {
+    if (isChapter(bookNode)) {
+        return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
+    } else if (isParagraph(bookNode)) {
+        return footnoteFromSpan(bookNode.span, id);
+    } else {
+        return undefined;
+    }
+}
+
+function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
+    if (isFootnote(span)) {
+        return span.id === id
+            ? span
+            : undefined;
+    } else if (isCompound(span)) {
+        return firstDefined(span.spans, s => footnoteFromSpan(s, id));
+    } else {
+        return undefined;
+    }
 }
 
 export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {

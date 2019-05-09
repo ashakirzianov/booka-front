@@ -152,3 +152,14 @@ export async function delay(timeout: number): Promise<void> {
 export function last<T>(arr: T[]): T {
     return arr[arr.length - 1];
 }
+
+export function firstDefined<T, U>(arr: T[], f: (x: T) => U | undefined): U | undefined {
+    for (const i of arr) {
+        const result = f(i);
+        if (result !== undefined) {
+            return result;
+        }
+    }
+
+    return undefined;
+}
