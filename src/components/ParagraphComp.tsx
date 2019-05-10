@@ -7,7 +7,7 @@ import { assertNever } from '../utils';
 import {
     isSimple, isAttributed, isFootnote, ParagraphNode,
     BookPath, AttributesObject, SimpleSpan, AttributedSpan,
-    attrs, spanLength, FootnoteSpan, Span, BookRange, Color, Highlights,
+    attrs, spanLength, FootnoteSpan, Span, BookRange, Color, Highlights, CompoundSpan, isCompound,
 } from '../model';
 import { actionCreators } from '../redux';
 import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
@@ -67,7 +67,7 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
 );
 
 type SimpleSpanProps = {
-    s: SimpleSpan,
+    span: SimpleSpan,
     first: boolean,
     path: BookPath,
     refPathHandler: RefPathHandler,
@@ -75,12 +75,11 @@ type SimpleSpanProps = {
 };
 const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
     return props.first
-        ? <CapitalizeFirst text={props.s} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
-        : <TextRun text={props.s} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />;
+        ? <CapitalizeFirst text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
+        : <TextRun text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />;
 });
-type AttributedSpanProps = SpanType<AttributedSpan>;
-const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
-    <StyledWithAttributes attrs={attrs(props.span)}>
+const CompoundSpanComp: Comp<SpanType<CompoundSpan>> = (props =>
+    <>
         {
             props.span.spans.reduce(
                 (result, childS, idx) => {
@@ -104,22 +103,29 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
                 }
             ).children
         }
+    </>
+);
+type AttributedSpanProps = SpanType<AttributedSpan>;
+const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
+    <StyledWithAttributes attrs={attrs(props.span)}>
+        <SpanComp {...props} span={props.span.content} />
     </StyledWithAttributes>
 );
 type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
     <Link action={actionCreators.openFootnote(props.span.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
-            <TextRun text={props.span.text || ''} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
+            <SpanComp {...props} span={props.span.content} />
         </ThemedText>
     </Link>
 );
 type SpanProps = SpanType<Span>;
 const SpanComp: Comp<SpanProps> = (props =>
-    isSimple(props.span) ? <SimpleSpanComp {...props} s={props.span} />
-        : isAttributed(props.span) ? <AttributedSpanComp {...props} span={props.span} />
-            : isFootnote(props.span) ? <FootnoteSpanComp {...props} span={props.span} />
-                : assertNever(props.span)
+    isSimple(props.span) ? <SimpleSpanComp {...props} span={props.span} />
+        : isCompound(props.span) ? <CompoundSpanComp {...props} span={props.span} />
+            : isAttributed(props.span) ? <AttributedSpanComp {...props} span={props.span} />
+                : isFootnote(props.span) ? <FootnoteSpanComp {...props} span={props.span} />
+                    : assertNever(props.span)
 );
 
 // TODO: rethink this solution
