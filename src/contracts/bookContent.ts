@@ -25,10 +25,12 @@ export type ParagraphNode = {
     node: 'paragraph',
     span: Span,
 };
+
+export type ChapterTitle = string[];
 export type ChapterNode = {
     node: 'chapter',
     level: number,
-    title?: string,
+    title: ChapterTitle,
     nodes: BookNode[],
 };
 
@@ -88,7 +90,7 @@ export function compoundSpan(spans: Span[]): Span {
     return { span: 'compound', spans };
 }
 
-export function createParagraph(span: Span): ParagraphNode {
+export function paragraphNode(span: Span): ParagraphNode {
     return {
         node: 'paragraph',
         span,
