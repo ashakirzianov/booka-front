@@ -5,7 +5,7 @@ import {
     isChapter, inRange, ChapterNode,
 } from '../model';
 import {
-    RefType, Comp, Row, ThemedText, relative, refable,
+    RefType, Comp, Row, ThemedText, relative, refable, Column,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
@@ -122,10 +122,17 @@ const BookTitle: Comp<{ text?: string }> = (props =>
     </Row>
 );
 
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props =>
-    props.level === 0 ? <ChapterTitle text={props.title} />
-        : props.level > 0 ? <PartTitle text={props.title} />
-            : <SubpartTitle text={props.title} />,
+const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
+    const TitleComp = props.level === 0 ? ChapterTitle
+        : props.level > 0 ? PartTitle
+            : SubpartTitle;
+    return <Column>
+        {
+            props.title.map((line, idx) =>
+                <TitleComp key={idx} text={line} />)
+        }
+    </Column>;
+},
     'ChapterHeader'
 );
 

@@ -45,7 +45,7 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = node.title ? [{
             toc: 'item' as 'item',
-            title: node.title,
+            title: node.title[0],
             level: node.level,
             id: info.id,
             path: path,

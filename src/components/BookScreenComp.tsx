@@ -89,13 +89,13 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
 const FootnoteComp: Comp<FootnoteSpan> = (props =>
     <BookNodesComp nodes={[{
         node: 'paragraph',
-        span: props,
+        span: props.footnote,
     }]} />
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(props =>
     <Modal
-        title='no title' // TODO: build title
+        title={props.footnote && props.footnote.title[0]}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
