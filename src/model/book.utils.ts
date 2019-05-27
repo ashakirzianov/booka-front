@@ -2,7 +2,7 @@ import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookConte
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
 import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
-import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound } from '../contracts';
+import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound, ChapterTitle } from '../contracts';
 
 export function footnoteForId(book: BookContent, id: string): FootnoteSpan | undefined {
     return firstDefined(book.nodes, n => footnoteFromNode(n, id));
@@ -98,5 +98,19 @@ export function spanLength(span: Span): number {
         return spanLength(span.content);
     } else {
         return assertNever(span);
+    }
+}
+
+export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
+    const iter = bookIterator(book);
+    const node = iterateToPath(iter, path);
+    if (node) {
+        if (isChapter(node.node)) {
+            return node.node.title;
+        } else {
+            return [];
+        }
+    } else {
+        return [];
     }
 }

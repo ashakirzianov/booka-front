@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     BookPath, BookId, bookLocator, BookRange, BookNode,
-    BookContent, bookRange, locationPath, parentPath,
+    BookContent, bookRange, locationPath, parentPath, titleForPath,
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText, ScrollView,
@@ -88,6 +88,8 @@ export class Reader extends React.Component<ReaderProps> {
 
     public render() {
         const { range, prevPath, nextPath, id, content } = this.props;
+        const prevTitle = prevPath && titleForPath(content, prevPath)[0];
+        const nextTitle = nextPath && titleForPath(content, nextPath)[0];
         const params: Params = {
             pageRange: range,
             refPathHandler: (ref, path) => {
@@ -99,7 +101,7 @@ export class Reader extends React.Component<ReaderProps> {
             quoteRange: this.props.quoteRange,
         };
         return <ScrollView>
-            {prevPath && <PathLink path={prevPath} id={id} text='Previous' />}
+            {prevPath && <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />}
             <Column>
                 <ThemedText style={{
                     textAlign: 'justify',
@@ -107,7 +109,7 @@ export class Reader extends React.Component<ReaderProps> {
                     {buildBook(content, params)}
                 </ThemedText>
             </Column>
-            {nextPath && <PathLink path={nextPath} id={id} text='Next' />}
+            {nextPath && <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />}
         </ScrollView>;
     }
 }

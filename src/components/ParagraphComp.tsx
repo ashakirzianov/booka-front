@@ -57,6 +57,7 @@ export const ParagraphComp = named(
 const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
     <PlainText style={{
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
+        fontWeight: props.attrs.bold ? 'bold' : 'normal',
         ...(props.attrs.line && {
             textIndent: relative(2),
             display: 'block',

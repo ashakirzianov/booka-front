@@ -28,5 +28,8 @@ export type IconProps = {
     size?: string,
 };
 export const Icon: Comp<IconProps> = (props =>
-    React.createElement(iconForName(props.name), props)
+    React.createElement(iconForName(props.name), {
+        ...props,
+        size: props.size || '1em',
+    })
 );

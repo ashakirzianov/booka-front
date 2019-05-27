@@ -9,7 +9,7 @@ import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
 import { platformValue } from '../utils';
 
-const headerHeight = relative(4);
+const headerHeight = relative(3);
 
 type ModalBoxProps = {
     open: boolean,
