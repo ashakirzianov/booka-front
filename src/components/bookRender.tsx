@@ -101,7 +101,10 @@ const PartTitle: Comp<{ text?: string }> = (props =>
 );
 
 const SubpartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{ justifyContent: 'flex-start' }}>
+    <Row style={{
+        justifyContent: 'flex-start',
+        width: '100%',
+    }}>
         <ThemedText style={{
             fontStyle: 'italic',
             margin: relative(1),
