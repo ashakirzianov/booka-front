@@ -1,7 +1,10 @@
 import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
-import { iterateToPath, bookIterator, nextIterator, buildPath, OptBookIterator, OptParentIterator } from './bookIterator';
+import {
+    iterateToPath, bookIterator, nextIterator, buildPath,
+    OptBookIterator, OptParentIterator,
+} from './bookIterator';
 import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound, ChapterTitle } from '../contracts';
 
 export function footnoteForId(book: BookContent, id: string): FootnoteSpan | undefined {
@@ -102,6 +105,35 @@ export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
     } else {
         return [];
     }
+}
+
+export function pageForPath(book: BookContent, path: BookPath) {
+    const iter = bookIterator(book);
+    const node = iterateToPath(iter, path);
+    return pageForIterator(node);
+}
+
+export function pageForIterator(bookIter: OptParentIterator): number {
+    if (!bookIter || bookIter.node === undefined) {
+        return 1;
+    }
+
+    const prev = bookIter.prevSibling();
+    if (prev) {
+        const prevStart = pageForIterator(prev);
+        const prevLength = nodeLength(prev.node);
+        const prevPages = numberOfPages(prevLength);
+
+        return prevStart + prevPages;
+    } else {
+        const parentStart = pageForIterator(bookIter.parent);
+        return parentStart;
+    }
+}
+
+const pageLength = 1500;
+export function numberOfPages(length: number): number {
+    return Math.ceil(length / pageLength);
 }
 
 export function nodeLength(node: BookNode): number {

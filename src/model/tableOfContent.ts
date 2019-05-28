@@ -2,7 +2,7 @@ import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
 import { BookPath } from './bookRange';
-import { nodeLength } from './book.utils';
+import { nodeLength, numberOfPages } from './book.utils';
 
 export type TableOfContentsItem = {
     title: string,
@@ -58,9 +58,4 @@ function itemsFromBookNodes(nodes: BookNode[], path: BookPath, page: number): Ta
     }
 
     return result;
-}
-
-const pageLength = 1500;
-function numberOfPages(length: number): number {
-    return Math.ceil(length / pageLength);
 }
