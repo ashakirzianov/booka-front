@@ -30,11 +30,7 @@ export class Reader extends React.Component<ReaderProps> {
     public selectedRange: BookSelection | undefined = undefined;
 
     public handleScroll = () => {
-        const newCurrentPath = Object.entries(this.refMap)
-            .reduce<BookPath | undefined>((path, [key, ref]) =>
-                path || !isPartiallyVisible(ref)
-                    ? path
-                    : parsePath(key), undefined);
+        const newCurrentPath = computeCurrentPath(this.refMap);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -146,4 +142,17 @@ const PathLink: Comp<PathLinkProps> = (props =>
 
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
+}
+
+function computeCurrentPath(refMap: RefMap) {
+    for (const [key, ref] of Object.entries(refMap)) {
+        if (isPartiallyVisible(ref)) {
+            const path = parsePath(key);
+            if (path) {
+                return path;
+            }
+        }
+    }
+
+    return undefined;
 }
