@@ -5,53 +5,39 @@ import { isAttributed, isSimple, isFootnote, isCompound } from '../contracts';
 import { BookPath } from './bookRange';
 
 export type TableOfContentsItem = {
-    toc: 'item',
     title: string,
     level: number,
     path: BookPath,
-    id: BookId,
     pageNumber: number,
 };
 
 export type TableOfContents = {
-    toc: 'toc',
+    id: BookId,
     title: string,
     items: TableOfContentsItem[],
 };
 
-type Info = {
-    id: BookId,
-};
-
-export function tableOfContents(title: string, items: TableOfContentsItem[]): TableOfContents {
-    return {
-        toc: 'toc',
-        title, items,
-    };
+export function tableOfContents(title: string, id: BookId, items: TableOfContentsItem[]): TableOfContents {
+    return { id, title, items };
 }
 
 export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
-    const info = {
-        id,
-    };
-    const items = itemsFromBookNodes(bookContent.nodes, [], info, 1);
+    const items = itemsFromBookNodes(bookContent.nodes, [], 1);
 
-    return tableOfContents(bookContent.meta.title, items);
+    return tableOfContents(bookContent.meta.title, id, items);
 }
 
-function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, page: number): TableOfContentsItem[] {
+function itemsFromBookNode(node: BookNode, path: BookPath, page: number): TableOfContentsItem[] {
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = node.title ? [{
-            toc: 'item' as 'item',
             title: node.title[0],
             level: node.level,
-            id: info.id,
             path: path,
             pageNumber: page,
         }]
             : [];
 
-        const children = itemsFromBookNodes(node.nodes, path, info, page);
+        const children = itemsFromBookNodes(node.nodes, path, page);
         return head.concat(children);
     } else if (isParagraph(node)) {
         return [];
@@ -60,12 +46,12 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, page: num
     }
 }
 
-function itemsFromBookNodes(nodes: BookNode[], path: BookPath, info: Info, page: number): TableOfContentsItem[] {
+function itemsFromBookNodes(nodes: BookNode[], path: BookPath, page: number): TableOfContentsItem[] {
     let result: TableOfContentsItem[] = [];
     let currPage = page;
     for (let idx = 0; idx < nodes.length; idx++) {
         const bn = nodes[idx];
-        const toAdd = itemsFromBookNode(bn, path.concat([idx]), info, currPage);
+        const toAdd = itemsFromBookNode(bn, path.concat([idx]), currPage);
         result = result.concat(toAdd);
         const nodeLength = lengthOfNode(bn);
         currPage += numberOfPages(nodeLength);
