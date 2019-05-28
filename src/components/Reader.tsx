@@ -101,7 +101,7 @@ export class Reader extends React.Component<ReaderProps> {
             quoteRange: this.props.quoteRange,
         };
         return <ScrollView>
-            {prevPath && <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />}
+            <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Column>
                 <ThemedText style={{
                     textAlign: 'justify',
@@ -109,7 +109,7 @@ export class Reader extends React.Component<ReaderProps> {
                     {buildBook(content, params)}
                 </ThemedText>
             </Column>
-            {nextPath && <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />}
+            <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
         </ScrollView>;
     }
 }
@@ -126,21 +126,22 @@ export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
 );
 
 type PathLinkProps = {
-    path: BookPath,
+    path: BookPath | undefined,
     id: BookId,
     text: string,
 };
 const PathLink: Comp<PathLinkProps> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        margin: relative(1),
-    }}>
-        <LinkButton action={actionCreators
-            .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-        >
-            {props.text}
-        </LinkButton>
-    </Row>
+    props.path === undefined ? null :
+        <Row style={{
+            justifyContent: 'center',
+            margin: relative(1),
+        }}>
+            <LinkButton action={actionCreators
+                .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
+            >
+                {props.text}
+            </LinkButton>
+        </Row>
 );
 
 function composeSelection(selection: BookSelection, id: BookId) {
