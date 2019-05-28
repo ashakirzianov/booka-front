@@ -53,8 +53,8 @@ function itemsFromBookNodes(nodes: BookNode[], path: BookPath, page: number): Ta
         const bn = nodes[idx];
         const toAdd = itemsFromBookNode(bn, path.concat([idx]), currPage);
         result = result.concat(toAdd);
-        const nodeLength = nodeLength(bn);
-        currPage += numberOfPages(nodeLength);
+        const charLength = nodeLength(bn);
+        currPage += numberOfPages(charLength);
     }
 
     return result;
