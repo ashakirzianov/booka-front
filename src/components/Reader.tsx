@@ -11,7 +11,7 @@ import { actionCreators } from '../redux';
 import {
     getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
-import { generateQuoteLink } from '../core/urlConversion';
+import { generateQuoteLink } from '../core';
 import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRender';
 
 type RefMap = { [k in string]?: RefType };
