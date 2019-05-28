@@ -80,24 +80,31 @@ export const Modal: Comp<ModalBoxProps> = (props =>
     </Transition>
 );
 
-export const TopBar = themed<{ open: boolean }>(props =>
-    <FadeIn visible={props.open}>
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            width: '100%',
-            height: headerHeight,
-            position: 'fixed',
-            top: 0, left: 0,
-            zIndex: 5,
-            boxShadow: `0px 0px 2px ${colors(props).shadow}`,
-            backgroundColor: colors(props).secondary,
-        }}>
-            {props.children}
-        </div >
-    </FadeIn >
-);
+function bar(top: boolean) {
+    return themed<{ open: boolean }>(props =>
+        <FadeIn visible={props.open}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                width: '100%',
+                height: headerHeight,
+                position: 'fixed',
+                top: top ? 0 : undefined,
+                bottom: !top ? 0 : undefined,
+                left: 0,
+                zIndex: 5,
+                boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+                backgroundColor: colors(props).secondary,
+            }}>
+                {props.children}
+            </div >
+        </FadeIn >
+    );
+}
+
+export const TopBar = bar(true);
+export const BottomBar = bar(false);
 
 export type WithPopoverProps = {
     body: ReactContent,
