@@ -86,21 +86,6 @@ function countElements(node: BookNode): number {
     }
 }
 
-export function spanLength(span: Span): number {
-    if (isSimple(span)) {
-        return span.length;
-    } else if (isCompound(span)) {
-        return span.spans
-            .reduce((res, s) => res + spanLength(s), 0);
-    } else if (isAttributed(span)) {
-        return spanLength(span.content);
-    } else if (isFootnote(span)) {
-        return spanLength(span.content);
-    } else {
-        return assertNever(span);
-    }
-}
-
 export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
     if (path.length === 0) {
         return [book.meta.title];
@@ -116,5 +101,30 @@ export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
         }
     } else {
         return [];
+    }
+}
+
+export function nodeLength(node: BookNode): number {
+    if (isChapter(node)) {
+        return node.nodes.reduce((len, n) => len + nodeLength(n), 0);
+    } else if (isParagraph(node)) {
+        return spanLength(node.span);
+    } else {
+        return assertNever(node);
+    }
+}
+
+export function spanLength(span: Span): number {
+    if (isSimple(span)) {
+        return span.length;
+    } else if (isCompound(span)) {
+        return span.spans.reduce((l, s) =>
+            l + spanLength(s), 0);
+    } else if (isAttributed(span)) {
+        return spanLength(span.content);
+    } else if (isFootnote(span)) {
+        return spanLength(span.content);
+    } else {
+        return assertNever(span);
     }
 }
