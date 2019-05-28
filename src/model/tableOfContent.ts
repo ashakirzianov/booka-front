@@ -10,7 +10,7 @@ export type TableOfContentsItem = {
     level: number,
     path: BookPath,
     id: BookId,
-    percentage: number,
+    pageNumber: number,
 };
 
 export type TableOfContents = {
@@ -21,7 +21,6 @@ export type TableOfContents = {
 
 type Info = {
     id: BookId,
-    length: number,
 };
 
 export function tableOfContents(title: string, items: TableOfContentsItem[]): TableOfContents {
@@ -34,14 +33,13 @@ export function tableOfContents(title: string, items: TableOfContentsItem[]): Ta
 export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
     const info = {
         id,
-        length: lengthOfBook(bookContent),
     };
-    const items = itemsFromBookNodes(bookContent.nodes, [], info, 0);
+    const items = itemsFromBookNodes(bookContent.nodes, [], info, 1);
 
     return tableOfContents(bookContent.meta.title, items);
 }
 
-function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
+function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, page: number): TableOfContentsItem[] {
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = node.title ? [{
             toc: 'item' as 'item',
@@ -49,11 +47,11 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
             level: node.level,
             id: info.id,
             path: path,
-            percentage: Math.floor(percentage * 1000) / 10,
+            pageNumber: page,
         }]
             : [];
 
-        const children = itemsFromBookNodes(node.nodes, path, info, percentage);
+        const children = itemsFromBookNodes(node.nodes, path, info, page);
         return head.concat(children);
     } else if (isParagraph(node)) {
         return [];
@@ -62,21 +60,23 @@ function itemsFromBookNode(node: BookNode, path: BookPath, info: Info, percentag
     }
 }
 
-function itemsFromBookNodes(nodes: BookNode[], path: BookPath, info: Info, percentage: number): TableOfContentsItem[] {
+function itemsFromBookNodes(nodes: BookNode[], path: BookPath, info: Info, page: number): TableOfContentsItem[] {
     let result: TableOfContentsItem[] = [];
-    let currPercentage = percentage;
+    let currPage = page;
     for (let idx = 0; idx < nodes.length; idx++) {
         const bn = nodes[idx];
-        const toAdd = itemsFromBookNode(bn, path.concat([idx]), info, currPercentage);
+        const toAdd = itemsFromBookNode(bn, path.concat([idx]), info, currPage);
         result = result.concat(toAdd);
-        currPercentage += lengthOfNode(bn) / info.length;
+        const nodeLength = lengthOfNode(bn);
+        currPage += numberOfPages(nodeLength);
     }
 
     return result;
 }
 
-function lengthOfBook(book: BookContent): number {
-    return book.nodes.reduce((len, n) => lengthOfNode(n) + len, 0);
+const pageLength = 1500;
+function numberOfPages(length: number): number {
+    return Math.ceil(length / pageLength);
 }
 
 function lengthOfNode(node: BookNode): number {

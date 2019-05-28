@@ -20,7 +20,7 @@ const TocItemComp: Comp<TocItemProps> = (props =>
         >
             {props.title}
             <DottedLine />
-            {props.percentage.toString()}
+            {props.pageNumber.toString()}
         </StretchLink>
     </Row>
 );
