@@ -173,7 +173,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
             borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
             shadowColor: palette.shadow,
             shadowRadius: 5,
-            [':hover']: {
+            ':hover': {
                 borderWidth: 3,
             },
         }}>

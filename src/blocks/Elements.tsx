@@ -20,7 +20,7 @@ export const ThemedText = themed<TextProps>(props =>
         fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
         color: colors(props)[props.color || 'text'],
         ...(props.hoverColor && {
-            [':hover']: {
+            ':hover': {
                 color: colors(props)[props.hoverColor],
             },
         }),
@@ -41,7 +41,7 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
             fontSize: props.theme.fontSize.normal,
             fontFamily: props.theme.fontFamily,
             color: colors(props).accent,
-            [':hover']: {
+            ':hover': {
                 color: colors(props).highlight,
             },
         }}
