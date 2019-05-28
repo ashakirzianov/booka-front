@@ -78,7 +78,7 @@ export function webPlatform(): WebPlatform {
         return 'chrome';
     }
 
-    const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    const isSafari = !!navigator.userAgent.match(/Version\/[\d.]+.*Safari/);
     const isSafariMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) && !win.MSStream;
     if (isSafari) {
         return isSafariMobile

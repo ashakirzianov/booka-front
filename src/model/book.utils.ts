@@ -102,6 +102,10 @@ export function spanLength(span: Span): number {
 }
 
 export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
+    if (path.length === 0) {
+        return [book.meta.title];
+    }
+
     const iter = bookIterator(book);
     const node = iterateToPath(iter, path);
     if (node) {

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import * as Atoms from './Atoms';
-import { themed, Comp, relative, hoverable, colors } from './comp-utils';
-import { View, ViewStyle } from 'react-native';
+import { themed, Comp, relative, colors } from './comp-utils';
+import { ViewStyle } from 'react-native';
 
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;</span>
@@ -22,7 +22,7 @@ export const Separator: Comp = (() =>
     <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
 );
 
-export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
+export const LinkButton = themed<Atoms.ActionLinkProps>(props =>
     <Atoms.ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',
@@ -31,7 +31,7 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
             fontSize: props.theme.fontSize.normal,
             borderRadius: 10,
             padding: relative(0.3), // TODO: extract somewhere ?
-            [':hover']: {
+            ':hover': {
                 borderColor: colors(props).highlight,
                 color: colors(props).highlight,
             },
@@ -39,7 +39,7 @@ export const LinkButton = hoverable(themed<Atoms.ActionLinkProps>(props =>
             {props.children}
         </div>
     </Atoms.ActionLink>
-));
+);
 
 export const Clickable: Comp<{ onClick: () => void }> = (props =>
     <div onClick={props.onClick}>
@@ -55,7 +55,7 @@ export type OverlayBoxProps = {
     },
 };
 export const OverlayBox = themed<OverlayBoxProps>(props =>
-    <View style={{
+    <div style={{
         alignSelf: 'center',
         backgroundColor: colors(props).secondary,
         width: '100%',
@@ -68,9 +68,10 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
         padding: relative(1),
         ...props.style as any,
     }}
+        onClick={e => e.stopPropagation()}
     >
         {props.children}
-    </View>
+    </div>
 );
 
 export const Article: Comp = (props =>

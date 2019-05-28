@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import {
-    connect, connectActions, Row, relative, Clickable, Modal, PanelLink,
-    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator,
+    connectActions, Row, relative, Clickable, Modal, PanelLink,
+    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator, connectState,
 } from '../blocks';
 import { BookScreen, Book, BookId, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
 import { BookNodesComp } from './Reader';
@@ -157,7 +157,7 @@ const PalettePicker: Comp = (() =>
 );
 
 const HoverableView = hoverable(View);
-const PaletteButton = connect(['theme'], ['setPalette'])<{
+const PaletteButton = connectState('theme')<{
     name: PaletteName,
     text: string,
 }>(props => {
@@ -173,7 +173,7 @@ const PaletteButton = connect(['theme'], ['setPalette'])<{
             borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
             shadowColor: palette.shadow,
             shadowRadius: 5,
-            [':hover']: {
+            ':hover': {
                 borderWidth: 3,
             },
         }}>
