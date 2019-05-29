@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-    ParagraphNode, BookPath, BookRange, BookContent,
-    BookNode, subpathCouldBeInRange, isParagraph,
+    ParagraphNode, BookPath, BookRange, VolumeNode,
+    ContentNode, subpathCouldBeInRange, isParagraph,
     isChapter, inRange, ChapterNode,
 } from '../model';
 import {
@@ -17,7 +17,7 @@ export type Params = {
     quoteRange?: BookRange,
 };
 
-export function buildBook(book: BookContent, params: Params) {
+export function buildBook(book: VolumeNode, params: Params) {
     const head = params.pageRange.start.length === 0
         ? [<BookTitle key={`bt`} text={book.meta.title} />]
         : [];
@@ -26,14 +26,14 @@ export function buildBook(book: BookContent, params: Params) {
         .concat(buildNodes(book.nodes, [], params));
 }
 
-export function buildNodes(nodes: BookNode[], headPath: BookPath, params: Params): JSX.Element[] {
+export function buildNodes(nodes: ContentNode[], headPath: BookPath, params: Params): JSX.Element[] {
     return nodes
         .map((bn, i) => buildNode(bn, headPath.concat([i]), params))
         .reduce((acc, arr) => acc.concat(arr), [])
         ;
 }
 
-function buildNode(node: BookNode, path: BookPath, params: Params) {
+function buildNode(node: ContentNode, path: BookPath, params: Params) {
     if (!subpathCouldBeInRange(path, params.pageRange)) {
         return [];
     }

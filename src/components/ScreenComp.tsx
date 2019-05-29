@@ -50,10 +50,10 @@ const Footer: Comp<BarProps> = (props => {
     }
 
     const currentPage = props.bl.location.location === 'path'
-        ? pageForPath(props.book.content, props.bl.location.path)
+        ? pageForPath(props.book.volume, props.bl.location.path)
         : 1;
     if (props.bl.location.location === 'path') {
-        console.log(pageForPath(props.book.content, props.bl.location.path));
+        console.log(pageForPath(props.book.volume, props.bl.location.path));
     }
     return <>
         <EmptyLine />

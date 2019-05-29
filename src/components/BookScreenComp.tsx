@@ -53,7 +53,7 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         <FootnoteBox
             footnote={
                 props.bl.footnoteId !== undefined
-                    ? footnoteForId(props.book.content, props.bl.footnoteId)
+                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
                     : undefined
             }
         />

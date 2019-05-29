@@ -1,6 +1,6 @@
 import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { BookNode, isChapter, isParagraph, BookContent } from './bookContent';
+import { ContentNode, isChapter, isParagraph, VolumeNode } from './bookVolume';
 import { BookPath } from './bookRange';
 import { nodeLength, numberOfPages } from './book.utils';
 
@@ -21,13 +21,13 @@ export function tableOfContents(title: string, id: BookId, items: TableOfContent
     return { id, title, items };
 }
 
-export function tocFromContent(bookContent: BookContent, id: BookId): TableOfContents {
-    const items = itemsFromBookNodes(bookContent.nodes, [], 1);
+export function tocFromVolume(volume: VolumeNode, id: BookId): TableOfContents {
+    const items = itemsFromBookNodes(volume.nodes, [], 1);
 
-    return tableOfContents(bookContent.meta.title, id, items);
+    return tableOfContents(volume.meta.title, id, items);
 }
 
-function itemsFromBookNode(node: BookNode, path: BookPath, page: number): TableOfContentsItem[] {
+function itemsFromBookNode(node: ContentNode, path: BookPath, page: number): TableOfContentsItem[] {
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = node.title ? [{
             title: node.title[0],
@@ -46,7 +46,7 @@ function itemsFromBookNode(node: BookNode, path: BookPath, page: number): TableO
     }
 }
 
-function itemsFromBookNodes(nodes: BookNode[], path: BookPath, page: number): TableOfContentsItem[] {
+function itemsFromBookNodes(nodes: ContentNode[], path: BookPath, page: number): TableOfContentsItem[] {
     let result: TableOfContentsItem[] = [];
     let currPage = page;
     for (let idx = 0; idx < nodes.length; idx++) {

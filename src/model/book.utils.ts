@@ -1,4 +1,4 @@
-import { BookNode, isChapter, isParagraph, BookContent, Span } from './bookContent';
+import { ContentNode, isChapter, isParagraph, VolumeNode, Span } from './bookVolume';
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
 import {
@@ -7,11 +7,11 @@ import {
 } from './bookIterator';
 import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound, ChapterTitle } from '../contracts';
 
-export function footnoteForId(book: BookContent, id: string): FootnoteSpan | undefined {
+export function footnoteForId(book: VolumeNode, id: string): FootnoteSpan | undefined {
     return firstDefined(book.nodes, n => footnoteFromNode(n, id));
 }
 
-function footnoteFromNode(bookNode: BookNode, id: string): FootnoteSpan | undefined {
+function footnoteFromNode(bookNode: ContentNode, id: string): FootnoteSpan | undefined {
     if (isChapter(bookNode)) {
         return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
     } else if (isParagraph(bookNode)) {
@@ -33,7 +33,7 @@ function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
     }
 }
 
-export function computeRangeForPath(book: BookContent, path: BookPath): BookRange {
+export function computeRangeForPath(book: VolumeNode, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);
     const chapter = findChapterLevel(iterator);
 
@@ -58,7 +58,7 @@ function findChapterLevel(i: OptParentIterator): OptBookIterator {
     }
 }
 
-export function countToPath(nodes: BookNode[], path: BookPath): number {
+export function countToPath(nodes: ContentNode[], path: BookPath): number {
     if (path.length > 0) {
         const head = path[0];
         const countFront = nodes
@@ -77,7 +77,7 @@ export function countToPath(nodes: BookNode[], path: BookPath): number {
     }
 }
 
-function countElements(node: BookNode): number {
+function countElements(node: ContentNode): number {
     if (isParagraph(node)) {
         return 1;
     } else if (isChapter(node)) {
@@ -89,7 +89,7 @@ function countElements(node: BookNode): number {
     }
 }
 
-export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
+export function titleForPath(book: VolumeNode, path: BookPath): ChapterTitle {
     if (path.length === 0) {
         return [book.meta.title];
     }
@@ -108,13 +108,13 @@ export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
 }
 
 // TODO: fix !!!
-export function pageForPath(book: BookContent, path: BookPath) {
+export function pageForPath(book: VolumeNode, path: BookPath) {
     const page = pageForPathImpl(book.nodes, path, 1);
 
     return page || 1;
 }
 
-function pageForPathImpl(nodes: BookNode[], path: BookPath, page: number): number | undefined {
+function pageForPathImpl(nodes: ContentNode[], path: BookPath, page: number): number | undefined {
     if (path.length === 0) {
         return page;
     }
@@ -167,7 +167,7 @@ export function numberOfPages(length: number): number {
     return Math.ceil(length / pageLength);
 }
 
-export function nodeLength(node: BookNode): number {
+export function nodeLength(node: ContentNode): number {
     if (isChapter(node)) {
         return node.nodes.reduce((len, n) => len + nodeLength(n), 0);
     } else if (isParagraph(node)) {

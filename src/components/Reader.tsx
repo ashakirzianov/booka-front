@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-    BookPath, BookId, bookLocator, BookRange, BookNode,
-    BookContent, bookRange, locationPath, parentPath, titleForPath,
+    BookPath, BookId, bookLocator, BookRange, ContentNode,
+    VolumeNode, bookRange, locationPath, parentPath, titleForPath,
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText, ScrollView,
@@ -16,7 +16,7 @@ import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRe
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
-    content: BookContent,
+    volume: VolumeNode,
     pathToNavigate: BookPath | null,
     updateBookPosition: Callback<BookPath>,
     range: BookRange,
@@ -83,9 +83,9 @@ export class Reader extends React.Component<ReaderProps> {
     }
 
     public render() {
-        const { range, prevPath, nextPath, id, content } = this.props;
-        const prevTitle = prevPath && titleForPath(content, prevPath)[0];
-        const nextTitle = nextPath && titleForPath(content, nextPath)[0];
+        const { range, prevPath, nextPath, id, volume } = this.props;
+        const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
+        const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
         const params: Params = {
             pageRange: range,
             refPathHandler: (ref, path) => {
@@ -102,7 +102,7 @@ export class Reader extends React.Component<ReaderProps> {
                 <ThemedText style={{
                     textAlign: 'justify',
                 }}>
-                    {buildBook(content, params)}
+                    {buildBook(volume, params)}
                 </ThemedText>
             </Column>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
@@ -110,7 +110,7 @@ export class Reader extends React.Component<ReaderProps> {
     }
 }
 
-export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
     <ThemedText>
         {
             buildNodes(props.nodes, [], {
