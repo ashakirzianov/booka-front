@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, relative, BottomBar,
+    Column, TopBar, relative, BottomBar, Label,
 } from '../blocks';
-import { AppScreen } from '../model';
+import { AppScreen, pageForPath } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
@@ -45,11 +45,22 @@ const Header: Comp<BarProps> = (props =>
 );
 
 const Footer: Comp<BarProps> = (props => {
-    return props.screen !== 'book' ? null :
-        <>
-            <EmptyLine />
-            <BottomBar open={props.controlsVisible}>
-                <Row />
-            </BottomBar>
-        </>;
+    if (props.screen !== 'book') {
+        return null;
+    }
+
+    const currentPage = props.bl.location.location === 'path'
+        ? pageForPath(props.book.content, props.bl.location.path)
+        : 1;
+    if (props.bl.location.location === 'path') {
+        console.log(pageForPath(props.book.content, props.bl.location.path));
+    }
+    return <>
+        <EmptyLine />
+        <BottomBar open={props.controlsVisible}>
+            <Row>
+                <Label text={currentPage.toString()} />
+            </Row>
+        </BottomBar>
+    </>;
 });

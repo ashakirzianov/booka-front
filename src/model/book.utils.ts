@@ -107,10 +107,41 @@ export function titleForPath(book: BookContent, path: BookPath): ChapterTitle {
     }
 }
 
+// TODO: fix !!!
 export function pageForPath(book: BookContent, path: BookPath) {
-    const iter = bookIterator(book);
-    const node = iterateToPath(iter, path);
-    return pageForIterator(node);
+    const page = pageForPathImpl(book.nodes, path, 1);
+
+    return page || 1;
+}
+
+function pageForPathImpl(nodes: BookNode[], path: BookPath, page: number): number | undefined {
+    if (path.length === 0) {
+        return page;
+    }
+
+    const head = path[0];
+    const headNode = nodes[head];
+    if (!headNode) {
+        return undefined;
+    }
+
+    const before = nodes
+        .slice(0, head)
+        .reduce((len, n) => len + nodeLength(n), 0);
+    const headPage = page + numberOfPages(before);
+    if (isChapter(headNode)) {
+        return pageForPathImpl(headNode.nodes, path.slice(1), headPage);
+    } else if (isParagraph(headNode)) {
+        if (path.length === 2) {
+            return headPage;
+        } else if (path.length === 1) {
+            return headPage;
+        } else {
+            return undefined;
+        }
+    } else {
+        return undefined;
+    }
 }
 
 export function pageForIterator(bookIter: OptParentIterator): number {
