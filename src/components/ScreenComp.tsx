@@ -2,19 +2,22 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, relative, BottomBar, PlainText, ThemedText,
+    Column, TopBar, relative, BottomBar, ThemedText, Link,
 } from '../blocks';
 import { AppScreen, Pagination } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
+import { actionCreators } from '../redux';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
     <Column style={{ width: '100%', alignItems: 'center' }}>
         {props.loading ? <FullScreenActivityIndicator /> : null}
         <Header {...props} />
-        <Content {...props} />
         <Footer {...props} />
+        <EmptyLine />
+        <Content {...props} />
+        <EmptyLine />
     </Column>
 );
 
@@ -30,18 +33,15 @@ type BarProps = AppScreen & {
     controlsVisible: boolean,
 };
 const Header: Comp<BarProps> = (props =>
-    <>
-        <TopBar open={props.controlsVisible}>
-            <Row>
-                {
-                    props.screen === 'library' ? <LibraryScreenHeader />
-                        : props.screen === 'book' ? <BookScreenHeader {...props} />
-                            : assertNever(props)
-                }
-            </Row>
-        </TopBar>
-        <EmptyLine />
-    </>
+    <TopBar open={props.controlsVisible}>
+        <Row>
+            {
+                props.screen === 'library' ? <LibraryScreenHeader />
+                    : props.screen === 'book' ? <BookScreenHeader {...props} />
+                        : assertNever(props)
+            }
+        </Row>
+    </TopBar>
 );
 
 const Footer: Comp<BarProps> = (props => {
@@ -58,28 +58,35 @@ const Footer: Comp<BarProps> = (props => {
         currentPage = pagination.pageForPath(path);
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
-    return <>
-        <EmptyLine />
-        <BottomBar open={props.controlsVisible}>
-
-            <ThemedText
-                size='smallest'
-                fixedSize={true}
-                family='menu'
-                color='accent'
-            >
-                <Row style={{
-                    justifyContent: 'space-between',
-                }}>
-                    <Column />
-                    <Column>
-                        <PlainText>{`${currentPage} of ${total}`}</PlainText>
-                    </Column>
-                    <Column>
-                        <PlainText>{`${left} left`}</PlainText>
-                    </Column>
-                </Row>
-            </ThemedText>
-        </BottomBar>
-    </>;
+    return <BottomBar open={props.controlsVisible}>
+        <Row style={{
+            justifyContent: 'space-between',
+        }}>
+            <Column />
+            <Column>
+                <Link action={actionCreators.toggleToc()}>
+                    <ThemedText
+                        size='smallest'
+                        fixedSize={true}
+                        family='menu'
+                        color='accent'
+                    >
+                        {`${currentPage} of ${total}`}
+                    </ThemedText>
+                </Link>
+            </Column>
+            <Column>
+                <Link>
+                    <ThemedText
+                        size='smallest'
+                        fixedSize={true}
+                        family='menu'
+                        color='accent'
+                    >
+                        {`${left} left`}
+                    </ThemedText>
+                </Link>
+            </Column>
+        </Row>
+    </BottomBar>;
 });

@@ -4,7 +4,7 @@ import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
     Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator, connectState,
 } from '../blocks';
-import { BookScreen, Book, BookId, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
+import { BookScreen, Book, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
 import { BookNodesComp } from './Reader';
 
 import { BookComp } from './BookComp';
@@ -15,7 +15,6 @@ export const BookScreenHeader: Comp<BookScreen> = (props =>
     <Line>
         <Row>
             <LibButton key='back' />
-            <OpenTocButton key='toc' bi={props.bl.id} />
         </Row>
         <Row>
             <AppearanceButton key='appearance' />
@@ -25,10 +24,6 @@ export const BookScreenHeader: Comp<BookScreen> = (props =>
 
 const LibButton: Comp = (() =>
     <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
-);
-
-const OpenTocButton: Comp<{ bi: BookId }> = (props =>
-    <PanelLink icon='items' action={actionCreators.toggleToc()} />
 );
 
 const AppearanceButton: Comp = (() =>
