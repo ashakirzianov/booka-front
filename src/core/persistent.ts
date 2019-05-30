@@ -95,6 +95,7 @@ const defaultTheme: Theme = {
         menu: 'San Francisco',
     },
     fontSizes: {
+        smallest: 14,
         small: 22,
         normal: 26,
         large: 30,

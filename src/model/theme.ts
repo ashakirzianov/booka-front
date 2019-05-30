@@ -16,6 +16,7 @@ export type Palette = {
     },
 };
 export type FontSizes = {
+    smallest: FontSize,
     small: FontSize,
     normal: FontSize,
     large: FontSize,
