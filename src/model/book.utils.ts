@@ -3,7 +3,7 @@ import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
 import {
     iterateToPath, bookIterator, nextIterator, buildPath,
-    OptBookIterator, OptParentIterator,
+    OptBookIterator, OptParentIterator, nextChapter, iterateUntilCan,
 } from './bookIterator';
 import {
     FootnoteSpan, isSimple, isAttributed, isFootnote,
@@ -40,11 +40,11 @@ export function computeRangeForPath(book: VolumeNode, path: BookPath): BookRange
     const iterator = iterateToPath(bookIterator(book), path);
     const chapter = findChapterLevel(iterator);
 
-    const nextChapter = nextIterator(chapter);
+    const next = nextIterator(chapter);
 
     const range = bookRange(
         buildPath(chapter),
-        nextChapter && buildPath(nextChapter)
+        next && buildPath(next)
     );
 
     return range;
@@ -143,7 +143,20 @@ export class Pagination {
     }
 
     public totalPages(): number {
-        return pagesInNodes(this.volume.nodes);
+        return pagesInNodes(this.volume.nodes) + 1;
+    }
+
+    public lastPageOfChapter(path: BookPath): number {
+        const rootIter = bookIterator(this.volume);
+        const pathIter = iterateUntilCan(rootIter, path);
+        const nc = nextChapter(pathIter);
+        if (nc) {
+            const ncPath = buildPath(nc);
+            const last = this.pageForPath(ncPath);
+            return last;
+        } else {
+            return this.totalPages();
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookRange';
 import { ContentNode, VolumeNode, children } from './bookVolume';
+import { isChapter } from '../contracts';
 
 export type RootIterator = {
     node: undefined,
@@ -35,6 +36,17 @@ export function iterateToPath(iterator: ParentIterator, path: BookPath): OptBook
         const next = nthSibling(iterator.firstChildren(), head);
         const tail = pathTail(path);
         return next ? iterateToPath(next, tail) : undefined;
+    }
+}
+
+export function iterateUntilCan(iterator: ParentIterator, path: BookPath): OptParentIterator {
+    const head = pathHead(path);
+    if (head === undefined) {
+        return iterator.node ? iterator : undefined;
+    } else {
+        const next = nthSibling(iterator.firstChildren(), head);
+        const tail = pathTail(path);
+        return next ? iterateUntilCan(next, tail) : iterator;
     }
 }
 
@@ -95,6 +107,15 @@ export function prevIterator(i: OptParentIterator): OptBookIterator {
     } else {
         return prevIterator(i.parent);
     }
+}
+
+export function nextChapter(i: OptParentIterator): OptParentIterator {
+    let next = nextIterator(i);
+    while (next && !isChapter(next.node)) {
+        next = nextIterator(next);
+    }
+
+    return next;
 }
 
 export function buildPath(i: OptParentIterator): BookPath {
