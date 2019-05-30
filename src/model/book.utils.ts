@@ -5,7 +5,10 @@ import {
     iterateToPath, bookIterator, nextIterator, buildPath,
     OptBookIterator, OptParentIterator,
 } from './bookIterator';
-import { FootnoteSpan, isSimple, isAttributed, isFootnote, isCompound, ChapterTitle } from '../contracts';
+import {
+    FootnoteSpan, isSimple, isAttributed, isFootnote,
+    isCompound, ChapterTitle, BookNode, hasSubnodes,
+} from '../contracts';
 
 export function footnoteForId(book: VolumeNode, id: string): FootnoteSpan | undefined {
     return firstDefined(book.nodes, n => footnoteFromNode(n, id));
@@ -107,66 +110,6 @@ export function titleForPath(book: VolumeNode, path: BookPath): ChapterTitle {
     }
 }
 
-// TODO: fix !!!
-export function pageForPath(book: VolumeNode, path: BookPath) {
-    const page = pageForPathImpl(book.nodes, path, 1);
-
-    return page || 1;
-}
-
-function pageForPathImpl(nodes: ContentNode[], path: BookPath, page: number): number | undefined {
-    if (path.length === 0) {
-        return page;
-    }
-
-    const head = path[0];
-    const headNode = nodes[head];
-    if (!headNode) {
-        return undefined;
-    }
-
-    const before = nodes
-        .slice(0, head)
-        .reduce((len, n) => len + nodeLength(n), 0);
-    const headPage = page + numberOfPages(before);
-    if (isChapter(headNode)) {
-        return pageForPathImpl(headNode.nodes, path.slice(1), headPage);
-    } else if (isParagraph(headNode)) {
-        if (path.length === 2) {
-            return headPage;
-        } else if (path.length === 1) {
-            return headPage;
-        } else {
-            return undefined;
-        }
-    } else {
-        return undefined;
-    }
-}
-
-export function pageForIterator(bookIter: OptParentIterator): number {
-    if (!bookIter || bookIter.node === undefined) {
-        return 1;
-    }
-
-    const prev = bookIter.prevSibling();
-    if (prev) {
-        const prevStart = pageForIterator(prev);
-        const prevLength = nodeLength(prev.node);
-        const prevPages = numberOfPages(prevLength);
-
-        return prevStart + prevPages;
-    } else {
-        const parentStart = pageForIterator(bookIter.parent);
-        return parentStart;
-    }
-}
-
-const pageLength = 1500;
-export function numberOfPages(length: number): number {
-    return Math.ceil(length / pageLength);
-}
-
 export function nodeLength(node: ContentNode): number {
     if (isChapter(node)) {
         return node.nodes.reduce((len, n) => len + nodeLength(n), 0);
@@ -190,4 +133,51 @@ export function spanLength(span: Span): number {
     } else {
         return assertNever(span);
     }
+}
+
+export function pageForPath(node: BookNode, path: BookPath): number {
+    if (path.length === 0) {
+        return 1;
+    }
+
+    if (isParagraph(node)) {
+        // TODO: handle remaining path properly!
+        return 1;
+    } else if (hasSubnodes(node)) {
+        const headPath = path[0];
+        const tailPath = path.slice(1);
+        const priorNodes = node.nodes.slice(0, headPath);
+        const before = pagesInNodes(priorNodes);
+        const headNode = node.nodes[headPath];
+        if (!headNode) {
+            // TODO: handle this unexpected situation
+            return before + 1;
+        }
+        const inside = pageForPath(headNode, tailPath);
+        return before + inside;
+    } else {
+        return assertNever(node);
+    }
+}
+
+function pagesInNodes(nodes: ContentNode[]): number {
+    let result = 0;
+    let currentTextLength = 0;
+    for (const node of nodes) {
+        if (isChapter(node)) {
+            result += numberOfPages(currentTextLength);
+            currentTextLength = 0;
+            result += pagesInNodes(node.nodes);
+        } else if (isParagraph(node)) {
+            currentTextLength += nodeLength(node);
+        }
+    }
+
+    result += numberOfPages(currentTextLength);
+    return result;
+}
+
+const pageLength = 1500;
+export function numberOfPages(length: number): number {
+    return Math.ceil(length / pageLength);
 }
