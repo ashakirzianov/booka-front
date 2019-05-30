@@ -92,6 +92,7 @@ const defaultTheme: Theme = {
     currentPalette: 'light',
     fontFamily: 'Georgia',
     fontSize: {
+        small: 22,
         normal: 26,
         large: 30,
         largest: 36,

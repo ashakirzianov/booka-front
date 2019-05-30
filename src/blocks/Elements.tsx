@@ -11,12 +11,12 @@ export * from './Elements.platform';
 type TextProps = {
     style?: Atoms.AtomTextStyle,
     size?: keyof Theme['fontSize'],
-    fixed?: boolean,
+    fixedSize?: boolean,
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
 export const ThemedText = themed<TextProps>(props => {
-    const fontScale = props.fixed ? 1 : props.theme.fontScale;
+    const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSize[props.size || 'normal'] * fontScale;
     return <Atoms.Text style={{
         fontSize,

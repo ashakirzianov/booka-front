@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, relative, BottomBar, Label,
+    Column, TopBar, relative, BottomBar, ThemedText,
 } from '../blocks';
 import { AppScreen, pageForPath } from '../model';
 import { assertNever } from '../utils';
@@ -55,8 +55,8 @@ const Footer: Comp<BarProps> = (props => {
     return <>
         <EmptyLine />
         <BottomBar open={props.controlsVisible}>
-            <Row>
-                <Label text={currentPage.toString()} />
+            <Row style={{ justifyContent: 'center' }}>
+                <ThemedText size='small' fixedSize={true}>{currentPage}</ThemedText>
             </Row>
         </BottomBar>
     </>;
