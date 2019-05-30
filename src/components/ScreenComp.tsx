@@ -56,7 +56,9 @@ const Footer: Comp<BarProps> = (props => {
         <EmptyLine />
         <BottomBar open={props.controlsVisible}>
             <Row style={{ justifyContent: 'center' }}>
-                <ThemedText size='small' fixedSize={true}>{currentPage}</ThemedText>
+                <ThemedText size='small' fixedSize={true} family='menu'>
+                    {currentPage}
+                </ThemedText>
             </Row>
         </BottomBar>
     </>;

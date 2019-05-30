@@ -38,6 +38,6 @@ export type Theme = {
     currentPalette: PaletteName,
     fontScale: number,
     fontFamilies: FontFamilies,
-    fontSize: FontSizes,
+    fontSizes: FontSizes,
     radius: number,
 };

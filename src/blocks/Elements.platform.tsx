@@ -28,7 +28,7 @@ export const LinkButton = themed<Atoms.ActionLinkProps>(props =>
             borderStyle: 'solid',
             borderColor: colors(props).accent,
             color: colors(props).accent,
-            fontSize: props.theme.fontSize.normal,
+            fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
             padding: relative(0.3), // TODO: extract somewhere ?
             ':hover': {

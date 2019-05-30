@@ -94,7 +94,7 @@ const defaultTheme: Theme = {
         main: 'Georgia',
         menu: 'San Francisco',
     },
-    fontSize: {
+    fontSizes: {
         small: 22,
         normal: 26,
         large: 30,

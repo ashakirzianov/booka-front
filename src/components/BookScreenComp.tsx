@@ -179,7 +179,7 @@ const PaletteButton = connectState('theme')<{
         }}>
             <Row style={{ justifyContent: 'center' }}>
                 <PlainText style={{
-                    fontSize: props.theme.fontSize.normal,
+                    fontSize: props.theme.fontSizes.normal,
                     color: palette.text,
                 }}>{props.text}</PlainText>
             </Row>
