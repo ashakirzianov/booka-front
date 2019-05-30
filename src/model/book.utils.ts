@@ -141,6 +141,10 @@ export class Pagination {
     public pageForPath(path: BookPath): number {
         return pageForPath(this.volume, path);
     }
+
+    public totalPages(): number {
+        return pagesInNodes(this.volume.nodes);
+    }
 }
 
 export function pageForPath(node: BookNode, path: BookPath): number {

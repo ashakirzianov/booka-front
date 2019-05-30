@@ -4,7 +4,7 @@ import {
     connectState, Comp, Row, FullScreenActivityIndicator,
     Column, TopBar, relative, BottomBar, ThemedText,
 } from '../blocks';
-import { AppScreen, pageForPath } from '../model';
+import { AppScreen, Pagination } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
@@ -49,9 +49,12 @@ const Footer: Comp<BarProps> = (props => {
         return null;
     }
 
+    const pagination = new Pagination(props.book.volume);
+
     const currentPage = props.bl.location.location === 'path'
-        ? pageForPath(props.book.volume, props.bl.location.path)
+        ? pagination.pageForPath(props.bl.location.path)
         : 1;
+    const total = pagination.totalPages();
     return <>
         <EmptyLine />
         <BottomBar open={props.controlsVisible}>
@@ -62,7 +65,7 @@ const Footer: Comp<BarProps> = (props => {
                     family='menu'
                     color='accent'
                 >
-                    {currentPage}
+                    {`${currentPage} of ${total}`}
                 </ThemedText>
             </Row>
         </BottomBar>
