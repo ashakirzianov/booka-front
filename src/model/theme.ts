@@ -1,4 +1,4 @@
-export type FontFamily = 'Georgia' | 'San Francisco';
+export type FontFamily = 'Georgia' | 'San Francisco' | 'Helvetica';
 export type FontSize = number;
 export type Color = string;
 

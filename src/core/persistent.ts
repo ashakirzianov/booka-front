@@ -92,7 +92,7 @@ const defaultTheme: Theme = {
     currentPalette: 'light',
     fontFamilies: {
         main: 'Georgia',
-        menu: 'San Francisco',
+        menu: 'Helvetica',
     },
     fontSizes: {
         smallest: 14,
