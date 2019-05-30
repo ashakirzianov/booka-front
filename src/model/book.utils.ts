@@ -135,6 +135,14 @@ export function spanLength(span: Span): number {
     }
 }
 
+export class Pagination {
+    constructor(readonly volume: VolumeNode) { }
+
+    public pageForPath(path: BookPath): number {
+        return pageForPath(this.volume, path);
+    }
+}
+
 export function pageForPath(node: BookNode, path: BookPath): number {
     if (path.length === 0) {
         return 1;

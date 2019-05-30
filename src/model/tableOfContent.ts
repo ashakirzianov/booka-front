@@ -2,7 +2,7 @@ import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import { ContentNode, isChapter, isParagraph, VolumeNode } from './bookVolume';
 import { BookPath } from './bookRange';
-import { nodeLength, numberOfPages } from './book.utils';
+import { Pagination } from './book.utils';
 
 export type TableOfContentsItem = {
     title: string,
@@ -22,22 +22,21 @@ export function tableOfContents(title: string, id: BookId, items: TableOfContent
 }
 
 export function tocFromVolume(volume: VolumeNode, id: BookId): TableOfContents {
-    const items = itemsFromBookNodes(volume.nodes, [], 1);
+    const items = itemsFromBookNodes(volume.nodes, [], new Pagination(volume));
 
     return tableOfContents(volume.meta.title, id, items);
 }
 
-function itemsFromBookNode(node: ContentNode, path: BookPath, page: number): TableOfContentsItem[] {
+function itemsFromBookNode(node: ContentNode, path: BookPath, pagination: Pagination): TableOfContentsItem[] {
     if (isChapter(node)) {
-        const head: TableOfContentsItem[] = node.title ? [{
+        const head: TableOfContentsItem[] = [{
             title: node.title[0],
             level: node.level,
             path: path,
-            pageNumber: page,
-        }]
-            : [];
+            pageNumber: pagination.pageForPath(path),
+        }];
 
-        const children = itemsFromBookNodes(node.nodes, path, page);
+        const children = itemsFromBookNodes(node.nodes, path, pagination);
         return head.concat(children);
     } else if (isParagraph(node)) {
         return [];
@@ -46,15 +45,12 @@ function itemsFromBookNode(node: ContentNode, path: BookPath, page: number): Tab
     }
 }
 
-function itemsFromBookNodes(nodes: ContentNode[], path: BookPath, page: number): TableOfContentsItem[] {
+function itemsFromBookNodes(nodes: ContentNode[], path: BookPath, pagination: Pagination): TableOfContentsItem[] {
     let result: TableOfContentsItem[] = [];
-    let currPage = page;
     for (let idx = 0; idx < nodes.length; idx++) {
         const bn = nodes[idx];
-        const toAdd = itemsFromBookNode(bn, path.concat([idx]), currPage);
+        const toAdd = itemsFromBookNode(bn, path.concat([idx]), pagination);
         result = result.concat(toAdd);
-        const charLength = nodeLength(bn);
-        currPage += numberOfPages(charLength);
     }
 
     return result;
