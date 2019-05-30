@@ -11,13 +11,16 @@ export * from './Elements.platform';
 type TextProps = {
     style?: Atoms.AtomTextStyle,
     size?: keyof Theme['fontSize'],
+    fixed?: boolean,
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const ThemedText = themed<TextProps>(props =>
-    <Atoms.Text style={{
+export const ThemedText = themed<TextProps>(props => {
+    const fontScale = props.fixed ? 1 : props.theme.fontScale;
+    const fontSize = props.theme.fontSize[props.size || 'normal'] * fontScale;
+    return <Atoms.Text style={{
+        fontSize,
         fontFamily: props.theme.fontFamily,
-        fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
         color: colors(props)[props.color || 'text'],
         ...(props.hoverColor && {
             ':hover': {
@@ -27,8 +30,8 @@ export const ThemedText = themed<TextProps>(props =>
         ...props.style,
     }}>
         {props.children}
-    </Atoms.Text>
-);
+    </Atoms.Text>;
+});
 
 export const PlainText = Atoms.Text;
 
