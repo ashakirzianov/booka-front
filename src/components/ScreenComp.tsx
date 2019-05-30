@@ -70,6 +70,9 @@ const Footer: Comp<BarProps> = (props => {
                         fixedSize={true}
                         family='menu'
                         color='accent'
+                        style={{
+                            fontWeight: 'bold',
+                        }}
                     >
                         {`${currentPage} of ${total}`}
                     </ThemedText>
