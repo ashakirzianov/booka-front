@@ -90,7 +90,10 @@ const defaultTheme: Theme = {
         },
     },
     currentPalette: 'light',
-    fontFamily: 'Georgia',
+    fontFamilies: {
+        main: 'Georgia',
+        menu: 'San Francisco',
+    },
     fontSize: {
         small: 22,
         normal: 26,

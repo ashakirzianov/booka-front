@@ -21,6 +21,10 @@ export type FontSizes = {
     large: FontSize,
     largest: FontSize,
 };
+export type FontFamilies = {
+    main: FontFamily,
+    menu: FontFamily,
+};
 
 export type Palettes = {
     light: Palette,
@@ -33,7 +37,7 @@ export type Theme = {
     palettes: Palettes,
     currentPalette: PaletteName,
     fontScale: number,
-    fontFamily: FontFamily,
+    fontFamilies: FontFamilies,
     fontSize: FontSizes,
     radius: number,
 };

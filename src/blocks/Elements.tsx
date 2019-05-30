@@ -10,6 +10,7 @@ export * from './Elements.platform';
 
 type TextProps = {
     style?: Atoms.AtomTextStyle,
+    family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSize'],
     fixedSize?: boolean,
     color?: keyof Palette['colors'],
@@ -18,9 +19,10 @@ type TextProps = {
 export const ThemedText = themed<TextProps>(props => {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSize[props.size || 'normal'] * fontScale;
+    const fontFamily = props.theme.fontFamilies[props.family || 'main'];
     return <Atoms.Text style={{
         fontSize,
-        fontFamily: props.theme.fontFamily,
+        fontFamily,
         color: colors(props)[props.color || 'text'],
         ...(props.hoverColor && {
             ':hover': {
@@ -42,7 +44,7 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
         style={{
             ...props.style,
             fontSize: props.theme.fontSize.normal,
-            fontFamily: props.theme.fontFamily,
+            fontFamily: props.theme.fontFamilies.main,
             color: colors(props).accent,
             ':hover': {
                 color: colors(props).highlight,
