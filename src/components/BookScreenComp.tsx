@@ -2,9 +2,13 @@ import * as React from 'react';
 
 import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
-    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator, connectState,
+    Comp, WithPopover, Line, Column, Link, PlainText,
+    hoverable, View, Separator, connectState, ThemedText,
 } from '../blocks';
-import { BookScreen, Book, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
+import {
+    BookScreen, Book, TableOfContents, PaletteName, BookRange,
+    FootnoteSpan, footnoteForId, Pagination,
+} from '../model';
 import { BookNodesComp } from './Reader';
 
 import { BookComp } from './BookComp';
@@ -22,18 +26,50 @@ export const BookScreenHeader: Comp<BookScreen> = (props =>
     </Line>
 );
 
-const LibButton: Comp = (() =>
-    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
-);
+export const BookScreenFooter: Comp<BookScreen> = (props => {
 
-const AppearanceButton: Comp = (() =>
-    <WithPopover
-        placement='bottom'
-        body={<ThemePicker />}
-    >
-        {onClick => <PanelLink icon='letter' onClick={onClick} />}
-    </WithPopover>
-);
+    const pagination = new Pagination(props.book.volume);
+    const total = pagination.totalPages();
+    let currentPage = 1;
+    let left = 0;
+    if (props.bl.location.location === 'path') {
+        const path = props.bl.location.path;
+        currentPage = pagination.pageForPath(path);
+        left = pagination.lastPageOfChapter(path) - currentPage;
+    }
+    return <Row style={{
+        justifyContent: 'space-between',
+    }}>
+        <Column />
+        <Column>
+            <Link action={actionCreators.toggleToc()}>
+                <ThemedText
+                    size='smallest'
+                    fixedSize={true}
+                    family='menu'
+                    color='accent'
+                    style={{
+                        fontWeight: 'bold',
+                    }}
+                >
+                    {`${currentPage} of ${total}`}
+                </ThemedText>
+            </Link>
+        </Column>
+        <Column>
+            <Link>
+                <ThemedText
+                    size='smallest'
+                    fixedSize={true}
+                    family='menu'
+                    color='accent'
+                >
+                    {`${left} left`}
+                </ThemedText>
+            </Link>
+        </Column>
+    </Row>;
+});
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
@@ -54,6 +90,20 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         />
     </>
 );
+
+const LibButton: Comp = (() =>
+    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
+);
+
+const AppearanceButton: Comp = (() =>
+    <WithPopover
+        placement='bottom'
+        body={<ThemePicker />}
+    >
+        {onClick => <PanelLink icon='letter' onClick={onClick} />}
+    </WithPopover>
+);
+
 type BookTextProps = {
     book: Book,
     quoteRange: BookRange | undefined,
