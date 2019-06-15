@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Comp, themed, relative, colors } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
-import { Theme, Palette } from '../model';
+import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
@@ -74,6 +74,19 @@ export const PanelLink: Comp<PanelLinkProps> = (props =>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
     </Link>
+);
+
+export const TagButton: Comp<{ color: Color }> = (props =>
+    <View style={{
+        justifyContent: 'center',
+        backgroundColor: props.color,
+        borderRadius: 50,
+        padding: relative(0.2),
+    }}>
+        <Atoms.Row style={{ justifyContent: 'center' }}>
+            {props.children}
+        </Atoms.Row>
+    </View>
 );
 
 export const StretchLink = themed<Atoms.ActionLinkProps>(props =>

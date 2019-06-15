@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
     Comp, WithPopover, Line, Column, Link, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -92,23 +92,16 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
 type TocButtonProps = { current: number, total: number };
 const TocButton = themed<TocButtonProps>(props =>
     <Link action={actionCreators.toggleToc()}>
-        <View style={{
-            justifyContent: 'center',
-            backgroundColor: colors(props).accent,
-            borderRadius: 50,
-            padding: relative(0.2),
-        }}>
-            <Row style={{ justifyContent: 'center' }}>
-                <ThemedText
-                    size='smallest'
-                    fixedSize={true}
-                    family='menu'
-                    color='secondary'
-                >
-                    {`${props.current} of ${props.total}`}
-                </ThemedText>
-            </Row>
-        </View>
+        <TagButton color={colors(props).accent}>
+            <ThemedText
+                size='smallest'
+                fixedSize={true}
+                family='menu'
+                color='secondary'
+            >
+                {`${props.current} of ${props.total}`}
+            </ThemedText>
+        </TagButton>
     </Link>
 );
 
