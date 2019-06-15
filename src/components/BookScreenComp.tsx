@@ -15,6 +15,26 @@ import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../redux';
 
+export const BookScreenComp: Comp<BookScreen> = (props =>
+    <>
+        <BookText
+            book={props.book}
+            quoteRange={props.bl.quote}
+        />
+        <TableOfContentsBox
+            toc={props.book.toc}
+            open={props.bl.toc}
+        />
+        <FootnoteBox
+            footnote={
+                props.bl.footnoteId !== undefined
+                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
+                    : undefined
+            }
+        />
+    </>
+);
+
 export const BookScreenHeader: Comp<BookScreen> = (props =>
     <Line>
         <Row>
@@ -47,16 +67,7 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             justifyContent: 'center',
         }}>
             <Row style={{ justifyContent: 'center' }}>
-                <Link action={actionCreators.toggleToc()}>
-                    <ThemedText
-                        size='smallest'
-                        fixedSize={true}
-                        family='menu'
-                        color='accent'
-                    >
-                        {`${currentPage} of ${total}`}
-                    </ThemedText>
-                </Link>
+                <TocButton current={currentPage} total={total} />
             </Row>
         </Column>
         <Column style={{
@@ -78,24 +89,17 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
     </Row>;
 });
 
-export const BookScreenComp: Comp<BookScreen> = (props =>
-    <>
-        <BookText
-            book={props.book}
-            quoteRange={props.bl.quote}
-        />
-        <TableOfContentsBox
-            toc={props.book.toc}
-            open={props.bl.toc}
-        />
-        <FootnoteBox
-            footnote={
-                props.bl.footnoteId !== undefined
-                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
-                    : undefined
-            }
-        />
-    </>
+const TocButton: Comp<{ current: number, total: number }> = (props =>
+    <Link action={actionCreators.toggleToc()}>
+        <ThemedText
+            size='smallest'
+            fixedSize={true}
+            family='menu'
+            color='accent'
+        >
+            {`${props.current} of ${props.total}`}
+        </ThemedText>
+    </Link>
 );
 
 const LibButton: Comp = (() =>
