@@ -3,21 +3,26 @@ import * as React from 'react';
 import { Comp, themed, relative, colors } from './comp-utils';
 import * as Atoms from './Atoms';
 import { View } from 'react-native';
-import { Theme, Palette } from '../model';
+import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
 
 export * from './Elements.platform';
 
 type TextProps = {
     style?: Atoms.AtomTextStyle,
-    size?: keyof Theme['fontSize'],
+    family?: keyof Theme['fontFamilies'],
+    size?: keyof Theme['fontSizes'],
+    fixedSize?: boolean,
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const ThemedText = themed<TextProps>(props =>
-    <Atoms.Text style={{
-        fontFamily: props.theme.fontFamily,
-        fontSize: props.theme.fontSize[props.size || 'normal'] * props.theme.fontScale,
+export const ThemedText = themed<TextProps>(props => {
+    const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
+    const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
+    const fontFamily = props.theme.fontFamilies[props.family || 'main'];
+    return <Atoms.Text style={{
+        fontSize,
+        fontFamily,
         color: colors(props)[props.color || 'text'],
         ...(props.hoverColor && {
             ':hover': {
@@ -27,8 +32,8 @@ export const ThemedText = themed<TextProps>(props =>
         ...props.style,
     }}>
         {props.children}
-    </Atoms.Text>
-);
+    </Atoms.Text>;
+});
 
 export const PlainText = Atoms.Text;
 
@@ -38,8 +43,8 @@ export const Link = themed<Atoms.ActionLinkProps>(props =>
         onClick={props.onClick}
         style={{
             ...props.style,
-            fontSize: props.theme.fontSize.normal,
-            fontFamily: props.theme.fontFamily,
+            fontSize: props.theme.fontSizes.normal,
+            fontFamily: props.theme.fontFamilies.main,
             color: colors(props).accent,
             ':hover': {
                 color: colors(props).highlight,
@@ -69,6 +74,19 @@ export const PanelLink: Comp<PanelLinkProps> = (props =>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
     </Link>
+);
+
+export const TagButton: Comp<{ color: Color }> = (props =>
+    <View style={{
+        justifyContent: 'center',
+        backgroundColor: props.color,
+        borderRadius: 50,
+        padding: relative(0.2),
+    }}>
+        <Atoms.Row style={{ justifyContent: 'center' }}>
+            {props.children}
+        </Atoms.Row>
+    </View>
 );
 
 export const StretchLink = themed<Atoms.ActionLinkProps>(props =>

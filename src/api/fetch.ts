@@ -12,13 +12,13 @@ export async function fetchLibrary(): Promise<Contracts.Library> {
     return lib;
 }
 
-export async function fetchBI(bookId: BookId): Promise<Contracts.BookContent> {
+export async function fetchBI(bookId: BookId): Promise<Contracts.VolumeNode> {
     const backendBook = fetchBook(bookId.name);
     return backendBook;
 }
 
-export async function fetchBook(bookName: string): Promise<Contracts.BookContent> {
-    const response = await fetchJson(backendUrl + jsonPath + bookName) as Contracts.BookContent;
+export async function fetchBook(bookName: string): Promise<Contracts.VolumeNode> {
+    const response = await fetchJson(backendUrl + jsonPath + bookName) as Contracts.VolumeNode;
     return response;
 }
 

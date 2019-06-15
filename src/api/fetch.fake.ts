@@ -3,8 +3,9 @@ import { timeouted } from '../utils';
 import * as Contracts from '../contracts';
 
 export const fetchBL = timeouted(fetchBIStatic);
-function fetchBIStatic(bookId: BookId): Contracts.BookContent {
+function fetchBIStatic(bookId: BookId): Contracts.VolumeNode {
     return {
+        node: 'volume',
         meta: {
             title: bookId.name,
         },

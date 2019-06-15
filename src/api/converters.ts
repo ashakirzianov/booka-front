@@ -1,5 +1,5 @@
 import * as Contracts from '../contracts';
-import { Library, BookId, Book, tocFromContent } from '../model';
+import { Library, BookId, Book, tocFromVolume } from '../model';
 
 export function convertLibrary(lib: Contracts.Library): Library {
     return {
@@ -7,10 +7,10 @@ export function convertLibrary(lib: Contracts.Library): Library {
     };
 }
 
-export function convertBook(book: Contracts.BookContent, id: BookId): Book {
+export function convertBook(volume: Contracts.VolumeNode, id: BookId): Book {
     return {
-        content: book,
+        volume,
         id,
-        toc: tocFromContent(book, id),
+        toc: tocFromVolume(volume, id),
     };
 }

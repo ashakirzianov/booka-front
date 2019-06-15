@@ -14,7 +14,7 @@ export type BookProps = Book & {
 export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProps>(props => {
     const {
         pathToOpen, updateBookPosition,
-        content, id, toc,
+        volume, id, toc,
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
     return <Reader
@@ -24,7 +24,7 @@ export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProp
         quoteRange={props.quoteRange}
         prevPath={prev}
         nextPath={next}
-        content={content}
+        volume={volume}
         id={id}
     />;
 });

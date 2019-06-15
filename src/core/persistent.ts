@@ -90,8 +90,13 @@ const defaultTheme: Theme = {
         },
     },
     currentPalette: 'light',
-    fontFamily: 'Georgia',
-    fontSize: {
+    fontFamilies: {
+        main: 'Georgia',
+        menu: 'Helvetica',
+    },
+    fontSizes: {
+        smallest: 14,
+        small: 22,
         normal: 26,
         large: 30,
         largest: 36,

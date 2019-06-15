@@ -1,12 +1,13 @@
 import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookRange';
-import { BookNode, BookContent, children } from './bookContent';
+import { ContentNode, VolumeNode, children } from './bookVolume';
+import { isChapter } from '../contracts';
 
 export type RootIterator = {
     node: undefined,
     firstChildren: BookIteratorHandler,
 };
 export type BookIterator = {
-    node: BookNode,
+    node: ContentNode,
     index: number,
     parent: ParentIterator,
     prevSibling: BookIteratorHandler,
@@ -18,7 +19,7 @@ export type ParentIterator = RootIterator | BookIterator;
 export type OptParentIterator = ParentIterator | undefined;
 type BookIteratorHandler = () => OptBookIterator;
 
-export function bookIterator(book: BookContent): RootIterator {
+export function bookIterator(book: VolumeNode): RootIterator {
     const p = {
         node: undefined,
         firstChildren: undefined as any,
@@ -38,6 +39,17 @@ export function iterateToPath(iterator: ParentIterator, path: BookPath): OptBook
     }
 }
 
+export function iterateUntilCan(iterator: ParentIterator, path: BookPath): OptParentIterator {
+    const head = pathHead(path);
+    if (head === undefined) {
+        return iterator.node ? iterator : undefined;
+    } else {
+        const next = nthSibling(iterator.firstChildren(), head);
+        const tail = pathTail(path);
+        return next ? iterateUntilCan(next, tail) : iterator;
+    }
+}
+
 export function nthSibling(iterator: OptBookIterator, n: number): OptBookIterator {
     if (!iterator || n === 0) {
         return iterator;
@@ -48,7 +60,7 @@ export function nthSibling(iterator: OptBookIterator, n: number): OptBookIterato
     }
 }
 
-function siblingIterator(parent: ParentIterator, siblings: BookNode[], idx: number): BookIteratorHandler {
+function siblingIterator(parent: ParentIterator, siblings: ContentNode[], idx: number): BookIteratorHandler {
     return () => {
         if (idx < siblings.length && idx >= 0) {
             const node = siblings[idx];
@@ -95,6 +107,15 @@ export function prevIterator(i: OptParentIterator): OptBookIterator {
     } else {
         return prevIterator(i.parent);
     }
+}
+
+export function nextChapter(i: OptParentIterator): OptParentIterator {
+    let next = nextIterator(i);
+    while (next && !isChapter(next.node)) {
+        next = nextIterator(next);
+    }
+
+    return next;
 }
 
 export function buildPath(i: OptParentIterator): BookPath {

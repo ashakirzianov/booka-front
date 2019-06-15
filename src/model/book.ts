@@ -1,9 +1,9 @@
 import { BookId } from './bookLocator';
-import { BookContent } from './bookContent';
+import { VolumeNode } from './bookVolume';
 import { TableOfContents } from './tableOfContent';
 
 export type Book = {
     id: BookId,
     toc: TableOfContents,
-    content: BookContent,
+    volume: VolumeNode,
 };

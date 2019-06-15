@@ -1,6 +1,6 @@
 export * from './app';
 export * from './book';
-export * from './bookContent';
+export * from './bookVolume';
 export * from './bookIterator';
 export * from './bookLocator';
 export * from './bookRange';

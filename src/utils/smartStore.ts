@@ -2,6 +2,8 @@ import * as store from 'store';
 import { values } from './misc';
 import { log } from './debug';
 
+const useStore = false;
+
 export function smartStore<V>(key: string) {
     type K = string;
     type Cache = {
@@ -19,7 +21,10 @@ export function smartStore<V>(key: string) {
         },
 
         get(k: K): V | undefined {
-            return cache[k];
+            // return cache[k];
+            return useStore
+                ? cache[k]
+                : undefined;
         },
 
         set(k: K, value: V) {
@@ -47,7 +52,9 @@ export function smartStore<V>(key: string) {
 export function singleValueStore<V extends object>(key: string) {
     return {
         get(): V | undefined {
-            return store.get(key) as any;
+            return useStore
+                ? store.get(key) as any
+                : undefined;
         },
         set(v: V) {
             store.set(key, v);

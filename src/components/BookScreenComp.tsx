@@ -2,43 +2,18 @@ import * as React from 'react';
 
 import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
-    Comp, WithPopover, Line, Column, Link, PlainText, hoverable, View, Separator, connectState,
+    Comp, WithPopover, Line, Column, Link, PlainText,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton,
 } from '../blocks';
-import { BookScreen, Book, BookId, TableOfContents, PaletteName, BookRange, FootnoteSpan, footnoteForId } from '../model';
+import {
+    BookScreen, Book, TableOfContents, PaletteName, BookRange,
+    FootnoteSpan, footnoteForId, Pagination,
+} from '../model';
 import { BookNodesComp } from './Reader';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../redux';
-
-export const BookScreenHeader: Comp<BookScreen> = (props =>
-    <Line>
-        <Row>
-            <LibButton key='back' />
-            <OpenTocButton key='toc' bi={props.bl.id} />
-        </Row>
-        <Row>
-            <AppearanceButton key='appearance' />
-        </Row>
-    </Line>
-);
-
-const LibButton: Comp = (() =>
-    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
-);
-
-const OpenTocButton: Comp<{ bi: BookId }> = (props =>
-    <PanelLink icon='items' action={actionCreators.toggleToc()} />
-);
-
-const AppearanceButton: Comp = (() =>
-    <WithPopover
-        placement='bottom'
-        body={<ThemePicker />}
-    >
-        {onClick => <PanelLink icon='letter' onClick={onClick} />}
-    </WithPopover>
-);
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
@@ -53,12 +28,96 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
         <FootnoteBox
             footnote={
                 props.bl.footnoteId !== undefined
-                    ? footnoteForId(props.book.content, props.bl.footnoteId)
+                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
                     : undefined
             }
         />
     </>
 );
+
+export const BookScreenHeader: Comp<BookScreen> = (props =>
+    <Line>
+        <Row>
+            <LibButton key='back' />
+        </Row>
+        <Row>
+            <AppearanceButton key='appearance' />
+        </Row>
+    </Line>
+);
+
+export const BookScreenFooter: Comp<BookScreen> = (props => {
+
+    const pagination = new Pagination(props.book.volume);
+    const total = pagination.totalPages();
+    let currentPage = 1;
+    let left = 0;
+    if (props.bl.location.location === 'path') {
+        const path = props.bl.location.path;
+        currentPage = pagination.pageForPath(path);
+        left = pagination.lastPageOfChapter(path) - currentPage;
+    }
+    return <Row style={{
+        position: 'relative',
+    }}>
+        <Column style={{
+            position: 'absolute',
+            top: 0, bottom: 0, left: 0, right: 0,
+            height: '100%', width: '100%',
+            justifyContent: 'center',
+        }}>
+            <Row style={{ justifyContent: 'center' }}>
+                <TocButton current={currentPage} total={total} />
+            </Row>
+        </Column>
+        <Column style={{
+            position: 'absolute',
+            right: 10, top: 0, height: '100%',
+            justifyContent: 'center',
+        }}>
+            <Link>
+                <ThemedText
+                    size='smallest'
+                    fixedSize={true}
+                    family='menu'
+                    color='accent'
+                >
+                    {`${left} left`}
+                </ThemedText>
+            </Link>
+        </Column>
+    </Row>;
+});
+
+type TocButtonProps = { current: number, total: number };
+const TocButton = themed<TocButtonProps>(props =>
+    <Link action={actionCreators.toggleToc()}>
+        <TagButton color={colors(props).accent}>
+            <ThemedText
+                size='smallest'
+                fixedSize={true}
+                family='menu'
+                color='secondary'
+            >
+                {`${props.current} of ${props.total}`}
+            </ThemedText>
+        </TagButton>
+    </Link>
+);
+
+const LibButton: Comp = (() =>
+    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
+);
+
+const AppearanceButton: Comp = (() =>
+    <WithPopover
+        placement='bottom'
+        body={<ThemePicker />}
+    >
+        {onClick => <PanelLink icon='letter' onClick={onClick} />}
+    </WithPopover>
+);
+
 type BookTextProps = {
     book: Book,
     quoteRange: BookRange | undefined,
@@ -179,7 +238,7 @@ const PaletteButton = connectState('theme')<{
         }}>
             <Row style={{ justifyContent: 'center' }}>
                 <PlainText style={{
-                    fontSize: props.theme.fontSize.normal,
+                    fontSize: props.theme.fontSizes.normal,
                     color: palette.text,
                 }}>{props.text}</PlainText>
             </Row>

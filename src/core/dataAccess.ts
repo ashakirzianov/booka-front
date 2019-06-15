@@ -10,8 +10,8 @@ export async function bookForId(bi: BookId): Promise<Book> {
         return book;
     }
 
-    const bookContent = await fetchBI(bi);
-    const converted = convertBook(bookContent, bi);
+    const volume = await fetchBI(bi);
+    const converted = convertBook(volume, bi);
     storeBook(converted);
 
     return converted;

@@ -1,4 +1,4 @@
-export type FontFamily = 'Georgia' | 'San Francisco';
+export type FontFamily = 'Georgia' | 'San Francisco' | 'Helvetica';
 export type FontSize = number;
 export type Color = string;
 
@@ -16,9 +16,15 @@ export type Palette = {
     },
 };
 export type FontSizes = {
+    smallest: FontSize,
+    small: FontSize,
     normal: FontSize,
     large: FontSize,
     largest: FontSize,
+};
+export type FontFamilies = {
+    main: FontFamily,
+    menu: FontFamily,
 };
 
 export type Palettes = {
@@ -32,7 +38,7 @@ export type Theme = {
     palettes: Palettes,
     currentPalette: PaletteName,
     fontScale: number,
-    fontFamily: FontFamily,
-    fontSize: FontSizes,
+    fontFamilies: FontFamilies,
+    fontSizes: FontSizes,
     radius: number,
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-    BookPath, BookId, bookLocator, BookRange, BookNode,
-    BookContent, bookRange, locationPath, parentPath, titleForPath,
+    BookPath, BookId, bookLocator, BookRange, ContentNode,
+    VolumeNode, bookRange, locationPath, parentPath, titleForPath,
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText, ScrollView,
@@ -11,12 +11,12 @@ import { actionCreators } from '../redux';
 import {
     getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
-import { generateQuoteLink } from '../core/urlConversion';
+import { generateQuoteLink } from '../core';
 import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRender';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
-    content: BookContent,
+    volume: VolumeNode,
     pathToNavigate: BookPath | null,
     updateBookPosition: Callback<BookPath>,
     range: BookRange,
@@ -30,11 +30,7 @@ export class Reader extends React.Component<ReaderProps> {
     public selectedRange: BookSelection | undefined = undefined;
 
     public handleScroll = () => {
-        const newCurrentPath = Object.entries(this.refMap)
-            .reduce<BookPath | undefined>((path, [key, ref]) =>
-                path || !isPartiallyVisible(ref)
-                    ? path
-                    : parsePath(key), undefined);
+        const newCurrentPath = computeCurrentPath(this.refMap);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -87,9 +83,9 @@ export class Reader extends React.Component<ReaderProps> {
     }
 
     public render() {
-        const { range, prevPath, nextPath, id, content } = this.props;
-        const prevTitle = prevPath && titleForPath(content, prevPath)[0];
-        const nextTitle = nextPath && titleForPath(content, nextPath)[0];
+        const { range, prevPath, nextPath, id, volume } = this.props;
+        const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
+        const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
         const params: Params = {
             pageRange: range,
             refPathHandler: (ref, path) => {
@@ -106,7 +102,7 @@ export class Reader extends React.Component<ReaderProps> {
                 <ThemedText style={{
                     textAlign: 'justify',
                 }}>
-                    {buildBook(content, params)}
+                    {buildBook(volume, params)}
                 </ThemedText>
             </Column>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
@@ -114,7 +110,7 @@ export class Reader extends React.Component<ReaderProps> {
     }
 }
 
-export const BookNodesComp: Comp<{ nodes: BookNode[] }> = (props =>
+export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
     <ThemedText>
         {
             buildNodes(props.nodes, [], {
@@ -146,4 +142,17 @@ const PathLink: Comp<PathLinkProps> = (props =>
 
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
+}
+
+function computeCurrentPath(refMap: RefMap) {
+    for (const [key, ref] of Object.entries(refMap)) {
+        if (isPartiallyVisible(ref)) {
+            const path = parsePath(key);
+            if (path) {
+                return path;
+            }
+        }
+    }
+
+    return undefined;
 }
