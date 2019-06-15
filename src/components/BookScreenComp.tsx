@@ -38,25 +38,32 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
     return <Row style={{
-        justifyContent: 'space-between',
+        position: 'relative',
     }}>
-        <Column />
-        <Column>
-            <Link action={actionCreators.toggleToc()}>
-                <ThemedText
-                    size='smallest'
-                    fixedSize={true}
-                    family='menu'
-                    color='accent'
-                    style={{
-                        fontWeight: 'bold',
-                    }}
-                >
-                    {`${currentPage} of ${total}`}
-                </ThemedText>
-            </Link>
+        <Column style={{
+            position: 'absolute',
+            top: 0, bottom: 0, left: 0, right: 0,
+            height: '100%', width: '100%',
+            justifyContent: 'center',
+        }}>
+            <Row style={{ justifyContent: 'center' }}>
+                <Link action={actionCreators.toggleToc()}>
+                    <ThemedText
+                        size='smallest'
+                        fixedSize={true}
+                        family='menu'
+                        color='accent'
+                    >
+                        {`${currentPage} of ${total}`}
+                    </ThemedText>
+                </Link>
+            </Row>
         </Column>
-        <Column>
+        <Column style={{
+            position: 'absolute',
+            right: 10, top: 0, height: '100%',
+            justifyContent: 'center',
+        }}>
             <Link>
                 <ThemedText
                     size='smallest'
