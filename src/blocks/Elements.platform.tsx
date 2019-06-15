@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as Atoms from './Atoms';
 import { themed, Comp, relative, colors } from './comp-utils';
-import { ViewStyle } from 'react-native';
+import { ViewStyle, View } from 'react-native';
 
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;</span>
@@ -55,7 +55,8 @@ export type OverlayBoxProps = {
     },
 };
 export const OverlayBox = themed<OverlayBoxProps>(props =>
-    <div style={{
+
+    <View style={{
         alignSelf: 'center',
         backgroundColor: colors(props).secondary,
         width: '100%',
@@ -68,10 +69,11 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
         padding: relative(1),
         ...props.style as any,
     }}
-        onClick={e => e.stopPropagation()}
     >
-        {props.children}
-    </div>
+        <div onClick={e => e.stopPropagation()}>
+            {props.children}
+        </div>
+    </View>
 );
 
 export const Article: Comp = (props =>
