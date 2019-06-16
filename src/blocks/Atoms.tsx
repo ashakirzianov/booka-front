@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, ViewStyle, TextStyle } from 'react-native';
 import { Comp } from './comp-utils';
+import * as Platform from './Atoms.platform';
 
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
@@ -47,4 +48,7 @@ export type TextProps = {
     style?: AtomTextStyle,
 };
 
-export * from './Atoms.platform';
+export type ActionLinkProps = Platform.ActionLinkProps;
+export {
+    ActionLink, Text,
+} from './Atoms.platform';

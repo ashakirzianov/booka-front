@@ -6,7 +6,10 @@ import { View } from 'react-native';
 import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
 
-export * from './Elements.platform';
+export {
+    Clickable, DottedLine, LinkButton, OverlayBox,
+    Separator, Tab,
+} from './Elements.platform';
 
 type TextProps = {
     style?: Atoms.AtomTextStyle,
