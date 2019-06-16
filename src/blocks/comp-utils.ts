@@ -1,11 +1,13 @@
 import * as React from 'react';
-import Radium from 'radium';
 import { KeyRestriction, ExcludeKeys, Func, platformValue } from '../utils';
 import { buildConnectRedux } from '../redux';
 import { App, Theme, Palette } from '../model';
 import { actionCreators } from '../redux';
 
-export * from './comp-utils.platform';
+export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
+
+export type RefType = HTMLElement | null;
+export type RefHandler = (ref: RefType) => void;
 
 export type ReactContent = React.ReactNode;
 export type Callback<Argument> = Func<Argument, void>;
@@ -42,10 +44,6 @@ export function partial<T>(Cmp: Comp<T>) {
             props.children
         );
     };
-}
-
-export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<T> {
-    return Radium(Cmp);
 }
 
 type Themeable = {

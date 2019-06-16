@@ -99,11 +99,7 @@ export class Reader extends React.Component<ReaderProps> {
         return <ScrollView>
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Column>
-                <ThemedText style={{
-                    textAlign: 'justify',
-                }}>
-                    {buildBook(volume, params)}
-                </ThemedText>
+                {buildBook(volume, params)}
             </Column>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
         </ScrollView>;

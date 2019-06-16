@@ -37,19 +37,21 @@ export type ParagraphProps = SpanTypeBase & {
 };
 export const ParagraphComp = named(
     themed<ParagraphProps>(props =>
-        <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
-            <SpanComp
-                {...props}
-                path={props.path.concat([0])}
-                span={props.p.span}
-                colorization={props.highlights && props.highlights.quote && {
-                    ranges: [{
-                        color: highlights(props).quote,
-                        range: props.highlights.quote,
-                    }],
-                }}
-            />
-        </ParagraphContainer>
+        <ThemedText>
+            <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
+                <SpanComp
+                    {...props}
+                    path={props.path.concat([0])}
+                    span={props.p.span}
+                    colorization={props.highlights && props.highlights.quote && {
+                        ranges: [{
+                            color: highlights(props).quote,
+                            range: props.highlights.quote,
+                        }],
+                    }}
+                />
+            </ParagraphContainer>
+        </ThemedText>
     ),
     'ParagraphComp'
 );

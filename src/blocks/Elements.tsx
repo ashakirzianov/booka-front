@@ -24,6 +24,7 @@ export const ThemedText = themed<TextProps>(props => {
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
     return <Atoms.Text style={{
+        textAlign: 'justify',
         fontSize,
         fontFamily,
         color: colors(props)[props.color || 'text'],
