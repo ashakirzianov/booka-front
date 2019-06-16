@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { AppComp } from './src/components';
-import { ConnectedProvider } from "./src/redux";
-import { onInit } from './src/logic';
+import { ConnectedProvider } from './src/redux';
+import { wireHistoryNavigation } from './src/core';
 
 export default class App extends React.Component {
   render() {
@@ -12,4 +12,4 @@ export default class App extends React.Component {
   }
 }
 
-onInit();
+wireHistoryNavigation();
