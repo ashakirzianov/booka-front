@@ -16,6 +16,16 @@ export type Func<Argument, Return> = void extends Argument
     : (payload: Argument) => Return;
 
 export type Defined<T> = T extends undefined ? never : T;
+export type MaybeLazy<T> = T | (() => T);
+export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {
+    if (v === undefined) {
+        return v;
+    }
+
+    return typeof v === 'function'
+        ? (v as any)()
+        : v;
+}
 
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);

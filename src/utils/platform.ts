@@ -1,19 +1,19 @@
 import { Platform as ReactNativePlatform } from 'react-native';
-import { assertNever } from './misc';
+import { assertNever, MaybeLazy, lazyValue } from './misc';
 
 export type PlatformValue<T> = Partial<{
-    default: T,
-    web: T,
-    chrome: T,
-    safari: T,
-    safariDesktop: T,
-    safariMobile: T,
-    firefox: T,
-    otherWeb: T,
-    mobile: T,
-    ios: T,
-    android: T,
-    otherMobile: T,
+    default: MaybeLazy<T>,
+    web: MaybeLazy<T>,
+    chrome: MaybeLazy<T>,
+    safari: MaybeLazy<T>,
+    safariDesktop: MaybeLazy<T>,
+    safariMobile: MaybeLazy<T>,
+    firefox: MaybeLazy<T>,
+    otherWeb: MaybeLazy<T>,
+    mobile: MaybeLazy<T>,
+    ios: MaybeLazy<T>,
+    android: MaybeLazy<T>,
+    otherMobile: MaybeLazy<T>,
 }>;
 
 export function platformValue<T>(pv: { default: T } & PlatformValue<T>): T;
@@ -22,21 +22,21 @@ export function platformValue<T>(pv: PlatformValue<T>): T | undefined {
     const p = platform();
     switch (p) {
         case 'chrome':
-            return pv.chrome || pv.web || pv.default;
+            return lazyValue(pv.chrome || pv.web || pv.default);
         case 'safari-desktop':
-            return pv.safariDesktop || pv.safari || pv.web || pv.default;
+            return lazyValue(pv.safariDesktop || pv.safari || pv.web || pv.default);
         case 'safari-mobile':
-            return pv.safariMobile || pv.safari || pv.web || pv.default;
+            return lazyValue(pv.safariMobile || pv.safari || pv.web || pv.default);
         case 'firefox':
-            return pv.firefox || pv.web || pv.default;
+            return lazyValue(pv.firefox || pv.web || pv.default);
         case 'other-web':
-            return pv.web || pv.default;
+            return lazyValue(pv.web || pv.default);
         case 'ios':
-            return pv.ios || pv.mobile || pv.default;
+            return lazyValue(pv.ios || pv.mobile || pv.default);
         case 'android':
-            return pv.android || pv.mobile || pv.default;
+            return lazyValue(pv.android || pv.mobile || pv.default);
         case 'other-mobile':
-            return pv.mobile || pv.default;
+            return lazyValue(pv.mobile || pv.default);
         default:
             return assertNever(p);
     }
