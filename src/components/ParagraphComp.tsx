@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     Comp, relative, PlainText,
-    connectActions, Link, ThemedText, themed, highlights, named,
+    connectActions, TextLink, ThemedText, themed, highlights, named,
 } from '../blocks';
 import { assertNever } from '../utils';
 import {
@@ -114,11 +114,11 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
 );
 type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
-    <Link action={actionCreators.openFootnote(props.span.id)}>
+    <TextLink action={actionCreators.openFootnote(props.span.id)}>
         <ThemedText color='accent' hoverColor='highlight'>
             <SpanComp {...props} span={props.span.content} />
         </ThemedText>
-    </Link>
+    </TextLink>
 );
 type SpanProps = SpanType<Span>;
 const SpanComp: Comp<SpanProps> = (props =>

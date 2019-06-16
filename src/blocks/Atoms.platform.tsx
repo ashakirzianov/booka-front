@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TextProps, AtomTextStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable, Hoverable } from './comp-utils';
+import { TextProps, LayoutProps } from './Atoms';
+import { isOpenNewTabEvent, Callback, hoverable } from './comp-utils';
 
 export const Text = hoverable<TextProps>(props =>
     <span
@@ -13,19 +13,18 @@ export const Text = hoverable<TextProps>(props =>
     </span>
 );
 
-export type LinkProps = {
+export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
-    style?: Hoverable<AtomTextStyle>,
 };
 export const Link = hoverable<LinkProps>(props =>
     <a
         href={props.to}
         style={{
+            ...props.style,
             textDecoration: 'none',
             cursor: 'pointer',
             alignSelf: 'flex-start',
-            ...props.style,
         }}
         onClick={e => {
             e.stopPropagation();

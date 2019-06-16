@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ViewStyle, TextStyle } from 'react-native';
-import { Comp, Callback, Hoverable, connectAll } from './comp-utils';
+import { Comp, Callback, connectAll } from './comp-utils';
 import { Action } from '../redux';
 import { actionToUrl } from '../core';
 import { Link } from './Atoms.platform';
@@ -10,7 +10,8 @@ function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
 }
 
 export type AllowedViewStyle = Pick<ViewStyle,
-    | 'justifyContent' | 'width' | 'height' | 'alignItems'
+    | 'justifyContent' | 'width' | 'height'
+    | 'alignItems' | 'alignSelf'
     | 'maxWidth' | 'overflow' | 'margin' | 'padding'
     | 'flex' // TODO: do not allow ?
 > & {
@@ -37,7 +38,7 @@ export const Row: Comp<LayoutProps> = (props =>
 export type ActionLinkProps = {
     action?: Action,
     onClick?: Callback<void>,
-    style?: Hoverable<AtomTextStyle>,
+    style?: AllowedViewStyle,
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Link

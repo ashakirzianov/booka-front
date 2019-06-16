@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { Callback, themed, ReactContent, Comp, relative, colors } from './comp-utils';
+import { Callback, themed, ReactContent, Comp } from './comp-utils';
 import { View } from 'react-native';
-import { FadeIn } from './Animations.platform';
 import { PopperProps } from 'react-popper';
-
-const headerHeight = relative(3);
 
 // TODO: implement
 type ModalBoxProps = {

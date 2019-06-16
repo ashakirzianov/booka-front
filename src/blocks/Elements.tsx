@@ -40,21 +40,25 @@ export const ThemedText = themed<TextProps>(props => {
 
 export const PlainText = Atoms.Text;
 
-export const Link = themed<Atoms.ActionLinkProps>(props =>
+export type TextLinkProps = Atoms.ActionLinkProps;
+export const TextLink = themed<TextLinkProps>(props =>
     <Atoms.ActionLink
         action={props.action}
         onClick={props.onClick}
-        style={{
-            ...props.style,
-            fontSize: props.theme.fontSizes.normal,
-            fontFamily: props.theme.fontFamilies.main,
-            color: colors(props).accent,
-            ':hover': {
-                color: colors(props).highlight,
-            },
-        }}
+        style={props.style}
     >
-        {props.children}
+        <Atoms.Text
+            style={{
+                fontSize: props.theme.fontSizes.normal,
+                fontFamily: props.theme.fontFamilies.main,
+                color: colors(props).accent,
+                ':hover': {
+                    color: colors(props).highlight,
+                },
+            } as any} // TODO: remove 'as any'?
+        >
+            {props.children}
+        </Atoms.Text>
     </Atoms.ActionLink>
 );
 
@@ -66,7 +70,7 @@ export const Label: Comp<{ text: string, margin?: string }> = (props =>
 
 export type PanelLinkProps = Atoms.ActionLinkProps & { icon: IconName };
 export const PanelLink: Comp<PanelLinkProps> = (props =>
-    <Link
+    <TextLink
         action={props.action}
         onClick={props.onClick}
         style={{
@@ -76,7 +80,7 @@ export const PanelLink: Comp<PanelLinkProps> = (props =>
         <Atoms.Column style={{ justifyContent: 'center' }}>
             <Icon name={props.icon} />{props.children}
         </Atoms.Column>
-    </Link>
+    </TextLink>
 );
 
 export const TagButton: Comp<{ color: Color }> = (props =>
@@ -92,12 +96,12 @@ export const TagButton: Comp<{ color: Color }> = (props =>
     </View>
 );
 
-export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
+export const StretchLink = themed<TextLinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <Link action={props.action} style={{
+        <TextLink action={props.action} style={{
+            ...props.style,
             margin: relative(0.5),
             alignSelf: 'stretch',
-            ...props.style,
         }}>
             <div style={{
                 display: 'flex',
@@ -106,7 +110,7 @@ export const StretchLink = themed<Atoms.ActionLinkProps>(props =>
             }}>
                 {props.children}
             </div>
-        </Link>
+        </TextLink>
     </View>
 );
 
