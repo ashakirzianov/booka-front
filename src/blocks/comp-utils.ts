@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { KeyRestriction, ExcludeKeys, Func, platformValue } from '../utils';
-import { buildConnectRedux } from '../redux';
+import { buildConnectRedux, actionCreators } from '../core';
 import { App, Theme, Palette } from '../model';
-import { actionCreators } from '../redux';
 
 export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
 

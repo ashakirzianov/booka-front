@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
 import { Comp, Row, TextLink, SafeAreaView, Column, ThemedText, relative } from '../blocks';
-import { actionCreators } from '../redux';
+import { actionCreators } from '../core';
 
 const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>

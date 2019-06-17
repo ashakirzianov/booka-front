@@ -1,11 +1,10 @@
 import {
     BookId, BookPath, library, Book,
-    Library, BookInfo, Theme, emptyPath,
+    Library, BookInfo, Theme,
 } from '../model';
 import { smartStore, forEach, singleValueStore } from '../utils';
-import { subscribe } from '../redux';
 
-const stores = {
+export const stores = {
     books: smartStore<Book>('books'),
     library: smartStore<BookInfo>('library'),
     positions: smartStore<BookPath>('positions'),
@@ -35,15 +34,6 @@ export async function resolveCurrentPosition(bi: BookId): Promise<BookPath> {
 export function setCurrentPosition(bookId: BookId, path: BookPath) {
     stores.positions.set(bookId.name, path);
 }
-
-setTimeout(() => subscribe(state => {
-    const { screen } = state;
-    if (screen.screen === 'book' && screen.bl.location.location === 'path') {
-        const id = screen.book.id;
-        const position = screen.bl.location.path || emptyPath();
-        setCurrentPosition(id, position);
-    }
-}));
 
 // ---- Theme
 
@@ -108,7 +98,3 @@ const defaultTheme: Theme = {
 export function restoreTheme(): Theme {
     return stores.theme.get() || defaultTheme;
 }
-
-setTimeout(() => subscribe(state => {
-    stores.theme.set(state.theme);
-}));

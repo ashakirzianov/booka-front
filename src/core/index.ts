@@ -1,4 +1,5 @@
-export { wireHistoryNavigation } from './historyNavigation.platform';
-export * from './screenBuilders';
-export { actionToUrl, urlToAction, generateQuoteLink } from './urlConversion';
-export { restoreTheme } from './persistent';
+export { ConnectedProvider } from './store';
+export * from './actions';
+export { buildConnectRedux } from './react-redux-utils';
+export { generateQuoteLink, actionToUrl } from './urlConversion';
+export { wireCore } from './wireCore';

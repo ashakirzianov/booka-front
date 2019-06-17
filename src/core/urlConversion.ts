@@ -1,10 +1,10 @@
-import { Action, actionCreators } from '../redux';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, BookLocator,
     BookRange, BookId, locationNone, BookPath, bookRange,
 } from '../model';
 import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined, frontendBase } from '../utils';
+import { Action, actionCreators } from './actions';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {

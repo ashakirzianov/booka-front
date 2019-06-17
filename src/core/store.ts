@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { validatePersistentStorage } from '../utils';
 import { App } from '../model';
-import { urlToAction } from '../core';
+import { urlToAction } from './urlConversion';
 import { reducer } from './reducers';
 import { createEnhancedStore } from './redux-utils';
 import { Action } from './actions';

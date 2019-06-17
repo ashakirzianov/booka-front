@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { View, ViewStyle, TextStyle } from 'react-native';
 import { Comp, Callback, connectAll } from './comp-utils';
-import { Action } from '../redux';
-import { actionToUrl } from '../core';
+import { Action, actionToUrl } from '../core';
 import { Link } from './Atoms.platform';
 
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {

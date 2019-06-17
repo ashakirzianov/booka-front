@@ -9,7 +9,7 @@ import {
     BookPath, AttributesObject, SimpleSpan, AttributedSpan,
     attrs, spanLength, FootnoteSpan, Span, BookRange, Color, Highlights, CompoundSpan, isCompound,
 } from '../model';
-import { actionCreators } from '../redux';
+import { actionCreators } from '../core';
 import { TextRun, CapitalizeFirst, ParagraphContainer } from './ParagraphComp.platform';
 import { parsePath, pathToString, RefPathHandler } from './bookRender';
 

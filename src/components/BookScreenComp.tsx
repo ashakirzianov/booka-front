@@ -13,7 +13,7 @@ import { BookNodesComp } from './Reader';
 
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
-import { actionCreators } from '../redux';
+import { actionCreators } from '../core';
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>

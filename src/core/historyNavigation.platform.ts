@@ -1,6 +1,6 @@
 import { createBrowserHistory } from 'history';
+import { dispatchUrlNavigation, subscribe } from './store';
 import { stateToUrl } from './urlConversion';
-import { dispatchUrlNavigation, subscribe } from '../redux';
 import { throttle } from 'lodash';
 
 const history = createBrowserHistory();
