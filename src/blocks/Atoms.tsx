@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ViewStyle, TextStyle } from 'react-native';
-import { Comp, Callback, connectAll, Hoverable } from './comp-utils';
+import { Comp, Callback, connectAll, Hoverable, RefHandler } from './comp-utils';
 import { Action, actionToUrl } from '../core';
 import { Link } from './Atoms.platform';
 
@@ -62,6 +62,7 @@ export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
     | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
+    | 'background'
 > & Pick<TextStyle,
     never
 > & {
@@ -70,6 +71,9 @@ export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
 
 export type TextProps = {
     style?: AtomTextStyle,
+    dropCaps?: boolean,
+    ref?: RefHandler,
+    id?: string,
 };
 
 export {

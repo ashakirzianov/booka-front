@@ -5,8 +5,15 @@ import { Callback } from './comp-utils';
 
 export const Text = hoverable<TextProps>(props =>
     <span
+        ref={props.ref}
+        id={props.id}
         style={{
             wordBreak: 'break-word',
+            ...(props.dropCaps && {
+                float: 'left',
+                fontSize: '400%',
+                lineHeight: '80%',
+            }),
             ...props.style,
         }}
     >
