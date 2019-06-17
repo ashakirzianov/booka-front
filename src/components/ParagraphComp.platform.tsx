@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Comp } from '../blocks';
+import { Comp, ThemedText } from '../blocks';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
-    <div style={{ display: 'flex' }}>
-        <span style={{
-            float: 'left',
-            textIndent: props.textIndent,
-        }}>
-            {props.children}
-        </span>
-    </div>
+    <ThemedText>
+        <div style={{ display: 'flex' }}>
+            <span style={{
+                float: 'left',
+                textIndent: props.textIndent,
+            }}>
+                {props.children}
+            </span>
+        </div>
+    </ThemedText>
 );
