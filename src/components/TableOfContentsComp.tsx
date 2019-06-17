@@ -4,10 +4,12 @@ import {
     Comp, Row, Tab, relative,
     Column, DottedLine, ScrollView, StretchLink,
 } from '../blocks';
-import { bookLocator, locationPath, BookId } from '../model';
-import { TableOfContents, TableOfContentsItem } from '../model';
+import {
+    bookLocator, locationPath, BookId,
+    TableOfContents, TableOfContentsItem,
+} from '../model';
 import { nums } from '../utils';
-import { actionCreators } from '../redux';
+import { actionCreators } from '../core';
 
 type TocItemProps = TableOfContentsItem & {
     tabs: number,

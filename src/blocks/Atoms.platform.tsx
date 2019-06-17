@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { TextProps, AtomTextStyle } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable, Hoverable, connectAll } from './comp-utils';
-import { Action } from '../redux';
-import { actionToUrl } from '../core';
+import { TextProps, LayoutProps } from './Atoms';
+import { isOpenNewTabEvent, Callback, hoverable } from './comp-utils';
 
 export const Text = hoverable<TextProps>(props =>
     <span
@@ -15,19 +13,18 @@ export const Text = hoverable<TextProps>(props =>
     </span>
 );
 
-export type LinkProps = {
+export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
-    style?: Hoverable<AtomTextStyle>,
 };
 export const Link = hoverable<LinkProps>(props =>
     <a
         href={props.to}
         style={{
+            ...props.style,
             textDecoration: 'none',
             cursor: 'pointer',
             alignSelf: 'flex-start',
-            ...props.style,
         }}
         onClick={e => {
             e.stopPropagation();
@@ -41,28 +38,6 @@ export const Link = hoverable<LinkProps>(props =>
     >
         {props.children}
     </a>
-);
-
-export type ActionLinkProps = {
-    action?: Action,
-    onClick?: Callback<void>,
-    style?: Hoverable<AtomTextStyle>,
-};
-export const ActionLink = connectAll<ActionLinkProps>(props =>
-    <Link
-        onClick={() => {
-            if (props.action) {
-                props.dispatch(props.action);
-            }
-            if (props.onClick) {
-                props.onClick();
-            }
-        }}
-        to={actionToUrl(props.action, props.state)}
-        style={props.style}
-    >
-        {props.children}
-    </Link>
 );
 
 export function showAlert(message: string) {

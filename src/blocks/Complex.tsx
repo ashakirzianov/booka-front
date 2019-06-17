@@ -4,7 +4,9 @@ import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native
 import { platformValue } from '../utils';
 import { defaults } from './defaults';
 
-export * from './Complex.platform';
+export {
+    BottomBar, TopBar, Modal, WithPopover,
+} from './Complex.platform';
 
 export const Layer = themed(props =>
     <View style={{

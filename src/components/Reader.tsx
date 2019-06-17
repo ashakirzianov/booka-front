@@ -7,12 +7,12 @@ import {
     Comp, Callback, Row, ThemedText, ScrollView,
     RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, relative,
 } from '../blocks';
-import { actionCreators } from '../redux';
+import { actionCreators, generateQuoteLink } from '../core';
 import {
     getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
-import { generateQuoteLink } from '../core';
-import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRender';
+import { buildNodes, buildBook, Params } from './bookRender';
+import { pathToString, parsePath } from './common';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -99,11 +99,7 @@ export class Reader extends React.Component<ReaderProps> {
         return <ScrollView>
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Column>
-                <ThemedText style={{
-                    textAlign: 'justify',
-                }}>
-                    {buildBook(volume, params)}
-                </ThemedText>
+                {buildBook(volume, params)}
             </Column>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
         </ScrollView>;

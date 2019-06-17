@@ -1,5 +1,5 @@
 import { PaletteName, BookPath, AppScreen, BookLocator } from '../model';
-import { actionCreator, ActionFromCreators } from './redux-utils';
+import { actionCreator, ActionFromCreators } from '../utils';
 
 export const actionCreators = {
     navigateToBook: actionCreator<BookLocator>()('navigateToBook'),

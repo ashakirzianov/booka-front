@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Comp } from '../blocks';
-import { pathToId, Colorization } from './ParagraphComp';
 import {
     Color, bookRange, incrementPath,
     overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith, inRange,
 } from '../model';
 import { last, filterUndefined } from '../utils';
-import { RefPathHandler } from './bookRender';
+import { Colorization } from './SpanComp';
+import { pathToId, RefPathHandler } from './common';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
     <div style={{ display: 'flex' }}>
