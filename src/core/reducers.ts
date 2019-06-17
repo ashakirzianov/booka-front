@@ -1,4 +1,4 @@
-import { combineReducers, loop } from './redux-utils';
+import { combineReducers, loop } from '../utils';
 import { Action, actionCreators } from './actions';
 import {
     App, forScreen, Theme, libraryScreen, library, AppScreen, locationPath,
