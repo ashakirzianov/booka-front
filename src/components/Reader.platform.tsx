@@ -1,6 +1,6 @@
 import { Callback } from '../blocks';
 import { BookPath, bookRangeUnordered, BookRange } from '../model';
-import { idToPath } from './ParagraphComp';
+import { idToPath } from './common';
 
 export type BookSelection = {
     text: string,
