@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, ViewStyle, TextStyle } from 'react-native';
-import { Comp, Callback, connectAll } from './comp-utils';
+import { Comp, Callback, connectAll, Hoverable } from './comp-utils';
 import { Action, actionToUrl } from '../core';
 import { Link } from './Atoms.platform';
 
@@ -58,7 +58,7 @@ export const ActionLink = connectAll<ActionLinkProps>(props =>
 
 // TODO: remove
 export type CssTextStyle = React.CSSProperties;
-export type AtomTextStyle = Pick<CssTextStyle,
+export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
     | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
@@ -66,7 +66,7 @@ export type AtomTextStyle = Pick<CssTextStyle,
     never
 > & {
     fontWeight?: 'bold' | 'normal',
-};
+}>;
 
 export type TextProps = {
     style?: AtomTextStyle,

@@ -35,5 +35,12 @@ export function showAlert(message: string) {
 }
 
 function convertStyle(style: AtomTextStyle | undefined): NativeTextStyle | undefined {
-    return style;
+    // TODO: rethink this ?
+    if (style && style[':hover'] !== undefined) {
+        const styleCopy = { ...style };
+        delete styleCopy[':hover'];
+        return styleCopy as any;
+    } else {
+        return style;
+    }
 }
