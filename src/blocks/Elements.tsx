@@ -104,13 +104,14 @@ export const StretchLink = themed<TextLinkProps>(props =>
             margin: relative(0.5),
             alignSelf: 'stretch',
         }}>
-            <div style={{
+            <View style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 margin: '0.3em',
+                flexDirection: 'row',
             }}>
                 {props.children}
-            </div>
+            </View>
         </TextLink>
     </View>
 );

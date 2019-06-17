@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextProps, LayoutProps } from './Atoms';
 import { isOpenNewTabEvent, hoverable } from './comp-utils.platform';
-import { Callback } from './comp-utils';
+import { Callback, named } from './comp-utils';
 
-export const Text = hoverable<TextProps>(props =>
+export const Text = named(hoverable<TextProps>(props =>
     <span
         ref={props.ref}
         id={props.id}
@@ -19,13 +19,13 @@ export const Text = hoverable<TextProps>(props =>
     >
         {props.children}
     </span>
-);
+), 'Text');
 
 export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
 };
-export const Link = hoverable<LinkProps>(props =>
+export const Link = named(hoverable<LinkProps>(props =>
     <a
         href={props.to}
         style={{
@@ -46,7 +46,7 @@ export const Link = hoverable<LinkProps>(props =>
     >
         {props.children}
     </a>
-);
+), 'Link');
 
 export function showAlert(message: string) {
     alert(message);

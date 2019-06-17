@@ -3,22 +3,22 @@ import {
     Text as NativeText, Alert, TextStyle as NativeTextStyle,
 } from 'react-native';
 import { TextProps, AtomTextStyle, LayoutProps } from './Atoms';
-import { Comp, Callback } from './comp-utils';
+import { Comp, Callback, named } from './comp-utils';
 
-export const Text: Comp<TextProps> = (props =>
+export const Text: Comp<TextProps> = named((props =>
     <NativeText
         style={convertStyle(props.style)}
     >
         {props.children}
     </NativeText>
-);
+), 'Text');
 
 // TODO: implement
 export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
 };
-export const Link: Comp<LinkProps> = (props =>
+export const Link: Comp<LinkProps> = named((props =>
     <NativeText
         style={{
             ...props.style,
@@ -28,7 +28,7 @@ export const Link: Comp<LinkProps> = (props =>
     >
         {props.children}
     </NativeText>
-);
+), 'Link');
 
 export function showAlert(message: string) {
     Alert.alert('Alert', message);
