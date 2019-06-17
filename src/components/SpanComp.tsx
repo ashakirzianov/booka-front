@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { Color, BookRange, BookPath, isSimple, Span, isCompound, isAttributed, isFootnote, AttributesObject, SimpleSpan, CompoundSpan, spanLength, AttributedSpan, attrs, FootnoteSpan } from '../model';
-import { RefPathHandler } from './bookRender';
 import { Comp, PlainText, relative, connectActions, TextLink, ThemedText } from '../blocks';
 import { assertNever } from '../utils';
 import { TextRun, CapitalizeFirst } from './ParagraphComp.platform';
 import { actionCreators } from '../core';
+import { RefPathHandler } from './common';
 
 type SpanType<T> = {
     span: T,

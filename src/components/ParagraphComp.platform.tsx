@@ -5,9 +5,8 @@ import {
     overlaps, BookRange, BookPath, pathLessThan, sameParent, overlapWith, inRange,
 } from '../model';
 import { last, filterUndefined } from '../utils';
-import { RefPathHandler } from './bookRender';
 import { Colorization } from './SpanComp';
-import { pathToId } from './common';
+import { pathToId, RefPathHandler } from './common';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
     <div style={{ display: 'flex' }}>

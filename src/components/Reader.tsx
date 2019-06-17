@@ -11,7 +11,8 @@ import { actionCreators, generateQuoteLink } from '../core';
 import {
     getSelectionRange, subscribe, unsubscribe, BookSelection,
 } from './Reader.platform';
-import { buildNodes, buildBook, Params, parsePath, pathToString } from './bookRender';
+import { buildNodes, buildBook, Params } from './bookRender';
+import { pathToString, parsePath } from './common';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {

@@ -5,12 +5,12 @@ import {
     isChapter, inRange, ChapterNode,
 } from '../model';
 import {
-    RefType, Comp, Row, ThemedText, relative, refable,
+    Comp, Row, ThemedText, relative, refable,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
+import { RefPathHandler, pathToString } from './common';
 
-export type RefPathHandler = (ref: RefType, path: BookPath) => void;
 export type Params = {
     refPathHandler: RefPathHandler,
     pageRange: BookRange,
@@ -138,17 +138,3 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
 },
     'ChapterHeader'
 );
-
-export function pathToString(path: BookPath): string {
-    return `${path.join('-')}`;
-}
-
-export function parsePath(pathString: string): BookPath | undefined {
-    const path = pathString
-        .split('-')
-        .map(pc => parseInt(pc, 10))
-        ;
-    return path.some(p => isNaN(p))
-        ? undefined
-        : path;
-}

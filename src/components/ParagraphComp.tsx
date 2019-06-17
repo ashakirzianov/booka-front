@@ -7,7 +7,7 @@ import {
 } from '../model';
 import { ParagraphContainer } from './ParagraphComp.platform';
 import { SpanComp } from './SpanComp';
-import { RefPathHandler } from './bookRender';
+import { RefPathHandler } from './common';
 
 export type ParagraphProps = {
     p: ParagraphNode,
