@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TextProps, LayoutProps } from './Atoms';
-import { isOpenNewTabEvent, Callback, hoverable } from './comp-utils';
+import { isOpenNewTabEvent, hoverable } from './comp-utils.platform';
+import { Callback } from './comp-utils';
 
 export const Text = hoverable<TextProps>(props =>
     <span
