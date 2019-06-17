@@ -1,4 +1,5 @@
 export * from './comp-utils';
+export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
 export {
     isPartiallyVisible, scrollToRef,
 } from './Scroll.platform';

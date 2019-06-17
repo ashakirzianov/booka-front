@@ -6,8 +6,6 @@ import {
 import { actionCreators } from '../core';
 import { App, Theme, Palette } from '../model';
 
-export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
-
 export type RefType = HTMLElement | null;
 export type RefHandler = (ref: RefType) => void;
 
