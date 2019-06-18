@@ -1,18 +1,42 @@
 import * as React from 'react';
 
-import { Comp, themed, relative, colors } from './comp-utils';
-import * as Atoms from './Atoms';
+import { Comp, themed, relative, colors, Callback, connectAll } from './comp-utils';
+import Atoms from './Atoms';
 import { View } from 'react-native';
 import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
+import { Action, actionToUrl } from '../core';
+import { AllowedViewStyle, TextStyle } from './Atoms.common';
 
 export {
     Clickable, DottedLine, LinkButton, OverlayBox,
     Separator, Tab,
 } from './Elements.platform';
 
+export type ActionLinkProps = {
+    action?: Action,
+    onClick?: Callback<void>,
+    style?: AllowedViewStyle,
+};
+export const ActionLink = connectAll<ActionLinkProps>(props =>
+    <Atoms.Link
+        onClick={() => {
+            if (props.action) {
+                props.dispatch(props.action);
+            }
+            if (props.onClick) {
+                props.onClick();
+            }
+        }}
+        to={actionToUrl(props.action, props.state)}
+        style={props.style}
+    >
+        {props.children}
+    </Atoms.Link>
+);
+
 type TextProps = {
-    style?: Atoms.AtomTextStyle,
+    style?: TextStyle,
     family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSizes'],
     fixedSize?: boolean,
@@ -41,9 +65,9 @@ export const ThemedText = themed<TextProps>(props => {
 
 export const PlainText = Atoms.Text;
 
-export type TextLinkProps = Atoms.ActionLinkProps;
+export type TextLinkProps = ActionLinkProps;
 export const TextLink = themed<TextLinkProps>(props =>
-    <Atoms.ActionLink
+    <ActionLink
         action={props.action}
         onClick={props.onClick}
         style={props.style}
@@ -60,7 +84,7 @@ export const TextLink = themed<TextLinkProps>(props =>
         >
             {props.children}
         </Atoms.Text>
-    </Atoms.ActionLink>
+    </ActionLink>
 );
 
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
@@ -69,7 +93,7 @@ export const Label: Comp<{ text: string, margin?: string }> = (props =>
     </ThemedText>
 );
 
-export type PanelLinkProps = Atoms.ActionLinkProps & { icon: IconName };
+export type PanelLinkProps = ActionLinkProps & { icon: IconName };
 export const PanelLink: Comp<PanelLinkProps> = (props =>
     <TextLink
         action={props.action}
@@ -97,7 +121,7 @@ export const TagButton: Comp<{ color: Color }> = (props =>
     </View>
 );
 
-export const StretchLink = themed<TextLinkProps>(props =>
+export const StretchLink = themed<ActionLinkProps>(props =>
     <View style={{ flex: 1 }}>
         <TextLink action={props.action} style={{
             ...props.style,

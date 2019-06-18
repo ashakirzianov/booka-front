@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import * as Atoms from './Atoms';
 import { themed, Comp, relative, colors } from './comp-utils';
 import { ViewStyle, View } from 'react-native';
+import { ActionLinkProps, ActionLink } from './Elements';
 
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;</span>
@@ -22,8 +22,8 @@ export const Separator: Comp = (() =>
     <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
 );
 
-export const LinkButton = themed<Atoms.ActionLinkProps>(props =>
-    <Atoms.ActionLink {...props}>
+export const LinkButton = themed<ActionLinkProps>(props =>
+    <ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',
             borderColor: colors(props).accent,
@@ -38,7 +38,7 @@ export const LinkButton = themed<Atoms.ActionLinkProps>(props =>
         }}>
             {props.children}
         </div>
-    </Atoms.ActionLink>
+    </ActionLink>
 );
 
 export const Clickable: Comp<{ onClick: () => void }> = (props =>
