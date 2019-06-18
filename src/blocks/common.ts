@@ -36,7 +36,9 @@ type Themeable = {
 };
 type ThemeableComp<T> = Comp<T & Themeable>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
-    return connectState('theme')(C);
+    const result = connectState('theme')(C);
+    result.displayName = `Themed:${result.displayName}`;
+    return result;
 }
 export function colors(themeable: Themeable): Palette['colors'] {
     return themeable.theme.palettes[themeable.theme.currentPalette].colors;

@@ -14,8 +14,8 @@ export type ActionLinkProps = {
     onClick?: Callback<void>,
     style?: ViewStyle,
 };
-export const ActionLink = connectAll<ActionLinkProps>(props =>
-    <Atoms.Link
+export const ActionLink = connectAll<ActionLinkProps>(function ActionLinkC(props) {
+    return <Atoms.Link
         onClick={() => {
             if (props.action) {
                 props.dispatch(props.action);
@@ -28,8 +28,8 @@ export const ActionLink = connectAll<ActionLinkProps>(props =>
         style={props.style}
     >
         {props.children}
-    </Atoms.Link>
-);
+    </Atoms.Link>;
+});
 
 type ThemedTextProps = {
     style?: TextStyle,
@@ -62,8 +62,8 @@ export const ThemedText = themed<ThemedTextProps>(props => {
 export const PlainText = Atoms.Text;
 
 export type TextLinkProps = ActionLinkProps;
-export const TextLink = themed<TextLinkProps>(props =>
-    <ActionLink
+export const TextLink = themed<TextLinkProps>(function TextLinkC(props) {
+    return <ActionLink
         action={props.action}
         onClick={props.onClick}
         style={props.style}
@@ -80,8 +80,8 @@ export const TextLink = themed<TextLinkProps>(props =>
         >
             {props.children}
         </Atoms.Text>
-    </ActionLink>
-);
+    </ActionLink>;
+});
 
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
