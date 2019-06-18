@@ -8,11 +8,6 @@ import { IconName, Icon } from './Icons';
 import { Action, actionToUrl } from '../core';
 import { AllowedViewStyle, TextStyle } from './Atoms.common';
 
-export {
-    Clickable, DottedLine, LinkButton, OverlayBox,
-    Separator, Tab,
-} from './Elements.platform';
-
 export type ActionLinkProps = {
     action?: Action,
     onClick?: Callback<void>,
@@ -35,7 +30,7 @@ export const ActionLink = connectAll<ActionLinkProps>(props =>
     </Atoms.Link>
 );
 
-type TextProps = {
+type ThemedTextProps = {
     style?: TextStyle,
     family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSizes'],
@@ -43,7 +38,7 @@ type TextProps = {
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const ThemedText = themed<TextProps>(props => {
+export const ThemedText = themed<ThemedTextProps>(props => {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];

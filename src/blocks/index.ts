@@ -8,7 +8,6 @@ export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
 export {
     isPartiallyVisible, scrollToRef,
 } from './Scroll.platform';
-export * from './Utility';
 export * from './Elements';
 export * from './Complex';
 export * from './Icons';
