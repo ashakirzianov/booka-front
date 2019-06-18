@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Comp, themed, relative, colors, Callback, connectAll } from './comp-utils';
+import { Comp, themed, relative, colors, Callback, connectAll } from './common';
 import * as Atoms from './Atoms';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { Theme, Palette, Color } from '../model';

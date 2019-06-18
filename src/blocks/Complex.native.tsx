@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, Comp, Props } from './comp-utils';
+import { themed, Comp, Props } from './common';
 import { ActionLinkProps } from './Elements';
 import { View } from 'react-native';
 import {

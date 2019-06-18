@@ -1,4 +1,4 @@
-import { Props } from './comp-utils';
+import { Props } from './common';
 import { FadeInProps } from './Animations.common';
 import { View } from 'react-native';
 

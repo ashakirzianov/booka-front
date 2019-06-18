@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { themed, Comp, relative, colors, Props } from './comp-utils';
+import { themed, Comp, relative, colors, Props } from './common';
 import { ThemedText, PanelLink, ActionLinkProps, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
-import { Refable } from './comp-utils.platform';
+import { Refable } from './utils';
 import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
 import { platformValue } from '../utils';

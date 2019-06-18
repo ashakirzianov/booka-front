@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Transition } from 'react-transition-group';
-import { Comp } from './comp-utils';
+import { Comp } from './common';
 import { defaults } from './defaults';
 import { FadeInProps } from './Animations.common';
 

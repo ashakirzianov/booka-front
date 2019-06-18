@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextProps, LinkProps } from './Atoms.common';
-import { isOpenNewTabEvent } from './comp-utils.platform';
-import { Props } from './comp-utils';
+import { isOpenNewTabEvent } from './utils';
+import { Props } from './common';
 
 export { Row, Column } from './Atoms.common';
 

@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 import { View, ViewStyle as NativeViewStyle, TextStyle as NativeTextStyle } from 'react-native';
-import { Comp, Hoverable, RefHandler, Callback } from './comp-utils';
+import { Comp, Hoverable, Callback } from './common';
 import { Color } from '../model';
+import { RefHandler } from './Scroll';
 
 export type LinkProps = LayoutProps & {
     to?: string,

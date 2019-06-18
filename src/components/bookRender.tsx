@@ -125,7 +125,7 @@ const BookTitle: Comp<{ text?: string }> = (props =>
     </Row>
 );
 
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
+const ChapterHeader = refable<ChapterNode & { path: BookPath }>(function ChapterHeaderC(props) {
     const TitleComp = props.level === 0 ? ChapterTitle
         : props.level > 0 ? PartTitle
             : SubpartTitle;
@@ -135,6 +135,4 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
                 <TitleComp key={idx} text={line} />)
         }
     </>;
-},
-    'ChapterHeader'
-);
+});

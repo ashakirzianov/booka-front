@@ -1,9 +1,10 @@
 import * as React from 'react';
+
 import {
     Text as NativeText, TextStyle as NativeTextStyle,
 } from 'react-native';
 import { TextStyle, TextProps, LinkProps } from './Atoms.common';
-import { Props } from './comp-utils';
+import { Props } from './common';
 
 export { Row, Column } from './Atoms.common';
 

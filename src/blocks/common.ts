@@ -1,13 +1,11 @@
 import * as React from 'react';
+
 import {
-    ExcludeKeys, Func, platformValue,
+    Func, platformValue,
     buildConnectRedux,
 } from '../utils';
 import { actionCreators } from '../core';
 import { App, Theme, Palette } from '../model';
-
-export type RefType = HTMLElement | null;
-export type RefHandler = (ref: RefType) => void;
 
 export type ReactContent = React.ReactNode;
 export type Callback<Argument> = Func<Argument, void>;
@@ -32,16 +30,6 @@ export function absolute(size: number) {
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
 export type Hoverable<T> = T & { ':hover'?: Partial<T> };
-
-export function partial<T>(Cmp: Comp<T>) {
-    return <P extends keyof T>(partials: Pick<T, P>): Comp<ExcludeKeys<T, P>> => {
-        return props => React.createElement(
-            Cmp,
-            { ...(partials as any), ...(props as any) }, // TODO: investigate why we need 'as any'
-            props.children
-        );
-    };
-}
 
 type Themeable = {
     theme: Theme,

@@ -4,7 +4,7 @@ import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
-import { Comp } from './comp-utils';
+import { Comp } from './common';
 
 export type IconName = 'close' | 'left' | 'items' | 'letter';
 

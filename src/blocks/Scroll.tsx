@@ -1,4 +1,5 @@
-import { RefType } from './comp-utils';
+export type RefType = HTMLElement | null;
+export type RefHandler = (ref: RefType) => void;
 
 export function isPartiallyVisible(ref?: RefType) {
     if (ref) {
