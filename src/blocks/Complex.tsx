@@ -2,7 +2,7 @@ import * as React from 'react';
 import { themed, Comp, relative, colors, Props } from './comp-utils';
 import { ThemedText, PanelLink, ActionLinkProps, ActionLink } from './Elements';
 import { View } from 'react-native';
-import { FadeIn } from './Animations.platform';
+import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
 import { Refable } from './comp-utils.platform';
 import { Transition } from 'react-transition-group';
