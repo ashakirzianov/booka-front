@@ -1,91 +1,234 @@
 import * as React from 'react';
-import { themed, colors, Comp } from './comp-utils';
-import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
-import { platformValue } from '../utils';
+import { themed, Comp, relative, colors } from './comp-utils';
+import { ThemedText, PanelLink, ActionLinkProps, ActionLink } from './Elements';
+import { View } from 'react-native';
+import { FadeIn } from './Animations.platform';
+import { Manager, Reference, Popper } from 'react-popper';
+import { Refable } from './comp-utils.platform';
+import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
+import { platformValue } from '../utils';
+import { Complex, ModalBoxProps, Layer, WithPopoverProps, BarProps, OverlayBoxProps, ClickableProps } from './Complex.common';
 
-export {
-    BottomBar, TopBar, Modal, WithPopover,
-    Clickable, Separator, LinkButton, Tab, DottedLine,
-} from './Complex.platform';
+const headerHeight = relative(3);
 
-export const Layer = themed(props =>
-    <View style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        width: platformValue({ mobile: '100%' }),
-        height: platformValue({ mobile: '100%' }),
-        backgroundColor: colors(props).primary,
-    }}>
-        {props.children}
-    </View>
-);
+export const Modal: Comp<ModalBoxProps> = (props =>
+    <Transition in={props.open} timeout={300}>
+        {state => state === 'exited' ? null :
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                position: 'fixed',
+                top: 0, bottom: 0, left: 0, right: 0,
+                backgroundColor: defaults.semiTransparent,
+                zIndex: 10,
+                transition: `${defaults.animationDuration}ms ease-in-out`,
+                opacity: state === 'entered' ? 1 : 0.01,
+            }}
+                onClick={props.toggle}
+            >
+                <OverlayBox
+                    style={{
+                        transitionDuration: `${defaults.animationDuration}ms`,
+                        transform: state === 'entered' ? [] : [{ translateY: '100%' as any }],
+                    }}
+                >
+                    <View style={{
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        height: headerHeight,
+                    }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                        }}>
+                            <View style={{
+                                position: 'absolute',
+                                top: 0, left: 0, bottom: 0, right: 0,
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <PanelLink onClick={props.toggle} icon='close' />
+                            </View>
+                            <View style={{
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                            }}>
+                                <ThemedText>{props.title}</ThemedText>
+                            </View>
+                            <View />
+                        </View>
+                    </View>
+                    <div style={{
+                        alignItems: 'stretch',
+                        width: '100%',
+                        overflowY: 'scroll',
+                        maxHeight: '90%',
+                    }}>
+                        {props.children}
+                    </div>
+                </OverlayBox>
 
-export const ActivityIndicator = themed(props =>
-    <NativeActivityIndicator
-        size='large'
-        color={colors(props).primary}
-    />
-);
-
-export const FullScreenActivityIndicator: Comp = (props =>
-    <View style={{
-        position: 'fixed' as any,
-        top: 0, left: 0,
-        minHeight: '100%',
-        minWidth: '100%',
-        width: '100%',
-        height: '100%',
-        backgroundColor: defaults.semiTransparent,
-        justifyContent: 'center',
-        zIndex: 10,
-    }}>
-        <ActivityIndicator />
-    </View>
-);
-
-export class IncrementalLoad extends React.Component<{
-    increment?: number,
-    initial?: number,
-    timeout?: number,
-    skip?: number,
-}, {
-    count: number,
-}> {
-    public state = this.initialState();
-    public initialState() {
-        return {
-            count: this.props.initial !== undefined ? this.props.initial : this.props.increment || 10,
-        };
-    }
-
-    public componentDidMount() {
-        this.setState(this.initialState());
-        this.handleIncrement();
-    }
-
-    public handleIncrement() {
-        const { children, increment, timeout } = this.props;
-        const { count } = this.state;
-        const childrenCount = Array.isArray(children) ? children.length : 0;
-        if (count < childrenCount) {
-            this.setState({
-                count: count + (increment || 10),
-            });
-            setTimeout(() => this.handleIncrement(), (timeout || 500));
+            </div>
         }
+    </Transition>
+);
+
+function bar(top: boolean) {
+    return themed<BarProps>(props =>
+        <FadeIn visible={props.open}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                width: '100%',
+                height: headerHeight,
+                position: 'fixed',
+                top: top ? 0 : undefined,
+                bottom: !top ? 0 : undefined,
+                left: 0,
+                zIndex: 5,
+                boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+                backgroundColor: colors(props).secondary,
+            }}>
+                {props.children}
+            </div >
+        </FadeIn >
+    );
+}
+
+export const TopBar = bar(true);
+export const BottomBar = bar(false);
+
+type WithPopoverState = {
+    open: boolean,
+};
+export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
+    public state = { open: false };
+
+    public toggleVisibility() {
+        this.setState({ open: !this.state.open });
+    }
+
+    public hide() {
+        this.setState({ open: false });
     }
 
     public render() {
-        const { children, skip } = this.props;
-        const { count } = this.state;
-        if (Array.isArray(children) && children.length > count) {
-            const start = skip && skip > count ? skip - count : 0;
-            const end = (skip || 0) + count;
-            return children.slice(start, end);
-        } else {
-            return children;
-        }
+        const props = this.props;
+        const { open } = this.state;
+        return <Manager>
+            <Reference>
+                {({ ref }) =>
+                    <>
+                        {!open ? null :
+                            <div style={{
+                                position: 'fixed',
+                                top: 0, bottom: 0, left: 0, right: 0,
+                                zIndex: -10,
+                            }}
+                                onClick={this.hide.bind(this)}
+                            />
+                        }
+                        <Refable ref={ref}>
+                            {props.children(this.toggleVisibility.bind(this))}
+                        </Refable>
+                    </>
+                }
+            </Reference>
+            <FadeIn visible={open}>
+                <Popper
+                    placement={props.placement}
+                    positionFixed={platformValue({
+                        firefox: true,
+                        default: false,
+                    })}
+                >
+                    {
+                        ({ ref, style, placement }) =>
+                            <div ref={ref} style={{
+                                ...style,
+                            }} data-placement={placement}>
+                                {/* TODO: add arrows */}
+                                <OverlayBox>
+                                    {props.body}
+                                </OverlayBox>
+                            </div>
+                    }
+                </Popper>
+            </FadeIn>
+        </Manager >;
     }
 }
+export const Tab: Comp = (props =>
+    <span>&nbsp;&nbsp;</span>
+);
+
+export const NewLine: Comp = (props => <br />);
+
+export const DottedLine: Comp = (props =>
+    <div style={{
+        flex: 1,
+        // TODO: consider properly implementing dotted line
+        // borderBottom: 'dotted 2px',
+    }} />
+);
+
+export const Separator: Comp = (() =>
+    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
+);
+
+export const LinkButton = themed<ActionLinkProps>(props =>
+    <ActionLink {...props}>
+        <div style={{
+            borderStyle: 'solid',
+            borderColor: colors(props).accent,
+            color: colors(props).accent,
+            fontSize: props.theme.fontSizes.normal,
+            borderRadius: 10,
+            padding: relative(0.3), // TODO: extract somewhere ?
+            ':hover': {
+                borderColor: colors(props).highlight,
+                color: colors(props).highlight,
+            },
+        }}>
+            {props.children}
+        </div>
+    </ActionLink>
+);
+
+export const Clickable: Comp<ClickableProps> = (props =>
+    <div onClick={props.onClick}>
+        {props.children}
+    </div>
+);
+
+export const OverlayBox = themed<OverlayBoxProps>(props =>
+    <View style={{
+        alignSelf: 'center',
+        backgroundColor: colors(props).secondary,
+        width: '100%',
+        maxWidth: '50em',
+        maxHeight: '100%',
+        margin: '0 auto',
+        zIndex: 10,
+        borderRadius: props.theme.radius,
+        boxShadow: `0px 0px 10px ${colors(props).shadow}`,
+        padding: relative(1),
+        ...props.style as any,
+    }}
+    >
+        <div onClick={e => e.stopPropagation()}>
+            {props.children}
+        </div>
+    </View>
+);
+
+const complex: Complex = {
+    Layer,
+    Modal, TopBar, BottomBar, WithPopover, OverlayBox,
+    Clickable, Separator, LinkButton, Tab, DottedLine,
+};
+export default complex;

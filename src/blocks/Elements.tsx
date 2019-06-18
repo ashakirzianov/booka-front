@@ -2,11 +2,12 @@ import * as React from 'react';
 
 import { Comp, themed, relative, colors, Callback, connectAll } from './comp-utils';
 import Atoms from './Atoms';
-import { View } from 'react-native';
+import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
 import { Action, actionToUrl } from '../core';
 import { AllowedViewStyle, TextStyle } from './Atoms.common';
+import { defaults } from './defaults';
 
 export type ActionLinkProps = {
     action?: Action,
@@ -142,4 +143,27 @@ export const Line: Comp = (props =>
     }}>
         {props.children}
     </Atoms.Row>
+);
+
+export const ActivityIndicator = themed(props =>
+    <NativeActivityIndicator
+        size='large'
+        color={colors(props).primary}
+    />
+);
+
+export const FullScreenActivityIndicator: Comp = (props =>
+    <View style={{
+        position: 'fixed' as any,
+        top: 0, left: 0,
+        minHeight: '100%',
+        minWidth: '100%',
+        width: '100%',
+        height: '100%',
+        backgroundColor: defaults.semiTransparent,
+        justifyContent: 'center',
+        zIndex: 10,
+    }}>
+        <ActivityIndicator />
+    </View>
 );

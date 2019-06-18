@@ -1,0 +1,102 @@
+import * as React from 'react';
+import { themed, colors, Comp, Callback, ReactContent } from './comp-utils';
+import { View, ViewStyle } from 'react-native';
+import { platformValue } from '../utils';
+import { PopperProps } from 'react-popper';
+import { ActionLinkProps } from './Elements';
+
+export type Complex = {
+    TopBar: Comp<BarProps>,
+    BottomBar: Comp<BarProps>,
+    Modal: Comp<ModalBoxProps>,
+    WithPopover: Comp<WithPopoverProps>,
+    OverlayBox: Comp<OverlayBoxProps>,
+    Clickable: Comp<ClickableProps>,
+    LinkButton: Comp<ActionLinkProps>,
+    Separator: Comp,
+    Tab: Comp,
+    DottedLine: Comp,
+    Layer: Comp,
+};
+
+export type ClickableProps = { onClick: () => void };
+
+export type OverlayBoxProps = {
+    style?: Pick<ViewStyle,
+        'transform'
+    > & {
+        transitionDuration?: string,
+    },
+};
+
+export type BarProps = { open: boolean };
+
+export type WithPopoverProps = {
+    body: ReactContent,
+    placement: PopperProps['placement'],
+    children: (onClick: Callback<void>) => ReactContent,
+};
+
+export type ModalBoxProps = {
+    open: boolean,
+    title?: string,
+    toggle: Callback<void>,
+};
+
+export const Layer = themed(props =>
+    <View style={{
+        position: 'absolute',
+        minHeight: '100%',
+        minWidth: '100%',
+        width: platformValue({ mobile: '100%' }),
+        height: platformValue({ mobile: '100%' }),
+        backgroundColor: colors(props).primary,
+    }}>
+        {props.children}
+    </View>
+);
+
+export class IncrementalLoad extends React.Component<{
+    increment?: number,
+    initial?: number,
+    timeout?: number,
+    skip?: number,
+}, {
+    count: number,
+}> {
+    public state = this.initialState();
+    public initialState() {
+        return {
+            count: this.props.initial !== undefined ? this.props.initial : this.props.increment || 10,
+        };
+    }
+
+    public componentDidMount() {
+        this.setState(this.initialState());
+        this.handleIncrement();
+    }
+
+    public handleIncrement() {
+        const { children, increment, timeout } = this.props;
+        const { count } = this.state;
+        const childrenCount = Array.isArray(children) ? children.length : 0;
+        if (count < childrenCount) {
+            this.setState({
+                count: count + (increment || 10),
+            });
+            setTimeout(() => this.handleIncrement(), (timeout || 500));
+        }
+    }
+
+    public render() {
+        const { children, skip } = this.props;
+        const { count } = this.state;
+        if (Array.isArray(children) && children.length > count) {
+            const start = skip && skip > count ? skip - count : 0;
+            const end = (skip || 0) + count;
+            return children.slice(start, end);
+        } else {
+            return children;
+        }
+    }
+}
