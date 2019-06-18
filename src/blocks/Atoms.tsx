@@ -3,6 +3,7 @@ import { View, ViewStyle, TextStyle } from 'react-native';
 import { Comp, Callback, connectAll, Hoverable, RefHandler } from './comp-utils';
 import { Action, actionToUrl } from '../core';
 import { Link } from './Atoms.platform';
+import { Color } from '../model';
 
 function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
     return style as ViewStyle;
@@ -62,7 +63,6 @@ export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
     | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
-    | 'background'
 > & Pick<TextStyle,
     never
 > & {
@@ -71,6 +71,7 @@ export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
 
 export type TextProps = {
     style?: AtomTextStyle,
+    background?: Color,
     dropCaps?: boolean,
     ref?: RefHandler,
     id?: string,

@@ -133,9 +133,7 @@ const TextRun: Comp<TextRunProps> = (props => {
                 key={idx}
                 id={pathToId(s.path)}
                 ref={ref => props.refPathHandler(ref, s.path)}
-                style={s.color !== undefined ? {
-                    background: s.color,
-                } : undefined}
+                background={s.color}
             >
                 {s.text}
             </PlainText>

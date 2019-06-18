@@ -9,6 +9,7 @@ export const Text = named(hoverable<TextProps>(props =>
         id={props.id}
         style={{
             wordBreak: 'break-word',
+            background: props.background,
             ...(props.dropCaps && {
                 float: 'left',
                 fontSize: '400%',

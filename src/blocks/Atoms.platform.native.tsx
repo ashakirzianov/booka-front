@@ -7,7 +7,10 @@ import { Comp, Callback, named } from './comp-utils';
 
 export const Text: Comp<TextProps> = named((props =>
     <NativeText
-        style={convertStyle(props.style)}
+        style={{
+            backgroundColor: props.background,
+            ...convertStyle(props.style),
+        }}
     >
         {props.children}
     </NativeText>
