@@ -3,8 +3,10 @@
         "**/build/**": true,
         "**/node_modules/**": true
     },
-    "tslint.enable": true,
-    "tslint.autoFixOnSave": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+    },
     "editor.formatOnSave": true,
     "cSpell.words": [
         "DELIM",
