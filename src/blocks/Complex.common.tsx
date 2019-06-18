@@ -1,23 +1,8 @@
 import * as React from 'react';
-import { themed, colors, Comp, Callback, ReactContent } from './comp-utils';
+import { themed, colors, Callback, ReactContent } from './comp-utils';
 import { View, ViewStyle } from 'react-native';
 import { platformValue } from '../utils';
 import { PopperProps } from 'react-popper';
-import { ActionLinkProps } from './Elements';
-
-export type Complex = {
-    TopBar: Comp<BarProps>,
-    BottomBar: Comp<BarProps>,
-    Modal: Comp<ModalBoxProps>,
-    WithPopover: Comp<WithPopoverProps>,
-    OverlayBox: Comp<OverlayBoxProps>,
-    Clickable: Comp<ClickableProps>,
-    LinkButton: Comp<ActionLinkProps>,
-    Separator: Comp,
-    Tab: Comp,
-    DottedLine: Comp,
-    Layer: Comp,
-};
 
 export type ClickableProps = { onClick: () => void };
 
@@ -37,7 +22,7 @@ export type WithPopoverProps = {
     children: (onClick: Callback<void>) => ReactContent,
 };
 
-export type ModalBoxProps = {
+export type ModalProps = {
     open: boolean,
     title?: string,
     toggle: Callback<void>,

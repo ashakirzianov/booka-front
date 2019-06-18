@@ -2,34 +2,33 @@ import * as React from 'react';
 import {
     Text as NativeText, TextStyle as NativeTextStyle,
 } from 'react-native';
-import { Atoms, TextStyle, Column, Row } from './Atoms.common';
+import { TextStyle, TextProps, LinkProps } from './Atoms.common';
+import { Props } from './comp-utils';
 
-const atoms: Atoms = {
-    Row, Column,
-    Text: (props =>
-        <NativeText
-            style={{
-                backgroundColor: props.background,
-                ...convertStyle(props.style),
-            }}
-        >
-            {props.children}
-        </NativeText>
-    ),
-    Link: (props =>
-        <NativeText
-            style={{
-                ...props.style,
-                alignSelf: 'flex-start' as any,
-            } as any} // TODO: remove as any ?
-            onPress={props.onClick}
-        >
-            {props.children}
-        </NativeText>
-    ),
-};
+export { Row, Column } from './Atoms.common';
 
-export default atoms;
+export function Text(props: Props<TextProps>) {
+    return <NativeText
+        style={{
+            backgroundColor: props.background,
+            ...convertStyle(props.style),
+        }}
+    >
+        {props.children}
+    </NativeText>;
+}
+
+export function Link(props: Props<LinkProps>) {
+    return <NativeText
+        style={{
+            ...props.style,
+            alignSelf: 'flex-start' as any,
+        } as any} // TODO: remove as any ?
+        onPress={props.onClick}
+    >
+        {props.children}
+    </NativeText>;
+}
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {
     // TODO: rethink this ?

@@ -1,23 +1,15 @@
 import * as React from 'react';
 
-import { View, ViewStyle, TextStyle as NativeTextStyle } from 'react-native';
+import { View, ViewStyle as NativeViewStyle, TextStyle as NativeTextStyle } from 'react-native';
 import { Comp, Hoverable, RefHandler, Callback } from './comp-utils';
 import { Color } from '../model';
-
-export type Atoms = {
-    Text: Comp<TextProps>,
-    Link: Comp<LinkProps>,
-    Row: Comp<LayoutProps>,
-    Column: Comp<LayoutProps>,
-};
 
 export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
 };
 
-// TODO: remove
-export type CssTextStyle = React.CSSProperties;
+type CssTextStyle = React.CSSProperties;
 export type TextStyle = Hoverable<Pick<CssTextStyle,
     | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
@@ -27,7 +19,6 @@ export type TextStyle = Hoverable<Pick<CssTextStyle,
 > & {
     fontWeight?: 'bold' | 'normal',
 }>;
-
 export type TextProps = {
     style?: TextStyle,
     background?: Color,
@@ -36,17 +27,17 @@ export type TextProps = {
     id?: string,
 };
 
-export type AllowedViewStyle = Pick<ViewStyle,
+export type ViewStyle = Pick<NativeViewStyle,
     | 'justifyContent' | 'width' | 'height'
     | 'alignItems' | 'alignSelf'
     | 'maxWidth' | 'overflow' | 'margin' | 'padding'
     | 'flex' // TODO: do not allow ?
 > & {
-    position?: ViewStyle['position'] | 'fixed',
+    position?: NativeViewStyle['position'] | 'fixed',
 };
 
 export type LayoutProps = {
-    style?: AllowedViewStyle,
+    style?: ViewStyle,
 };
 export const Column: Comp<LayoutProps> = (props =>
     <View style={{ ...convertLayoutStyle(props.style), flexDirection: 'column' }}>
@@ -62,6 +53,6 @@ export const Row: Comp<LayoutProps> = (props =>
     </View>
 );
 
-function convertLayoutStyle(style: LayoutProps['style']): ViewStyle | undefined {
+function convertLayoutStyle(style: LayoutProps['style']): NativeViewStyle | undefined {
     return style as ViewStyle;
 }

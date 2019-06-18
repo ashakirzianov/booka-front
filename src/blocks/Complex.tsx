@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, Comp, relative, colors } from './comp-utils';
+import { themed, Comp, relative, colors, Props } from './comp-utils';
 import { ThemedText, PanelLink, ActionLinkProps, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations.platform';
@@ -8,12 +8,15 @@ import { Refable } from './comp-utils.platform';
 import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
 import { platformValue } from '../utils';
-import { Complex, ModalBoxProps, Layer, WithPopoverProps, BarProps, OverlayBoxProps, ClickableProps } from './Complex.common';
+import {
+    ModalProps, WithPopoverProps, BarProps,
+    OverlayBoxProps, ClickableProps,
+} from './Complex.common';
 
-const headerHeight = relative(3);
+export { Layer } from './Complex.common';
 
-export const Modal: Comp<ModalBoxProps> = (props =>
-    <Transition in={props.open} timeout={300}>
+export function Modal(props: Props<ModalProps>) {
+    return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{
                 display: 'flex',
@@ -73,8 +76,10 @@ export const Modal: Comp<ModalBoxProps> = (props =>
 
             </div>
         }
-    </Transition>
-);
+    </Transition>;
+}
+
+const headerHeight = relative(3);
 
 function bar(top: boolean) {
     return themed<BarProps>(props =>
@@ -162,6 +167,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
         </Manager >;
     }
 }
+
 export const Tab: Comp = (props =>
     <span>&nbsp;&nbsp;</span>
 );
@@ -225,10 +231,3 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
         </div>
     </View>
 );
-
-const complex: Complex = {
-    Layer,
-    Modal, TopBar, BottomBar, WithPopover, OverlayBox,
-    Clickable, Separator, LinkButton, Tab, DottedLine,
-};
-export default complex;

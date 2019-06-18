@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { Comp, themed, relative, colors, Callback, connectAll } from './comp-utils';
-import Atoms from './Atoms';
+import * as Atoms from './Atoms';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { Theme, Palette, Color } from '../model';
 import { IconName, Icon } from './Icons';
 import { Action, actionToUrl } from '../core';
-import { AllowedViewStyle, TextStyle } from './Atoms.common';
+import { ViewStyle, TextStyle } from './Atoms.common';
 import { defaults } from './defaults';
 
 export type ActionLinkProps = {
     action?: Action,
     onClick?: Callback<void>,
-    style?: AllowedViewStyle,
+    style?: ViewStyle,
 };
 export const ActionLink = connectAll<ActionLinkProps>(props =>
     <Atoms.Link

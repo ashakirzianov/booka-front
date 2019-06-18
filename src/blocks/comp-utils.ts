@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    KeyRestriction, ExcludeKeys, Func, platformValue,
+    ExcludeKeys, Func, platformValue,
     buildConnectRedux,
 } from '../utils';
 import { actionCreators } from '../core';
@@ -15,11 +15,8 @@ export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
-export type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;
-export type Comp<P = {}, A = {}> = React.ComponentType<CompProps<P, A>>;
-export function comp<P = {}, A = {}>(c: Comp<P, A>) {
-    return c;
-}
+export type Comp<P = {}> = React.ComponentType<P>;
+export type Props<P> = React.PropsWithChildren<P>;
 
 export function relative(size: number) {
     return platformValue({
