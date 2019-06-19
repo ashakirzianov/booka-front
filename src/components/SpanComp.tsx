@@ -112,7 +112,7 @@ const CapitalizeFirst: Comp<TextRunProps> = (props => {
     secondPath[secondPath.length - 1] += 1;
     return <PlainText>
         <PlainText
-            ref={ref => props.refPathHandler(ref, firstPath)}
+            refHandler={ref => props.refPathHandler(ref, firstPath)}
             id={pathToId(firstPath)}
             dropCaps={true}
             style={{
@@ -132,7 +132,7 @@ const TextRun: Comp<TextRunProps> = (props => {
             <PlainText
                 key={idx}
                 id={pathToId(s.path)}
-                ref={ref => props.refPathHandler(ref, s.path)}
+                refHandler={ref => props.refPathHandler(ref, s.path)}
                 background={s.color}
             >
                 {s.text}

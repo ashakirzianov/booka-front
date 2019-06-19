@@ -24,7 +24,7 @@ export type TextProps = {
     style?: TextStyle,
     background?: Color,
     dropCaps?: boolean,
-    ref?: RefHandler,
+    refHandler?: RefHandler,
     id?: string,
 };
 

@@ -7,7 +7,7 @@ export { Row, Column } from './Atoms.common';
 
 export function Text(props: Props<TextProps>) {
     return <span
-        ref={props.ref}
+        ref={props.refHandler}
         id={props.id}
         style={{
             wordBreak: 'break-word',
