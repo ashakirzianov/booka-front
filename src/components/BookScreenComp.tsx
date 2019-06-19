@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
-    Comp, WithPopover, Line, Column, TextLink, PlainText,
+    Comp, WithPopover, Line, Column, ThemedTextLink, PlainText,
     hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton,
 } from '../blocks';
 import {
@@ -75,7 +75,7 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             right: 10, top: 0, height: '100%',
             justifyContent: 'center',
         }}>
-            <TextLink>
+            <ThemedTextLink>
                 <ThemedText
                     size='smallest'
                     fixedSize={true}
@@ -84,14 +84,14 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
                 >
                     {`${left} left`}
                 </ThemedText>
-            </TextLink>
+            </ThemedTextLink>
         </Column>
     </Row>;
 });
 
 type TocButtonProps = { current: number, total: number };
 const TocButton = themed<TocButtonProps>(props =>
-    <TextLink action={actionCreators.toggleToc()}>
+    <ThemedTextLink action={actionCreators.toggleToc()}>
         <TagButton color={colors(props).accent}>
             <ThemedText
                 size='smallest'
@@ -102,7 +102,7 @@ const TocButton = themed<TocButtonProps>(props =>
                 {`${props.current} of ${props.total}`}
             </ThemedText>
         </TagButton>
-    </TextLink>
+    </ThemedTextLink>
 );
 
 const LibButton: Comp = (() =>
@@ -196,9 +196,9 @@ const FontScaleButton = connectActions('incrementScale')<{
     <Column style={{
         justifyContent: 'center',
     }}>
-        <TextLink action={actionCreators.incrementScale(props.increment)}>
+        <ThemedTextLink action={actionCreators.incrementScale(props.increment)}>
             <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
-        </TextLink>
+        </ThemedTextLink>
     </Column>
 );
 
@@ -221,7 +221,7 @@ const PaletteButton = connectState('theme')<{
     text: string,
 }>(props => {
     const palette = props.theme.palettes[props.name].colors;
-    return <TextLink action={actionCreators.setPalette(props.name)}>
+    return <ThemedTextLink action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,
             height: 50,
@@ -243,6 +243,6 @@ const PaletteButton = connectState('theme')<{
                 }}>{props.text}</PlainText>
             </Row>
         </HoverableView>
-    </TextLink>;
+    </ThemedTextLink>;
 }
 );

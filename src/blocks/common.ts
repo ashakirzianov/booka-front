@@ -14,7 +14,7 @@ export type Callbacks<A> = {
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type Comp<P = {}> = React.ComponentType<P>;
-export type Props<P> = React.PropsWithChildren<P>;
+export type Props<P = {}> = React.PropsWithChildren<P>;
 
 export function relative(size: number) {
     return platformValue({
@@ -31,14 +31,12 @@ export const { connect, connectState, connectActions, connectAll } = buildConnec
 
 export type Hoverable<T> = T & { ':hover'?: Partial<T> };
 
-type Themeable = {
+export type Themeable = {
     theme: Theme,
 };
 type ThemeableComp<T> = Comp<T & Themeable>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
-    const result = connectState('theme')(C);
-    result.displayName = `Themed:${result.displayName}`;
-    return result;
+    return connectState('theme')(C);
 }
 export function colors(themeable: Themeable): Palette['colors'] {
     return themeable.theme.palettes[themeable.theme.currentPalette].colors;

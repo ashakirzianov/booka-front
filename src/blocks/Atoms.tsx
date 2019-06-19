@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextProps, LinkProps } from './Atoms.common';
-import { isOpenNewTabEvent } from './utils';
-import { Props } from './common';
+import { isOpenNewTabEvent, hoverable } from './utils';
+import { Props, colors, themed, Themeable } from './common';
 
 export { Row, Column } from './Atoms.common';
 
@@ -45,3 +45,18 @@ export function Link(props: Props<LinkProps>) {
         {props.children}
     </a>;
 }
+
+export const Hoverable = themed(hoverable<Themeable>(function HoverableC(props) {
+    return <span
+        style={{
+            fontSize: props.theme.fontSizes.normal,
+            fontFamily: props.theme.fontFamilies.main,
+            color: colors(props).accent,
+            ':hover': {
+                color: colors(props).highlight,
+            },
+        } as any} // TODO: remove 'as any'?
+    >
+        {props.children}
+    </span>;
+}));

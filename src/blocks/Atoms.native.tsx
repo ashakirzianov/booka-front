@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Text as NativeText, TextStyle as NativeTextStyle,
+    Text as NativeText, TextStyle as NativeTextStyle, View,
 } from 'react-native';
 import { TextStyle, TextProps, LinkProps } from './Atoms.common';
 import { Props } from './common';
@@ -20,15 +20,19 @@ export function Text(props: Props<TextProps>) {
 }
 
 export function Link(props: Props<LinkProps>) {
-    return <NativeText
+    return <View
         style={{
             ...props.style,
             alignSelf: 'flex-start' as any,
         } as any} // TODO: remove as any ?
-        onPress={props.onClick}
+        onTouchEnd={props.onClick}
     >
         {props.children}
-    </NativeText>;
+    </View>;
+}
+
+export function Hoverable(props: Props) {
+    return <>{props.children}</>;
 }
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {

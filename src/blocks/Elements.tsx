@@ -8,6 +8,7 @@ import { IconName, Icon } from './Icons';
 import { Action, actionToUrl } from '../core';
 import { ViewStyle, TextStyle } from './Atoms.common';
 import { defaults } from './defaults';
+import { Hoverable } from './Atoms';
 
 export type ActionLinkProps = {
     action?: Action,
@@ -62,24 +63,13 @@ export const ThemedText = themed<ThemedTextProps>(props => {
 export const PlainText = Atoms.Text;
 
 export type TextLinkProps = ActionLinkProps;
-export const TextLink = themed<TextLinkProps>(function TextLinkC(props) {
+export const ThemedTextLink = themed<TextLinkProps>(function TextLinkC(props) {
     return <ActionLink
         action={props.action}
         onClick={props.onClick}
         style={props.style}
     >
-        <Atoms.Text
-            style={{
-                fontSize: props.theme.fontSizes.normal,
-                fontFamily: props.theme.fontFamilies.main,
-                color: colors(props).accent,
-                ':hover': {
-                    color: colors(props).highlight,
-                },
-            } as any} // TODO: remove 'as any'?
-        >
-            {props.children}
-        </Atoms.Text>
+        <Hoverable>{props.children}</Hoverable>
     </ActionLink>;
 });
 
@@ -91,17 +81,19 @@ export const Label: Comp<{ text: string, margin?: string }> = (props =>
 
 export type PanelLinkProps = ActionLinkProps & { icon: IconName };
 export const PanelLink: Comp<PanelLinkProps> = (props =>
-    <TextLink
+    <ActionLink
         action={props.action}
         onClick={props.onClick}
         style={{
             margin: relative(0.5),
         }}
     >
-        <Atoms.Column style={{ justifyContent: 'center' }}>
-            <Icon name={props.icon} />{props.children}
-        </Atoms.Column>
-    </TextLink>
+        <Hoverable>
+            <Atoms.Column style={{ justifyContent: 'center' }}>
+                <Icon name={props.icon} />{props.children}
+            </Atoms.Column>
+        </Hoverable>
+    </ActionLink>
 );
 
 export const TagButton: Comp<{ color: Color }> = (props =>
@@ -119,7 +111,7 @@ export const TagButton: Comp<{ color: Color }> = (props =>
 
 export const StretchLink = themed<ActionLinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <TextLink action={props.action} style={{
+        <ThemedTextLink action={props.action} style={{
             ...props.style,
             margin: relative(0.5),
             alignSelf: 'stretch',
@@ -132,7 +124,7 @@ export const StretchLink = themed<ActionLinkProps>(props =>
             }}>
                 {props.children}
             </View>
-        </TextLink>
+        </ThemedTextLink>
     </View>
 );
 
