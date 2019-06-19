@@ -31,7 +31,6 @@ export function Link(props: Props<LinkProps>) {
             ...props.style,
             textDecoration: 'none',
             cursor: 'pointer',
-            alignSelf: 'flex-start',
         }}
         onClick={e => {
             e.stopPropagation();
