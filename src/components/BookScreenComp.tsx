@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import {
     connectActions, Row, relative, Clickable, Modal, PanelLink,
-    Comp, WithPopover, Line, Column, ThemedTextLink, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton,
+    Comp, WithPopover, Line, Column, PlainText,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -47,7 +47,6 @@ export const BookScreenHeader: Comp<BookScreen> = (props =>
 );
 
 export const BookScreenFooter: Comp<BookScreen> = (props => {
-
     const pagination = new Pagination(props.book.volume);
     const total = pagination.totalPages();
     let currentPage = 1;
@@ -75,23 +74,21 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             right: 10, top: 0, height: '100%',
             justifyContent: 'center',
         }}>
-            <ThemedTextLink>
-                <ThemedText
-                    size='smallest'
-                    fixedSize={true}
-                    family='menu'
-                    color='accent'
-                >
-                    {`${left} left`}
-                </ThemedText>
-            </ThemedTextLink>
+            <ThemedText
+                size='smallest'
+                fixedSize={true}
+                family='menu'
+                color='accent'
+            >
+                {`${left} left`}
+            </ThemedText>
         </Column>
     </Row>;
 });
 
 type TocButtonProps = { current: number, total: number };
 const TocButton = themed<TocButtonProps>(props =>
-    <ThemedTextLink action={actionCreators.toggleToc()}>
+    <ActionLink action={actionCreators.toggleToc()}>
         <TagButton color={colors(props).accent}>
             <ThemedText
                 size='smallest'
@@ -102,7 +99,7 @@ const TocButton = themed<TocButtonProps>(props =>
                 {`${props.current} of ${props.total}`}
             </ThemedText>
         </TagButton>
-    </ThemedTextLink>
+    </ActionLink>
 );
 
 const LibButton: Comp = (() =>
@@ -196,9 +193,11 @@ const FontScaleButton = connectActions('incrementScale')<{
     <Column style={{
         justifyContent: 'center',
     }}>
-        <ThemedTextLink action={actionCreators.incrementScale(props.increment)}>
-            <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
-        </ThemedTextLink>
+        <ActionLink action={actionCreators.incrementScale(props.increment)}>
+            <Hoverable>
+                <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
+            </Hoverable>
+        </ActionLink>
     </Column>
 );
 
@@ -221,7 +220,7 @@ const PaletteButton = connectState('theme')<{
     text: string,
 }>(props => {
     const palette = props.theme.palettes[props.name].colors;
-    return <ThemedTextLink action={actionCreators.setPalette(props.name)}>
+    return <ActionLink action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,
             height: 50,
@@ -243,6 +242,6 @@ const PaletteButton = connectState('theme')<{
                 }}>{props.text}</PlainText>
             </Row>
         </HoverableView>
-    </ThemedTextLink>;
+    </ActionLink>;
 }
 );

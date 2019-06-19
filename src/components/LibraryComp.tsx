@@ -1,18 +1,20 @@
 import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
-import { Comp, Row, ThemedTextLink, SafeAreaView, Column, ThemedText, relative } from '../blocks';
+import { Comp, Row, SafeAreaView, Column, ThemedText, relative, ActionLink, Hoverable } from '../blocks';
 import { actionCreators } from '../core';
 
 const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
     <Row>
-        <ThemedTextLink
+        <ActionLink
             style={{ margin: relative(0.5) }}
             action={actionCreators.navigateToBook(
                 bookLocator(remoteBookId(props.id), locationCurrent()))}
         >
-            <ThemedText>{props.meta.title}</ThemedText>
-        </ThemedTextLink>
+            <Hoverable>
+                <ThemedText>{props.meta.title}</ThemedText>
+            </Hoverable>
+        </ActionLink>
     </Row>
 );
 

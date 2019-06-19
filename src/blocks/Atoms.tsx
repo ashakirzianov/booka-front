@@ -52,6 +52,7 @@ export const Hoverable = themed(hoverable<Themeable>(function HoverableC(props) 
             fontSize: props.theme.fontSizes.normal,
             fontFamily: props.theme.fontFamilies.main,
             color: colors(props).accent,
+            alignSelf: 'stretch',
             ':hover': {
                 color: colors(props).highlight,
             },

@@ -62,17 +62,6 @@ export const ThemedText = themed<ThemedTextProps>(props => {
 
 export const PlainText = Atoms.Text;
 
-export type TextLinkProps = ActionLinkProps;
-export const ThemedTextLink = themed<TextLinkProps>(function TextLinkC(props) {
-    return <ActionLink
-        action={props.action}
-        onClick={props.onClick}
-        style={props.style}
-    >
-        <Hoverable>{props.children}</Hoverable>
-    </ActionLink>;
-});
-
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
@@ -111,7 +100,7 @@ export const TagButton: Comp<{ color: Color }> = (props =>
 
 export const StretchLink = themed<ActionLinkProps>(props =>
     <View style={{ flex: 1 }}>
-        <ThemedTextLink action={props.action} style={{
+        <ActionLink action={props.action} style={{
             ...props.style,
             margin: relative(0.5),
             alignSelf: 'stretch',
@@ -124,7 +113,7 @@ export const StretchLink = themed<ActionLinkProps>(props =>
             }}>
                 {props.children}
             </View>
-        </ThemedTextLink>
+        </ActionLink>
     </View>
 );
 

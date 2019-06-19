@@ -12,7 +12,7 @@ export * from './Complex.common';
 export * from './Icons';
 export * from './common';
 export { SafeAreaView, ScrollView, View } from 'react-native';
-export { Row, Column } from './Atoms';
+export { Row, Column, Hoverable } from './Atoms';
 export {
     TopBar, BottomBar, Clickable, DottedLine, LinkButton,
     Modal, Separator, Tab, WithPopover,
