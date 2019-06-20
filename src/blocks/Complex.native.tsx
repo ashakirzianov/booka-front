@@ -65,7 +65,11 @@ export const LinkButton = themed<ActionLinkProps>(props =>
 );
 
 export const Clickable: Comp<ClickableProps> = (props =>
-    <View>{props.children}</View>
+    <View
+        onTouchEnd={props.onClick}
+    >
+        {props.children}
+    </View>
 );
 
 export const OverlayBox = themed<OverlayBoxProps>(props =>
