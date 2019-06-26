@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { assertNever } from '../utils';
 import { Comp } from './common';
 import { IconProps, IconName } from './Icons.common';
@@ -8,13 +8,13 @@ import { IconProps, IconName } from './Icons.common';
 function convertIconName(name: IconName): string {
     switch (name) {
         case 'close':
-            return 'fa-times';
+            return 'times';
         case 'left':
-            return 'fa-angle-left';
+            return 'angle-left';
         case 'items':
-            return 'fa-bars';
+            return 'bars';
         case 'letter':
-            return 'fa-font';
+            return 'font';
         default:
             return assertNever(name);
     }
@@ -22,5 +22,5 @@ function convertIconName(name: IconName): string {
 
 // TODO: implement size
 export const Icon: Comp<IconProps> = (({ name }) =>
-    <FontAwesome5 name={convertIconName(name)} />
+    <FontAwesome name={convertIconName(name)} />
 );
