@@ -9,8 +9,9 @@ import {
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
-    getSelectionRange, subscribe, unsubscribe, BookSelection,
+    getSelectionRange, subscribe, unsubscribe,
 } from './Reader.platform';
+import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
 

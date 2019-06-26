@@ -1,11 +1,7 @@
 import { Callback } from '../blocks';
-import { BookPath, bookRangeUnordered, BookRange } from '../model';
+import { BookPath, bookRangeUnordered } from '../model';
 import { idToPath } from './common';
-
-export type BookSelection = {
-    text: string,
-    range: BookRange,
-};
+import { BookSelection } from './Reader.common';
 
 export function getSelectionRange(): BookSelection | undefined {
     const selection = window.getSelection();
