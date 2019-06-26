@@ -126,9 +126,7 @@ const CapitalizeFirst: Comp<TextRunProps> = (props => {
             refHandler={ref => props.refPathHandler(ref, firstPath)}
             id={pathToId(firstPath)}
             dropCaps={true}
-            style={{
-                background: firstHighlight,
-            }}
+            background={firstHighlight}
         >
             {text[0]}
         </PlainText>
