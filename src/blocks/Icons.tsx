@@ -5,8 +5,7 @@ import {
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
 import { Comp } from './common';
-
-export type IconName = 'close' | 'left' | 'items' | 'letter';
+import { IconProps, IconName } from './Icons.common';
 
 function iconForName(name: IconName) {
     switch (name) {
@@ -23,10 +22,6 @@ function iconForName(name: IconName) {
     }
 }
 
-export type IconProps = {
-    name: IconName,
-    size?: string,
-};
 export const Icon: Comp<IconProps> = (props =>
     React.createElement(iconForName(props.name), {
         ...props,
