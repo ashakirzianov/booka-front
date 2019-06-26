@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { themed, Comp, Props } from './common';
-import { ActionLinkProps } from './Elements';
+import { ActionableProps } from './Elements';
 import { View } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
@@ -60,7 +60,7 @@ export const Separator: Comp = (() =>
     <View />
 );
 
-export const LinkButton = themed<ActionLinkProps>(props =>
+export const LinkButton = themed<ActionableProps>(props =>
     <View>{props.children}</View>
 );
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { themed, Comp, relative, colors, Props } from './common';
-import { ThemedText, PanelLink, ActionLinkProps, ActionLink } from './Elements';
+import { ThemedText, PanelButton, ActionableProps, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
@@ -53,7 +53,7 @@ export function Modal(props: Props<ModalProps>) {
                                 justifyContent: 'center',
                                 flexDirection: 'column',
                             }}>
-                                <PanelLink onClick={props.toggle} icon='close' />
+                                <PanelButton onClick={props.toggle} icon='close' />
                             </View>
                             <View style={{
                                 justifyContent: 'center',
@@ -186,7 +186,7 @@ export const Separator: Comp = (() =>
     <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
 );
 
-export const LinkButton = themed<ActionLinkProps>(props =>
+export const LinkButton = themed<ActionableProps>(props =>
     <ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',

@@ -19,7 +19,19 @@ export function Text(props: Props<TextProps>) {
     </NativeText>;
 }
 
-export function Link(props: Props<LinkProps>) {
+export function Link({ style, onClick, children }: Props<LinkProps>) {
+    return <NativeText
+        style={{
+            ...style,
+            alignSelf: 'flex-start' as any,
+        } as any} // TODO: remove as any ?
+        onPress={onClick}
+    >
+        {children}
+    </NativeText>;
+}
+
+export function Button(props: Props<LinkProps>) {
     return <View
         style={{
             ...props.style,

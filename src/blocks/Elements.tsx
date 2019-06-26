@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Comp, themed, relative, colors, Callback, connectAll } from './common';
 import * as Atoms from './Atoms';
+import { LinkProps } from './Atoms.common';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { Theme, Palette, Color } from '../model';
 import { Icon } from './Icons';
@@ -11,27 +12,31 @@ import { ViewStyle, TextStyle } from './Atoms.common';
 import { defaults } from './defaults';
 import { Hoverable } from './Atoms';
 
-export type ActionLinkProps = {
+export type ActionableProps = {
     action?: Action,
     onClick?: Callback<void>,
     style?: ViewStyle,
 };
-export const ActionLink = connectAll<ActionLinkProps>(function ActionLinkC(props) {
-    return <Atoms.Link
-        onClick={() => {
-            if (props.action) {
-                props.dispatch(props.action);
-            }
-            if (props.onClick) {
-                props.onClick();
-            }
-        }}
-        to={actionToUrl(props.action, props.state)}
-        style={props.style}
-    >
-        {props.children}
-    </Atoms.Link>;
-});
+function actionize(LinkOrButton: Comp<LinkProps>) {
+    return connectAll<ActionableProps>(function ActionLinkC({ action, onClick, state, children, dispatch, style }) {
+        return <LinkOrButton
+            onClick={() => {
+                if (action) {
+                    dispatch(action);
+                }
+                if (onClick) {
+                    onClick();
+                }
+            }}
+            to={actionToUrl(action, state)}
+            style={style}
+        >
+            {children}
+        </LinkOrButton>;
+    });
+}
+export const ActionLink = actionize(Atoms.Link);
+export const ActionButton = actionize(Atoms.Button);
 
 type ThemedTextProps = {
     style?: TextStyle,
@@ -69,9 +74,9 @@ export const Label: Comp<{ text: string, margin?: string }> = (props =>
     </ThemedText>
 );
 
-export type PanelLinkProps = ActionLinkProps & { icon: IconName };
-export const PanelLink: Comp<PanelLinkProps> = (props =>
-    <ActionLink
+export type PanelLinkProps = ActionableProps & { icon: IconName };
+export const PanelButton: Comp<PanelLinkProps> = (props =>
+    <ActionButton
         action={props.action}
         onClick={props.onClick}
         style={{
@@ -83,7 +88,7 @@ export const PanelLink: Comp<PanelLinkProps> = (props =>
                 <Icon name={props.icon} />{props.children}
             </Atoms.Column>
         </Hoverable>
-    </ActionLink>
+    </ActionButton>
 );
 
 export const TagButton: Comp<{ color: Color }> = (props =>
@@ -99,9 +104,9 @@ export const TagButton: Comp<{ color: Color }> = (props =>
     </View>
 );
 
-export const StretchLink = themed<ActionLinkProps>(props =>
+export const StretchLink = themed<ActionableProps>(props =>
     <View style={{ flex: 1 }}>
-        <ActionLink action={props.action} style={{
+        <ActionButton action={props.action} style={{
             ...props.style,
             margin: relative(0.5),
             alignSelf: 'stretch',
@@ -114,7 +119,7 @@ export const StretchLink = themed<ActionLinkProps>(props =>
             }}>
                 {props.children}
             </View>
-        </ActionLink>
+        </ActionButton>
     </View>
 );
 

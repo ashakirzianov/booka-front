@@ -1,7 +1,16 @@
 import * as React from 'react';
 
-import { Color, BookRange, BookPath, isSimple, Span, isCompound, isAttributed, isFootnote, AttributesObject, SimpleSpan, CompoundSpan, spanLength, AttributedSpan, attrs, FootnoteSpan, inRange, bookRange, incrementPath, overlapWith, overlaps, sameParent, pathLessThan } from '../model';
-import { Comp, PlainText, relative, connectActions, ThemedText, ActionLink, Hoverable } from '../blocks';
+import {
+    Color, BookRange, BookPath, isSimple, Span,
+    isCompound, isAttributed, isFootnote, AttributesObject,
+    SimpleSpan, CompoundSpan, spanLength, AttributedSpan,
+    attrs, FootnoteSpan, inRange, bookRange, incrementPath,
+    overlapWith, overlaps, sameParent, pathLessThan,
+} from '../model';
+import {
+    Comp, PlainText, relative, connectActions, ThemedText,
+    ActionLink, Hoverable, Props,
+} from '../blocks';
 import { assertNever, filterUndefined, last } from '../utils';
 import { actionCreators } from '../core';
 import { RefPathHandler, pathToId } from './common';
@@ -90,15 +99,15 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
     </StyledWithAttributes>
 );
 type FootnoteSpanProps = SpanType<FootnoteSpan>;
-const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(props =>
-    <ActionLink action={actionCreators.openFootnote(props.span.id)}>
+const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(function FootnoteSpanC(props: Props<FootnoteSpanProps>) {
+    return <ActionLink action={actionCreators.openFootnote(props.span.id)}>
         <Hoverable>
             <ThemedText color='accent' hoverColor='highlight'>
                 <SpanComp {...props} span={props.span.content} />
             </ThemedText>
         </Hoverable>
-    </ActionLink>
-);
+    </ActionLink>;
+});
 
 type TextRunProps = {
     text: string,

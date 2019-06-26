@@ -24,11 +24,11 @@ export function Text(props: Props<TextProps>) {
     </span>;
 }
 
-export function Link(props: Props<LinkProps>) {
+function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
     return <a
-        href={props.to}
+        href={to}
         style={{
-            ...props.style,
+            ...style,
             textDecoration: 'none',
             cursor: 'pointer',
         }}
@@ -36,15 +36,18 @@ export function Link(props: Props<LinkProps>) {
             e.stopPropagation();
             if (!isOpenNewTabEvent(e)) {
                 e.preventDefault();
-                if (props.onClick) {
-                    props.onClick();
+                if (onClick) {
+                    onClick();
                 }
             }
         }}
     >
-        {props.children}
+        {children}
     </a>;
 }
+
+export const Link = linkOrButton;
+export const Button = linkOrButton;
 
 export const Hoverable = themed(hoverable<Themeable>(function HoverableC(props) {
     return <span

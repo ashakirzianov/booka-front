@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, relative, Clickable, Modal, PanelLink,
+    connectActions, Row, relative, Clickable, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -88,7 +88,7 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
 
 type TocButtonProps = { current: number, total: number };
 const TocButton = themed<TocButtonProps>(props =>
-    <ActionLink action={actionCreators.toggleToc()}>
+    <ActionButton action={actionCreators.toggleToc()}>
         <TagButton color={colors(props).accent}>
             <ThemedText
                 size='smallest'
@@ -99,11 +99,11 @@ const TocButton = themed<TocButtonProps>(props =>
                 {`${props.current} of ${props.total}`}
             </ThemedText>
         </TagButton>
-    </ActionLink>
+    </ActionButton>
 );
 
 const LibButton: Comp = (() =>
-    <PanelLink icon='left' action={actionCreators.navigateToLibrary()} />
+    <PanelButton icon='left' action={actionCreators.navigateToLibrary()} />
 );
 
 const AppearanceButton: Comp = (() =>
@@ -111,7 +111,7 @@ const AppearanceButton: Comp = (() =>
         placement='bottom'
         body={<ThemePicker />}
     >
-        {onClick => <PanelLink icon='letter' onClick={onClick} />}
+        {onClick => <PanelButton icon='letter' onClick={onClick} />}
     </WithPopover>
 );
 
