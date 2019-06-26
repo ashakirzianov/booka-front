@@ -104,24 +104,24 @@ export const TagButton: Comp<{ color: Color }> = (props =>
     </View>
 );
 
-export const StretchLink = themed<ActionableProps>(props =>
-    <View style={{ flex: 1 }}>
-        <ActionButton action={props.action} style={{
-            ...props.style,
-            margin: relative(0.5),
-            alignSelf: 'stretch',
+export const StretchLink = themed<ActionableProps>(function StretchLinkC({ action, style, children }) {
+    return <View style={{ flex: 1 }}>
+        <ActionButton action={action} style={{
+            ...style,
+            // margin: relative(0.5),
+            // alignSelf: 'stretch',
         }}>
             <View style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                margin: '0.3em',
+                // margin: relative(0.3),
                 flexDirection: 'row',
             }}>
-                {props.children}
+                {children}
             </View>
         </ActionButton>
-    </View>
-);
+    </View>;
+});
 
 export const Line: Comp = (props =>
     <Atoms.Row style={{

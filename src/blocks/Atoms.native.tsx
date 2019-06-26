@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import {
-    Text as NativeText, TextStyle as NativeTextStyle, View,
+    Text as NativeText, TextStyle as NativeTextStyle,
+    View, ViewStyle as NativeViewStyle,
 } from 'react-native';
 import { TextStyle, TextProps, LinkProps } from './Atoms.common';
 import { Props } from './common';
@@ -31,15 +32,15 @@ export function Link({ style, onClick, children }: Props<LinkProps>) {
     </NativeText>;
 }
 
-export function Button(props: Props<LinkProps>) {
+export function Button({ style, onClick, children }: Props<LinkProps>) {
     return <View
         style={{
-            ...props.style,
             alignSelf: 'flex-start' as any,
-        } as any} // TODO: remove as any ?
-        onTouchEnd={props.onClick}
+            ...(style as NativeViewStyle),
+        }}
+        onTouchEnd={onClick}
     >
-        {props.children}
+        {children}
     </View>;
 }
 
