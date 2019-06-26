@@ -18,7 +18,7 @@ export type BarProps = { open: boolean };
 
 export type WithPopoverProps = {
     body: ReactContent,
-    placement: PopperProps['placement'],
+    popoverPlacement: PopperProps['placement'],
     children: (onClick: Callback<void>) => ReactContent,
 };
 

@@ -43,8 +43,10 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
     }
 
     public render() {
-        const props = this.props;
-        return <View>{props.children}</View>;
+        const { children } = this.props;
+        return <View>
+            {children(this.toggleVisibility.bind(this))}
+        </View>;
     }
 }
 

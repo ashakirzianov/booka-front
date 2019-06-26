@@ -108,7 +108,7 @@ const LibButton: Comp = (() =>
 
 const AppearanceButton: Comp = (() =>
     <WithPopover
-        placement='bottom'
+        popoverPlacement='bottom'
         body={<ThemePicker />}
     >
         {onClick => <PanelButton icon='letter' onClick={onClick} />}

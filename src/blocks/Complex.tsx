@@ -122,7 +122,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
     }
 
     public render() {
-        const props = this.props;
+        const { body, popoverPlacement, children } = this.props;
         const { open } = this.state;
         return <Manager>
             <Reference>
@@ -138,14 +138,14 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                             />
                         }
                         <Refable ref={ref}>
-                            {props.children(this.toggleVisibility.bind(this))}
+                            {children(this.toggleVisibility.bind(this))}
                         </Refable>
                     </>
                 }
             </Reference>
             <FadeIn visible={open}>
                 <Popper
-                    placement={props.placement}
+                    placement={popoverPlacement}
                     positionFixed={platformValue({
                         firefox: true,
                         default: false,
@@ -158,7 +158,7 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                             }} data-placement={placement}>
                                 {/* TODO: add arrows */}
                                 <OverlayBox>
-                                    {props.body}
+                                    {body}
                                 </OverlayBox>
                             </div>
                     }
