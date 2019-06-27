@@ -14,6 +14,7 @@ import { BookNodesComp } from './Reader';
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
+import { platformValue } from '../utils';
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
@@ -122,7 +123,10 @@ type BookTextProps = {
 const BookText = connectActions('toggleControls')<BookTextProps>(props =>
     <Row style={{
         alignItems: 'center',
-        maxWidth: relative(50),
+        maxWidth: platformValue({
+            web: relative(50),
+            mobile: relative(95),
+        }),
         marginHorizontal: relative(2),
     }}
     >
