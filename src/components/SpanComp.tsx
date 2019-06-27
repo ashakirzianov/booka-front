@@ -65,33 +65,28 @@ const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
         ? <CapitalizeFirst text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
         : <TextRun text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />;
 });
-const CompoundSpanComp: Comp<SpanType<CompoundSpan>> = (props =>
-    <>
-        {
-            props.span.spans.reduce(
-                (result, childS, idx) => {
-                    const path = props.path.slice();
-                    path[path.length - 1] += result.offset;
-                    const child = <SpanComp
-                        key={`${idx}`}
-                        span={childS}
-                        first={props.first && idx === 0}
-                        path={path}
-                        colorization={props.colorization}
-                        refPathHandler={props.refPathHandler}
-                    />;
-                    result.children.push(child);
-                    result.offset += spanLength(childS);
-                    return result;
-                },
-                {
-                    children: [] as JSX.Element[],
-                    offset: 0,
-                }
-            ).children
-        }
-    </>
-);
+function CompoundSpanComp({ span, path, first, colorization, refPathHandler }: SpanType<CompoundSpan>) {
+    const children: JSX.Element[] = [];
+    let offset = 0;
+    let idx = 0;
+    for (const childS of span.spans) {
+        const pathCopy = path.slice();
+        pathCopy[path.length - 1] += offset;
+        const child = <SpanComp
+            key={`${idx}`}
+            span={childS}
+            first={first && idx === 0}
+            path={pathCopy}
+            colorization={colorization}
+            refPathHandler={refPathHandler}
+        />;
+        children.push(child);
+        offset += spanLength(childS);
+        idx++;
+    }
+
+    return <PlainText>{children}</PlainText>;
+}
 type AttributedSpanProps = SpanType<AttributedSpan>;
 const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
     <StyledWithAttributes attrs={attrs(props.span)}>
