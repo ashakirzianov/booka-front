@@ -8,8 +8,8 @@ import {
     overlapWith, overlaps, sameParent, pathLessThan,
 } from '../model';
 import {
-    Comp, PlainText, relative, connectActions, ThemedText,
-    ActionLink, Hoverable, Props,
+    Comp, PlainText, connectActions, ThemedText,
+    ActionLink, Hoverable, Props, point,
 } from '../blocks';
 import { assertNever, filterUndefined, last } from '../utils';
 import { actionCreators } from '../core';
@@ -45,7 +45,7 @@ const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
         fontStyle: props.attrs.italic ? 'italic' : 'normal',
         fontWeight: props.attrs.bold ? 'bold' : 'normal',
         ...(props.attrs.line && {
-            textIndent: relative(2),
+            textIndent: point(2),
             display: 'block',
         }),
     }}>

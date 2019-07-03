@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { themed, Comp, relative, colors, Props } from './common';
+import { themed, Comp, percent, colors, Props, point } from './common';
 import { ThemedText, PanelButton, ActionableProps, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations';
@@ -79,7 +79,7 @@ export function Modal(props: Props<ModalProps>) {
     </Transition>;
 }
 
-const headerHeight = relative(3);
+const headerHeight = point(3);
 
 function bar(top: boolean) {
     return themed<BarProps>(props =>
@@ -183,7 +183,11 @@ export const DottedLine: Comp = (props =>
 );
 
 export const Separator: Comp = (() =>
-    <hr style={{ width: '100%', marginTop: relative(1), marginBottom: relative(1) }} />
+    <hr style={{
+        width: percent(100),
+        marginTop: point(1),
+        marginBottom: point(1),
+    }} />
 );
 
 export const LinkButton = themed<ActionableProps>(props =>
@@ -194,7 +198,7 @@ export const LinkButton = themed<ActionableProps>(props =>
             color: colors(props).accent,
             fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
-            padding: relative(0.3), // TODO: extract somewhere ?
+            padding: point(0.3), // TODO: extract somewhere ?
             ':hover': {
                 borderColor: colors(props).highlight,
                 color: colors(props).highlight,
@@ -215,14 +219,14 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
     <View style={{
         alignSelf: 'center',
         backgroundColor: colors(props).secondary,
-        width: '100%',
-        maxWidth: '50em',
-        maxHeight: '100%',
+        width: percent(100),
+        maxWidth: point(50),
+        maxHeight: percent(100),
         margin: '0 auto',
         zIndex: 10,
         borderRadius: props.theme.radius,
         boxShadow: `0px 0px 10px ${colors(props).shadow}`,
-        padding: relative(1),
+        padding: point(1),
         ...props.style as any,
     }}
     >

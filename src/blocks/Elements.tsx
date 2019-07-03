@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Comp, themed, relative, colors, Callback, connectAll } from './common';
+import { Comp, themed, colors, Callback, connectAll, point } from './common';
 import * as Atoms from './Atoms';
 import { LinkProps } from './Atoms.common';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
@@ -80,7 +80,7 @@ export const PanelButton: Comp<PanelLinkProps> = (props =>
         action={props.action}
         onClick={props.onClick}
         style={{
-            margin: relative(0.5),
+            margin: point(0.5),
         }}
     >
         <Hoverable>
@@ -96,7 +96,8 @@ export const TagButton: Comp<{ color: Color }> = (props =>
         justifyContent: 'center',
         backgroundColor: props.color,
         borderRadius: 50,
-        padding: relative(0.2),
+        paddingHorizontal: point(1),
+        paddingVertical: point(0.2),
     }}>
         <Atoms.Row style={{ justifyContent: 'center' }}>
             {props.children}

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Comp, ThemedText } from '../blocks';
+import { Comp, ThemedText, Size } from '../blocks';
 
-export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
+export const ParagraphContainer: Comp<{ textIndent: Size }> = (props =>
     <ThemedText>
         <div style={{ display: 'flex' }}>
             <span style={{

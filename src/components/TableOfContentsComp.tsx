@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import {
-    Comp, Row, Tab, relative,
-    Column, DottedLine, StretchLink, ThemedText,
+    Comp, Row, Tab,
+    Column, DottedLine, StretchLink, ThemedText, point,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -32,7 +32,7 @@ const TocItemComp: Comp<TocItemProps> = (props =>
 export const TableOfContentsComp: Comp<TableOfContents> = (props => {
     const { id, items } = props;
     const maxLevel = items.reduce((max, i) => Math.max(max, i.level), 0);
-    return <Column style={{ margin: relative(2) }}>
+    return <Column style={{ margin: point(2) }}>
         {items.map(i =>
             <TocItemComp
                 key={i.path.join('-')}

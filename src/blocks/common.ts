@@ -16,15 +16,16 @@ export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type Comp<P = {}> = React.ComponentType<P>;
 export type Props<P = {}> = React.PropsWithChildren<P>;
 
-export function relative(size: number) {
-    return platformValue({
-        web: `${size}em`,
-        default: `${size}%`,
-    });
+export type Size = string | number;
+export function percent(size: number) {
+    return `${size}%`;
 }
 
-export function absolute(size: number) {
-    return `${size}`;
+export function point(size: number) {
+    return platformValue<Size>({
+        web: `${size}em`,
+        default: size * 12,
+    });
 }
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);

@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, relative, Clickable, Modal, PanelButton,
+    connectActions, Row, Clickable, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton, point,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -14,7 +14,6 @@ import { BookNodesComp } from './Reader';
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
-import { platformValue } from '../utils';
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
@@ -123,11 +122,8 @@ type BookTextProps = {
 const BookText = connectActions('toggleControls')<BookTextProps>(props =>
     <Row style={{
         alignItems: 'center',
-        maxWidth: platformValue({
-            web: relative(50),
-            mobile: relative(95),
-        }),
-        marginHorizontal: relative(2),
+        maxWidth: point(50),
+        marginHorizontal: point(2),
     }}
     >
         <Clickable key='book' onClick={() => props.toggleControls()}>
@@ -170,7 +166,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
 
 const ThemePicker: Comp = (props =>
     <Column style={{
-        width: relative(14),
+        width: point(14),
     }}>
         <FontScale />
         <Separator />
@@ -181,7 +177,7 @@ const ThemePicker: Comp = (props =>
 const FontScale: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
-        height: relative(5),
+        height: point(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
             <FontScaleButton increment={-0.1} size={18} />
@@ -208,7 +204,7 @@ const FontScaleButton = connectActions('incrementScale')<{
 const PalettePicker: Comp = (() =>
     <Column style={{
         justifyContent: 'center',
-        height: relative(5),
+        height: point(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
             <PaletteButton name='light' text='L' />
