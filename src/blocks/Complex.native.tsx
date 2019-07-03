@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { themed, Comp, Props } from './common';
+
+import { themed, Comp, Props, colors } from './common';
 import { ActionableProps } from './Elements';
-import { View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps,
@@ -17,11 +18,28 @@ export function Modal(props: Props<ModalProps>) {
     </View>;
 }
 
+const headerHeight = 80;
 function bar(top: boolean) {
     return themed<BarProps>(props =>
-        <View>
-            {props.children}
-        </View>
+        <View style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: headerHeight,
+            position: 'absolute',
+            top: top ? 0 : undefined,
+            bottom: !top ? 0 : undefined,
+            left: 0,
+            zIndex: 5,
+            // boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+            backgroundColor: colors(props).secondary,
+        }}>
+            <SafeAreaView>
+                {props.children}
+            </SafeAreaView>
+        </View >
     );
 }
 
