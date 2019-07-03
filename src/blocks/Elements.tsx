@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Comp, themed, colors, Callback, connectAll, point } from './common';
+import { Comp, themed, colors, Callback, connectAll, point, Props } from './common';
 import * as Atoms from './Atoms';
 import { LinkProps } from './Atoms.common';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
@@ -91,10 +91,16 @@ export const PanelButton: Comp<PanelLinkProps> = (props =>
     </ActionButton>
 );
 
-export const TagButton: Comp<{ color: Color }> = (props =>
-    <View style={{
+export type TagButtonProps = {
+    color?: Color,
+    borderColor?: Color,
+};
+export function TagButton(props: Props<TagButtonProps>) {
+    return <View style={{
         justifyContent: 'center',
         backgroundColor: props.color,
+        borderWidth: props.borderColor ? 1 : undefined,
+        borderColor: props.borderColor,
         borderRadius: 50,
         paddingHorizontal: point(1),
         paddingVertical: point(0.2),
@@ -102,8 +108,8 @@ export const TagButton: Comp<{ color: Color }> = (props =>
         <Atoms.Row style={{ justifyContent: 'center' }}>
             {props.children}
         </Atoms.Row>
-    </View>
-);
+    </View>;
+}
 
 export const StretchLink = themed<ActionableProps>(function StretchLinkC({ action, style, children }) {
     return <View style={{ flex: 1 }}>
