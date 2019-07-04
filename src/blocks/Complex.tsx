@@ -79,7 +79,7 @@ export function Modal(props: Props<ModalProps>) {
     </Transition>;
 }
 
-const headerHeight = point(3);
+const headerHeight = point(3.5);
 
 function bar(top: boolean) {
     return themed<BarProps>(props =>

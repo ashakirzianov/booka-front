@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, BottomBar, point,
+    Column, TopBar, BottomBar, point, SafeAreaView,
 } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
@@ -30,7 +30,11 @@ const Content: Comp<AppScreen> = (props =>
             : assertNever(props)
 );
 
-const EmptyLine: Comp = props => <Row style={{ margin: point(2) }} />;
+function EmptyLine() {
+    return <SafeAreaView>
+        <Row style={{ height: point(3.5) }} />
+    </SafeAreaView>;
+}
 
 type BarProps = AppScreen & {
     controlsVisible: boolean,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { themed, Comp, Props, colors, point } from './common';
-import { ActionableProps } from './Elements';
+import { ActionableProps, ActionButton } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
@@ -84,7 +84,18 @@ export const Separator: Comp = (() =>
 );
 
 export const LinkButton = themed<ActionableProps>(props =>
-    <View>{props.children}</View>
+    <ActionButton {...props}>
+        <View style={{
+            borderStyle: 'solid',
+            borderColor: colors(props).accent,
+            color: colors(props).accent,
+            fontSize: props.theme.fontSizes.normal,
+            borderRadius: 10,
+            padding: point(0.3), // TODO: extract somewhere ?
+        }}>
+            {props.children}
+        </View>
+    </ActionButton>
 );
 
 export const Clickable: Comp<ClickableProps> = (props =>

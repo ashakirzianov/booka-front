@@ -123,7 +123,6 @@ function BookText({ book, quoteRange }: Props<BookTextProps>) {
     return <Row style={{
         alignItems: 'center',
         maxWidth: point(50),
-        marginHorizontal: point(2),
     }}
     >
         <BookComp {...book} quoteRange={quoteRange} />
