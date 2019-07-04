@@ -14,12 +14,14 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
+import { Clickable } from '../blocks/Complex.native';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
     volume: VolumeNode,
     pathToNavigate: BookPath | null,
     updateBookPosition: Callback<BookPath>,
+    toggleControls: Callback<void>,
     range: BookRange,
     prevPath?: BookPath,
     nextPath?: BookPath,
@@ -99,9 +101,11 @@ export class Reader extends React.Component<ReaderProps> {
         };
         return <ScrollView>
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
-            <Column>
-                {buildBook(volume, params)}
-            </Column>
+            <Clickable onClick={this.props.toggleControls}>
+                <Column>
+                    {buildBook(volume, params)}
+                </Column>
+            </Clickable>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
         </ScrollView>;
     }

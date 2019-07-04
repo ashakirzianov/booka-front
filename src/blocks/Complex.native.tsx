@@ -88,11 +88,13 @@ export const LinkButton = themed<ActionableProps>(props =>
 );
 
 export const Clickable: Comp<ClickableProps> = (props =>
-    <View
-        onTouchEnd={props.onClick}
+    <TouchableWithoutFeedback
+        onPress={props.onClick}
     >
-        {props.children}
-    </View>
+        <View>
+            {props.children}
+        </View>
+    </TouchableWithoutFeedback>
 );
 
 export const OverlayBox = themed<OverlayBoxProps>(props =>

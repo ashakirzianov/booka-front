@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, Clickable, Modal, PanelButton,
+    connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton, point,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton, point, Props,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -119,19 +119,16 @@ type BookTextProps = {
     book: Book,
     quoteRange: BookRange | undefined,
 };
-const BookText = connectActions('toggleControls')<BookTextProps>(props =>
-    <Row style={{
+function BookText({ book, quoteRange }: Props<BookTextProps>) {
+    return <Row style={{
         alignItems: 'center',
         maxWidth: point(50),
         marginHorizontal: point(2),
     }}
     >
-        <Clickable key='book' onClick={() => props.toggleControls()}>
-            <BookComp {...props.book} quoteRange={props.quoteRange} />
-        </Clickable>
-    </Row>
-
-);
+        <BookComp {...book} quoteRange={quoteRange} />
+    </Row>;
+}
 
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
