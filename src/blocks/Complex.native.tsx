@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { themed, Comp, Props, colors } from './common';
+import { themed, Comp, Props, colors, point } from './common';
 import { ActionableProps } from './Elements';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps,
 } from './Complex.common';
+import { FadeIn } from './Animations.native';
 
 export { Layer } from './Complex.common';
 
@@ -18,28 +19,30 @@ export function Modal(props: Props<ModalProps>) {
     </View>;
 }
 
-const headerHeight = 80;
+const headerHeight = point(7);
 function bar(top: boolean) {
     return themed<BarProps>(props =>
-        <View style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: headerHeight,
-            position: 'absolute',
-            top: top ? 0 : undefined,
-            bottom: !top ? 0 : undefined,
-            left: 0,
-            zIndex: 5,
-            // boxShadow: `0px 0px 2px ${colors(props).shadow}`,
-            backgroundColor: colors(props).secondary,
-        }}>
-            <SafeAreaView>
-                {props.children}
-            </SafeAreaView>
-        </View >
+        <FadeIn visible={props.open}>
+            <View style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: headerHeight,
+                position: 'absolute',
+                top: top ? 0 : undefined,
+                bottom: !top ? 0 : undefined,
+                left: 0,
+                zIndex: 5,
+                // boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+                backgroundColor: colors(props).secondary,
+            }}>
+                <SafeAreaView>
+                    {props.children}
+                </SafeAreaView>
+            </View >
+        </FadeIn>
     );
 }
 
