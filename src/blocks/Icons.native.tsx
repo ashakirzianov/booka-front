@@ -21,6 +21,9 @@ function convertIconName(name: IconName): string {
 }
 
 // TODO: implement size
-export const Icon: Comp<IconProps> = (({ name }) =>
-    <FontAwesome name={convertIconName(name)} />
+export const Icon: Comp<IconProps> = (({ name, size }) =>
+    <FontAwesome
+        name={convertIconName(name)}
+        size={size || 24}
+    />
 );
