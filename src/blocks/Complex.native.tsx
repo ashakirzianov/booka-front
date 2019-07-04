@@ -13,10 +13,12 @@ export { Layer } from './Complex.common';
 
 // TODO: implement components below
 
-export function Modal(props: Props<ModalProps>) {
-    return <View>
-        {props.children}
-    </View>;
+export function Modal({ open, children }: Props<ModalProps>) {
+    return open
+        ? <View>
+            {children}
+        </View>
+        : null;
 }
 
 const headerHeight = point(7);
