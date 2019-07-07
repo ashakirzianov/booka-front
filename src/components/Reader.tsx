@@ -4,8 +4,8 @@ import {
     VolumeNode, bookRange, locationPath, parentPath, titleForPath,
 } from '../model';
 import {
-    Comp, Callback, Row, ThemedText, ScrollView,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, PlainText, point,
+    Comp, Callback, Row, ThemedText,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, PlainText, point, percent,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -99,7 +99,9 @@ export class Reader extends React.Component<ReaderProps> {
             },
             quoteRange: this.props.quoteRange,
         };
-        return <ScrollView>
+        return <Column style={{
+            width: percent(100),
+        }}>
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Clickable onClick={this.props.toggleControls}>
                 <Column>
@@ -107,7 +109,7 @@ export class Reader extends React.Component<ReaderProps> {
                 </Column>
             </Clickable>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
-        </ScrollView>;
+        </Column>;
     }
 }
 

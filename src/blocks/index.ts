@@ -11,8 +11,8 @@ export * from './Elements';
 export * from './Complex.common';
 export * from './Icons';
 export * from './common';
-export { SafeAreaView, ScrollView, View } from 'react-native';
-export { Row, Column, Hoverable } from './Atoms';
+export { SafeAreaView, View } from 'react-native';
+export { Row, Column, Hoverable, Scroll } from './Atoms';
 export {
     TopBar, BottomBar, Clickable, DottedLine, LinkButton,
     Modal, Separator, Tab, WithPopover,

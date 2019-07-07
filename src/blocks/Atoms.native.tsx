@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     Text as NativeText, TextStyle as NativeTextStyle,
-    View, ViewStyle as NativeViewStyle,
+    View, ViewStyle as NativeViewStyle, ScrollView,
 } from 'react-native';
 import { TextStyle, TextProps, LinkProps } from './Atoms.common';
 import { Props } from './common';
@@ -47,6 +47,8 @@ export function Button({ style, onClick, children }: Props<LinkProps>) {
 export function Hoverable(props: Props) {
     return <>{props.children}</>;
 }
+
+export const Scroll = ScrollView;
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {
     // TODO: rethink this ?

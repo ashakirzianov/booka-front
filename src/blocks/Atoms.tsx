@@ -64,3 +64,7 @@ export const Hoverable = themed(hoverable<Themeable>(function HoverableC(props) 
         {props.children}
     </span>;
 }));
+
+export function Scroll(props: Props) {
+    return <>{props.children}</>;
+}
