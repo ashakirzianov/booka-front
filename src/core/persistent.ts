@@ -37,7 +37,7 @@ export function setCurrentPosition(bookId: BookId, path: BookPath) {
 
 // ---- Theme
 
-const defaultTheme: Theme = {
+export const defaultTheme: Theme = {
     palettes: {
         light: {
             colors: {

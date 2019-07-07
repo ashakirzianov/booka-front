@@ -28,4 +28,4 @@ export const ConnectedProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
 validatePersistentStorage();
-const store = createEnhancedStore(reducer);
+const store = createEnhancedStore(reducer, undefined);
