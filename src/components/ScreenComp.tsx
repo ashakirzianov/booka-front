@@ -8,6 +8,7 @@ import { AppScreen } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
+import { headerHeight } from '../blocks/Complex';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
     <Column style={{
@@ -34,7 +35,7 @@ const Content: Comp<AppScreen> = (props =>
 
 function EmptyLine() {
     return <SafeAreaView>
-        <Row style={{ height: point(3.5) }} />
+        <Row style={{ height: point(headerHeight) }} />
     </SafeAreaView>;
 }
 

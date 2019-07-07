@@ -40,7 +40,7 @@ export function Modal(props: Props<ModalProps>) {
                     <View style={{
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        height: headerHeight,
+                        height: point(headerHeight),
                     }}>
                         <View style={{
                             flex: 1,
@@ -79,7 +79,7 @@ export function Modal(props: Props<ModalProps>) {
     </Transition>;
 }
 
-const headerHeight = point(3.5);
+export const headerHeight = 3;
 
 function bar(top: boolean) {
     return themed<BarProps>(props =>
@@ -89,7 +89,7 @@ function bar(top: boolean) {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 width: '100%',
-                height: headerHeight,
+                height: point(headerHeight),
                 position: 'fixed',
                 top: top ? 0 : undefined,
                 bottom: !top ? 0 : undefined,

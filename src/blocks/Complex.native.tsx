@@ -21,7 +21,8 @@ export function Modal({ open, children }: Props<ModalProps>) {
         : null;
 }
 
-const headerHeight = point(7);
+const viewOffset = 3.5;
+export const headerHeight = 3.5;
 function bar(top: boolean) {
     return themed<BarProps>(props =>
         <FadeIn visible={props.open}>
@@ -31,7 +32,7 @@ function bar(top: boolean) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
-                height: headerHeight,
+                height: point(headerHeight + viewOffset),
                 position: 'absolute',
                 top: top ? 0 : undefined,
                 bottom: !top ? 0 : undefined,
