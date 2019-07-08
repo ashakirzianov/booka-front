@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { View, ViewStyle as NativeViewStyle, TextStyle as NativeTextStyle } from 'react-native';
-import { Comp, Hoverable, Callback } from './common';
+import { Comp, Callback } from './common';
 import { Color } from '../model';
 import { RefHandler } from './Scroll';
 
@@ -11,7 +11,7 @@ export type LinkProps = LayoutProps & {
 };
 
 type CssTextStyle = React.CSSProperties;
-export type TextStyle = Hoverable<Pick<CssTextStyle,
+export type TextStyle = Pick<CssTextStyle,
     | 'fontStyle' | 'textAlign' | 'margin'
     | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
     | 'letterSpacing' | 'textIndent' | 'alignSelf'
@@ -19,7 +19,7 @@ export type TextStyle = Hoverable<Pick<CssTextStyle,
     never
 > & {
     fontWeight?: 'bold' | 'normal',
-}>;
+};
 export type TextProps = {
     style?: TextStyle,
     background?: Color,

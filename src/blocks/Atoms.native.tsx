@@ -44,7 +44,7 @@ export function Button({ style, onClick, children }: Props<LinkProps>) {
     </View>;
 }
 
-export function Hoverable(props: Props) {
+export function HoverableText(props: Props) {
     return <>{props.children}</>;
 }
 
@@ -52,9 +52,9 @@ export const Scroll = ScrollView;
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {
     // TODO: rethink this ?
-    if (style && style[':hover'] !== undefined) {
+    if (style && (style as any)[':hover'] !== undefined) {
         const styleCopy = { ...style };
-        delete styleCopy[':hover'];
+        delete (styleCopy as any)[':hover'];
         return styleCopy as any;
     } else {
         return style;

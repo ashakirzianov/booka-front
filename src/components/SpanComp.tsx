@@ -9,7 +9,7 @@ import {
 } from '../model';
 import {
     Comp, PlainText, connectActions, ThemedText,
-    ActionLink, Hoverable, Props, point,
+    ActionLink, ThemedHoverable, Props, point,
 } from '../blocks';
 import { assertNever, filterUndefined, last } from '../utils';
 import { actionCreators } from '../core';
@@ -96,11 +96,11 @@ const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
 type FootnoteSpanProps = SpanType<FootnoteSpan>;
 const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(function FootnoteSpanC(props: Props<FootnoteSpanProps>) {
     return <ActionLink action={actionCreators.openFootnote(props.span.id)}>
-        <Hoverable>
+        <ThemedHoverable>
             <ThemedText color='accent' hoverColor='highlight'>
                 <SpanComp {...props} span={props.span.content} />
             </ThemedText>
-        </Hoverable>
+        </ThemedHoverable>
     </ActionLink>;
 });
 

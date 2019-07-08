@@ -30,8 +30,6 @@ export function point(size: number) {
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
-export type Hoverable<T> = T & { ':hover'?: Partial<T> };
-
 export type Themeable = {
     theme: Theme,
 };

@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, Hoverable, ActionButton, point, Props,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point, Props,
 } from '../blocks';
 import {
     BookScreen, Book, TableOfContents, PaletteName, BookRange,
@@ -190,9 +190,9 @@ const FontScaleButton = connectActions('incrementScale')<{
         justifyContent: 'center',
     }}>
         <ActionLink action={actionCreators.incrementScale(props.increment)}>
-            <Hoverable>
+            <ThemedHoverable>
                 <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
-            </Hoverable>
+            </ThemedHoverable>
         </ActionLink>
     </Column>
 );

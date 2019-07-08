@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextProps, LinkProps } from './Atoms.common';
 import { isOpenNewTabEvent, hoverable } from './utils';
-import { Props, colors, themed, Themeable } from './common';
+import { Props } from './common';
 
 export { Row, Column } from './Atoms.common';
 
@@ -49,21 +49,22 @@ function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
 export const Link = linkOrButton;
 export const Button = linkOrButton;
 
-export const Hoverable = themed(hoverable<Themeable>(function HoverableC(props) {
+export type HoverableTextProps = {
+    color?: string,
+    hoverColor?: string,
+};
+export const HoverableText = hoverable<HoverableTextProps>(function HoverableTextC({ color, hoverColor, children }) {
     return <span
         style={{
-            fontSize: props.theme.fontSizes.normal,
-            fontFamily: props.theme.fontFamilies.main,
-            color: colors(props).accent,
-            alignSelf: 'stretch',
+            color: color,
             ':hover': {
-                color: colors(props).highlight,
+                color: hoverColor,
             },
-        } as any} // TODO: remove 'as any'?
+        }}
     >
-        {props.children}
+        {children}
     </span>;
-}));
+});
 
 export function Scroll(props: Props) {
     return <>{props.children}</>;

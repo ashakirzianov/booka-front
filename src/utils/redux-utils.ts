@@ -2,6 +2,7 @@ import {
     createStore, Middleware, applyMiddleware, compose,
     Reducer as ReducerRedux,
     Action as ReduxAction,
+    DeepPartial,
 } from 'redux';
 import {
     install, Cmd, Loop,
@@ -19,7 +20,7 @@ export function combineReducers<State, Action extends ReduxAction>(map: Reducers
     return loopCombineReducers(map as any) as any;
 }
 
-export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, initial: State | undefined, middlewares: Array<Middleware<{}, State, any>> | undefined = []) {
+export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, initial: DeepPartial<State> | undefined, middlewares: Array<Middleware<{}, State, any>> | undefined = []) {
     const middlewareEnhancer = applyMiddleware(
         ...middlewares
     );

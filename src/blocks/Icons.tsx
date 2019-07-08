@@ -4,8 +4,9 @@ import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
-import { Comp } from './common';
+import { Props } from './common';
 import { IconProps, IconName } from './Icons.common';
+import { HoverableText } from './Atoms';
 
 function iconForName(name: IconName) {
     switch (name) {
@@ -22,9 +23,13 @@ function iconForName(name: IconName) {
     }
 }
 
-export const Icon: Comp<IconProps> = (props =>
-    React.createElement(iconForName(props.name), {
-        ...props,
-        size: props.size || '1em',
-    })
-);
+export function Icon({ size, name, color, hover }: Props<IconProps>) {
+    return React.createElement(HoverableText,
+        {
+            color: color,
+            hoverColor: hover,
+        },
+        React.createElement(iconForName(name), {
+            size: size || '1em',
+        }));
+}

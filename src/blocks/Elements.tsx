@@ -10,7 +10,6 @@ import { IconName } from './Icons.common';
 import { Action, actionToUrl } from '../core';
 import { ViewStyle, TextStyle } from './Atoms.common';
 import { defaults } from './defaults';
-import { Hoverable } from './Atoms';
 
 export type ActionableProps = {
     action?: Action,
@@ -68,6 +67,16 @@ export const ThemedText = themed<ThemedTextProps>(props => {
 
 export const PlainText = Atoms.Text;
 
+// TODO: remove this one
+export const ThemedHoverable = themed(function HoverableC(props) {
+    return <Atoms.HoverableText
+        color={colors(props).accent}
+        hoverColor={colors(props).highlight}
+    >
+        {props.children}
+    </Atoms.HoverableText>;
+});
+
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
     <ThemedText style={{ margin: props.margin }} size='normal'>
         {props.text}
@@ -75,21 +84,25 @@ export const Label: Comp<{ text: string, margin?: string }> = (props =>
 );
 
 export type PanelLinkProps = ActionableProps & { icon: IconName };
-export const PanelButton: Comp<PanelLinkProps> = (props =>
-    <ActionButton
+export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
+    return <ActionButton
         action={props.action}
         onClick={props.onClick}
         style={{
             margin: point(0.5),
         }}
     >
-        <Hoverable>
-            <Atoms.Column style={{ justifyContent: 'center' }}>
-                <Icon name={props.icon} />{props.children}
-            </Atoms.Column>
-        </Hoverable>
-    </ActionButton>
-);
+        <Atoms.Column style={{ justifyContent: 'center' }}>
+            <Icon
+                name={props.icon}
+                color={colors(props).accent}
+                hover={colors(props).highlight}
+                size={24}
+            />
+            {props.children}
+        </Atoms.Column>
+    </ActionButton>;
+});
 
 export type TagButtonProps = {
     color?: Color,

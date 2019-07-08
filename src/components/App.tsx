@@ -9,4 +9,4 @@ export const AppProd: React.SFC = props =>
 export const AppTest: React.SFC = () =>
     <TestProvider><TopComp /></TestProvider>;
 
-export const AppComp = AppTest;
+export const AppComp = AppProd;
