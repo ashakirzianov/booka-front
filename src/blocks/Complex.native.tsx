@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { themed, Comp, Props, colors, point } from './common';
-import { ActionableProps, ActionButton } from './Elements';
+import { ActionButton, PlainText } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
-    OverlayBoxProps, ClickableProps,
+    OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
 import { FadeIn } from './Animations.native';
 
@@ -86,17 +86,21 @@ export const Separator: Comp = (() =>
     <View />
 );
 
-export const LinkButton = themed<ActionableProps>(props =>
+export const LinkButton = themed<LinkButtonProps>(props =>
     <ActionButton {...props}>
         <View style={{
+            borderWidth: 2,
             borderStyle: 'solid',
-            borderColor: colors(props).accent,
-            color: colors(props).accent,
-            fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
-            padding: point(0.3), // TODO: extract somewhere ?
+            borderColor: colors(props).accent,
+            padding: point(1),
         }}>
-            {props.children}
+            <PlainText style={{
+                fontSize: props.theme.fontSizes.normal,
+                color: colors(props).accent,
+            }}>
+                {props.text}
+            </PlainText>
         </View>
     </ActionButton>
 );

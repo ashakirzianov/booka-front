@@ -3,6 +3,7 @@ import { themed, colors, Callback, ReactContent } from './common';
 import { View, ViewStyle } from 'react-native';
 import { platformValue } from '../utils';
 import { PopperProps } from 'react-popper';
+import { ActionableProps } from './Elements';
 
 export type ClickableProps = { onClick: () => void };
 
@@ -26,6 +27,10 @@ export type ModalProps = {
     open: boolean,
     title?: string,
     toggle: Callback<void>,
+};
+
+export type LinkButtonProps = ActionableProps & {
+    text: string,
 };
 
 export const Layer = themed(props =>

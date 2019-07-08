@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, ThemedText,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, PlainText, point, percent,
+    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -135,13 +135,11 @@ const PathLink: Comp<PathLinkProps> = (props =>
             justifyContent: 'center',
             margin: point(1),
         }}>
-            <LinkButton action={actionCreators
-                .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-            >
-                <PlainText>
-                    {props.text}
-                </PlainText>
-            </LinkButton>
+            <LinkButton
+                action={actionCreators
+                    .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
+                text={props.text}
+            />
         </Row>
 );
 

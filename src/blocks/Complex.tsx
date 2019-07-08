@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { themed, Comp, percent, colors, Props, point } from './common';
-import { ThemedText, PanelButton, ActionableProps, ActionLink } from './Elements';
+import { ThemedText, PanelButton, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
@@ -10,7 +10,7 @@ import { defaults } from './defaults';
 import { platformValue } from '../utils';
 import {
     ModalProps, WithPopoverProps, BarProps,
-    OverlayBoxProps, ClickableProps,
+    OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
 
 export { Layer } from './Complex.common';
@@ -190,7 +190,7 @@ export const Separator: Comp = (() =>
     }} />
 );
 
-export const LinkButton = themed<ActionableProps>(props =>
+export const LinkButton = themed<LinkButtonProps>(props =>
     <ActionLink {...props}>
         <div style={{
             borderStyle: 'solid',
@@ -198,13 +198,13 @@ export const LinkButton = themed<ActionableProps>(props =>
             color: colors(props).accent,
             fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
-            padding: point(0.3), // TODO: extract somewhere ?
+            padding: point(0.3),
             ':hover': {
                 borderColor: colors(props).highlight,
                 color: colors(props).highlight,
             },
         }}>
-            {props.children}
+            {props.text}
         </div>
     </ActionLink>
 );
