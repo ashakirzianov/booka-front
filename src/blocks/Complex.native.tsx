@@ -1,24 +1,44 @@
 import * as React from 'react';
 
 import { themed, Comp, Props, colors, point } from './common';
-import { ActionButton, PlainText } from './Elements';
-import { View, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
+import { ActionButton, PlainText, ThemedText, PanelButton } from './Elements';
+import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
 import { FadeIn } from './Animations.native';
+import { Column, Row } from './Atoms.common';
 
 export { Layer } from './Complex.common';
 
 // TODO: implement components below
 
-export function Modal({ open, children }: Props<ModalProps>) {
-    return open
-        ? <View>
-            {children}
-        </View>
-        : null;
+export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
+    return <NativeModal
+        visible={open}
+        animationType='slide'
+        onRequestClose={toggle}
+    >
+        <SafeAreaView>
+            <Column>
+                <Row style={{ justifyContent: 'center' }}>
+                    <Column style={{
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        left: 0,
+                    }}>
+                        <PanelButton
+                            onClick={toggle}
+                            icon='close'
+                        />
+                    </Column>
+                    <ThemedText size='normal'>{title}</ThemedText>
+                </Row>
+                <Row>{children}</Row>
+            </Column>
+        </SafeAreaView>
+    </NativeModal>;
 }
 
 const viewOffset = 3.5;
