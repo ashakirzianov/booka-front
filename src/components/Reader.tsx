@@ -101,6 +101,7 @@ export class Reader extends React.Component<ReaderProps> {
         };
         return <Column style={{
             width: percent(100),
+            padding: point(1),
         }}>
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Clickable onClick={this.props.toggleControls}>

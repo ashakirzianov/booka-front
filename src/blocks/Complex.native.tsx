@@ -38,7 +38,6 @@ function bar(top: boolean) {
                 bottom: !top ? 0 : undefined,
                 left: 0,
                 zIndex: 5,
-                // boxShadow: `0px 0px 2px ${colors(props).shadow}`,
                 backgroundColor: colors(props).secondary,
             }}>
                 <SafeAreaView>
