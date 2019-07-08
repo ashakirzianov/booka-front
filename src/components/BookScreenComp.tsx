@@ -60,8 +60,6 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
         position: 'relative',
     }}>
         <Column style={{
-            position: 'absolute',
-            top: 0, bottom: 0, left: 0, right: 0,
             height: '100%', width: '100%',
             justifyContent: 'center',
         }}>
@@ -80,7 +78,7 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
                 family='menu'
                 color='accent'
             >
-                {`${left} left`}
+                {`${left} pages left`}
             </ThemedText>
         </Column>
     </Row>;
