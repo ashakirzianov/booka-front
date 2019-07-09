@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Popover from 'react-native-popover-view';
 
-import { themed, Comp, Props, colors, point } from './common';
+import { themed, Comp, Props, colors, point, percent } from './common';
 import { ActionButton, PlainText, ThemedText, PanelButton } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
@@ -21,8 +21,13 @@ export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
         onRequestClose={toggle}
     >
         <SafeAreaView>
-            <Column>
-                <Row style={{ justifyContent: 'center' }}>
+            <Column style={{
+                width: percent(100),
+            }}>
+                <Row style={{
+                    justifyContent: 'center',
+                    height: percent(5),
+                }}>
                     <Column style={{
                         justifyContent: 'center',
                         position: 'absolute',
@@ -33,9 +38,13 @@ export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
                             icon='close'
                         />
                     </Column>
-                    <ThemedText size='normal'>{title}</ThemedText>
+                    <Column style={{ justifyContent: 'center' }}>
+                        <ThemedText size='normal'>{title}</ThemedText>
+                    </Column>
                 </Row>
-                <Row>{children}</Row>
+                <Row style={{
+                    height: percent(95),
+                }}>{children}</Row>
             </Column>
         </SafeAreaView>
     </NativeModal>;
@@ -111,7 +120,7 @@ export const Tab: Comp = (props =>
 
 export const NewLine: Comp = (props => null);
 export const DottedLine: Comp = (props =>
-    <View />
+    <View style={{ alignSelf: 'stretch', alignContent: 'stretch', flex: 1 }} />
 );
 export const Separator: Comp = (() =>
     <View />

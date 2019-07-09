@@ -129,7 +129,7 @@ export const StretchLink = themed<ActionableProps>(function StretchLinkC({ actio
         <ActionButton action={action} style={{
             ...style,
             // margin: relative(0.5),
-            // alignSelf: 'stretch',
+            alignSelf: 'stretch',
         }}>
             <View style={{
                 display: 'flex',

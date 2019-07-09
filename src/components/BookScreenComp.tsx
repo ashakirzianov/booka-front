@@ -130,9 +130,13 @@ function BookText({ book, quoteRange }: Props<BookTextProps>) {
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
     >
-        <Row style={{ overflow: 'scroll' }}>
+        <Column style={{
+            overflow: 'scroll',
+            alignSelf: 'stretch',
+            flex: 1,
+        }}>
             <TableOfContentsComp {...props.toc} />
-        </Row>
+        </Column>
     </Modal>
 );
 
