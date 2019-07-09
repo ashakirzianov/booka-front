@@ -5,7 +5,7 @@ import {
     isChapter, inRange, ChapterNode,
 } from '../model';
 import {
-    Comp, Row, ThemedText, relative, refable,
+    Comp, Row, ThemedText, refable, point,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
@@ -76,9 +76,9 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
         width: '100%',
     }}>
         <ThemedText style={{
-            letterSpacing: relative(0.15),
+            letterSpacing: point(0.15),
             textAlign: 'center',
-            margin: relative(1),
+            margin: point(1),
         }}>
             {props.text && props.text.toLocaleUpperCase()}
         </ThemedText>
@@ -93,7 +93,7 @@ const PartTitle: Comp<{ text?: string }> = (props =>
         <ThemedText size='large' style={{
             fontWeight: 'bold',
             textAlign: 'center',
-            margin: relative(1),
+            margin: point(1),
         }}>
             {props.text}
         </ThemedText>
@@ -107,7 +107,7 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
     }}>
         <ThemedText style={{
             fontStyle: 'italic',
-            margin: relative(1),
+            margin: point(1),
         }}>
             {props.text}
         </ThemedText>
@@ -125,7 +125,7 @@ const BookTitle: Comp<{ text?: string }> = (props =>
     </Row>
 );
 
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
+const ChapterHeader = refable<ChapterNode & { path: BookPath }>(function ChapterHeaderC(props) {
     const TitleComp = props.level === 0 ? ChapterTitle
         : props.level > 0 ? PartTitle
             : SubpartTitle;
@@ -135,6 +135,4 @@ const ChapterHeader = refable<ChapterNode & { path: BookPath }>(props => {
                 <TitleComp key={idx} text={line} />)
         }
     </>;
-},
-    'ChapterHeader'
-);
+});

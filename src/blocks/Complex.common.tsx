@@ -1,4 +1,50 @@
 import * as React from 'react';
+import { themed, colors, Callback, ReactContent } from './common';
+import { View, ViewStyle } from 'react-native';
+import { platformValue } from '../utils';
+import { PopperProps } from 'react-popper';
+import { ActionableProps } from './Elements';
+
+export type ClickableProps = { onClick: () => void };
+
+export type OverlayBoxProps = {
+    style?: Pick<ViewStyle,
+        'transform'
+    > & {
+        transitionDuration?: string,
+    },
+};
+
+export type BarProps = { open: boolean };
+
+export type WithPopoverProps = {
+    body: ReactContent,
+    popoverPlacement: PopperProps['placement'],
+    children: (onClick: Callback<void>) => ReactContent,
+};
+
+export type ModalProps = {
+    open: boolean,
+    title?: string,
+    toggle: Callback<void>,
+};
+
+export type LinkButtonProps = ActionableProps & {
+    text: string,
+};
+
+export const Layer = themed(props =>
+    <View style={{
+        position: 'absolute',
+        minHeight: '100%',
+        minWidth: '100%',
+        width: platformValue({ mobile: '100%' }),
+        height: platformValue({ mobile: '100%' }),
+        backgroundColor: colors(props).primary,
+    }}>
+        {props.children}
+    </View>
+);
 
 export class IncrementalLoad extends React.Component<{
     increment?: number,

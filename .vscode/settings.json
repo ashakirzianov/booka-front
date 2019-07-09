@@ -3,8 +3,10 @@
         "**/build/**": true,
         "**/node_modules/**": true
     },
-    "tslint.enable": true,
-    "tslint.autoFixOnSave": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+    },
     "editor.formatOnSave": true,
     "cSpell.words": [
         "DELIM",
@@ -25,6 +27,7 @@
         "Themer",
         "Unmount",
         "Whitespaces",
+        "actionize",
         "backend",
         "booka",
         "browserslist",
@@ -35,6 +38,8 @@
         "onupdatefound",
         "polyfill",
         "precached",
+        "refability",
+        "shinel",
         "subpath",
         "succ",
         "timeouted",

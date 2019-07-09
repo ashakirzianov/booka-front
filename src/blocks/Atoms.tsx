@@ -1,77 +1,71 @@
 import * as React from 'react';
-import { View, ViewStyle, TextStyle } from 'react-native';
-import { Comp, Callback, connectAll, Hoverable } from './comp-utils';
-import { Action, actionToUrl } from '../core';
-import { Link } from './Atoms.platform';
+import { TextProps, LinkProps } from './Atoms.common';
+import { isOpenNewTabEvent, hoverable } from './utils';
+import { Props } from './common';
 
-function convertStyle(style: LayoutProps['style']): ViewStyle | undefined {
-    return style as ViewStyle;
+export { Row, Column } from './Atoms.common';
+
+export function Text(props: Props<TextProps>) {
+    return <span
+        ref={props.refHandler}
+        id={props.id}
+        style={{
+            wordBreak: 'break-word',
+            background: props.background,
+            ...(props.dropCaps && {
+                float: 'left',
+                fontSize: '400%',
+                lineHeight: '80%',
+            }),
+            ...props.style,
+        }}
+    >
+        {props.children}
+    </span>;
 }
 
-export type AllowedViewStyle = Pick<ViewStyle,
-    | 'justifyContent' | 'width' | 'height'
-    | 'alignItems' | 'alignSelf'
-    | 'maxWidth' | 'overflow' | 'margin' | 'padding'
-    | 'flex' // TODO: do not allow ?
-> & {
-    position?: ViewStyle['position'] | 'fixed',
-};
-
-export type LayoutProps = {
-    style?: AllowedViewStyle,
-};
-export const Column: Comp<LayoutProps> = (props =>
-    <View style={{ ...convertStyle(props.style), flexDirection: 'column' }}>
-        {props.children}
-    </View>
-);
-
-export const Row: Comp<LayoutProps> = (props =>
-    <View
-        style={{ ...convertStyle(props.style), flexDirection: 'row' }}
-    >
-        {props.children}
-    </View>
-);
-
-export type ActionLinkProps = {
-    action?: Action,
-    onClick?: Callback<void>,
-    style?: AllowedViewStyle,
-};
-export const ActionLink = connectAll<ActionLinkProps>(props =>
-    <Link
-        onClick={() => {
-            if (props.action) {
-                props.dispatch(props.action);
-            }
-            if (props.onClick) {
-                props.onClick();
+function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
+    return <a
+        href={to}
+        style={{
+            ...style,
+            textDecoration: 'none',
+            cursor: 'pointer',
+        }}
+        onClick={e => {
+            e.stopPropagation();
+            if (!isOpenNewTabEvent(e)) {
+                e.preventDefault();
+                if (onClick) {
+                    onClick();
+                }
             }
         }}
-        to={actionToUrl(props.action, props.state)}
-        style={props.style}
     >
-        {props.children}
-    </Link>
-);
+        {children}
+    </a>;
+}
 
-// TODO: remove
-export type CssTextStyle = React.CSSProperties;
-export type AtomTextStyle = Hoverable<Pick<CssTextStyle,
-    | 'fontStyle' | 'textAlign' | 'margin'
-    | 'fontSize' | 'fontFamily' | 'color' // TODO: disallow ?
-    | 'letterSpacing' | 'textIndent' | 'alignSelf'
-> & Pick<TextStyle,
-    never
-> & {
-    fontWeight?: 'bold' | 'normal',
-}>;
+export const Link = linkOrButton;
+export const Button = linkOrButton;
 
-export type TextProps = {
-    style?: AtomTextStyle,
+export type HoverableTextProps = {
+    color?: string,
+    hoverColor?: string,
 };
+export const HoverableText = hoverable<HoverableTextProps>(function HoverableTextC({ color, hoverColor, children }) {
+    return <span
+        style={{
+            color: color,
+            ':hover': {
+                color: hoverColor,
+            },
+        }}
+    >
+        {children}
+    </span>;
+});
 
-export {
-    Text,
-} from './Atoms.platform';
+export function Scroll(props: Props) {
+    return <>{props.children}</>;
+}

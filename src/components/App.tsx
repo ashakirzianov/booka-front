@@ -1,9 +1,12 @@
 import * as React from 'react';
 
-import { ConnectedProvider } from '../core';
+import { ConnectedProvider, TestProvider } from '../core';
 import { TopComp } from './TopComp';
 
-const App: React.SFC = props =>
+export const AppProd: React.SFC = props =>
     <ConnectedProvider><TopComp /></ConnectedProvider>;
 
-export { App as AppComp };
+export const AppTest: React.SFC = () =>
+    <TestProvider><TopComp /></TestProvider>;
+
+export const AppComp = AppProd;

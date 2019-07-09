@@ -11,15 +11,16 @@ import { Reader } from './Reader';
 export type BookProps = Book & {
     quoteRange: BookRange | undefined,
 };
-export const BookComp = connect(['pathToOpen'], ['updateBookPosition'])<BookProps>(props => {
+export const BookComp = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])<BookProps>(props => {
     const {
-        pathToOpen, updateBookPosition,
+        pathToOpen, updateBookPosition, toggleControls,
         volume, id, toc,
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
     return <Reader
         pathToNavigate={pathToOpen}
         updateBookPosition={updateBookPosition}
+        toggleControls={toggleControls}
         range={bookRange(current, next)}
         quoteRange={props.quoteRange}
         prevPath={prev}

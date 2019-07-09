@@ -1,13 +1,11 @@
 import * as React from 'react';
+
 import {
-    KeyRestriction, ExcludeKeys, Func, platformValue,
+    Func, platformValue,
     buildConnectRedux,
 } from '../utils';
 import { actionCreators } from '../core';
 import { App, Theme, Palette } from '../model';
-
-export type RefType = HTMLElement | null;
-export type RefHandler = (ref: RefType) => void;
 
 export type ReactContent = React.ReactNode;
 export type Callback<Argument> = Func<Argument, void>;
@@ -15,38 +13,24 @@ export type Callbacks<A> = {
     [name in keyof A]: Callback<A[name]>;
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
-export type CompProps<P, A extends KeyRestriction<A, keyof P>> = P & CallbacksOpt<A>;
-export type Comp<P = {}, A = {}> = React.ComponentType<CompProps<P, A>>;
-export function comp<P = {}, A = {}>(c: Comp<P, A>) {
-    return c;
+export type Comp<P = {}> = React.ComponentType<P>;
+export type Props<P = {}> = React.PropsWithChildren<P>;
+
+export type Size = string | number;
+export function percent(size: number) {
+    return `${size}%`;
 }
 
-export function relative(size: number) {
-    return platformValue({
+export function point(size: number) {
+    return platformValue<Size>({
         web: `${size}em`,
-        default: `${size}%`,
+        default: size * 12,
     });
-}
-
-export function absolute(size: number) {
-    return `${size}`;
 }
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
-export type Hoverable<T> = T & { ':hover'?: Partial<T> };
-
-export function partial<T>(Cmp: Comp<T>) {
-    return <P extends keyof T>(partials: Pick<T, P>): Comp<ExcludeKeys<T, P>> => {
-        return props => React.createElement(
-            Cmp,
-            { ...(partials as any), ...(props as any) }, // TODO: investigate why we need 'as any'
-            props.children
-        );
-    };
-}
-
-type Themeable = {
+export type Themeable = {
     theme: Theme,
 };
 type ThemeableComp<T> = Comp<T & Themeable>;

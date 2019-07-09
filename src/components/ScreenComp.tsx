@@ -2,21 +2,28 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, relative, BottomBar,
+    Column, TopBar, BottomBar, point, SafeAreaView, Scroll,
 } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
+import { headerHeight } from '../blocks/Complex';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
-    <Column style={{ width: '100%', alignItems: 'center' }}>
+    <Column style={{
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+    }}>
         {props.loading ? <FullScreenActivityIndicator /> : null}
         <Header {...props} />
         <Footer {...props} />
-        <EmptyLine />
-        <Content {...props} />
-        <EmptyLine />
+        <Scroll>
+            <EmptyLine />
+            <Content {...props} />
+            <EmptyLine />
+        </Scroll>
     </Column>
 );
 
@@ -26,7 +33,11 @@ const Content: Comp<AppScreen> = (props =>
             : assertNever(props)
 );
 
-const EmptyLine: Comp = props => <Row style={{ margin: relative(1.2) }} />;
+function EmptyLine() {
+    return <SafeAreaView>
+        <Row style={{ height: point(headerHeight) }} />
+    </SafeAreaView>;
+}
 
 type BarProps = AppScreen & {
     controlsVisible: boolean,

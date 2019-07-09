@@ -11,7 +11,7 @@ export function parsePartialUrl(urlString: string, base: string = 'http://localh
 }
 export function parseUrl(urlString: string): ParsedUrl {
     // eslint-disable-next-line
-    const urlRexString = '(\w+)://([\w\.]+)((/[^/\?#]*)*)(([\?][^#]*)?)((#.*)?)';
+    const urlRexString = '(\\w+)://([\\w0-9\\.\\:]+)((/[^/\\?#]*)*)(([\\?][^#]*)?)((#.*)?)';
     const urlRegex = new RegExp(urlRexString);
     // $1 -- $2 -- $3 -- $5 -- $7
     // 1 - https

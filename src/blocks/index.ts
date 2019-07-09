@@ -1,11 +1,19 @@
-export * from './comp-utils';
-export { isOpenNewTabEvent, refable, hoverable } from './comp-utils.platform';
+import * as Scroll from './Scroll';
+
+export type RefType = Scroll.RefType;
+
+export * from './utils';
+export { isOpenNewTabEvent, refable, hoverable } from './utils';
 export {
     isPartiallyVisible, scrollToRef,
-} from './Scroll.platform';
-export * from './Utility';
+} from './Scroll';
 export * from './Elements';
-export * from './Complex';
+export * from './Complex.common';
 export * from './Icons';
-export { Row, Column } from './Atoms';
-export { SafeAreaView, ScrollView, View } from 'react-native';
+export * from './common';
+export { SafeAreaView, View } from 'react-native';
+export { Row, Column, Scroll } from './Atoms';
+export {
+    TopBar, BottomBar, Clickable, DottedLine, LinkButton,
+    Modal, Separator, Tab, WithPopover,
+} from './Complex';

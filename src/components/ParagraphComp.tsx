@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    relative, ThemedText, themed, highlights, named,
+    themed, highlights, point,
 } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath,
@@ -16,23 +16,18 @@ export type ParagraphProps = {
     refPathHandler: RefPathHandler,
     highlights?: Highlights,
 };
-export const ParagraphComp = named(
-    themed<ParagraphProps>(props =>
-        <ThemedText>
-            <ParagraphContainer textIndent={relative(props.first ? 0 : 2)}>
-                <SpanComp
-                    {...props}
-                    path={props.path.concat([0])}
-                    span={props.p.span}
-                    colorization={props.highlights && props.highlights.quote && {
-                        ranges: [{
-                            color: highlights(props).quote,
-                            range: props.highlights.quote,
-                        }],
-                    }}
-                />
-            </ParagraphContainer>
-        </ThemedText>
-    ),
-    'ParagraphComp'
-);
+export const ParagraphComp = themed<ParagraphProps>(function ParagraphCompC(props) {
+    return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
+        <SpanComp
+            {...props}
+            path={props.path.concat([0])}
+            span={props.p.span}
+            colorization={props.highlights && props.highlights.quote && {
+                ranges: [{
+                    color: highlights(props).quote,
+                    range: props.highlights.quote,
+                }],
+            }}
+        />
+    </ParagraphContainer>;
+});
