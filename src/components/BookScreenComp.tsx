@@ -209,12 +209,14 @@ const PalettePicker: Comp = (() =>
 );
 
 const HoverableView = hoverable(View);
-const PaletteButton = connectState('theme')<{
+
+type PaletteButtonProps = {
     name: PaletteName,
     text: string,
-}>(props => {
+};
+const PaletteButton = connectState('theme')<PaletteButtonProps>(function PaletteButtonC(props) {
     const palette = props.theme.palettes[props.name].colors;
-    return <ActionLink action={actionCreators.setPalette(props.name)}>
+    return <ActionButton action={actionCreators.setPalette(props.name)}>
         <HoverableView style={{
             width: 50,
             height: 50,
@@ -236,6 +238,5 @@ const PaletteButton = connectState('theme')<{
                 }}>{props.text}</PlainText>
             </Row>
         </HoverableView>
-    </ActionLink>;
-}
-);
+    </ActionButton>;
+});
