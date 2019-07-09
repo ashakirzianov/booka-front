@@ -4,8 +4,8 @@ import {
     VolumeNode, bookRange, locationPath, parentPath, titleForPath,
 } from '../model';
 import {
-    Comp, Callback, Row, ThemedText,
-    RefType, isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent,
+    Comp, Callback, Row, RefType,
+    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -115,14 +115,14 @@ export class Reader extends React.Component<ReaderProps> {
 }
 
 export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
-    <ThemedText>
+    <>
         {
             buildNodes(props.nodes, [], {
                 refPathHandler: () => undefined,
                 pageRange: bookRange(),
             })
         }
-    </ThemedText>
+    </>
 );
 
 type PathLinkProps = {
