@@ -11,3 +11,10 @@ declare module 'store' {
     const store: Store;
     export = store;
 }
+
+declare module 'react-native-popover-view' {
+    type Popover = any;
+
+    const Popover: Popover;
+    export = Popover;
+}
