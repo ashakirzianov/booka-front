@@ -13,7 +13,14 @@ declare module 'store' {
 }
 
 declare module 'react-native-popover-view' {
-    type Popover = any;
+    type PopoverProps = {
+        isVisible?: boolean,
+        fromView?: any,
+        placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        onRequestClose?: () => void,
+        children: any,
+    };
+    type Popover = (props: PopoverProps) => any;
 
     const Popover: Popover;
     export = Popover;

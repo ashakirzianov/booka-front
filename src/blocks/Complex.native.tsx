@@ -1,8 +1,10 @@
 import * as React from 'react';
 
+import Popover from 'react-native-popover-view';
+
 import { themed, Comp, Props, colors, point } from './common';
 import { ActionButton, PlainText, ThemedText, PanelButton } from './Elements';
-import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal } from 'react-native';
+import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
@@ -11,8 +13,6 @@ import { FadeIn } from './Animations.native';
 import { Column, Row } from './Atoms.common';
 
 export { Layer } from './Complex.common';
-
-// TODO: implement components below
 
 export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
     return <NativeModal
@@ -76,6 +76,7 @@ type WithPopoverState = {
 };
 export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
     public state = { open: false };
+    private button: any = undefined;
 
     public toggleVisibility() {
         this.setState({ open: !this.state.open });
@@ -86,9 +87,20 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
     }
 
     public render() {
-        const { children } = this.props;
+        const { open } = this.state;
+        const { children, body } = this.props;
         return <View>
-            {children(this.toggleVisibility.bind(this))}
+            <TouchableHighlight ref={ref => this.button = ref}>
+                {children(this.toggleVisibility.bind(this))}
+            </TouchableHighlight>
+            <Popover
+                isVisible={open}
+                fromView={this.button}
+                placement='bottom'
+                onRequestClose={this.toggleVisibility.bind(this)}
+            >
+                {body}
+            </Popover>
         </View>;
     }
 }
