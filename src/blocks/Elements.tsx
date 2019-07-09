@@ -10,6 +10,7 @@ import { IconName } from './Icons.common';
 import { Action, actionToUrl } from '../core';
 import { ViewStyle, TextStyle } from './Atoms.common';
 import { defaults } from './defaults';
+import { platformValue } from '../utils';
 
 export type ActionableProps = {
     action?: Action,
@@ -50,7 +51,10 @@ export const ThemedText = themed<ThemedTextProps>(props => {
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
     return <Atoms.Text style={{
-        textAlign: 'justify',
+        textAlign: platformValue({
+            mobile: 'left',
+            default: 'justify',
+        }),
         fontSize,
         fontFamily,
         color: colors(props)[props.color || 'text'],
