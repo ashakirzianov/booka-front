@@ -2,13 +2,12 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, BottomBar, point, SafeAreaView, Scroll,
+    Column, TopBar, BottomBar, Scroll,
 } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
-import { headerHeight } from '../blocks/Complex';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
     <Column style={{
@@ -20,9 +19,7 @@ export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(
         <Header {...props} />
         <Footer {...props} />
         <Scroll>
-            <EmptyLine />
             <Content {...props} />
-            <EmptyLine />
         </Scroll>
     </Column>
 );
@@ -32,12 +29,6 @@ const Content: Comp<AppScreen> = (props =>
         : props.screen === 'library' ? <LibraryScreenComp {...props} />
             : assertNever(props)
 );
-
-function EmptyLine() {
-    return <SafeAreaView>
-        <Row style={{ height: point(headerHeight) }} />
-    </SafeAreaView>;
-}
 
 type BarProps = AppScreen & {
     controlsVisible: boolean,

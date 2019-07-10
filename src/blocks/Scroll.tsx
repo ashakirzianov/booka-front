@@ -1,7 +1,7 @@
 export type RefType = HTMLElement | null;
-export type RefHandler = (ref: RefType) => void;
+export type RefHandler = (ref: any) => void;
 
-export function isPartiallyVisible(ref?: RefType) {
+export async function isPartiallyVisible(ref?: RefType) {
     if (ref) {
         const rect = boundingClientRect(ref);
         if (rect) {

@@ -38,6 +38,7 @@
         "onupdatefound",
         "polyfill",
         "precached",
+        "promisify",
         "refability",
         "shinel",
         "subpath",

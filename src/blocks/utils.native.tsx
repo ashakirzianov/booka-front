@@ -11,8 +11,8 @@ export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<T
 
 // TODO: implement refability
 export function refable<P = {}>(C: React.ComponentType<P>) {
-    return React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>
-        <View style={{ display: 'flex' }}>
+    return React.forwardRef<View, P & { children?: React.ReactNode }>((props, ref) =>
+        <View ref={ref} style={{ display: 'flex' }}>
             <C {...props} />
         </View>
     );

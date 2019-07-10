@@ -11,6 +11,11 @@ export { Row, Column } from './Atoms.common';
 
 export function Text(props: Props<TextProps>) {
     return <NativeText
+        ref={r => {
+            if (props.refHandler) {
+                props.refHandler(r);
+            }
+        }}
         style={{
             backgroundColor: props.background,
             ...convertStyle(props.style),

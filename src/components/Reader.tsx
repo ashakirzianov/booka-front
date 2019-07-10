@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, RefType,
-    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent,
+    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -15,6 +15,7 @@ import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
 import { Clickable } from '../blocks';
+import { headerHeight } from '../blocks/Complex';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -32,8 +33,8 @@ export class Reader extends React.Component<ReaderProps> {
     public refMap: RefMap = {};
     public selectedRange: BookSelection | undefined = undefined;
 
-    public handleScroll = () => {
-        const newCurrentPath = computeCurrentPath(this.refMap);
+    public handleScroll = async () => {
+        const newCurrentPath = await computeCurrentPath(this.refMap);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -103,6 +104,7 @@ export class Reader extends React.Component<ReaderProps> {
             width: percent(100),
             padding: point(1),
         }}>
+            <EmptyLine />
             <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
             <Clickable onClick={this.props.toggleControls}>
                 <Column>
@@ -110,6 +112,7 @@ export class Reader extends React.Component<ReaderProps> {
                 </Column>
             </Clickable>
             <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+            <EmptyLine />
         </Column>;
     }
 }
@@ -144,13 +147,20 @@ const PathLink: Comp<PathLinkProps> = (props =>
         </Row>
 );
 
+function EmptyLine() {
+    return <SafeAreaView>
+        <Row style={{ height: point(headerHeight) }} />
+    </SafeAreaView>;
+}
+
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
 }
 
-function computeCurrentPath(refMap: RefMap) {
+async function computeCurrentPath(refMap: RefMap) {
     for (const [key, ref] of Object.entries(refMap)) {
-        if (isPartiallyVisible(ref)) {
+        const isVisible = await isPartiallyVisible(ref);
+        if (isVisible) {
             const path = parsePath(key);
             if (path) {
                 return path;
