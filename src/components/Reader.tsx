@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, RefType,
-    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView,
+    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView, Scroll,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -36,6 +36,7 @@ export class Reader extends React.Component<ReaderProps> {
     public handleScroll = async () => {
         const newCurrentPath = await computeCurrentPath(this.refMap);
         if (newCurrentPath) {
+            // console.warn(newCurrentPath.join('-'));
             this.props.updateBookPosition(newCurrentPath);
         }
     }
@@ -100,20 +101,29 @@ export class Reader extends React.Component<ReaderProps> {
             },
             quoteRange: this.props.quoteRange,
         };
-        return <Column style={{
-            width: percent(100),
-            padding: point(1),
-        }}>
-            <EmptyLine />
-            <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
-            <Clickable onClick={this.props.toggleControls}>
-                <Column>
-                    {buildBook(volume, params)}
+        return <Scroll
+            onScroll={this.handleScroll}
+        >
+            <Row style={{
+                maxWidth: point(50),
+            }}>
+                <Column style={{
+                    width: percent(100),
+                    padding: point(1),
+                    alignItems: 'center',
+                }}>
+                    <EmptyLine />
+                    <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
+                    <Clickable onClick={this.props.toggleControls}>
+                        <Column>
+                            {buildBook(volume, params)}
+                        </Column>
+                    </Clickable>
+                    <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+                    <EmptyLine />
                 </Column>
-            </Clickable>
-            <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
-            <EmptyLine />
-        </Column>;
+            </Row>
+        </Scroll>;
     }
 }
 

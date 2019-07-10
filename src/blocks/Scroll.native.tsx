@@ -4,10 +4,8 @@ export type RefType = NativeMethodsMixinStatic | null;
 export type RefHandler = (ref: any) => void;
 
 export async function isPartiallyVisible(ref?: RefType) {
-    console.warn('heello');
     if (ref) {
         const rect = await boundingClientRect(ref);
-        console.log(rect);
         if (rect) {
             const { top, height } = rect;
             const result = top <= 0 && top + height >= 0;
@@ -30,13 +28,20 @@ export async function boundingClientRect(ref?: RefType): Promise<Rect | undefine
     const current = currentObject(ref);
     const promise = new Promise<Rect | undefined>((resolve, reject) => {
         if (current) {
-            current.measure((x, y, width, height) =>
-                resolve({
-                    top: x,
-                    left: y,
-                    width,
-                    height,
-                }));
+            setTimeout(() =>
+                current.measureInWindow((x, y, width, height) => {
+                    if (x || y || width || height) {
+                        resolve({
+                            top: y,
+                            left: x,
+                            width,
+                            height,
+                        });
+                    } else {
+                        resolve(undefined);
+                    }
+                }
+                ));
         } else {
             resolve(undefined);
         }

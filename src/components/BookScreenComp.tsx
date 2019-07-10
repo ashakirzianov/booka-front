@@ -3,10 +3,10 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point, Props,
+    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point,
 } from '../blocks';
 import {
-    BookScreen, Book, TableOfContents, PaletteName, BookRange,
+    BookScreen, TableOfContents, PaletteName,
     FootnoteSpan, footnoteForId, Pagination,
 } from '../model';
 import { BookNodesComp } from './Reader';
@@ -17,8 +17,8 @@ import { actionCreators } from '../core';
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>
-        <BookText
-            book={props.book}
+        <BookComp
+            {...props.book}
             quoteRange={props.bl.quote}
         />
         <TableOfContentsBox
@@ -112,20 +112,6 @@ const AppearanceButton: Comp = (() =>
         {onClick => <PanelButton icon='letter' onClick={onClick} />}
     </WithPopover>
 );
-
-type BookTextProps = {
-    book: Book,
-    quoteRange: BookRange | undefined,
-};
-function BookText({ book, quoteRange }: Props<BookTextProps>) {
-    return <Row style={{
-        alignItems: 'center',
-        maxWidth: point(50),
-    }}
-    >
-        <BookComp {...book} quoteRange={quoteRange} />
-    </Row>;
-}
 
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}

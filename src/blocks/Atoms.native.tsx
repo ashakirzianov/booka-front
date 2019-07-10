@@ -4,18 +4,14 @@ import {
     Text as NativeText, TextStyle as NativeTextStyle,
     View, ViewStyle as NativeViewStyle, ScrollView,
 } from 'react-native';
-import { TextStyle, TextProps, LinkProps } from './Atoms.common';
+import { TextStyle, TextProps, LinkProps, ScrollProps } from './Atoms.common';
 import { Props } from './common';
 
 export { Row, Column } from './Atoms.common';
 
 export function Text(props: Props<TextProps>) {
     return <NativeText
-        ref={r => {
-            if (props.refHandler) {
-                props.refHandler(r);
-            }
-        }}
+        ref={props.refHandler}
         style={{
             backgroundColor: props.background,
             ...convertStyle(props.style),
@@ -53,7 +49,14 @@ export function HoverableText(props: Props) {
     return <>{props.children}</>;
 }
 
-export const Scroll = ScrollView;
+export function Scroll(props: Props<ScrollProps>) {
+    return <ScrollView
+        onScroll={props.onScroll}
+        scrollEventThrottle={512}
+    >
+        {props.children}
+    </ScrollView>;
+}
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {
     // TODO: rethink this ?

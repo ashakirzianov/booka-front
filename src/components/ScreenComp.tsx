@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectState, Comp, Row, FullScreenActivityIndicator,
-    Column, TopBar, BottomBar, Scroll,
+    Column, TopBar, BottomBar,
 } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
@@ -18,9 +18,7 @@ export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(
         {props.loading ? <FullScreenActivityIndicator /> : null}
         <Header {...props} />
         <Footer {...props} />
-        <Scroll>
-            <Content {...props} />
-        </Scroll>
+        <Content {...props} />
     </Column>
 );
 

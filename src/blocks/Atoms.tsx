@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextProps, LinkProps } from './Atoms.common';
+import { TextProps, LinkProps, ScrollProps } from './Atoms.common';
 import { isOpenNewTabEvent, hoverable } from './utils';
 import { Props } from './common';
 
@@ -66,6 +66,8 @@ export const HoverableText = hoverable<HoverableTextProps>(function HoverableTex
     </span>;
 });
 
-export function Scroll(props: Props) {
-    return <>{props.children}</>;
+export function Scroll(props: Props<ScrollProps>) {
+    return <>
+        {props.children}
+    </>;
 }

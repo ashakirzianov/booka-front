@@ -5,6 +5,10 @@ import { Comp, Callback } from './common';
 import { Color } from '../model';
 import { RefHandler } from './Scroll';
 
+export type ScrollProps = {
+    onScroll?: Callback<void>,
+};
+
 export type LinkProps = LayoutProps & {
     to?: string,
     onClick?: Callback<void>, // TODO: rethinks this
