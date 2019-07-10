@@ -3,9 +3,9 @@ import * as Scroll from './Scroll';
 export type RefType = Scroll.RefType;
 
 export * from './utils';
-export { isOpenNewTabEvent, refable, hoverable } from './utils';
+export { isOpenNewTabEvent, hoverable } from './utils';
 export {
-    isPartiallyVisible, scrollToRef,
+    isPartiallyVisible, scrollToRef, refable,
 } from './Scroll';
 export * from './Elements';
 export * from './Complex.common';

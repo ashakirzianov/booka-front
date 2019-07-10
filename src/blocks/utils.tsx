@@ -15,13 +15,3 @@ export function isOpenNewTabEvent(e: React.MouseEvent) {
 function isMacOs(): boolean {
     return navigator.platform.startsWith('Mac');
 }
-
-export function refable<P = {}>(C: React.ComponentType<P>) {
-    return React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>
-        <div ref={ref} style={{ display: 'flex' }}>
-            <C {...props} />
-        </div>
-    );
-}
-
-export const Refable = refable(props => <>{props.children}</>);
