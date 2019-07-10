@@ -46,5 +46,7 @@
         "timeouted",
         "webfonts"
     ],
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wrappingIndent": "indent"
 }

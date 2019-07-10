@@ -1,5 +1,15 @@
+import * as React from 'react';
+
 export type RefType = HTMLElement | null;
 export type RefHandler = (ref: any) => void;
+
+export function refable<P = {}>(C: React.ComponentType<P>) {
+    return React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>((props, ref) =>
+        <div ref={ref} style={{ display: 'flex' }}>
+            <C {...props} />
+        </div>
+    );
+}
 
 export async function isPartiallyVisible(ref?: RefType) {
     if (ref) {

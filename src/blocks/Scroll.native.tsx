@@ -1,7 +1,17 @@
-import { NativeMethodsMixinStatic } from 'react-native';
+import * as React from 'react';
+import { NativeMethodsMixinStatic, View } from 'react-native';
 
 export type RefType = NativeMethodsMixinStatic | null;
 export type RefHandler = (ref: any) => void;
+
+// TODO: rename to 'scrollable' ? add path support ?
+export function refable<P = {}>(C: React.ComponentType<P>) {
+    return React.forwardRef<View, P & { children?: React.ReactNode }>((props, ref) =>
+        <View ref={ref} style={{ display: 'flex' }}>
+            <C {...props} />
+        </View>
+    );
+}
 
 export async function isPartiallyVisible(ref?: RefType) {
     if (ref) {

@@ -4,7 +4,6 @@ import { ThemedText, PanelButton, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
-import { Refable } from './utils';
 import { Transition } from 'react-transition-group';
 import { defaults } from './defaults';
 import { platformValue } from '../utils';
@@ -137,9 +136,9 @@ export class WithPopover extends React.Component<WithPopoverProps, WithPopoverSt
                                 onClick={this.hide.bind(this)}
                             />
                         }
-                        <Refable ref={ref}>
+                        <div ref={ref} style={{ display: 'flex' }}>
                             {children(this.toggleVisibility.bind(this))}
-                        </Refable>
+                        </div>
                     </>
                 }
             </Reference>
