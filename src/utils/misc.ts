@@ -173,3 +173,53 @@ export function firstDefined<T, U>(arr: T[], f: (x: T) => U | undefined): U | un
 
     return undefined;
 }
+
+export type Range<T> = {
+    start: T,
+    end?: T,
+};
+export function inRange<T>(point: T, range: Range<T>, lessThanF: (l: T, r: T) => boolean) {
+    if (lessThanF(range.start, point)) {
+        if (range.end === undefined || lessThanF(point, range.end)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+export type TaggedRange<T, U> = {
+    tag?: T,
+    range: Range<U>,
+};
+export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, , lessThanF: (l: U, r: U) => boolean) {
+    const points = taggedRanges.reduce<U[]>(
+        (pts, tagged) => {
+            pts.push(tagged.range.start);
+            if (tagged.range.end) {
+                pts.push(tagged.range.end);
+            }
+            return pts;
+        }, [])
+        .sort();
+
+    const result: Array<{
+        tags: T[],
+        range: Range<U>,
+    }> = [];
+    for (let idx = 1; idx <= points.length; idx++) {
+        const prevPoint = points[idx - 1];
+        const point = points[idx];
+        const tags = filterUndefined(taggedRanges
+            .filter(tr => inRange(prevPoint, tr.range, lessThanF))
+            .map(tr => tr.tag));
+        result.push({
+            tags,
+            range: {
+                start: prevPoint,
+                end: point,
+            },
+        });
+    }
+
+    return result;
+}
