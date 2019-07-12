@@ -4,14 +4,14 @@ import {
     Color, BookRange, BookPath, isSimple, Span,
     isCompound, isAttributed, isFootnote, AttributesObject,
     SimpleSpan, CompoundSpan, spanLength, AttributedSpan,
-    attrs, FootnoteSpan, inRange, bookRange, incrementPath,
-    overlapWith, overlaps, sameParent, pathLessThan,
+    attrs, FootnoteSpan, inBookRange, bookRange, incrementPath,
+    overlapWith, sameParent, pathLessThan,
 } from '../model';
 import {
     Comp, PlainText, connectActions, ThemedText,
     ActionLink, ThemedHoverable, Props, point,
 } from '../blocks';
-import { assertNever, filterUndefined, last } from '../utils';
+import { assertNever, filterUndefined, last, overlaps } from '../utils';
 import { actionCreators } from '../core';
 import { RefPathHandler, pathToId } from './common';
 
@@ -160,7 +160,7 @@ function colorsForPath(path: BookPath, colorization?: Colorization) {
     }
 
     const colors = colorization.ranges.map(cr =>
-        inRange(path, cr.range) ? cr.color : undefined);
+        inBookRange(path, cr.range) ? cr.color : undefined);
 
     return filterUndefined(colors);
 }
@@ -177,7 +177,7 @@ function buildColorizedSpans(text: string, path: BookPath, colorization?: Colori
     })));
     relevant.push({ range: spanRange });
 
-    const os = overlaps(relevant);
+    const os = overlaps(relevant, pathLessThan);
 
     const result = os.map(tagged => {
         const spanText = subsForRange(text, path, tagged.range);
