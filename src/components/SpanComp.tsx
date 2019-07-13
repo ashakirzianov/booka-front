@@ -2,26 +2,17 @@ import * as React from 'react';
 
 import {
     Color, BookRange, BookPath, isSimple, Span,
-    isCompound, isAttributed, isFootnote, AttributesObject,
-    SimpleSpan, CompoundSpan, spanLength, AttributedSpan,
-    attrs, FootnoteSpan, inBookRange, bookRange, incrementPath,
-    overlapWith, sameParent, pathLessThan,
+    isCompound, isAttributed, isFootnote,
+    pathLessThan, FootnoteId, isPrefix, attrs,
 } from '../model';
 import {
-    Comp, PlainText, connectActions, ThemedText,
-    ActionLink, ThemedHoverable, Props, point,
+    PlainText, point,
 } from '../blocks';
-import { assertNever, filterUndefined, last, overlaps } from '../utils';
-import { actionCreators } from '../core';
+import {
+    assertNever, filterUndefined,
+    TaggedRange, range, Range, overlaps,
+} from '../utils';
 import { RefPathHandler, pathToId } from './common';
-
-type SpanType<T> = {
-    span: T,
-    path: BookPath,
-    first: boolean,
-    refPathHandler: RefPathHandler,
-    colorization?: Colorization,
-};
 
 export type ColorizedRange = {
     color: Color,
@@ -31,186 +22,225 @@ export type Colorization = {
     ranges: ColorizedRange[],
 };
 
-type SpanProps = SpanType<Span>;
-export const SpanComp: Comp<SpanProps> = (props =>
-    isSimple(props.span) ? <SimpleSpanComp {...props} span={props.span} />
-        : isCompound(props.span) ? <CompoundSpanComp {...props} span={props.span} />
-            : isAttributed(props.span) ? <AttributedSpanComp {...props} span={props.span} />
-                : isFootnote(props.span) ? <FootnoteSpanComp {...props} span={props.span} />
-                    : assertNever(props.span)
-);
-
-const StyledWithAttributes: Comp<{ attrs: AttributesObject }> = (props =>
-    <PlainText style={{
-        fontStyle: props.attrs.italic ? 'italic' : 'normal',
-        fontWeight: props.attrs.bold ? 'bold' : 'normal',
-        ...(props.attrs.line && {
-            textIndent: point(2),
-            display: 'block',
-        }),
-    }}>
-        {props.children}
-    </PlainText>
-);
-
-type SimpleSpanProps = {
-    span: SimpleSpan,
+export type SpanProps = {
+    span: Span,
+    path: BookPath,
     first: boolean,
-    path: BookPath,
     refPathHandler: RefPathHandler,
     colorization?: Colorization,
+    fontSize: number,
+    color: Color,
 };
-const SimpleSpanComp: Comp<SimpleSpanProps> = (props => {
-    return props.first
-        ? <CapitalizeFirst text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />
-        : <TextRun text={props.span} path={props.path} colorization={props.colorization} refPathHandler={props.refPathHandler} />;
-});
-function CompoundSpanComp({ span, path, first, colorization, refPathHandler }: SpanType<CompoundSpan>) {
-    const children: JSX.Element[] = [];
-    let offset = 0;
-    let idx = 0;
-    for (const childS of span.spans) {
-        const pathCopy = path.slice();
-        pathCopy[path.length - 1] += offset;
-        const child = <SpanComp
-            key={`${idx}`}
-            span={childS}
-            first={first && idx === 0}
-            path={pathCopy}
-            colorization={colorization}
-            refPathHandler={refPathHandler}
+export function SpanComp(props: SpanProps) {
+    const ranges = rangesForProps(props);
+    const fullText = spanText(props.span);
+    const children = ranges.map((r, idx) => {
+        const rendering = foldRendering(r.tags);
+        const text = fullText.substring(r.range.start, r.range.end);
+        const path = props.path.concat(r.range.start);
+
+        return <TextRun
+            fontSize={props.fontSize}
+            color={props.color}
+            key={idx.toString()}
+            {...rendering}
+            text={text}
+            refPathHandler={props.refPathHandler}
+            path={path}
         />;
-        children.push(child);
-        offset += spanLength(childS);
-        idx++;
-    }
-
-    return <PlainText>{children}</PlainText>;
-}
-type AttributedSpanProps = SpanType<AttributedSpan>;
-const AttributedSpanComp: Comp<AttributedSpanProps> = (props =>
-    <StyledWithAttributes attrs={attrs(props.span)}>
-        <SpanComp {...props} span={props.span.content} />
-    </StyledWithAttributes>
-);
-type FootnoteSpanProps = SpanType<FootnoteSpan>;
-const FootnoteSpanComp = connectActions('openFootnote')<FootnoteSpanProps>(function FootnoteSpanC(props: Props<FootnoteSpanProps>) {
-    return <ActionLink action={actionCreators.openFootnote(props.span.id)}>
-        <ThemedHoverable>
-            <ThemedText color='accent' hoverColor='highlight'>
-                <SpanComp {...props} span={props.span.content} />
-            </ThemedText>
-        </ThemedHoverable>
-    </ActionLink>;
-});
-
-type TextRunProps = {
-    text: string,
-    path: BookPath,
-    refPathHandler: RefPathHandler,
-    colorization?: Colorization,
-};
-const CapitalizeFirst: Comp<TextRunProps> = (props => {
-    const text = props.text.trimStart();
-    const firstPath = props.path;
-    const firstHighlight = colorsForPath(firstPath, props.colorization)[0];
-    const secondPath = props.path.slice();
-    secondPath[secondPath.length - 1] += 1;
-    return <PlainText>
-        <PlainText
-            refHandler={ref => props.refPathHandler(ref, firstPath)}
-            id={pathToId(firstPath)}
-            dropCaps={true}
-            background={firstHighlight}
-        >
-            {text[0]}
-        </PlainText>
-        <TextRun {...props} path={secondPath} text={text.slice(1)} />
-    </PlainText>;
-});
-
-const TextRun: Comp<TextRunProps> = (props => {
-    const spans = buildColorizedSpans(props.text, props.path, props.colorization);
-    const children = spans.map(
-        (s, idx) => !s ? null :
-            <PlainText
-                key={idx}
-                id={pathToId(s.path)}
-                refHandler={ref => props.refPathHandler(ref, s.path)}
-                background={s.color}
-            >
-                {s.text}
-            </PlainText>
-    );
-
-    return <PlainText>
-        {children}
-    </PlainText>;
-});
-
-type StyledSpan = {
-    text: string,
-    color?: Color,
-    path: BookPath,
-};
-
-function colorsForPath(path: BookPath, colorization?: Colorization) {
-    if (!colorization) {
-        return [];
-    }
-
-    const colors = colorization.ranges.map(cr =>
-        inBookRange(path, cr.range) ? cr.color : undefined);
-
-    return filterUndefined(colors);
-}
-
-function buildColorizedSpans(text: string, path: BookPath, colorization?: Colorization): StyledSpan[] {
-    if (!colorization || colorization.ranges.length < 1) {
-        return [{ text, path }];
-    }
-
-    const spanRange = bookRange(path, incrementPath(path, text.length));
-    const relevant = overlapWith(spanRange, colorization.ranges.map(cr => ({
-        tag: cr.color,
-        range: cr.range,
-    })));
-    relevant.push({ range: spanRange });
-
-    const os = overlaps(relevant, pathLessThan);
-
-    const result = os.map(tagged => {
-        const spanText = subsForRange(text, path, tagged.range);
-        return !spanText ? undefined : {
-            text: spanText,
-            color: tagged.tags.length > 0
-                ? tagged.tags[0]
-                : undefined,
-            path: tagged.range.start,
-        };
     });
 
-    return filterUndefined(result);
+    return <>{children}</>;
 }
 
-function subsForRange(s: string, path: BookPath, r: BookRange): string | undefined {
-    let from = 0;
-    if (sameParent(r.start, path)) {
-        from = last(r.start) - last(path);
-    } else if (!pathLessThan(r.start, path)) {
-        return undefined;
-    }
+type TextRunProps = RenderingAttrs & {
+    text: string,
+    path: BookPath,
+    refPathHandler: RefPathHandler,
+};
+// TODO: support footnotes
+function TextRun(props: TextRunProps) {
+    return <PlainText
+        dropCaps={props.dropCaps}
+        refHandler={ref => props.refPathHandler(ref, props.path)}
+        background={props.background}
+        id={pathToId(props.path)}
+        style={{
+            color: props.color,
+            fontSize: props.fontSize,
+            fontStyle: props.italic ? 'italic' : 'normal',
+            fontWeight: props.bold ? 'bold' : 'normal',
+            ...(props.line && {
+                textIndent: point(2),
+                display: 'block',
+            }),
+        }}>
+        {props.text}
+    </PlainText>;
+}
 
-    if (!r.end) {
-        return s.substring(from);
-    }
+type FootnoteData = {
+    footnote: Span,
+    id: FootnoteId,
+    title: string[],
+};
 
-    if (sameParent(path, r.end)) {
-        const to = last(r.end) - last(path);
-        return s.substring(from, to);
-    } else if (pathLessThan(path, r.end)) {
-        return s.substring(from);
+type RenderingAttrs = {
+    color?: Color,
+    background?: Color,
+    fontSize?: number,
+    dropCaps?: boolean,
+    italic?: boolean,
+    bold?: boolean,
+    line?: boolean,
+    footnote?: FootnoteData,
+};
+
+type RenderingAttrsRange = TaggedRange<RenderingAttrs, number>;
+
+function rangesForProps(props: SpanProps): RenderingAttrsRange[] {
+    const spanRanges = rangesForSpan(props.span);
+    const dropCaseRanges = props.first
+        ? [{
+            range: range(0, 2),
+            tags: [{ dropCaps: true }],
+        }]
+        : [];
+
+    const absoluteRanges = ((props.colorization && props.colorization.ranges) || []);
+    const colorizationRanges = filterUndefined(
+        absoluteRanges
+            .map(cr => {
+                const relative = rangeRelativeToPath(props.path, cr.range);
+                return relative
+                    ? {
+                        tags: [{ background: cr.color }],
+                        range: relative,
+                    }
+                    : undefined;
+            })
+    );
+
+    const allRanges = spanRanges.concat(dropCaseRanges).concat(colorizationRanges);
+    const result = overlaps(allRanges, (l, r) => l < r);
+
+    return result;
+}
+
+function rangesForSpan(span: Span): RenderingAttrsRange[] {
+    const result = rangesForSpanHelper(span, 0);
+    return result.ranges;
+}
+
+function rangesForSpanHelper(span: Span, offset: number): {
+    ranges: RenderingAttrsRange[],
+    length: number,
+} {
+    if (isSimple(span)) {
+        return {
+            ranges: [{
+                range: {
+                    start: offset,
+                    end: offset + span.length,
+                },
+                tags: [],
+            }],
+            length: span.length,
+        };
+    } else if (isAttributed(span)) {
+        const inside = rangesForSpanHelper(span.content, offset);
+        const current: RenderingAttrsRange = {
+            range: {
+                start: offset,
+                end: offset + inside.length,
+            },
+            tags: [{
+                italic: attrs(span).italic,
+                bold: attrs(span).bold,
+                line: attrs(span).line,
+            }],
+        };
+        return {
+            ranges: [current].concat(inside.ranges),
+            length: inside.length,
+        };
+    } else if (isCompound(span)) {
+        let ranges: RenderingAttrsRange[] = [];
+        let currentOffset = offset;
+        for (const s of span.spans) {
+            const rs = rangesForSpanHelper(s, currentOffset);
+            ranges = ranges.concat(rs.ranges);
+            currentOffset += rs.length;
+        }
+
+        return {
+            ranges,
+            length: currentOffset - offset,
+        };
+    } else if (isFootnote(span)) {
+        const inside = rangesForSpanHelper(span.content, offset);
+        const current: RenderingAttrsRange = {
+            range: {
+                start: offset,
+                end: offset + inside.length,
+            },
+            tags: [{
+                footnote: {
+                    footnote: span.footnote,
+                    id: span.id,
+                    title: span.title,
+                },
+            }],
+        };
+        return {
+            ranges: [current].concat(inside.ranges),
+            length: inside.length,
+        };
     } else {
+        return assertNever(span);
+    }
+}
+
+function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range<number> | undefined {
+    if (bookR.end && pathLessThan(bookR.end, path)) {
         return undefined;
     }
+
+    if (!pathLessThan(path, bookR.start)) {
+        return range(0);
+    }
+
+    let start: number | undefined;
+    if (isPrefix(path, bookR.start)) {
+        start = bookR.start[path.length];
+    }
+    let end: number | undefined;
+    if (bookR.end && isPrefix(path, bookR.end)) {
+        end = bookR.end[path.length];
+    }
+
+    return start !== undefined
+        ? range(start, end)
+        : undefined;
+}
+
+function foldRendering(rendering: RenderingAttrs[]): RenderingAttrs {
+    return rendering.reduce((res, r) => ({ ...res, ...r }), {});
+}
+
+// TODO: move to model utils
+function spanText(span: Span): string {
+    if (isSimple(span)) {
+        return span;
+    } else if (isAttributed(span)) {
+        return spanText(span.content);
+    } else if (isCompound(span)) {
+        return span.spans
+            .map(spanText)
+            .join();
+    } else if (isFootnote(span)) {
+        return spanText(span.content);
+    }
+
+    return assertNever(span);
 }
