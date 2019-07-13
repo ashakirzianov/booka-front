@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    themed, highlights, point,
+    themed, highlights, point, colors,
 } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath,
@@ -20,6 +20,8 @@ export const ParagraphComp = themed<ParagraphProps>(function ParagraphCompC(prop
     return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
         <SpanComp
             {...props}
+            fontSize={props.theme.fontSizes.normal * props.theme.fontScale}
+            color={colors(props).text}
             path={props.path.concat([0])}
             span={props.p.span}
             colorization={props.highlights && props.highlights.quote && {

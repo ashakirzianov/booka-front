@@ -178,9 +178,13 @@ export type Range<T> = {
     start: T,
     end?: T,
 };
-export function inRange<T>(point: T, range: Range<T>, lessThanF: (l: T, r: T) => boolean) {
-    if (lessThanF(range.start, point)) {
-        if (range.end === undefined || lessThanF(point, range.end)) {
+export function range<T>(start: T, end?: T) {
+    return { start, end };
+}
+
+export function inRange<T>(point: T, r: Range<T>, lessThanF: (l: T, r: T) => boolean) {
+    if (lessThanF(r.start, point)) {
+        if (r.end === undefined || lessThanF(point, r.end)) {
             return true;
         }
     }
@@ -188,10 +192,10 @@ export function inRange<T>(point: T, range: Range<T>, lessThanF: (l: T, r: T) =>
     return false;
 }
 export type TaggedRange<T, U> = {
-    tag?: T,
+    tags: T[],
     range: Range<U>,
 };
-export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, , lessThanF: (l: U, r: U) => boolean) {
+export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
     const points = taggedRanges.reduce<U[]>(
         (pts, tagged) => {
             pts.push(tagged.range.start);
@@ -209,9 +213,10 @@ export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, , lessTha
     for (let idx = 1; idx <= points.length; idx++) {
         const prevPoint = points[idx - 1];
         const point = points[idx];
-        const tags = filterUndefined(taggedRanges
+        const tags = taggedRanges
             .filter(tr => inRange(prevPoint, tr.range, lessThanF))
-            .map(tr => tr.tag));
+            .map(tr => tr.tags)
+            .reduce((acc, ts) => acc.concat(ts), []);
         result.push({
             tags,
             range: {
