@@ -40,13 +40,13 @@ export function SpanComp(props: SpanProps) {
         const path = props.path.concat(r.range.start);
 
         return <TextRun
-            fontSize={props.fontSize}
             color={props.color}
+            fontSize={props.fontSize}
             key={idx.toString()}
             {...rendering}
             text={text}
-            refPathHandler={props.refPathHandler}
             path={path}
+            refPathHandler={props.refPathHandler}
         />;
     });
 
@@ -102,7 +102,7 @@ function rangesForProps(props: SpanProps): RenderingAttrsRange[] {
     const spanRanges = rangesForSpan(props.span);
     const dropCaseRanges = props.first
         ? [{
-            range: range(0, 2),
+            range: range(0, 1),
             tags: [{ dropCaps: true }],
         }]
         : [];

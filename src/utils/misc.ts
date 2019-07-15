@@ -174,6 +174,16 @@ export function firstDefined<T, U>(arr: T[], f: (x: T) => U | undefined): U | un
     return undefined;
 }
 
+export function distinct<T>(arr: T[]): T[] {
+    return arr.reduce<T[]>((res, x) => {
+        if (!res.some(xx => xx === x)) {
+            res.push(x);
+        }
+
+        return res;
+    }, []);
+}
+
 export type Range<T> = {
     start: T,
     end?: T,
@@ -183,7 +193,7 @@ export function range<T>(start: T, end?: T) {
 }
 
 export function inRange<T>(point: T, r: Range<T>, lessThanF: (l: T, r: T) => boolean) {
-    if (lessThanF(r.start, point)) {
+    if (!lessThanF(point, r.start)) {
         if (r.end === undefined || lessThanF(point, r.end)) {
             return true;
         }
@@ -196,21 +206,28 @@ export type TaggedRange<T, U> = {
     range: Range<U>,
 };
 export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
-    const points = taggedRanges.reduce<U[]>(
+    let isEndInfinity = false;
+    const points = distinct(taggedRanges.reduce<U[]>(
         (pts, tagged) => {
             pts.push(tagged.range.start);
             if (tagged.range.end) {
                 pts.push(tagged.range.end);
+            } else {
+                isEndInfinity = true;
             }
+
             return pts;
-        }, [])
+        }, []))
         .sort();
 
     const result: Array<{
         tags: T[],
         range: Range<U>,
     }> = [];
-    for (let idx = 1; idx <= points.length; idx++) {
+    const lastIndex = isEndInfinity
+        ? points.length + 1
+        : points.length;
+    for (let idx = 1; idx < lastIndex; idx++) {
         const prevPoint = points[idx - 1];
         const point = points[idx];
         const tags = taggedRanges

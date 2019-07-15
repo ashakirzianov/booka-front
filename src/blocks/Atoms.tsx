@@ -12,12 +12,12 @@ export function Text(props: Props<TextProps>) {
         style={{
             wordBreak: 'break-word',
             background: props.background,
+            ...props.style,
             ...(props.dropCaps && {
                 float: 'left',
                 fontSize: '400%',
                 lineHeight: '80%',
             }),
-            ...props.style,
         }}
     >
         {props.children}
