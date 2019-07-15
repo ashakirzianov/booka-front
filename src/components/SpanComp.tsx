@@ -29,6 +29,7 @@ export type SpanProps = {
     refPathHandler: RefPathHandler,
     colorization?: Colorization,
     fontSize: number,
+    fontFamily: string,
     color: Color,
 };
 export function SpanComp(props: SpanProps) {
@@ -42,6 +43,7 @@ export function SpanComp(props: SpanProps) {
         return <TextRun
             color={props.color}
             fontSize={props.fontSize}
+            fontFamily={props.fontFamily}
             key={idx.toString()}
             {...rendering}
             text={text}
@@ -68,6 +70,7 @@ function TextRun(props: TextRunProps) {
         style={{
             color: props.color,
             fontSize: props.fontSize,
+            fontFamily: props.fontFamily,
             fontStyle: props.italic ? 'italic' : 'normal',
             fontWeight: props.bold ? 'bold' : 'normal',
             ...(props.line && {
@@ -89,6 +92,7 @@ type RenderingAttrs = {
     color?: Color,
     background?: Color,
     fontSize?: number,
+    fontFamily?: string,
     dropCaps?: boolean,
     italic?: boolean,
     bold?: boolean,
