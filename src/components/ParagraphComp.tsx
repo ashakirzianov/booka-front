@@ -21,6 +21,7 @@ export const ParagraphComp = themed<ParagraphProps>(function ParagraphCompC(prop
         <SpanComp
             {...props}
             fontSize={props.theme.fontSizes.normal * props.theme.fontScale}
+            fontFamily={props.theme.fontFamilies.main}
             color={colors(props).text}
             path={props.path.concat([0])}
             span={props.p.span}
