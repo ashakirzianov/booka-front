@@ -201,11 +201,11 @@ export function inRange<T>(point: T, r: Range<T>, lessThanF: (l: T, r: T) => boo
 
     return false;
 }
-export type TaggedRange<T, U> = {
+export type TaggedRange<T, U = number> = {
     tags: T[],
     range: Range<U>,
 };
-export function overlaps<T, U>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
+export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
     let isEndInfinity = false;
     const points = distinct(taggedRanges.reduce<U[]>(
         (pts, tagged) => {

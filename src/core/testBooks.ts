@@ -10,7 +10,18 @@ export const short: VolumeNode = {
             'nodes': [
                 {
                     'node': 'paragraph',
-                    'span': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed velit dignissim sodales ut eu sem. Ornare arcu dui vivamus arcu felis bibendum. Ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Cursus turpis massa tincidunt dui ut. At quis risus sed vulputate odio ut. In fermentum et sollicitudin ac orci phasellus egestas. Et netus et malesuada fames. Egestas sed tempus urna et pharetra pharetra. Nunc sed id semper risus in hendrerit gravida rutrum quisque. Semper feugiat nibh sed pulvinar proin. Vitae turpis massa sed elementum tempus egestas sed sed risus.',
+                    'span': {
+                        'span': 'compound',
+                        'spans': [
+                            'Lorem ipsum ',
+                            {
+                                'span': 'attrs',
+                                'content': 'dolor sit amet',
+                                attrs: ['italic'],
+                            },
+                            ', consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed velit dignissim sodales ut eu sem. Ornare arcu dui vivamus arcu felis bibendum. Ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Cursus turpis massa tincidunt dui ut. At quis risus sed vulputate odio ut. In fermentum et sollicitudin ac orci phasellus egestas. Et netus et malesuada fames. Egestas sed tempus urna et pharetra pharetra. Nunc sed id semper risus in hendrerit gravida rutrum quisque. Semper feugiat nibh sed pulvinar proin. Vitae turpis massa sed elementum tempus egestas sed sed risus.',
+                        ],
+                    },
                 },
                 {
                     'node': 'paragraph',
