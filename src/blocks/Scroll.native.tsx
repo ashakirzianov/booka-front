@@ -7,7 +7,7 @@ export type RefHandler = (ref: any) => void;
 // TODO: rename to 'scrollable' ? add path support ?
 export function refable<P = {}>(C: React.ComponentType<P>) {
     return React.forwardRef<View, P & { children?: React.ReactNode }>((props, ref) =>
-        <View ref={ref} style={{ display: 'flex' }}>
+        <View style={{ display: 'flex' }}>
             <C {...props} />
         </View>
     );
@@ -15,7 +15,7 @@ export function refable<P = {}>(C: React.ComponentType<P>) {
 
 export async function isPartiallyVisible(ref?: RefType) {
     if (ref) {
-        const rect = await boundingClientRect(ref);
+        const rect = await visibleRect(ref);
         if (rect) {
             const { top, height } = rect;
             const result = top <= 0 && top + height >= 0;
@@ -34,7 +34,7 @@ type Rect = {
     width: number,
     height: number,
 };
-export async function boundingClientRect(ref?: RefType): Promise<Rect | undefined> {
+export async function visibleRect(ref?: RefType): Promise<Rect | undefined> {
     const current = currentObject(ref);
     const promise = new Promise<Rect | undefined>((resolve, reject) => {
         if (current) {

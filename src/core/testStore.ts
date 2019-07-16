@@ -4,14 +4,14 @@ import { Action } from './actions';
 import { App, BookScreen, Book, BookId, VolumeNode, tocFromVolume } from '../model';
 import { reducer } from './reducers';
 import { defaultTheme } from './persistent';
-import { shinel } from './testBooks';
+import { short } from './testBooks';
 import { createEnhancedStore } from '../utils';
 
 class AppProvider extends Provider<Action> { }
 export const TestProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
-const volume: VolumeNode = shinel;
+const volume: VolumeNode = short;
 const bookId: BookId = { name: 'test' };
 const book: Book = {
     id: bookId,
