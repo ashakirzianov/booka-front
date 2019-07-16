@@ -218,7 +218,7 @@ export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, 
 
             return pts;
         }, []))
-        .sort();
+        .sort((a, b) => lessThanF(a, b) ? -1 : +1);
 
     const result: Array<{
         tag: T[],
