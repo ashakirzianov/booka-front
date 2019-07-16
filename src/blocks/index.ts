@@ -17,3 +17,4 @@ export {
     TopBar, BottomBar, Clickable, DottedLine, LinkButton,
     Modal, Separator, Tab, WithPopover,
 } from './Complex';
+export * from './RichText';
