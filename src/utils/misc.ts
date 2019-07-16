@@ -202,7 +202,7 @@ export function inRange<T>(point: T, r: Range<T>, lessThanF: (l: T, r: T) => boo
     return false;
 }
 export type TaggedRange<T, U = number> = {
-    tags: T[],
+    tag: T | undefined,
     range: Range<U>,
 };
 export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
@@ -221,7 +221,7 @@ export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, 
         .sort();
 
     const result: Array<{
-        tags: T[],
+        tag: T[],
         range: Range<U>,
     }> = [];
     const lastIndex = isEndInfinity
@@ -232,10 +232,10 @@ export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, 
         const point = points[idx];
         const tags = taggedRanges
             .filter(tr => inRange(prevPoint, tr.range, lessThanF))
-            .map(tr => tr.tags)
-            .reduce((acc, ts) => acc.concat(ts), []);
+            .map(tr => tr.tag)
+            .reduce<T[]>((acc, ts) => ts !== undefined ? acc.concat(ts) : acc, []);
         result.push({
-            tags,
+            tag: tags,
             range: {
                 start: prevPoint,
                 end: point,
