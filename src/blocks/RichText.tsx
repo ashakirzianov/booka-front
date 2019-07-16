@@ -62,7 +62,7 @@ function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle
     const renderings = overlaps(ranges, (l, r) => l < r);
     const result: TextSegmentProps[] = renderings.map(taggedRange => ({
         text: text.substring(taggedRange.range.start, taggedRange.range.end),
-        ...taggedRange.tags.reduce((res, r) => ({ ...res, ...r }), {}),
+        ...taggedRange.tag.reduce((res, r) => ({ ...res, ...r }), {}),
     }));
 
     return result;

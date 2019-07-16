@@ -47,7 +47,7 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
     const dropCaseRanges = props.first
         ? [{
             range: range(0, 1),
-            tags: [{ dropCaps: true }],
+            tag: { dropCaps: true },
         }]
         : [];
 
@@ -58,7 +58,7 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
                 const relative = rangeRelativeToPath(props.path, cr.range);
                 return relative
                     ? {
-                        tags: [{ background: cr.color }],
+                        tag: { background: cr.color },
                         range: relative,
                     }
                     : undefined;
@@ -71,10 +71,11 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
 
         return {
             range: r.range,
-            tags: r.tags.concat({
+            tag: {
+                ...r.tag,
                 id: pathToId(path),
                 refHandler: (ref: any) => props.refPathHandler(ref, path),
-            }),
+            },
         };
     });
 
@@ -97,7 +98,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
                     start: offset,
                     end: offset + span.length,
                 },
-                tags: [],
+                tag: undefined,
             }],
             length: span.length,
         };
@@ -108,11 +109,11 @@ function rangesForSpanHelper(span: Span, offset: number): {
                 start: offset,
                 end: offset + inside.length,
             },
-            tags: [{
+            tag: {
                 italic: attrs(span).italic,
                 bold: attrs(span).bold,
                 line: attrs(span).line,
-            }],
+            },
         };
         return {
             ranges: [current].concat(inside.ranges),
@@ -139,7 +140,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
                 end: offset + inside.length,
             },
             // TODO: support footnotes
-            tags: [],
+            tag: undefined,
         };
         return {
             ranges: [current].concat(inside.ranges),
