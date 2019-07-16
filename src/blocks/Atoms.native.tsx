@@ -52,7 +52,7 @@ export function HoverableText(props: Props) {
 export function Scroll(props: Props<ScrollProps>) {
     return <ScrollView
         onScroll={props.onScroll}
-        scrollEventThrottle={512}
+        scrollEventThrottle={1024}
     >
         {props.children}
     </ScrollView>;
