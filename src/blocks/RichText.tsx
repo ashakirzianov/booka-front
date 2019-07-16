@@ -7,21 +7,7 @@ import {
     TaggedRange, overlaps,
 } from '../utils';
 
-export function buildTextSegments(text: string, ranges: Array<TaggedRange<TextRendering, number>>): TextSegmentProps[] {
-    const renderings = overlaps(ranges, (l, r) => l < r);
-    const result: TextSegmentProps[] = renderings.map(r => ({
-        text: text.substring(r.range.start, r.range.end),
-        ...r,
-    }));
-
-    return result;
-}
-
-export type TextSegmentProps = TextRendering & {
-    text: string,
-};
-
-export type TextRendering = {
+export type RichTextStyle = {
     color?: string,
     background?: string,
     fontSize?: number,
@@ -35,10 +21,12 @@ export type TextRendering = {
 };
 
 export type RichTextProps = {
-    segments: TextSegmentProps[],
+    text: string,
+    styles: Array<TaggedRange<RichTextStyle>>,
 };
-export function RichText(props: RichTextProps) {
-    const children = props.segments.map((seg, idx) => {
+export function RichText({ text, styles }: RichTextProps) {
+    const segments = buildTextSegments(text, styles);
+    const children = segments.map((seg, idx) => {
         return <TextSegment
             {...seg}
             key={idx.toString()}
@@ -69,3 +57,17 @@ function TextSegment(props: TextSegmentProps) {
         {props.text}
     </PlainText>;
 }
+
+function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle, number>>): TextSegmentProps[] {
+    const renderings = overlaps(ranges, (l, r) => l < r);
+    const result: TextSegmentProps[] = renderings.map(taggedRange => ({
+        text: text.substring(taggedRange.range.start, taggedRange.range.end),
+        ...taggedRange.tags.reduce((res, r) => ({ ...res, ...r }), {}),
+    }));
+
+    return result;
+}
+
+type TextSegmentProps = RichTextStyle & {
+    text: string,
+};
