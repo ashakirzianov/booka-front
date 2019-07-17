@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import {
-    PlainText, point,
-} from '../blocks';
-import {
     TaggedRange, overlaps,
 } from '../utils';
+import { SuperLink } from './Atoms.common';
+import { Text, Link } from './Atoms';
+import { point } from './common';
 
 export type RichTextStyle = {
     color?: string,
@@ -18,6 +18,7 @@ export type RichTextStyle = {
     line?: boolean,
     id?: string,
     refHandler?: (ref: any) => void,
+    superLink?: SuperLink,
 };
 
 export type RichTextProps = {
@@ -38,7 +39,7 @@ export function RichText({ text, styles }: RichTextProps) {
 }
 
 function TextSegment(props: TextSegmentProps) {
-    return <PlainText
+    const text = <Text
         dropCaps={props.dropCaps}
         refHandler={props.refHandler}
         background={props.background}
@@ -55,7 +56,15 @@ function TextSegment(props: TextSegmentProps) {
             }),
         }}>
         {props.text}
-    </PlainText>;
+    </Text>;
+
+    if (props.superLink) {
+        return <Link {...props.superLink}>
+            {text}
+        </Link>;
+    } else {
+        return text;
+    }
 }
 
 function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle, number>>): TextSegmentProps[] {
