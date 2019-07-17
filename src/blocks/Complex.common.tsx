@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { themed, colors, Callback, ReactContent } from './common';
+import { themed, colors } from './connect';
 import { View, ViewStyle } from 'react-native';
 import { platformValue } from '../utils';
 import { PopperProps } from 'react-popper';
 import { ActionableProps } from './Elements';
+import { ReactContent, Callback } from '../bricks';
 
 export type ClickableProps = { onClick: () => void };
 

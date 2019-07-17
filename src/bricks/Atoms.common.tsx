@@ -5,10 +5,16 @@ import { Comp, Callback } from './common';
 import { Color } from '../model';
 import { RefHandler } from './Scroll';
 
-export type LinkProps = LayoutProps & {
-    to?: string,
-    onClick?: Callback<void>, // TODO: rethinks this
+export type ScrollProps = {
+    onScroll?: Callback<void>,
 };
+
+export type SuperLink = {
+    to?: string,
+    onClick?: Callback<void>,
+};
+
+export type LinkProps = LayoutProps & SuperLink;
 
 type CssTextStyle = React.CSSProperties;
 export type TextStyle = Pick<CssTextStyle,

@@ -82,10 +82,10 @@ function pathToOpen(state: App['pathToOpen'] | undefined = null, action: Action)
         case 'pushScreen':
             const { payload } = action;
             if (payload.screen === 'book') {
-                if (payload.bl.location.location === 'path') {
-                    return payload.bl.location.path;
-                } else if (payload.bl.quote) {
+                if (payload.bl.quote) {
                     return payload.bl.quote.start;
+                } if (payload.bl.location.location === 'path') {
+                    return payload.bl.location.path;
                 } else {
                     return null;
                 }

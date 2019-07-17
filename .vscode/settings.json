@@ -31,6 +31,7 @@
         "backend",
         "booka",
         "browserslist",
+        "collapsable",
         "esnext",
         "middlewares",
         "nums",
@@ -38,6 +39,7 @@
         "onupdatefound",
         "polyfill",
         "precached",
+        "promisify",
         "refability",
         "shinel",
         "subpath",
@@ -45,5 +47,10 @@
         "timeouted",
         "webfonts"
     ],
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.wordWrap": "bounded",
+    "editor.wrappingIndent": "indent",
+    "bracketPairColorizer.showVerticalScopeLine": false,
+    "bracketPairColorizer.showHorizontalScopeLine": false,
+    "editor.gotoLocation.multiple": "gotoAndPeek"
 }

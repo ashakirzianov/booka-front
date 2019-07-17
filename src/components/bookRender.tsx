@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     ParagraphNode, BookPath, BookRange, VolumeNode,
     ContentNode, subpathCouldBeInRange, isParagraph,
-    isChapter, inRange, ChapterNode,
+    isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
     Comp, Row, ThemedText, refable, point,
@@ -48,7 +48,7 @@ function buildNode(node: ContentNode, path: BookPath, params: Params) {
 }
 
 function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
-    return inRange(path, params.pageRange)
+    return inBookRange(path, params.pageRange)
         ? [<ParagraphComp
             key={`p-${pathToString(path)}`}
             p={paragraph}
@@ -63,7 +63,7 @@ function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params
 }
 
 function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
-    const head = inRange(path, params.pageRange)
+    const head = inBookRange(path, params.pageRange)
         ? [<ChapterHeader ref={ref => params.refPathHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
         : [];
     return head

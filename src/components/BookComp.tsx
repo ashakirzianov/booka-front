@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from '../blocks';
 import {
     Book, BookPath,
-    inRange, bookRange, emptyPath, isFirstSubpath, BookRange,
+    inBookRange, bookRange, emptyPath, isFirstSubpath, BookRange,
 } from '../model';
 import { TableOfContents, TableOfContentsItem } from '../model';
 import { Reader } from './Reader';
@@ -60,7 +60,7 @@ function buildPaths(path: BookPath, toc: TableOfContents): {
                 }
             }
 
-            if (inRange(path, bookRange(current, next))) {
+            if (inBookRange(path, bookRange(current, next))) {
                 return { prev, current, next };
             }
 
