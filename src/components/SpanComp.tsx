@@ -13,6 +13,7 @@ import {
     TaggedRange, range, Range,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
+import { dispatchOpenFootnote } from '../core/store';
 
 export type ColorizedRange = {
     color: Color,
@@ -140,7 +141,12 @@ function rangesForSpanHelper(span: Span, offset: number): {
                 end: offset + inside.length,
             },
             // TODO: support footnotes
-            tag: undefined,
+            tag: {
+                superLink: {
+                    // TODO: fix !!!!
+                    onClick: () => dispatchOpenFootnote(span.id),
+                },
+            },
         };
         return {
             ranges: [current].concat(inside.ranges),
