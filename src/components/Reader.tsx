@@ -94,10 +94,7 @@ export class Reader extends React.Component<ReaderProps> {
         const params: Params = {
             pageRange: range,
             refPathHandler: (ref, path) => {
-                this.refMap = {
-                    ...this.refMap,
-                    [pathToString(path)]: ref,
-                };
+                this.refMap[pathToString(path)] = ref;
             },
             quoteRange: this.props.quoteRange,
         };
