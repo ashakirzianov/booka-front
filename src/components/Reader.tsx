@@ -14,8 +14,7 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
-import { Clickable } from '../blocks';
-import { headerHeight } from '../blocks/Complex';
+import { Clickable, headerHeight } from '../blocks';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
