@@ -6,7 +6,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "history": "^4.9.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "radium": "^0.25.1",
     "react": "16.8.6",
     "react-art": "16.8.6",
