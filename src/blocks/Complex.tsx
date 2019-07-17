@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { themed, Comp, percent, colors, Props, point } from './common';
+import { themed, colors } from './connect';
 import { ThemedText, PanelButton, ActionLink } from './Elements';
 import { View } from 'react-native';
-import { FadeIn } from './Animations';
 import { Manager, Reference, Popper } from 'react-popper';
 import { Transition } from 'react-transition-group';
-import { defaults } from './defaults';
 import { platformValue } from '../utils';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
+import { Props, point, Comp, percent } from '../bricks';
+import { defaults } from '../bricks/defaults';
+import { FadeIn } from '../bricks/Animations';
 
 export { Layer } from './Complex.common';
 
