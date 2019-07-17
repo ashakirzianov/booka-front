@@ -1,16 +1,17 @@
 import * as React from 'react';
 
-import { Comp, themed, colors, Callback, connectAll, point, Props } from './common';
-import * as Atoms from './Atoms';
-import { LinkProps } from './Atoms.common';
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
 import { Theme, Palette, Color } from '../model';
-import { Icon } from './Icons';
-import { IconName } from './Icons.common';
 import { Action, actionToUrl } from '../core';
-import { ViewStyle, TextStyle } from './Atoms.common';
-import { defaults } from './defaults';
 import { platformValue } from '../utils';
+import { connectAll, themed, colors } from './connect';
+import { Comp, Callback, point, Props, Icon } from '../bricks';
+
+// TODO: remove all second-level imports
+import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../bricks/Atoms.common';
+import { Button, Link, Text, HoverableText } from '../bricks/Atoms';
+import { IconName } from '../bricks/Icons.common';
+import { defaults } from '../bricks/defaults';
 
 export type ActionableProps = {
     action?: Action,
@@ -35,8 +36,8 @@ function actionize(LinkOrButton: Comp<LinkProps>) {
         </LinkOrButton>;
     });
 }
-export const ActionLink = actionize(Atoms.Link);
-export const ActionButton = actionize(Atoms.Button);
+export const ActionLink = actionize(Link);
+export const ActionButton = actionize(Button);
 
 type ThemedTextProps = {
     style?: TextStyle,
@@ -50,7 +51,7 @@ export const ThemedText = themed<ThemedTextProps>(props => {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
-    return <Atoms.Text style={{
+    return <Text style={{
         textAlign: platformValue({
             mobile: 'left',
             default: 'justify',
@@ -66,19 +67,19 @@ export const ThemedText = themed<ThemedTextProps>(props => {
         ...props.style,
     }}>
         {props.children}
-    </Atoms.Text>;
+    </Text>;
 });
 
-export const PlainText = Atoms.Text;
+export const PlainText = Text;
 
 // TODO: remove this one
 export const ThemedHoverable = themed(function HoverableC(props) {
-    return <Atoms.HoverableText
+    return <HoverableText
         color={colors(props).accent}
         hoverColor={colors(props).highlight}
     >
         {props.children}
-    </Atoms.HoverableText>;
+    </HoverableText>;
 });
 
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
@@ -96,7 +97,7 @@ export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
             margin: point(0.5),
         }}
     >
-        <Atoms.Column style={{ justifyContent: 'center' }}>
+        <Column style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
                 color={colors(props).accent}
@@ -104,10 +105,11 @@ export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
                 size={24}
             />
             {props.children}
-        </Atoms.Column>
+        </Column>
     </ActionButton>;
 });
 
+// TODO: move to bricks
 export type TagButtonProps = {
     color?: Color,
     borderColor?: Color,
@@ -122,9 +124,9 @@ export function TagButton(props: Props<TagButtonProps>) {
         paddingHorizontal: point(1),
         paddingVertical: point(0.2),
     }}>
-        <Atoms.Row style={{ justifyContent: 'center' }}>
+        <Row style={{ justifyContent: 'center' }}>
             {props.children}
-        </Atoms.Row>
+        </Row>
     </View>;
 }
 
@@ -148,12 +150,12 @@ export const StretchLink = themed<ActionableProps>(function StretchLinkC({ actio
 });
 
 export const Line: Comp = (props =>
-    <Atoms.Row style={{
+    <Row style={{
         width: '100%',
         justifyContent: 'space-between',
     }}>
         {props.children}
-    </Atoms.Row>
+    </Row>
 );
 
 export const ActivityIndicator = themed(props =>

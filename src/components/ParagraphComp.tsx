@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    themed, highlights, point,
+    highlights, point, connect,
 } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath,
@@ -16,7 +16,7 @@ export type ParagraphProps = {
     refPathHandler: RefPathHandler,
     highlights?: Highlights,
 };
-export const ParagraphComp = themed<ParagraphProps>(function ParagraphCompC(props) {
+export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps>(function ParagraphCompC(props) {
     return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
         <SpanComp
             {...props}

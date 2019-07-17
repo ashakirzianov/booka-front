@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, RefType,
-    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent,
+    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView, Scroll,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -14,7 +14,7 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
-import { Clickable } from '../blocks';
+import { Clickable, headerHeight } from '../blocks';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -32,8 +32,8 @@ export class Reader extends React.Component<ReaderProps> {
     public refMap: RefMap = {};
     public selectedRange: BookSelection | undefined = undefined;
 
-    public handleScroll = () => {
-        const newCurrentPath = computeCurrentPath(this.refMap);
+    public handleScroll = async () => {
+        const newCurrentPath = await computeCurrentPath(this.refMap);
         if (newCurrentPath) {
             this.props.updateBookPosition(newCurrentPath);
         }
@@ -92,25 +92,33 @@ export class Reader extends React.Component<ReaderProps> {
         const params: Params = {
             pageRange: range,
             refPathHandler: (ref, path) => {
-                this.refMap = {
-                    ...this.refMap,
-                    [pathToString(path)]: ref,
-                };
+                this.refMap[pathToString(path)] = ref;
             },
             quoteRange: this.props.quoteRange,
         };
-        return <Column style={{
-            width: percent(100),
-            padding: point(1),
-        }}>
-            <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
-            <Clickable onClick={this.props.toggleControls}>
-                <Column>
-                    {buildBook(volume, params)}
+        return <Scroll
+            onScroll={this.handleScroll}
+        >
+            <Row style={{
+                maxWidth: point(50),
+            }}>
+                <Column style={{
+                    width: percent(100),
+                    padding: point(1),
+                    alignItems: 'center',
+                }}>
+                    <EmptyLine />
+                    <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
+                    <Clickable onClick={this.props.toggleControls}>
+                        <Column>
+                            {buildBook(volume, params)}
+                        </Column>
+                    </Clickable>
+                    <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+                    <EmptyLine />
                 </Column>
-            </Clickable>
-            <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
-        </Column>;
+            </Row>
+        </Scroll>;
     }
 }
 
@@ -144,13 +152,20 @@ const PathLink: Comp<PathLinkProps> = (props =>
         </Row>
 );
 
+function EmptyLine() {
+    return <SafeAreaView>
+        <Row style={{ height: point(headerHeight) }} />
+    </SafeAreaView>;
+}
+
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
 }
 
-function computeCurrentPath(refMap: RefMap) {
+async function computeCurrentPath(refMap: RefMap) {
     for (const [key, ref] of Object.entries(refMap)) {
-        if (isPartiallyVisible(ref)) {
+        const isVisible = await isPartiallyVisible(ref);
+        if (isVisible) {
             const path = parsePath(key);
             if (path) {
                 return path;
