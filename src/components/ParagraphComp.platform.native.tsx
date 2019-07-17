@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Comp, View } from '../blocks';
+import { Comp, PlainText } from '../blocks';
 
 export const ParagraphContainer: Comp<{ textIndent: string }> = (props =>
-    <View>
+    <PlainText>
         {props.children}
-    </View>
+    </PlainText>
 );
