@@ -3,17 +3,17 @@ import * as React from 'react';
 import {
     Color, BookRange, BookPath, isSimple, Span,
     isCompound, isAttributed, isFootnote,
-    pathLessThan, isPrefix, attrs,
+    pathLessThan, isPrefix, attrs, FootnoteId,
 } from '../model';
 import {
-    RichTextStyle, RichText,
+    RichTextStyle, RichText, Callback,
 } from '../blocks';
 import {
     assertNever, filterUndefined,
-    TaggedRange, range, Range,
+    TaggedRange, range, Range, Func,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
-import { dispatchOpenFootnote } from '../core/store';
+import { SuperLink } from '../bricks/Atoms.common';
 
 export type ColorizedRange = {
     color: Color,
@@ -32,6 +32,7 @@ export type SpanProps = {
     fontSize: number,
     fontFamily: string,
     color: Color,
+    openFootnote: Callback<string>,
 };
 export function SpanComp(props: SpanProps) {
     const ranges = rangesForProps(props);
@@ -44,7 +45,10 @@ export function SpanComp(props: SpanProps) {
 
 type RenderingRange = TaggedRange<RichTextStyle, number>;
 function rangesForProps(props: SpanProps): RenderingRange[] {
-    const spanRanges = rangesForSpan(props.span);
+    const footnoteIdToSuperLink = (id: string) => ({
+        onClick: () => props.openFootnote(id),
+    });
+    const spanRanges = rangesForSpan(props.span, footnoteIdToSuperLink);
     const dropCaseRanges = props.first
         ? [{
             range: range(0, 1),
@@ -83,12 +87,12 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
     return augmented;
 }
 
-function rangesForSpan(span: Span): RenderingRange[] {
-    const result = rangesForSpanHelper(span, 0);
+function rangesForSpan(span: Span, footnoteIdToSuperLink: Func<FootnoteId, SuperLink>): RenderingRange[] {
+    const result = rangesForSpanHelper(span, 0, footnoteIdToSuperLink);
     return result.ranges;
 }
 
-function rangesForSpanHelper(span: Span, offset: number): {
+function rangesForSpanHelper(span: Span, offset: number, footnoteIdToSuperLink: Func<FootnoteId, SuperLink>): {
     ranges: RenderingRange[],
     length: number,
 } {
@@ -104,7 +108,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
             length: span.length,
         };
     } else if (isAttributed(span)) {
-        const inside = rangesForSpanHelper(span.content, offset);
+        const inside = rangesForSpanHelper(span.content, offset, footnoteIdToSuperLink);
         const current: RenderingRange = {
             range: {
                 start: offset,
@@ -124,7 +128,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
         let ranges: RenderingRange[] = [];
         let currentOffset = offset;
         for (const s of span.spans) {
-            const rs = rangesForSpanHelper(s, currentOffset);
+            const rs = rangesForSpanHelper(s, currentOffset, footnoteIdToSuperLink);
             ranges = ranges.concat(rs.ranges);
             currentOffset += rs.length;
         }
@@ -134,7 +138,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
             length: currentOffset - offset,
         };
     } else if (isFootnote(span)) {
-        const inside = rangesForSpanHelper(span.content, offset);
+        const inside = rangesForSpanHelper(span.content, offset, footnoteIdToSuperLink);
         const current: RenderingRange = {
             range: {
                 start: offset,
@@ -142,10 +146,7 @@ function rangesForSpanHelper(span: Span, offset: number): {
             },
             // TODO: support footnotes
             tag: {
-                superLink: {
-                    // TODO: fix !!!!
-                    onClick: () => dispatchOpenFootnote(span.id),
-                },
+                superLink: footnoteIdToSuperLink(span.id),
             },
         };
         return {

@@ -4,12 +4,7 @@ import { validatePersistentStorage, createEnhancedStore } from '../utils';
 import { App } from '../model';
 import { urlToAction } from './urlConversion';
 import { reducer } from './reducers';
-import { Action, actionCreators } from './actions';
-
-// TODO: remove !!!
-export function dispatchOpenFootnote(footnoteId: string) {
-    store.dispatch(actionCreators.openFootnote(footnoteId));
-}
+import { Action } from './actions';
 
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);
