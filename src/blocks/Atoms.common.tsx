@@ -9,10 +9,12 @@ export type ScrollProps = {
     onScroll?: Callback<void>,
 };
 
-export type LinkProps = LayoutProps & {
+export type SuperLink = {
     to?: string,
-    onClick?: Callback<void>, // TODO: rethinks this
+    onClick?: Callback<void>,
 };
+
+export type LinkProps = LayoutProps & SuperLink;
 
 type CssTextStyle = React.CSSProperties;
 export type TextStyle = Pick<CssTextStyle,
