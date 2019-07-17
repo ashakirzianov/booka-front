@@ -64,7 +64,19 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
             })
     );
 
-    const allRanges = spanRanges.concat(dropCaseRanges).concat(colorizationRanges);
+    const defaultStyles: RenderingRange[] = [{
+        range: range(0),
+        tag: {
+            fontSize: props.theme.fontSizes.normal * props.theme.fontScale,
+            color: colors(props).text,
+        },
+    }];
+
+    const allRanges = spanRanges
+        .concat(dropCaseRanges)
+        .concat(colorizationRanges)
+        .concat(defaultStyles)
+        ;
     const augmented = allRanges.map(r => {
         const path = props.path.concat(r.range.start);
 

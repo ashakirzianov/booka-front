@@ -35,7 +35,6 @@ export class Reader extends React.Component<ReaderProps> {
     public handleScroll = async () => {
         const newCurrentPath = await computeCurrentPath(this.refMap);
         if (newCurrentPath) {
-            // console.warn(newCurrentPath.join('-'));
             this.props.updateBookPosition(newCurrentPath);
         }
     }
