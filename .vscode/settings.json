@@ -49,5 +49,8 @@
     ],
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.wordWrap": "bounded",
-    "editor.wrappingIndent": "indent"
+    "editor.wrappingIndent": "indent",
+    "bracketPairColorizer.showVerticalScopeLine": false,
+    "bracketPairColorizer.showHorizontalScopeLine": false,
+    "editor.gotoLocation.multiple": "gotoAndPeek"
 }

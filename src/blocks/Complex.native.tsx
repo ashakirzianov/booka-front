@@ -2,15 +2,18 @@ import * as React from 'react';
 
 import Popover from 'react-native-popover-view';
 
-import { themed, Comp, Props, colors, point, percent } from './common';
-import { ActionButton, PlainText, ThemedText, PanelButton } from './Elements';
+import { themed, colors } from './connect';
+import {
+    ActionButton, PlainText, ThemedText, PanelButton,
+} from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { FadeIn } from './Animations.native';
-import { Column, Row } from './Atoms.common';
+import { Props, Column, Row, percent, point, Comp } from '../bricks';
+// TODO: remove all second-level imports
+import { FadeIn } from '../bricks/Animations.native';
 
 export { Layer } from './Complex.common';
 
