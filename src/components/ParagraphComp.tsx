@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    highlights, point, colors, connect,
+    highlights, point, connect,
 } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath,
@@ -20,9 +20,6 @@ export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps
     return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
         <SpanComp
             {...props}
-            fontSize={props.theme.fontSizes.normal * props.theme.fontScale}
-            fontFamily={props.theme.fontFamilies.main}
-            color={colors(props).text}
             path={props.path.concat([0])}
             span={props.p.span}
             colorization={props.highlights && props.highlights.quote && {
