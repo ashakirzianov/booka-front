@@ -1,6 +1,6 @@
 import { buildConnectRedux } from '../utils';
 import { Theme, App, Palette } from '../model';
-import { Comp } from '../bricks';
+import { Comp } from '../atoms';
 import { actionCreators } from '../core';
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);

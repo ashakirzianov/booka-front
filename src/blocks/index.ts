@@ -1,4 +1,4 @@
-export * from '../bricks';
+export * from '../atoms';
 export * from './Elements';
 export {
     TopBar, BottomBar, Clickable, DottedLine, LinkButton,

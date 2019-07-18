@@ -11,9 +11,9 @@ import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { Props, Column, Row, percent, point, Comp } from '../bricks';
+import { Props, Column, Row, percent, point, Comp } from '../atoms';
 // TODO: remove all second-level imports
-import { FadeIn } from '../bricks/Animations.native';
+import { FadeIn } from '../atoms/Animations.native';
 
 export { Layer } from './Complex.common';
 
