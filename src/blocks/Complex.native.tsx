@@ -4,14 +4,16 @@ import Popover from 'react-native-popover-view';
 
 import { themed, colors } from './connect';
 import {
-    ActionButton, PlainText, TextLine, PanelButton,
+    ActionButton, TextLine, PanelButton,
 } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { Props, Column, Row, percent, point, Comp } from '../atoms';
+import {
+    Props, Column, Row, percent, point, Comp, Text,
+} from '../atoms';
 // TODO: remove all second-level imports
 import { FadeIn } from '../atoms/Animations.native';
 
@@ -141,12 +143,12 @@ export const LinkButton = themed<LinkButtonProps>(props =>
             borderColor: colors(props).accent,
             padding: point(1),
         }}>
-            <PlainText style={{
+            <Text style={{
                 fontSize: props.theme.fontSizes.normal,
                 color: colors(props).accent,
             }}>
                 {props.text}
-            </PlainText>
+            </Text>
         </View>
     </ActionButton>
 );
