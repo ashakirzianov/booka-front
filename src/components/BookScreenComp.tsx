@@ -2,8 +2,10 @@ import * as React from 'react';
 
 import {
     connectActions, Row, Modal, PanelButton,
-    Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, TextLine, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point,
+    Comp, WithPopover, Line, Column,
+    hoverable, View, Separator, connectState, TextLine, themed,
+    colors, TagButton, ActionLink, ThemedHoverable, ActionButton,
+    point,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -162,22 +164,27 @@ const FontScale: Comp = (() =>
         height: point(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
-            <FontScaleButton increment={-0.1} size={18} />
-            <FontScaleButton increment={0.1} size={36} />
+            <FontScaleButton increment={-0.1} size='smallest' />
+            <FontScaleButton increment={0.1} size='largest' />
         </Row>
     </Column>
 );
 
 const FontScaleButton = connectActions('incrementScale')<{
     increment: number,
-    size: number,
+    size: 'largest' | 'smallest',
 }>(props =>
     <Column style={{
         justifyContent: 'center',
     }}>
         <ActionLink action={actionCreators.incrementScale(props.increment)}>
             <ThemedHoverable>
-                <PlainText style={{ fontSize: props.size }}>Abc</PlainText>
+                <TextLine
+                    fixedSize
+                    size={props.size}
+                    color='accent'
+                    text='Abc'
+                />
             </ThemedHoverable>
         </ActionLink>
     </Column>
@@ -220,10 +227,11 @@ const PaletteButton = connectState('theme')<PaletteButtonProps>(function Palette
             },
         }}>
             <Row style={{ justifyContent: 'center' }}>
-                <PlainText style={{
-                    fontSize: props.theme.fontSizes.normal,
-                    color: palette.text,
-                }}>{props.text}</PlainText>
+                <TextLine
+                    text={props.text}
+                    size='normal'
+                    color='text'
+                />
             </Row>
         </HoverableView>
     </ActionButton>;

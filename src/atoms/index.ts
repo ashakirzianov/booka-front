@@ -10,6 +10,6 @@ export {
 export * from './Icons';
 export * from './common';
 export { SafeAreaView, View } from 'react-native';
-export { Row, Column, Scroll } from './Basic';
+export { Row, Column, Scroll, Text } from './Basic';
 export * from './RichText';
 export * from './RichText.common';

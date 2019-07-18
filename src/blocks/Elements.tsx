@@ -73,8 +73,6 @@ export const TextLine = themed<ThemedTextProps>(function TextLineC(props) {
     </Text>;
 });
 
-export const PlainText = Text;
-
 // TODO: remove this one
 export const ThemedHoverable = themed(function HoverableC(props) {
     return <HoverableText
