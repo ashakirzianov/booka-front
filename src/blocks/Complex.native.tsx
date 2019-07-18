@@ -4,16 +4,18 @@ import Popover from 'react-native-popover-view';
 
 import { themed, colors } from './connect';
 import {
-    ActionButton, PlainText, ThemedText, PanelButton,
+    ActionButton, TextLine, PanelButton,
 } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { Props, Column, Row, percent, point, Comp } from '../bricks';
+import {
+    Props, Column, Row, percent, point, Comp, Text,
+} from '../atoms';
 // TODO: remove all second-level imports
-import { FadeIn } from '../bricks/Animations.native';
+import { FadeIn } from '../atoms/Animations.native';
 
 export { Layer } from './Complex.common';
 
@@ -42,7 +44,10 @@ export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
                         />
                     </Column>
                     <Column style={{ justifyContent: 'center' }}>
-                        <ThemedText size='normal'>{title}</ThemedText>
+                        <TextLine
+                            text={title}
+                            size='normal'
+                        />
                     </Column>
                 </Row>
                 <Row style={{
@@ -138,12 +143,12 @@ export const LinkButton = themed<LinkButtonProps>(props =>
             borderColor: colors(props).accent,
             padding: point(1),
         }}>
-            <PlainText style={{
+            <Text style={{
                 fontSize: props.theme.fontSizes.normal,
                 color: colors(props).accent,
             }}>
                 {props.text}
-            </PlainText>
+            </Text>
         </View>
     </ActionButton>
 );

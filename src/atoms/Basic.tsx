@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { TextProps, LinkProps, ScrollProps } from './Atoms.common';
+import { TextProps, LinkProps, ScrollProps } from './Basic.common';
 import { isOpenNewTabEvent, hoverable } from './utils';
 import { Props } from './common';
 
-export { Row, Column } from './Atoms.common';
+export { Row, Column } from './Basic.common';
 
 export function Text(props: Props<TextProps>) {
     return <span
@@ -49,6 +49,7 @@ function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
 export const Link = linkOrButton;
 export const Button = linkOrButton;
 
+// TODO: remove
 export type HoverableTextProps = {
     color?: string,
     hoverColor?: string,

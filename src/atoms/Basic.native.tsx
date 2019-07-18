@@ -4,10 +4,10 @@ import {
     Text as NativeText, TextStyle as NativeTextStyle,
     View, ViewStyle as NativeViewStyle, ScrollView,
 } from 'react-native';
-import { TextStyle, TextProps, LinkProps, ScrollProps } from './Atoms.common';
+import { TextStyle, TextProps, LinkProps, ScrollProps } from './Basic.common';
 import { Props } from './common';
 
-export { Row, Column } from './Atoms.common';
+export { Row, Column } from './Basic.common';
 
 export function Text(props: Props<TextProps>) {
     return <NativeText

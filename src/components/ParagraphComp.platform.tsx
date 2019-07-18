@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { Comp, ThemedText, Size } from '../blocks';
+import { Size, Props } from '../blocks';
 
-export const ParagraphContainer: Comp<{ textIndent: Size }> = (props =>
-    <ThemedText>
-        <div style={{ display: 'flex' }}>
-            <span style={{
-                float: 'left',
-                textIndent: props.textIndent,
-            }}>
-                {props.children}
-            </span>
-        </div>
-    </ThemedText>
-);
+// TODO: do we need 'textIndent' ?
+export function ParagraphContainer(props: Props<{ textIndent: Size }>) {
+    return <div style={{ display: 'flex' }}>
+        <span style={{
+            float: 'left',
+            textIndent: props.textIndent,
+        }}>
+            {props.children}
+        </span>
+    </div>;
+}

@@ -6,7 +6,7 @@ import {
 import { assertNever } from '../utils';
 import { Props } from './common';
 import { IconProps, IconName } from './Icons.common';
-import { HoverableText } from './Atoms';
+import { HoverableText } from './Basic';
 
 function iconForName(name: IconName) {
     switch (name) {

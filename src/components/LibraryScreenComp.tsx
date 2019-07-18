@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { LibraryScreen } from '../model';
-import { Comp, Label, Row, percent } from '../blocks';
+import { Comp, TextLine, Row, percent } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 
 export const LibraryScreenHeader: Comp = (props =>
@@ -9,7 +9,7 @@ export const LibraryScreenHeader: Comp = (props =>
         width: percent(100),
         justifyContent: 'center',
     }}>
-        <Label text='Library' />
+        <TextLine text='Library' />
     </Row>
 );
 
