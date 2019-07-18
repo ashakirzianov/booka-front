@@ -1,4 +1,4 @@
-import { SuperLink } from './Atoms.common';
+import { SuperLink } from './Basic.common';
 import { TaggedRange, overlaps } from '../utils';
 
 export type RichTextStyle = {

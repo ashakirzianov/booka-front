@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, Link } from './Atoms';
+import { Text, Link } from './Basic';
 import { point } from './common';
 import { RichTextProps, TextSegment, buildTextSegments } from './RichText.common';
 
