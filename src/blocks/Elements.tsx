@@ -40,6 +40,7 @@ export const ActionLink = actionize(Link);
 export const ActionButton = actionize(Button);
 
 type ThemedTextProps = {
+    text: string | undefined, // TODO: make optional ?
     style?: TextStyle,
     family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSizes'],
@@ -47,26 +48,28 @@ type ThemedTextProps = {
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const ThemedText = themed<ThemedTextProps>(props => {
+export const TextLine = themed<ThemedTextProps>(function TextLineC(props) {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
-    return <Text style={{
-        textAlign: platformValue({
-            mobile: 'left',
-            default: 'justify',
-        }),
-        fontSize,
-        fontFamily,
-        color: colors(props)[props.color || 'text'],
-        ...(props.hoverColor && {
-            ':hover': {
-                color: colors(props)[props.hoverColor],
-            },
-        }),
-        ...props.style,
-    }}>
-        {props.children}
+    return <Text
+        style={{
+            textAlign: platformValue({
+                mobile: 'left',
+                default: 'justify',
+            }),
+            fontSize,
+            fontFamily,
+            color: colors(props)[props.color || 'text'],
+            ...(props.hoverColor && {
+                ':hover': {
+                    color: colors(props)[props.hoverColor],
+                },
+            }),
+            ...props.style,
+        }}
+    >
+        {props.text}
     </Text>;
 });
 
@@ -82,10 +85,9 @@ export const ThemedHoverable = themed(function HoverableC(props) {
     </HoverableText>;
 });
 
+// TODO: remove
 export const Label: Comp<{ text: string, margin?: string }> = (props =>
-    <ThemedText style={{ margin: props.margin }} size='normal'>
-        {props.text}
-    </ThemedText>
+    <TextLine text={props.text} style={{ margin: props.margin }} size='normal' />
 );
 
 export type PanelLinkProps = ActionableProps & { icon: IconName };

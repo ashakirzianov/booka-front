@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column, PlainText,
-    hoverable, View, Separator, connectState, ThemedText, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point,
+    hoverable, View, Separator, connectState, TextLine, themed, colors, TagButton, ActionLink, ThemedHoverable, ActionButton, point,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -72,14 +72,13 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             right: 10, top: 0, height: '100%',
             justifyContent: 'center',
         }}>
-            <ThemedText
+            <TextLine
+                text={`${left} pages left`}
                 size='smallest'
                 fixedSize={true}
                 family='menu'
                 color='accent'
-            >
-                {`${left} pages left`}
-            </ThemedText>
+            />
         </Column>
     </Row>;
 });
@@ -88,14 +87,13 @@ type TocButtonProps = { current: number, total: number };
 const TocButton = themed<TocButtonProps>(props =>
     <ActionButton action={actionCreators.toggleToc()}>
         <TagButton color={colors(props).accent}>
-            <ThemedText
+            <TextLine
+                text={`${props.current} of ${props.total}`}
                 size='smallest'
                 fixedSize={true}
                 family='menu'
                 color='secondary'
-            >
-                {`${props.current} of ${props.total}`}
-            </ThemedText>
+            />
         </TagButton>
     </ActionButton>
 );

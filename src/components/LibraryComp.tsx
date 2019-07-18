@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
 import {
-    Comp, Row, SafeAreaView, Column, ThemedText, ActionLink,
+    Comp, Row, SafeAreaView, Column, TextLine, ActionLink,
     ThemedHoverable, point,
 } from '../blocks';
 import { actionCreators } from '../core';
@@ -15,7 +15,7 @@ const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
                 bookLocator(remoteBookId(props.id), locationCurrent()))}
         >
             <ThemedHoverable>
-                <ThemedText>{props.meta.title}</ThemedText>
+                <TextLine text={props.meta.title} />
             </ThemedHoverable>
         </ActionLink>
     </Row>
