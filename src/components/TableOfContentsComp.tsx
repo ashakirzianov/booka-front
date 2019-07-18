@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     Comp, Row, Tab,
-    Column, DottedLine, StretchLink, ThemedText, point,
+    Column, DottedLine, StretchLink, TextLine, point,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -21,10 +21,9 @@ const TocItemComp: Comp<TocItemProps> = (props =>
         <StretchLink action={actionCreators
             .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
         >
-            <ThemedText>{props.title}</ThemedText>
+            <TextLine text={props.title} />
             <DottedLine />
-            <ThemedText>{props.pageNumber.toString()}
-            </ThemedText>
+            <TextLine text={props.pageNumber.toString()} />
         </StretchLink>
     </Row>
 );

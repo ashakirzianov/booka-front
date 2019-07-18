@@ -4,7 +4,7 @@ import Popover from 'react-native-popover-view';
 
 import { themed, colors } from './connect';
 import {
-    ActionButton, PlainText, ThemedText, PanelButton,
+    ActionButton, PlainText, TextLine, PanelButton,
 } from './Elements';
 import { View, SafeAreaView, TouchableWithoutFeedback, Modal as NativeModal, TouchableHighlight } from 'react-native';
 import {
@@ -42,7 +42,10 @@ export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
                         />
                     </Column>
                     <Column style={{ justifyContent: 'center' }}>
-                        <ThemedText size='normal'>{title}</ThemedText>
+                        <TextLine
+                            text={title}
+                            size='normal'
+                        />
                     </Column>
                 </Row>
                 <Row style={{

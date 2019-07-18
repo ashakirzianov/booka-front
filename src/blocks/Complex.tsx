@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { themed, colors } from './connect';
-import { ThemedText, PanelButton, ActionLink } from './Elements';
+import { TextLine, PanelButton, ActionLink } from './Elements';
 import { View } from 'react-native';
 import { Manager, Reference, Popper } from 'react-popper';
 import { Transition } from 'react-transition-group';
@@ -59,7 +59,7 @@ export function Modal(props: Props<ModalProps>) {
                                 justifyContent: 'center',
                                 flexDirection: 'column',
                             }}>
-                                <ThemedText>{props.title}</ThemedText>
+                                <TextLine text={props.title} />
                             </View>
                             <View />
                         </View>

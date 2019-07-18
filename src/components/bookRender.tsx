@@ -5,7 +5,7 @@ import {
     isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
-    Comp, Row, ThemedText, refable, point,
+    Comp, Row, TextLine, refable, point,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
@@ -75,13 +75,14 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
         justifyContent: 'center',
         width: '100%',
     }}>
-        <ThemedText style={{
-            letterSpacing: point(0.15),
-            textAlign: 'center',
-            margin: point(1),
-        }}>
-            {props.text && props.text.toLocaleUpperCase()}
-        </ThemedText>
+        <TextLine
+            text={props.text && props.text.toLocaleUpperCase()}
+            style={{
+                letterSpacing: point(0.15),
+                textAlign: 'center',
+                margin: point(1),
+            }}
+        />
     </Row>
 );
 
@@ -90,13 +91,15 @@ const PartTitle: Comp<{ text?: string }> = (props =>
         justifyContent: 'center',
         width: '100%',
     }}>
-        <ThemedText size='large' style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-            margin: point(1),
-        }}>
-            {props.text}
-        </ThemedText>
+        <TextLine
+            text={props.text}
+            size='large'
+            style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                margin: point(1),
+            }}
+        />
     </Row>
 );
 
@@ -105,23 +108,26 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
         justifyContent: 'flex-start',
         width: '100%',
     }}>
-        <ThemedText style={{
-            fontStyle: 'italic',
-            margin: point(1),
-        }}>
-            {props.text}
-        </ThemedText>
+        <TextLine
+            text={props.text}
+            style={{
+                fontStyle: 'italic',
+                margin: point(1),
+            }}
+        />
     </Row>
 );
 
 const BookTitle: Comp<{ text?: string }> = (props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
-        <ThemedText size='largest' style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-        }}>
-            {props.text}
-        </ThemedText>
+        <TextLine
+            text={props.text}
+            size='largest'
+            style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+            }}
+        />
     </Row>
 );
 
