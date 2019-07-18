@@ -1,3 +1,4 @@
+// TODO: rename file to 'Themed' ?
 import * as React from 'react';
 
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
@@ -5,13 +6,13 @@ import { Theme, Palette, Color } from '../model';
 import { Action, actionToUrl } from '../core';
 import { platformValue } from '../utils';
 import { connectAll, themed, colors } from './connect';
-import { Comp, Callback, point, Props, Icon } from '../bricks';
+import { Comp, Callback, point, Props, Icon, Hoverable } from '../atoms';
 
 // TODO: remove all second-level imports
-import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../bricks/Atoms.common';
-import { Button, Link, Text, HoverableText } from '../bricks/Atoms';
-import { IconName } from '../bricks/Icons.common';
-import { defaults } from '../bricks/defaults';
+import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../atoms/Basic.common';
+import { Button, Link, Text, HoverableText } from '../atoms/Basic';
+import { IconName } from '../atoms/Icons.common';
+import { defaults } from '../atoms/defaults';
 
 export type ActionableProps = {
     action?: Action,
@@ -40,6 +41,7 @@ export const ActionLink = actionize(Link);
 export const ActionButton = actionize(Button);
 
 type ThemedTextProps = {
+    text: string | undefined, // TODO: make optional ?
     style?: TextStyle,
     family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSizes'],
@@ -47,30 +49,32 @@ type ThemedTextProps = {
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const ThemedText = themed<ThemedTextProps>(props => {
+export const TextLine = themed<ThemedTextProps>(function (props) {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
-    return <Text style={{
-        textAlign: platformValue({
-            mobile: 'left',
-            default: 'justify',
-        }),
-        fontSize,
-        fontFamily,
-        color: colors(props)[props.color || 'text'],
-        ...(props.hoverColor && {
-            ':hover': {
-                color: colors(props)[props.hoverColor],
-            },
-        }),
-        ...props.style,
-    }}>
-        {props.children}
-    </Text>;
+    return <Hoverable>
+        <Text
+            style={{
+                textAlign: platformValue({
+                    mobile: 'left',
+                    default: 'justify',
+                }),
+                fontSize,
+                fontFamily,
+                color: colors(props)[props.color || 'text'],
+                ...(props.hoverColor && {
+                    ':hover': {
+                        color: colors(props)[props.hoverColor],
+                    },
+                }),
+                ...props.style,
+            }}
+        >
+            {props.text}
+        </Text>
+    </Hoverable>;
 });
-
-export const PlainText = Text;
 
 // TODO: remove this one
 export const ThemedHoverable = themed(function HoverableC(props) {
@@ -81,12 +85,6 @@ export const ThemedHoverable = themed(function HoverableC(props) {
         {props.children}
     </HoverableText>;
 });
-
-export const Label: Comp<{ text: string, margin?: string }> = (props =>
-    <ThemedText style={{ margin: props.margin }} size='normal'>
-        {props.text}
-    </ThemedText>
-);
 
 export type PanelLinkProps = ActionableProps & { icon: IconName };
 export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
@@ -109,7 +107,7 @@ export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
     </ActionButton>;
 });
 
-// TODO: move to bricks
+// TODO: move to atoms
 export type TagButtonProps = {
     color?: Color,
     borderColor?: Color,
