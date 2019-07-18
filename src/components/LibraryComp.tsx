@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
 import {
-    Comp, Row, SafeAreaView, Column, TextLine, ActionLink,
-    ThemedHoverable, point,
+    Comp, Row, SafeAreaView, Column, TextLine,
+    ActionLink, point,
 } from '../blocks';
 import { actionCreators } from '../core';
 
@@ -18,9 +18,10 @@ function BookItem({ meta, id }: BookItemProps) {
             action={actionCreators.navigateToBook(
                 bookLocator(remoteBookId(id), locationCurrent()))}
         >
-            <ThemedHoverable>
-                <TextLine text={meta.title} />
-            </ThemedHoverable>
+            <TextLine
+                text={meta.title}
+                hoverColor='accent'
+            />
         </ActionLink>
     </Row>;
 }
