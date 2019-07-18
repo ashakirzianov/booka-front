@@ -5,13 +5,13 @@ import { Theme, Palette, Color } from '../model';
 import { Action, actionToUrl } from '../core';
 import { platformValue } from '../utils';
 import { connectAll, themed, colors } from './connect';
-import { Comp, Callback, point, Props, Icon } from '../bricks';
+import { Comp, Callback, point, Props, Icon } from '../atoms';
 
 // TODO: remove all second-level imports
-import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../bricks/Basic.common';
-import { Button, Link, Text, HoverableText } from '../bricks/Basic';
-import { IconName } from '../bricks/Icons.common';
-import { defaults } from '../bricks/defaults';
+import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../atoms/Basic.common';
+import { Button, Link, Text, HoverableText } from '../atoms/Basic';
+import { IconName } from '../atoms/Icons.common';
+import { defaults } from '../atoms/defaults';
 
 export type ActionableProps = {
     action?: Action,
@@ -109,7 +109,7 @@ export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
     </ActionButton>;
 });
 
-// TODO: move to bricks
+// TODO: move to atoms
 export type TagButtonProps = {
     color?: Color,
     borderColor?: Color,

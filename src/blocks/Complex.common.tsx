@@ -4,7 +4,7 @@ import { View, ViewStyle } from 'react-native';
 import { platformValue } from '../utils';
 import { PopperProps } from 'react-popper';
 import { ActionableProps } from './Elements';
-import { ReactContent, Callback } from '../bricks';
+import { ReactContent, Callback } from '../atoms';
 
 export type ClickableProps = { onClick: () => void };
 

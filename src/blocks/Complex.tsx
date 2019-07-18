@@ -9,9 +9,9 @@ import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { Props, point, Comp, percent } from '../bricks';
-import { defaults } from '../bricks/defaults';
-import { FadeIn } from '../bricks/Animations';
+import { Props, point, Comp, percent } from '../atoms';
+import { defaults } from '../atoms/defaults';
+import { FadeIn } from '../atoms/Animations';
 
 export { Layer } from './Complex.common';
 
