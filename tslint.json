@@ -5,6 +5,7 @@
     "tslint-config-prettier"
   ],
   "rules": {
+    "only-arrow-functions": false,
     "eofline": true,
     "jsx-no-lambda": false,
     "jsx-no-bind": false,

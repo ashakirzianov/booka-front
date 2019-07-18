@@ -49,6 +49,7 @@ function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
 export const Link = linkOrButton;
 export const Button = linkOrButton;
 
+// TODO: remove
 export type HoverableTextProps = {
     color?: string,
     hoverColor?: string,

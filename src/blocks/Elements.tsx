@@ -1,3 +1,4 @@
+// TODO: rename file to 'Themed' ?
 import * as React from 'react';
 
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
@@ -5,7 +6,7 @@ import { Theme, Palette, Color } from '../model';
 import { Action, actionToUrl } from '../core';
 import { platformValue } from '../utils';
 import { connectAll, themed, colors } from './connect';
-import { Comp, Callback, point, Props, Icon } from '../atoms';
+import { Comp, Callback, point, Props, Icon, Hoverable } from '../atoms';
 
 // TODO: remove all second-level imports
 import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../atoms/Basic.common';
@@ -48,29 +49,31 @@ type ThemedTextProps = {
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const TextLine = themed<ThemedTextProps>(function TextLineC(props) {
+export const TextLine = themed<ThemedTextProps>(function (props) {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
     const fontFamily = props.theme.fontFamilies[props.family || 'main'];
-    return <Text
-        style={{
-            textAlign: platformValue({
-                mobile: 'left',
-                default: 'justify',
-            }),
-            fontSize,
-            fontFamily,
-            color: colors(props)[props.color || 'text'],
-            ...(props.hoverColor && {
-                ':hover': {
-                    color: colors(props)[props.hoverColor],
-                },
-            }),
-            ...props.style,
-        }}
-    >
-        {props.text}
-    </Text>;
+    return <Hoverable>
+        <Text
+            style={{
+                textAlign: platformValue({
+                    mobile: 'left',
+                    default: 'justify',
+                }),
+                fontSize,
+                fontFamily,
+                color: colors(props)[props.color || 'text'],
+                ...(props.hoverColor && {
+                    ':hover': {
+                        color: colors(props)[props.hoverColor],
+                    },
+                }),
+                ...props.style,
+            }}
+        >
+            {props.text}
+        </Text>
+    </Hoverable>;
 });
 
 // TODO: remove this one
