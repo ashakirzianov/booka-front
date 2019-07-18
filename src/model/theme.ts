@@ -23,7 +23,7 @@ export type FontSizes = {
     largest: FontSize,
 };
 export type FontFamilies = {
-    main: FontFamily,
+    book: FontFamily,
     menu: FontFamily,
 };
 

@@ -68,6 +68,7 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
         range: range(0),
         tag: {
             fontSize: props.theme.fontSizes.normal * props.theme.fontScale,
+            fontFamily: props.theme.fontFamilies.book,
             color: colors(props).text,
         },
     }];

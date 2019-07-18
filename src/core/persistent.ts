@@ -81,7 +81,7 @@ export const defaultTheme: Theme = {
     },
     currentPalette: 'light',
     fontFamilies: {
-        main: 'Georgia',
+        book: 'Georgia',
         menu: 'Helvetica',
     },
     fontSizes: {
