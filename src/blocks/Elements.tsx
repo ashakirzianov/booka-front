@@ -83,11 +83,6 @@ export const ThemedHoverable = themed(function HoverableC(props) {
     </HoverableText>;
 });
 
-// TODO: remove
-export const Label: Comp<{ text: string, margin?: string }> = (props =>
-    <TextLine text={props.text} style={{ margin: props.margin }} size='normal' />
-);
-
 export type PanelLinkProps = ActionableProps & { icon: IconName };
 export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
     return <ActionButton
