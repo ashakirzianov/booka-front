@@ -8,8 +8,8 @@ import { connectAll, themed, colors } from './connect';
 import { Comp, Callback, point, Props, Icon } from '../bricks';
 
 // TODO: remove all second-level imports
-import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../bricks/Atoms.common';
-import { Button, Link, Text, HoverableText } from '../bricks/Atoms';
+import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../bricks/Basic.common';
+import { Button, Link, Text, HoverableText } from '../bricks/Basic';
 import { IconName } from '../bricks/Icons.common';
 import { defaults } from '../bricks/defaults';
 
