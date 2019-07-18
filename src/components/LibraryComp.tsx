@@ -7,28 +7,36 @@ import {
 } from '../blocks';
 import { actionCreators } from '../core';
 
-const BookMetaComp: Comp<{ meta: BookInfo, id: string }> = (props =>
-    <Row>
+type BookItemProps = {
+    meta: BookInfo,
+    id: string,
+};
+function BookItem({ meta, id }: BookItemProps) {
+    return <Row>
         <ActionLink
             style={{ margin: point(0.5) }}
             action={actionCreators.navigateToBook(
-                bookLocator(remoteBookId(props.id), locationCurrent()))}
+                bookLocator(remoteBookId(id), locationCurrent()))}
         >
             <ThemedHoverable>
-                <TextLine text={props.meta.title} />
+                <TextLine text={meta.title} />
             </ThemedHoverable>
         </ActionLink>
-    </Row>
-);
+    </Row>;
+}
 
 export const LibraryComp: Comp<Library> = (props =>
     <SafeAreaView>
         <Column>
             {
                 Object.keys(props.books).map(
-                    id => <BookMetaComp
-                        key={id} meta={props.books[id]!} id={id}
-                    />)
+                    id =>
+                        <BookItem
+                            key={id}
+                            meta={props.books[id]!}
+                            id={id}
+                        />
+                )
             }
         </Column>
     </SafeAreaView>
