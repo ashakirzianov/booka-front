@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column,
-    hoverable, View, Separator, connectState, TextLine, themed,
+    hoverable, Separator, connectState, TextLine, themed,
     colors, TagButton, ActionLink, ActionButton,
     point,
 } from '../blocks';
@@ -202,7 +202,7 @@ const PalettePicker: Comp = (() =>
     </Column>
 );
 
-const HoverableView = hoverable(View);
+const HoverableColumn = hoverable(Column);
 
 type PaletteButtonProps = {
     name: PaletteName,
@@ -211,7 +211,7 @@ type PaletteButtonProps = {
 const PaletteButton = connectState('theme')<PaletteButtonProps>(function PaletteButtonC(props) {
     const palette = props.theme.palettes[props.name].colors;
     return <ActionButton action={actionCreators.setPalette(props.name)}>
-        <HoverableView style={{
+        <HoverableColumn style={{
             width: 50,
             height: 50,
             justifyContent: 'center',
@@ -232,6 +232,6 @@ const PaletteButton = connectState('theme')<PaletteButtonProps>(function Palette
                     color='text'
                 />
             </Row>
-        </HoverableView>
+        </HoverableColumn>
     </ActionButton>;
 });

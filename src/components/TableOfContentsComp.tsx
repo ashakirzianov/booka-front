@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     Row, Tab, Column, DottedLine,
-    TextLine, point, View, ActionButton, ThemedContainer,
+    TextLine, point, ActionButton, ThemedContainer,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -18,7 +18,7 @@ type TocItemProps = TableOfContentsItem & {
 function TocItemComp(props: TocItemProps) {
     return <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <View style={{ flex: 1 }}>
+        <Column style={{ flex: 1 }}>
             <ActionButton action={actionCreators
                 .navigateToBook(bookLocator(props.id, locationPath(props.path)))} style={{
                     alignSelf: 'stretch',
@@ -38,7 +38,7 @@ function TocItemComp(props: TocItemProps) {
                     <TextLine text={props.pageNumber.toString()} />
                 </ThemedContainer>
             </ActionButton>
-        </View>
+        </Column>
     </Row>;
 }
 
