@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { themed, colors } from './connect';
 import { TextLine, PanelButton, ActionLink } from './Elements';
-import { View } from 'react-native';
 import { Manager, Reference, Popper } from 'react-popper';
 import { Transition } from 'react-transition-group';
 import { platformValue } from '../utils';
@@ -9,7 +8,7 @@ import {
     ModalProps, WithPopoverProps, BarProps,
     OverlayBoxProps, ClickableProps, LinkButtonProps,
 } from './Complex.common';
-import { Props, point, Comp, percent } from '../atoms';
+import { Props, point, Comp, percent, Column, Row } from '../atoms';
 import { defaults } from '../atoms/defaults';
 import { FadeIn } from '../atoms/Animations';
 
@@ -37,33 +36,29 @@ export function Modal(props: Props<ModalProps>) {
                         transform: state === 'entered' ? [] : [{ translateY: '100%' as any }],
                     }}
                 >
-                    <View style={{
-                        flexDirection: 'column',
+                    <Column style={{
                         justifyContent: 'center',
                         height: point(headerHeight),
                     }}>
-                        <View style={{
+                        <Row style={{
                             flex: 1,
                             justifyContent: 'center',
-                            flexDirection: 'row',
                         }}>
-                            <View style={{
+                            <Column style={{
                                 position: 'absolute',
                                 top: 0, left: 0, bottom: 0, right: 0,
                                 justifyContent: 'center',
-                                flexDirection: 'column',
                             }}>
                                 <PanelButton onClick={props.toggle} icon='close' />
-                            </View>
-                            <View style={{
+                            </Column>
+                            <Column style={{
                                 justifyContent: 'center',
-                                flexDirection: 'column',
                             }}>
                                 <TextLine text={props.title} />
-                            </View>
-                            <View />
-                        </View>
-                    </View>
+                            </Column>
+                            <Column />
+                        </Row>
+                    </Column>
                     <div style={{
                         alignItems: 'stretch',
                         width: '100%',
@@ -216,7 +211,7 @@ export const Clickable: Comp<ClickableProps> = (props =>
 );
 
 export const OverlayBox = themed<OverlayBoxProps>(props =>
-    <View style={{
+    <Column style={{
         alignSelf: 'center',
         backgroundColor: colors(props).secondary,
         width: percent(100),
@@ -233,5 +228,5 @@ export const OverlayBox = themed<OverlayBoxProps>(props =>
         <div onClick={e => e.stopPropagation()}>
             {props.children}
         </div>
-    </View>
+    </Column>
 );

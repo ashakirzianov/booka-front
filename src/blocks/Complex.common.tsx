@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { themed, colors } from './connect';
-import { View, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 import { platformValue } from '../utils';
 import { PopperProps } from 'react-popper';
 import { ActionableProps } from './Elements';
-import { ReactContent, Callback } from '../atoms';
+import { ReactContent, Callback, Column } from '../atoms';
 
 export type ClickableProps = { onClick: () => void };
 
@@ -35,7 +35,7 @@ export type LinkButtonProps = ActionableProps & {
 };
 
 export const Layer = themed(props =>
-    <View style={{
+    <Column style={{
         position: 'absolute',
         minHeight: '100%',
         minWidth: '100%',
@@ -44,7 +44,7 @@ export const Layer = themed(props =>
         backgroundColor: colors(props).primary,
     }}>
         {props.children}
-    </View>
+    </Column>
 );
 
 export class IncrementalLoad extends React.Component<{
