@@ -24,7 +24,6 @@ function TocItemComp(props: TocItemProps) {
                     alignSelf: 'stretch',
                 }}>
                 <ThemedContainer style={{
-                    display: 'flex',
                     justifyContent: 'space-between',
                     flexDirection: 'row',
                 }}

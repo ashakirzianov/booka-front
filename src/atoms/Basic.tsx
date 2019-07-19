@@ -28,12 +28,13 @@ function HoverableContainerC(props: Props<HoverableContainerProps>) {
     return <div style={{
         display: 'flex',
         color: props.color,
-        ...props.style,
-        ...(props.hoverColor && {
+        ...{
+            ...props.style,
             ':hover': {
+                ...(props.style && props.style[':hover']),
                 color: props.hoverColor,
             },
-        }),
+        },
     }}>
         {props.children}
     </div>;

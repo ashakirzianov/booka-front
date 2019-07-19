@@ -61,12 +61,5 @@ export function Scroll(props: Props<ScrollProps>) {
 }
 
 function convertStyle(style: TextStyle | undefined): NativeTextStyle | undefined {
-    // TODO: rethink this ?
-    if (style && (style as any)[':hover'] !== undefined) {
-        const styleCopy = { ...style };
-        delete (styleCopy as any)[':hover'];
-        return styleCopy as any;
-    } else {
-        return style;
-    }
+    return style;
 }

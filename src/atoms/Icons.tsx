@@ -23,12 +23,9 @@ function iconForName(name: IconName) {
     }
 }
 
-export function Icon({ size, name, color, hover }: Props<IconProps>) {
+export function Icon({ size, name, color, hoverColor }: Props<IconProps>) {
     return React.createElement(HoverableContainer,
-        {
-            color: color,
-            hoverColor: hover,
-        },
+        { color, hoverColor },
         React.createElement(iconForName(name), {
             size: size || '1em',
         }));

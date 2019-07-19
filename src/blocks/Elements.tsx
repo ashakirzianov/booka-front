@@ -110,7 +110,7 @@ export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {
             <Icon
                 name={props.icon}
                 color={colors(props).accent}
-                hover={colors(props).highlight}
+                hoverColor={colors(props).highlight}
                 size={24}
             />
             {props.children}

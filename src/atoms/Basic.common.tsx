@@ -4,6 +4,7 @@ import { View, ViewStyle as NativeViewStyle, TextStyle as NativeTextStyle } from
 import { Comp, Callback } from './common';
 import { Color } from '../model';
 import { RefHandler } from './Scroll';
+import { HoverableProps } from './utils';
 
 export type ScrollProps = {
     onScroll?: Callback<void>,
@@ -38,7 +39,10 @@ export type ViewStyle = Pick<NativeViewStyle,
     | 'justifyContent' | 'width' | 'height'
     | 'alignItems' | 'alignSelf'
     | 'maxWidth' | 'overflow' | 'margin' | 'padding'
+    | 'backgroundColor'
+    | 'borderRadius' | 'borderColor' | 'borderWidth'
     | 'flex' // TODO: do not allow ?
+    | 'flexDirection'
 > & {
     position?: NativeViewStyle['position'] | 'fixed',
 };
@@ -47,7 +51,7 @@ export type LayoutProps = {
     style?: ViewStyle,
 };
 
-export type HoverableContainerProps = LayoutProps & {
+export type HoverableContainerProps = HoverableProps<LayoutProps> & {
     color?: string,
     hoverColor?: string,
 };

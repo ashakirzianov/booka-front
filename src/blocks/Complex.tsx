@@ -185,6 +185,7 @@ export const Separator: Comp = (() =>
     }} />
 );
 
+// TODO: rename
 export const LinkButton = themed<LinkButtonProps>(props =>
     <ActionLink {...props}>
         <div style={{
