@@ -46,6 +46,12 @@ export type ViewStyle = Pick<NativeViewStyle,
 export type LayoutProps = {
     style?: ViewStyle,
 };
+
+export type HoverableContainerProps = LayoutProps & {
+    color?: string,
+    hoverColor?: string,
+};
+
 export const Column: Comp<LayoutProps> = (props =>
     <View style={{ ...convertLayoutStyle(props.style), flexDirection: 'column' }}>
         {props.children}

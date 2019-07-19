@@ -11,7 +11,7 @@ import {
 
 // TODO: remove all second-level imports
 import { ViewStyle, LinkProps, TextStyle, Column, Row, LayoutProps } from '../atoms/Basic.common';
-import { Button, Link, Text, HoverableText, Hoverable, HoverableView } from '../atoms/Basic';
+import { Button, Link, Text, HoverableContainer } from '../atoms/Basic';
 import { IconName } from '../atoms/Icons.common';
 import { defaults } from '../atoms/defaults';
 
@@ -20,7 +20,7 @@ export type ThemedContainerProps = LayoutProps & {
     color?: PaletteColor,
 };
 function ThemedContainerC(props: Props<Themeable<ThemedContainerProps>>) {
-    return <HoverableView
+    return <HoverableContainer
         style={{
             ...props.style,
             color: props.color !== undefined
@@ -34,7 +34,7 @@ function ThemedContainerC(props: Props<Themeable<ThemedContainerProps>>) {
         } as any} // TODO: remove 'as any' (color prop is a problem)
     >
         {props.children}
-    </HoverableView>;
+    </HoverableContainer>;
 }
 export const ThemedContainer = themed(hoverable(ThemedContainerC));
 
@@ -88,24 +88,14 @@ function TextLineC(props: Themeable<TextLineProps>) {
         {props.text}
     </Text>;
     if (props.hoverColor) {
-        return <Hoverable color={colors(props)[props.hoverColor]}>
+        return <HoverableContainer color={colors(props)[props.hoverColor]}>
             {textComp}
-        </Hoverable>;
+        </HoverableContainer>;
     } else {
         return textComp;
     }
 }
 export const TextLine = themed(TextLineC);
-
-// TODO: remove this one
-export const ThemedHoverable = themed(function HoverableC(props) {
-    return <HoverableText
-        color={colors(props).accent}
-        hoverColor={colors(props).highlight}
-    >
-        {props.children}
-    </HoverableText>;
-});
 
 export type PanelLinkProps = ActionableProps & { icon: IconName };
 export const PanelButton = themed<PanelLinkProps>(function PanelButtonC(props) {

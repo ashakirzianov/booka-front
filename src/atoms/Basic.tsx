@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { TextProps, LinkProps, ScrollProps } from './Basic.common';
+import { TextProps, LinkProps, ScrollProps, HoverableContainerProps } from './Basic.common';
 import { isOpenNewTabEvent, hoverable } from './utils';
 import { Props } from './common';
-import { View } from 'react-native';
 
 export { Row, Column } from './Basic.common';
 
@@ -25,25 +24,21 @@ export function Text(props: Props<TextProps>) {
     </span>;
 }
 
-export type HoverableProps = {
-    color?: string,
-};
-function HoverableC(props: Props<HoverableProps>) {
+function HoverableContainerC(props: Props<HoverableContainerProps>) {
     return <div style={{
         display: 'flex',
-        alignSelf: 'stretch',
-        ...(props.color && {
+        color: props.color,
+        ...props.style,
+        ...(props.hoverColor && {
             ':hover': {
-                color: props.color,
+                color: props.hoverColor,
             },
         }),
-    } as any}>
+    }}>
         {props.children}
     </div>;
 }
-export const Hoverable = hoverable(HoverableC);
-
-export const HoverableView = hoverable(View);
+export const HoverableContainer = hoverable(HoverableContainerC);
 
 function LinkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
     return <a
@@ -69,24 +64,6 @@ function LinkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
 
 export const Link = LinkOrButton;
 export const Button = LinkOrButton;
-
-// TODO: remove
-export type HoverableTextProps = {
-    color?: string,
-    hoverColor?: string,
-};
-export const HoverableText = hoverable<HoverableTextProps>(function HoverableTextC({ color, hoverColor, children }) {
-    return <span
-        style={{
-            color: color,
-            ':hover': {
-                color: hoverColor,
-            },
-        }}
-    >
-        {children}
-    </span>;
-});
 
 export function Scroll(props: Props<ScrollProps>) {
     return <>

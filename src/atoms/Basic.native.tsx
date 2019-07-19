@@ -4,7 +4,7 @@ import {
     Text as NativeText, TextStyle as NativeTextStyle,
     View, ViewStyle as NativeViewStyle, ScrollView,
 } from 'react-native';
-import { TextStyle, TextProps, LinkProps, ScrollProps } from './Basic.common';
+import { TextStyle, TextProps, LinkProps, ScrollProps, HoverableContainerProps } from './Basic.common';
 import { Props } from './common';
 
 export { Row, Column } from './Basic.common';
@@ -45,8 +45,10 @@ export function Button({ style, onClick, children }: Props<LinkProps>) {
     </View>;
 }
 
-export function HoverableText(props: Props) {
-    return <>{props.children}</>;
+export function HoverableContainer(props: Props<HoverableContainerProps>) {
+    return <>
+        {props.children}
+    </>;
 }
 
 export function Scroll(props: Props<ScrollProps>) {

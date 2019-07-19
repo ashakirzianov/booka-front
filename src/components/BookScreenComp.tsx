@@ -4,7 +4,7 @@ import {
     connectActions, Row, Modal, PanelButton,
     Comp, WithPopover, Line, Column,
     hoverable, View, Separator, connectState, TextLine, themed,
-    colors, TagButton, ActionLink, ThemedHoverable, ActionButton,
+    colors, TagButton, ActionLink, ActionButton,
     point,
 } from '../blocks';
 import {
@@ -178,14 +178,13 @@ const FontScaleButton = connectActions('incrementScale')<{
         justifyContent: 'center',
     }}>
         <ActionLink action={actionCreators.incrementScale(props.increment)}>
-            <ThemedHoverable>
-                <TextLine
-                    fixedSize
-                    size={props.size}
-                    color='accent'
-                    text='Abc'
-                />
-            </ThemedHoverable>
+            <TextLine
+                fixedSize
+                size={props.size}
+                color='accent'
+                hoverColor='highlight'
+                text='Abc'
+            />
         </ActionLink>
     </Column>
 );
