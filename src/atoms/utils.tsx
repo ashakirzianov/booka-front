@@ -2,14 +2,15 @@ import * as React from 'react';
 
 import Radium from 'radium';
 
-export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<T> {
-    return Radium(Cmp);
-}
+export type HoverableProps<T> = T extends { style: infer S }
+    ? T & { style: { ':hover': S } }
+    : T;
+export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<HoverableProps<T>> {
+    const result = Radium(Cmp);
+    result.displayName = (Cmp.displayName || (Cmp as any).name);
 
-function HoverableC({ children }: React.PropsWithChildren<{}>) {
-    return <div>{children}</div>;
+    return result as any;
 }
-export const Hoverable = Radium(HoverableC);
 
 export function isOpenNewTabEvent(e: React.MouseEvent) {
     return isMacOs()

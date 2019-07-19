@@ -2,17 +2,41 @@
 import * as React from 'react';
 
 import { View, ActivityIndicator as NativeActivityIndicator } from 'react-native';
-import { Theme, Palette, Color } from '../model';
+import { Theme, Palette, Color, PaletteColor } from '../model';
 import { Action, actionToUrl } from '../core';
-import { platformValue } from '../utils';
-import { connectAll, themed, colors } from './connect';
-import { Comp, Callback, point, Props, Icon, Hoverable } from '../atoms';
+import { connectAll, themed, colors, Themeable } from './connect';
+import {
+    Comp, Callback, point, Props, Icon, hoverable,
+} from '../atoms';
 
 // TODO: remove all second-level imports
-import { ViewStyle, LinkProps, TextStyle, Column, Row } from '../atoms/Basic.common';
-import { Button, Link, Text, HoverableText } from '../atoms/Basic';
+import { ViewStyle, LinkProps, TextStyle, Column, Row, LayoutProps } from '../atoms/Basic.common';
+import { Button, Link, Text, HoverableText, Hoverable, HoverableView } from '../atoms/Basic';
 import { IconName } from '../atoms/Icons.common';
 import { defaults } from '../atoms/defaults';
+
+export type ThemedContainerProps = LayoutProps & {
+    hoverColor?: PaletteColor,
+    color?: PaletteColor,
+};
+function ThemedContainerC(props: Props<Themeable<ThemedContainerProps>>) {
+    return <HoverableView
+        style={{
+            ...props.style,
+            color: props.color !== undefined
+                ? colors(props)[props.color]
+                : undefined,
+            ...(props.hoverColor && {
+                ':hover': {
+                    color: colors(props)[props.hoverColor],
+                },
+            }),
+        } as any} // TODO: remove 'as any' (color prop is a problem)
+    >
+        {props.children}
+    </HoverableView>;
+}
+export const ThemedContainer = themed(hoverable(ThemedContainerC));
 
 export type ActionableProps = {
     action?: Action,
@@ -40,7 +64,7 @@ function actionize(LinkOrButton: Comp<LinkProps>) {
 export const ActionLink = actionize(Link);
 export const ActionButton = actionize(Button);
 
-type ThemedTextProps = {
+type TextLineProps = {
     text: string | undefined, // TODO: make optional ?
     style?: TextStyle,
     family?: keyof Theme['fontFamilies'],
@@ -49,32 +73,29 @@ type ThemedTextProps = {
     color?: keyof Palette['colors'],
     hoverColor?: keyof Palette['colors'],
 };
-export const TextLine = themed<ThemedTextProps>(function (props) {
+function TextLineC(props: Themeable<TextLineProps>) {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
     const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
-    const fontFamily = props.theme.fontFamilies[props.family || 'main'];
-    return <Hoverable>
-        <Text
-            style={{
-                textAlign: platformValue({
-                    mobile: 'left',
-                    default: 'justify',
-                }),
-                fontSize,
-                fontFamily,
-                color: colors(props)[props.color || 'text'],
-                ...(props.hoverColor && {
-                    ':hover': {
-                        color: colors(props)[props.hoverColor],
-                    },
-                }),
-                ...props.style,
-            }}
-        >
-            {props.text}
-        </Text>
-    </Hoverable>;
-});
+    const fontFamily = props.theme.fontFamilies[props.family || 'book'];
+    const textComp = <Text
+        style={{
+            fontSize,
+            fontFamily,
+            color: props.color !== undefined ? colors(props)[props.color] : undefined,
+            ...props.style,
+        }}
+    >
+        {props.text}
+    </Text>;
+    if (props.hoverColor) {
+        return <Hoverable color={colors(props)[props.hoverColor]}>
+            {textComp}
+        </Hoverable>;
+    } else {
+        return textComp;
+    }
+}
+export const TextLine = themed(TextLineC);
 
 // TODO: remove this one
 export const ThemedHoverable = themed(function HoverableC(props) {
@@ -128,7 +149,7 @@ export function TagButton(props: Props<TagButtonProps>) {
     </View>;
 }
 
-export const StretchLink = themed<ActionableProps>(function StretchLinkC({ action, style, children }) {
+export function StretchLink({ action, style, children }: Props<ActionableProps>) {
     return <View style={{ flex: 1 }}>
         <ActionButton action={action} style={{
             ...style,
@@ -145,7 +166,7 @@ export const StretchLink = themed<ActionableProps>(function StretchLinkC({ actio
             </View>
         </ActionButton>
     </View>;
-});
+}
 
 export const Line: Comp = (props =>
     <Row style={{

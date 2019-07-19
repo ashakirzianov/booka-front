@@ -53,6 +53,5 @@
     "editor.wordWrap": "bounded",
     "editor.wrappingIndent": "indent",
     "bracketPairColorizer.showVerticalScopeLine": false,
-    "bracketPairColorizer.showHorizontalScopeLine": false,
-    "editor.gotoLocation.multiple": "gotoAndPeek"
+    "bracketPairColorizer.showHorizontalScopeLine": false
 }

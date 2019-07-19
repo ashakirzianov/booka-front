@@ -5,12 +5,14 @@ import { actionCreators } from '../core';
 
 export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
-export type Themeable = {
+export type Themeable<T = {}> = T & {
     theme: Theme,
 };
-type ThemeableComp<T> = Comp<T & Themeable>;
+type ThemeableComp<T> = Comp<Themeable<T>>;
 export function themed<T = {}>(C: ThemeableComp<T>) {
-    return connectState('theme')(C);
+    const result = connectState('theme')(C);
+    result.displayName = (C as any).name;
+    return result;
 }
 export function colors(themeable: Themeable): Palette['colors'] {
     return themeable.theme.palettes[themeable.theme.currentPalette].colors;

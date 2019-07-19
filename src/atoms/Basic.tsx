@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TextProps, LinkProps, ScrollProps } from './Basic.common';
 import { isOpenNewTabEvent, hoverable } from './utils';
 import { Props } from './common';
+import { View } from 'react-native';
 
 export { Row, Column } from './Basic.common';
 
@@ -24,7 +25,27 @@ export function Text(props: Props<TextProps>) {
     </span>;
 }
 
-function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
+export type HoverableProps = {
+    color?: string,
+};
+function HoverableC(props: Props<HoverableProps>) {
+    return <div style={{
+        display: 'flex',
+        alignSelf: 'stretch',
+        ...(props.color && {
+            ':hover': {
+                color: props.color,
+            },
+        }),
+    } as any}>
+        {props.children}
+    </div>;
+}
+export const Hoverable = hoverable(HoverableC);
+
+export const HoverableView = hoverable(View);
+
+function LinkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
     return <a
         href={to}
         style={{
@@ -46,8 +67,8 @@ function linkOrButton({ to, style, onClick, children }: Props<LinkProps>) {
     </a>;
 }
 
-export const Link = linkOrButton;
-export const Button = linkOrButton;
+export const Link = LinkOrButton;
+export const Button = LinkOrButton;
 
 // TODO: remove
 export type HoverableTextProps = {

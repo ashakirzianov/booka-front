@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import {
-    Comp, Row, Tab,
-    Column, DottedLine, StretchLink, TextLine, point,
+    Row, Tab, Column, DottedLine,
+    TextLine, point, View, ActionButton, ThemedContainer,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -15,20 +15,34 @@ type TocItemProps = TableOfContentsItem & {
     tabs: number,
     id: BookId,
 };
-const TocItemComp: Comp<TocItemProps> = (props =>
-    <Row>
+function TocItemComp(props: TocItemProps) {
+    return <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <StretchLink action={actionCreators
-            .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-        >
-            <TextLine text={props.title} />
-            <DottedLine />
-            <TextLine text={props.pageNumber.toString()} />
-        </StretchLink>
-    </Row>
-);
+        <View style={{ flex: 1 }}>
+            <ActionButton action={actionCreators
+                .navigateToBook(bookLocator(props.id, locationPath(props.path)))} style={{
+                    alignSelf: 'stretch',
+                }}>
+                <ThemedContainer style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                }}
+                    hoverColor='highlight'
+                    color='text'
+                >
+                    <TextLine
+                        text={props.title}
+                    />
+                    <DottedLine />
+                    <TextLine text={props.pageNumber.toString()} />
+                </ThemedContainer>
+            </ActionButton>
+        </View>
+    </Row>;
+}
 
-export const TableOfContentsComp: Comp<TableOfContents> = (props => {
+export function TableOfContentsComp(props: TableOfContents) {
     const { id, items } = props;
     const maxLevel = items.reduce((max, i) => Math.max(max, i.level), 0);
     return <Column style={{ margin: point(2) }}>
@@ -41,4 +55,4 @@ export const TableOfContentsComp: Comp<TableOfContents> = (props => {
             />
         )}
     </Column>;
-});
+}

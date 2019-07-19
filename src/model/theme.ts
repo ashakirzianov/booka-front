@@ -15,6 +15,8 @@ export type Palette = {
         quote: Color,
     },
 };
+export type PaletteColor = keyof Palette['colors'];
+export type HighlightsColor = keyof Palette['highlights'];
 export type FontSizes = {
     smallest: FontSize,
     small: FontSize,
