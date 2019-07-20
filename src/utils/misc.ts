@@ -27,6 +27,8 @@ export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {
         : v;
 }
 
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
 }

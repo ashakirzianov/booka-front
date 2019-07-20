@@ -1,4 +1,14 @@
 import * as React from 'react';
+import { Props, Callback } from './common';
+
+export type ScrollProps = {
+    onScroll?: Callback<void>,
+};
+export function Scroll(props: Props<ScrollProps>) {
+    return <>
+        {props.children}
+    </>;
+}
 
 export type RefType = HTMLElement | null;
 export type RefHandler = (ref: any) => void;

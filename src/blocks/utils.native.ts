@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 export function isOpenNewTabEvent(e: React.MouseEvent) {
     return false;
 }

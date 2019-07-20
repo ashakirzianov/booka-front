@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import {
-    Row, Tab, Column, DottedLine,
-    TextLine, point, ActionButton, ThemedContainer,
+    Row, Tab, Column, point, StretchTextButton,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -19,24 +18,14 @@ function TocItemComp(props: TocItemProps) {
     return <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
         <Column style={{ flex: 1 }}>
-            <ActionButton action={actionCreators
-                .navigateToBook(bookLocator(props.id, locationPath(props.path)))} style={{
-                    alignSelf: 'stretch',
-                }}>
-                <ThemedContainer style={{
-                    justifyContent: 'space-between',
-                    flexDirection: 'row',
-                }}
-                    hoverColor='highlight'
-                    color='text'
-                >
-                    <TextLine
-                        text={props.title}
-                    />
-                    <DottedLine />
-                    <TextLine text={props.pageNumber.toString()} />
-                </ThemedContainer>
-            </ActionButton>
+            <StretchTextButton
+                action={actionCreators
+                    .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
+                texts={[
+                    props.title,
+                    props.pageNumber.toString(),
+                ]}
+            />
         </Column>
     </Row>;
 }

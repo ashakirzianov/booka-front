@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, Modal, PanelButton,
+    connectActions, Row, Modal,
     Comp, WithPopover, Line, Column,
-    hoverable, Separator, connectState, TextLine, themed,
-    colors, TagButton, ActionLink, ActionButton,
-    point,
+    Separator, TextLine, TagButton,
+    point, IconButton, TextButton, PaletteButton,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -86,22 +85,20 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
 });
 
 type TocButtonProps = { current: number, total: number };
-const TocButton = themed<TocButtonProps>(props =>
-    <ActionButton action={actionCreators.toggleToc()}>
-        <TagButton color={colors(props).accent}>
-            <TextLine
-                text={`${props.current} of ${props.total}`}
-                size='smallest'
-                fixedSize={true}
-                family='menu'
-                color='secondary'
-            />
-        </TagButton>
-    </ActionButton>
-);
+function TocButton(props: TocButtonProps) {
+    return <TagButton
+        text={`${props.current} of ${props.total}`}
+        color='secondary'
+        backgroundColor='accent'
+        action={actionCreators.toggleToc()}
+    />;
+}
 
 const LibButton: Comp = (() =>
-    <PanelButton icon='left' action={actionCreators.navigateToLibrary()} />
+    <IconButton
+        icon='left'
+        action={actionCreators.navigateToLibrary()}
+    />
 );
 
 const AppearanceButton: Comp = (() =>
@@ -109,12 +106,18 @@ const AppearanceButton: Comp = (() =>
         popoverPlacement='bottom'
         body={<ThemePicker />}
     >
-        {onClick => <PanelButton icon='letter' onClick={onClick} />}
+        {
+            onClick =>
+                <IconButton icon='letter' onClick={onClick} />
+        }
     </WithPopover>
 );
 
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
-    <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
+    <Modal
+        title={props.toc.title}
+        toggle={props.toggleToc}
+        open={props.open}
     >
         <Column style={{
             overflow: 'scroll',
@@ -173,21 +176,21 @@ const FontScale: Comp = (() =>
 const FontScaleButton = connectActions('incrementScale')<{
     increment: number,
     size: 'largest' | 'smallest',
-}>(props =>
-    <Column style={{
+}>(props => {
+    return <Column style={{
         justifyContent: 'center',
     }}>
-        <ActionLink action={actionCreators.incrementScale(props.increment)}>
-            <TextLine
-                fixedSize
-                size={props.size}
-                color='accent'
-                hoverColor='highlight'
-                text='Abc'
-            />
-        </ActionLink>
-    </Column>
-);
+        <TextButton
+            text='Abc'
+            textProps={{
+                size: props.size,
+                color: 'accent',
+            }}
+            action={actionCreators
+                .incrementScale(props.increment)}
+        />
+    </Column>;
+});
 
 const PalettePicker: Comp = (() =>
     <Column style={{
@@ -195,43 +198,21 @@ const PalettePicker: Comp = (() =>
         height: point(5),
     }}>
         <Row style={{ justifyContent: 'space-around' }}>
-            <PaletteButton name='light' text='L' />
-            <PaletteButton name='sepia' text='S' />
-            <PaletteButton name='dark' text='D' />
+            <SelectPaletteButton name='light' text='L' />
+            <SelectPaletteButton name='sepia' text='S' />
+            <SelectPaletteButton name='dark' text='D' />
         </Row>
     </Column>
 );
-
-const HoverableColumn = hoverable(Column);
 
 type PaletteButtonProps = {
     name: PaletteName,
     text: string,
 };
-const PaletteButton = connectState('theme')<PaletteButtonProps>(function PaletteButtonC(props) {
-    const palette = props.theme.palettes[props.name].colors;
-    return <ActionButton action={actionCreators.setPalette(props.name)}>
-        <HoverableColumn style={{
-            width: 50,
-            height: 50,
-            justifyContent: 'center',
-            backgroundColor: palette.primary,
-            borderRadius: 50,
-            borderColor: palette.highlight, // 'orange' ?
-            borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
-            shadowColor: palette.shadow,
-            shadowRadius: 5,
-            ':hover': {
-                borderWidth: 3,
-            },
-        }}>
-            <Row style={{ justifyContent: 'center' }}>
-                <TextLine
-                    text={props.text}
-                    size='normal'
-                    color='text'
-                />
-            </Row>
-        </HoverableColumn>
-    </ActionButton>;
-});
+function SelectPaletteButton(props: PaletteButtonProps) {
+    return <PaletteButton
+        text={props.text}
+        palette={props.name}
+        action={actionCreators.setPalette(props.name)}
+    />;
+}

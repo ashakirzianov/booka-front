@@ -5,7 +5,8 @@ import {
 } from '../model';
 import {
     Comp, Callback, Row, RefType,
-    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView, Scroll,
+    isPartiallyVisible, scrollToRef, Column, point,
+    percent, SafeAreaView, Scroll, Clickable, BorderButton,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -14,7 +15,7 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
-import { Clickable, headerHeight } from '../blocks';
+import { defaults } from '../blocks/defaults';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -144,7 +145,7 @@ const PathLink: Comp<PathLinkProps> = (props =>
             justifyContent: 'center',
             margin: point(1),
         }}>
-            <LinkButton
+            <BorderButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
                 text={props.text}
@@ -154,7 +155,7 @@ const PathLink: Comp<PathLinkProps> = (props =>
 
 function EmptyLine() {
     return <SafeAreaView>
-        <Row style={{ height: point(headerHeight) }} />
+        <Row style={{ height: point(defaults.headerHeight) }} />
     </SafeAreaView>;
 }
 

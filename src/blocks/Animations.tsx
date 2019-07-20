@@ -1,18 +1,19 @@
 import * as React from 'react';
 
 import { Transition } from 'react-transition-group';
-import { Comp } from './common';
+import { Props } from './common';
 import { defaults } from './defaults';
 import { FadeInProps } from './Animations.common';
 
-export const FadeIn: Comp<FadeInProps> = (props =>
-    <Animated
+export function FadeIn(props: Props<FadeInProps>) {
+    return <Animated
         in={props.visible}
         start={{ opacity: 0.01 }}
         end={{ opacity: 1 }}
     >
         {props.children}
-    </Animated>);
+    </Animated>;
+}
 
 type AnimationStyles = {
     opacity?: number,
@@ -24,7 +25,7 @@ type AnimatedProps = {
     start: AnimationStyles,
     end: AnimationStyles,
 };
-const Animated: Comp<AnimatedProps> = (props => {
+function Animated(props: Props<AnimatedProps>) {
     const duration = props.duration || defaults.animationDuration;
     return <Transition in={props.in} timeout={duration}>
         {state =>
@@ -38,4 +39,4 @@ const Animated: Comp<AnimatedProps> = (props => {
                 </div>
         }
     </Transition>;
-});
+}

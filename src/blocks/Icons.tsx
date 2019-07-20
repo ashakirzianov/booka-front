@@ -6,7 +6,6 @@ import {
 import { assertNever } from '../utils';
 import { Props } from './common';
 import { IconProps, IconName } from './Icons.common';
-import { HoverableContainer } from './Basic';
 
 function iconForName(name: IconName) {
     switch (name) {
@@ -24,8 +23,13 @@ function iconForName(name: IconName) {
 }
 
 export function Icon({ size, name, color, hoverColor }: Props<IconProps>) {
-    return React.createElement(HoverableContainer,
-        { color, hoverColor },
+    return React.createElement('div',
+        {
+            color,
+            ':hover': {
+                color: hoverColor,
+            },
+        },
         React.createElement(iconForName(name), {
             size: size || '1em',
         }));

@@ -1,6 +1,6 @@
 import { connect as connectReactRedux } from 'react-redux';
 import { Dispatch } from 'redux';
-import { mapObject, pick, ExcludeKeys, Func } from './misc';
+import { mapObject, pick, ExcludeKeys, Func, Omit } from './misc';
 import { ActionCreatorsMap, ActionCreator, ActionFromCreators } from './redux-utils';
 
 type ActionDispatcher<Payload> = Func<Payload, void>;
@@ -57,7 +57,7 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
         dispatch: Dispatch<Action>,
         state: State,
     };
-    function connectAll<P>(Comp: React.ComponentType<P & ConnectAllProps>): React.ComponentType<P> {
+    function connectAll<P>(Comp: React.ComponentType<P & ConnectAllProps>): React.ComponentType<Omit<P & ConnectAllProps, 'state' | 'dispatch'>> {
         return connectReactRedux(state => ({ state }))(Comp as any) as any;
     }
 

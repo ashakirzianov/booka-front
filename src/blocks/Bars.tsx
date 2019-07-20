@@ -1,0 +1,34 @@
+import * as React from 'react';
+import { Props, point } from './common';
+import { Themeable, colors, themed } from './connect';
+import { FadeIn } from './Animations';
+import { defaults } from './defaults';
+
+export type BarProps = {
+    open: boolean,
+};
+function bar(top: boolean) {
+    return function Bar(props: Props<Themeable<BarProps>>) {
+        return <FadeIn visible={props.open}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                width: '100%',
+                height: point(defaults.headerHeight),
+                position: 'fixed',
+                top: top ? 0 : undefined,
+                bottom: !top ? 0 : undefined,
+                left: 0,
+                zIndex: 5,
+                boxShadow: `0px 0px 2px ${colors(props).shadow}`,
+                backgroundColor: colors(props).secondary,
+            }}>
+                {props.children}
+            </div>
+        </FadeIn >;
+    };
+}
+
+export const TopBar = themed(bar(true));
+export const BottomBar = themed(bar(false));
