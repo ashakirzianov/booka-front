@@ -108,3 +108,11 @@ function LayerC(props: Props<Themeable>) {
     </Column>;
 }
 export const Layer = themed(LayerC);
+
+export function EmptyLine() {
+    return <Row
+        style={{
+            height: point(defaults.headerHeight),
+        }}
+    />;
+}

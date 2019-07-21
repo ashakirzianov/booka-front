@@ -5,6 +5,7 @@ import {
     Comp, Row, SafeAreaView, Column, TextButton,
 } from '../blocks';
 import { actionCreators } from '../core';
+import { EmptyLine } from '../blocks/Basics.native';
 
 type BookItemProps = {
     meta: BookInfo,
@@ -23,6 +24,7 @@ function BookItem({ meta, id }: BookItemProps) {
 export const LibraryComp: Comp<Library> = (props =>
     <SafeAreaView>
         <Column>
+            <EmptyLine />
             {
                 Object.keys(props.books).map(
                     id =>
@@ -33,6 +35,7 @@ export const LibraryComp: Comp<Library> = (props =>
                         />
                 )
             }
+            <EmptyLine />
         </Column>
     </SafeAreaView>
 );

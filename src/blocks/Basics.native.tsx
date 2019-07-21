@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Text, ActivityIndicator, TouchableWithoutFeedback, View } from 'react-native';
+import { Text, ActivityIndicator, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
 
 import { Themeable, colors, themed } from './connect';
 import { TextLineProps, ClickableProps } from './Basics';
 import { Column, Row } from './Layout';
 import { defaults } from './defaults';
-import { Props } from './common';
+import { Props, point } from './common';
 import { platformValue } from '../utils';
 
 function TextLineC(props: Themeable<TextLineProps>) {
@@ -93,3 +93,13 @@ function LayerC(props: Props<Themeable>) {
     </Column>;
 }
 export const Layer = themed(LayerC);
+
+export function EmptyLine() {
+    return <SafeAreaView>
+        <Row
+            style={{
+                height: point(defaults.headerHeight),
+            }}
+        />
+    </SafeAreaView>;
+}

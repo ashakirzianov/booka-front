@@ -2,10 +2,7 @@
 export * from './connect';
 
 export * from './common';
-export {
-    TextLine, Layer, Clickable, FullScreenActivityIndicator,
-    Line, Separator, Tab,
-} from './Basics';
+export * from './Basics';
 export * from './Bars';
 export * from './Buttons';
 export * from './Modal';

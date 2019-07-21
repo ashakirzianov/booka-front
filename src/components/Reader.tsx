@@ -6,7 +6,7 @@ import {
 import {
     Comp, Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    percent, SafeAreaView, Scroll, Clickable, BorderButton,
+    percent, Scroll, Clickable, BorderButton, EmptyLine,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -15,7 +15,6 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
-import { defaults } from '../blocks/defaults';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -152,12 +151,6 @@ const PathLink: Comp<PathLinkProps> = (props =>
             />
         </Row>
 );
-
-function EmptyLine() {
-    return <SafeAreaView>
-        <Row style={{ height: point(defaults.headerHeight) }} />
-    </SafeAreaView>;
-}
 
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
