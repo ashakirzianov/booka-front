@@ -11,7 +11,7 @@ import { ModalProps } from './Modal';
 
 export { Layer } from './Basics.native';
 
-export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
+export function Modal({ theme, open, title, toggle, children }: Props<ModalProps>) {
     return <NativeModal
         visible={open}
         animationType='slide'
@@ -31,6 +31,7 @@ export function Modal({ open, title, toggle, children }: Props<ModalProps>) {
                         left: 0,
                     }}>
                         <IconButton
+                            theme={theme}
                             onClick={toggle}
                             icon='close'
                         />

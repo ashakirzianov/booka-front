@@ -10,13 +10,13 @@ import { Themeable, themed } from './connect';
 import { defaults } from './defaults';
 import { Column, Row } from './Layout';
 
-export type ModalProps = {
+export type ModalProps = Themeable<{
     open: boolean,
     title?: string,
     toggle: Callback<void>,
-};
+}>;
 
-function ModalC(props: Props<Themeable<ModalProps>>) {
+function ModalC(props: Props<ModalProps>) {
     return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{
@@ -50,7 +50,11 @@ function ModalC(props: Props<Themeable<ModalProps>>) {
                                 top: 0, left: 0, bottom: 0, right: 0,
                                 justifyContent: 'center',
                             }}>
-                                <IconButton onClick={props.toggle} icon='close' />
+                                <IconButton
+                                    theme={props.theme}
+                                    onClick={props.toggle}
+                                    icon='close'
+                                />
                             </Column>
                             <Column style={{
                                 justifyContent: 'center',

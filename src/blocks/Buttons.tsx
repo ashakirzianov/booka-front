@@ -1,27 +1,24 @@
 import * as React from 'react';
 
 // TODO: review imports
-import { Action, actionToUrl } from '../core';
-import { App, PaletteColor, PaletteName } from '../model';
+import { PaletteColor, PaletteName } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { Callback, point, Props } from './common';
 import { IconName } from './Icons.common';
 import { Column, Row } from './Layout';
 import { Icon } from './Icons';
-import { connectAll, colors } from './connect';
+import { colors, Themeable } from './connect';
 import { Hyperlink } from './Web';
 
-export type ButtonProps = {
-    state: App,
-    dispatch: Callback<Action>,
-    action?: Action,
+export type ButtonProps<T> = T & Themeable<{
+    href?: string,
     onClick?: Callback<void>,
-};
+}>;
 
-export type TextButtonProps = ButtonProps & TextProps & {
+export type TextButtonProps = ButtonProps<TextProps & {
     text: string,
-};
-function TextButtonC(props: TextButtonProps) {
+}>;
+export function TextButton(props: TextButtonProps) {
     return <Button {...props}>
         <TextLine
             text={props.text}
@@ -32,40 +29,38 @@ function TextButtonC(props: TextButtonProps) {
         />
     </Button>;
 }
-export const TextButton = connectAll(TextButtonC);
 
-export type IconButtonProps = ButtonProps & {
+export type IconButtonProps = ButtonProps<{
     icon: IconName,
-};
-function IconButtonC(props: IconButtonProps) {
+}>;
+export function IconButton(props: IconButtonProps) {
     return <Button
         {...props}
     >
         <Column style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
-                color={colors(props.state).accent}
-                hoverColor={colors(props.state).highlight}
+                color={colors(props).accent}
+                hoverColor={colors(props).highlight}
                 size={24}
             />
         </Column>
     </Button>;
 }
-export const IconButton = connectAll(IconButtonC);
 
-export type TagButtonProps = ButtonProps & {
+export type TagButtonProps = ButtonProps<{
     text: string,
     color: PaletteColor,
     backgroundColor: PaletteColor,
     borderColor?: PaletteColor,
-};
-function TagButtonC(props: TagButtonProps) {
+}>;
+export function TagButton(props: TagButtonProps) {
     return <Button {...props}>
         <Column style={{
             justifyContent: 'center',
-            backgroundColor: colors(props.state)[props.backgroundColor],
+            backgroundColor: colors(props)[props.backgroundColor],
             borderWidth: props.borderColor ? 1 : undefined,
-            borderColor: colors(props.state)[props.borderColor || props.backgroundColor],
+            borderColor: colors(props)[props.borderColor || props.backgroundColor],
             borderRadius: 50,
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
@@ -81,14 +76,13 @@ function TagButtonC(props: TagButtonProps) {
         </Column>
     </Button>;
 }
-export const TagButton = connectAll(TagButtonC);
 
-function BorderButtonC(props: TextButtonProps) {
+export function BorderButton(props: TextButtonProps) {
     return <Button {...props}>
         <div
             style={{
                 borderStyle: 'solid',
-                fontSize: props.state.theme.fontSizes.normal,
+                fontSize: props.theme.fontSizes.normal,
                 borderRadius: 10,
                 padding: point(0.3),
             }}
@@ -103,14 +97,13 @@ function BorderButtonC(props: TextButtonProps) {
         </div>
     </Button>;
 }
-export const BorderButton = connectAll(BorderButtonC);
 
-export type PaletteButtonProps = ButtonProps & {
+export type PaletteButtonProps = ButtonProps<{
     text: string,
     palette: PaletteName,
-};
-function PaletteButtonC(props: PaletteButtonProps) {
-    const theme = props.state.theme;
+}>;
+export function PaletteButton(props: PaletteButtonProps) {
+    const theme = props.theme;
     const cols = theme.palettes[theme.currentPalette].colors;
     return <Button {...props}>
         <Column style={{
@@ -138,12 +131,11 @@ function PaletteButtonC(props: PaletteButtonProps) {
         </Column>
     </Button>;
 }
-export const PaletteButton = connectAll(PaletteButtonC);
 
-export type StretchTextButtonProps = ButtonProps & {
+export type StretchTextButtonProps = ButtonProps<{
     texts: string[],
-};
-function StretchTextButtonC(props: StretchTextButtonProps) {
+}>;
+export function StretchTextButton(props: StretchTextButtonProps) {
     return <Button {...props}>
         <div style={{
             justifyContent: 'space-between',
@@ -154,33 +146,24 @@ function StretchTextButtonC(props: StretchTextButtonProps) {
         </div>
     </Button>;
 }
-export const StretchTextButton = connectAll(StretchTextButtonC);
 
 // =================================================
 
-// TODO: extract to Atoms ?
-function Button({ action, state, dispatch, onClick, children }: Props<ButtonProps>) {
-    const to = action && actionToUrl(action, state);
+// TODO: remove
+function Button({ href, onClick, theme, children }: Props<ButtonProps<{}>>) {
     return <Hyperlink
-        href={to}
+        href={href}
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
-            color: colors(state).accent,
-            borderColor: colors(state).accent,
+            color: colors({ theme }).accent,
+            borderColor: colors({ theme }).accent,
             ':hover': {
-                color: colors(state).highlight,
-                borderColor: colors(state).highlight,
+                color: colors({ theme }).highlight,
+                borderColor: colors({ theme }).highlight,
             },
         }}
-        onClick={() => {
-            if (action) {
-                dispatch(action);
-            }
-            if (onClick) {
-                onClick();
-            }
-        }}
+        onClick={onClick}
     >
         {children}
     </Hyperlink>;

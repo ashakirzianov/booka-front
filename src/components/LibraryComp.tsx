@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
 import {
-    Comp, Row, SafeAreaView, Column, TextButton,
+    Comp, Row, SafeAreaView, Column, EmptyLine,
 } from '../blocks';
 import { actionCreators } from '../core';
-import { EmptyLine } from '../blocks/Basics.native';
+import { TextButton } from './Connected';
 
 type BookItemProps = {
     meta: BookInfo,

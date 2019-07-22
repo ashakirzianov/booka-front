@@ -6,7 +6,7 @@ import {
 import {
     Comp, Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    percent, Scroll, Clickable, BorderButton, EmptyLine,
+    percent, Scroll, Clickable, EmptyLine,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -15,6 +15,7 @@ import {
 import { BookSelection } from './Reader.common';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
+import { BorderButton } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {

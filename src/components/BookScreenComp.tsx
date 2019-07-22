@@ -3,8 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal,
     Comp, WithPopover, Line, Column,
-    Separator, TextLine, TagButton,
-    point, IconButton, TextButton, PaletteButton,
+    Separator, TextLine, point,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -15,6 +14,7 @@ import { BookNodesComp } from './Reader';
 import { BookComp } from './BookComp';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
+import { TagButton, IconButton, TextButton, PaletteButton } from './Connected';
 
 export const BookScreenComp: Comp<BookScreen> = (props =>
     <>

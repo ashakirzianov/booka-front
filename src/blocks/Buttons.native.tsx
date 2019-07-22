@@ -29,8 +29,8 @@ function IconButtonC(props: IconButtonProps) {
         <Column style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
-                color={colors(props.state).accent}
-                hoverColor={colors(props.state).highlight}
+                color={colors(props).accent}
+                hoverColor={colors(props).highlight}
                 size={24}
             />
         </Column>
@@ -42,9 +42,9 @@ function TagButtonC(props: TagButtonProps) {
     return <Button {...props}>
         <Column style={{
             justifyContent: 'center',
-            backgroundColor: colors(props.state)[props.backgroundColor],
+            backgroundColor: colors(props)[props.backgroundColor],
             borderWidth: props.borderColor ? 1 : undefined,
-            borderColor: colors(props.state)[props.borderColor || props.backgroundColor],
+            borderColor: colors(props)[props.borderColor || props.backgroundColor],
             borderRadius: 50,
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
@@ -66,9 +66,9 @@ function BorderButtonC(props: TextButtonProps) {
     return <Button {...props}>
         <View style={{
             borderStyle: 'solid',
-            borderColor: colors(props.state).accent,
-            color: colors(props.state).accent,
-            fontSize: props.state.theme.fontSizes.normal,
+            borderColor: colors(props).accent,
+            color: colors(props).accent,
+            fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
             padding: point(0.3),
         }}>
@@ -85,7 +85,7 @@ function BorderButtonC(props: TextButtonProps) {
 export const BorderButton = connectAll(BorderButtonC);
 
 function PaletteButtonC(props: PaletteButtonProps) {
-    const theme = props.state.theme;
+    const theme = props.theme;
     const cols = theme.palettes[theme.currentPalette].colors;
     return <Button {...props}>
         <Column style={{
@@ -127,31 +127,17 @@ export const StretchTextButton = connectAll(StretchTextButtonC);
 
 // =================================================
 
-function Link({ action, state, dispatch, onClick, children }: Props<ButtonProps>) {
+function Link({ onClick, children }: Props<ButtonProps<{}>>) {
     return <Text
-        onPress={() => {
-            if (action) {
-                dispatch(action);
-            }
-            if (onClick) {
-                onClick();
-            }
-        }}
+        onPress={onClick}
     >
         {children}
     </Text>;
 }
 
-function Button({ action, state, dispatch, onClick, children }: Props<ButtonProps>) {
+function Button({ onClick, children }: Props<ButtonProps<{}>>) {
     return <View
-        onTouchEnd={() => {
-            if (action) {
-                dispatch(action);
-            }
-            if (onClick) {
-                onClick();
-            }
-        }}
+        onTouchEnd={onClick}
     >
         {children}
     </View>;

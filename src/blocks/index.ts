@@ -4,7 +4,6 @@ export * from './connect';
 export * from './common';
 export * from './Basics';
 export * from './Bars';
-export * from './Buttons';
 export * from './Modal';
 export * from './Popover';
 export * from './Layout';
