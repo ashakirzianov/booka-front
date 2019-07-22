@@ -88,8 +88,6 @@ type TocButtonProps = { current: number, total: number };
 function TocButton(props: TocButtonProps) {
     return <TagButton
         text={`${props.current} of ${props.total}`}
-        color='secondary'
-        backgroundColor='accent'
         action={actionCreators.toggleToc()}
     />;
 }

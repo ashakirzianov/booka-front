@@ -11,7 +11,11 @@ export type HyperlinkProps = {
 function HyperlinkC(props: Props<HyperlinkProps>) {
     return <a
         href={props.href}
-        style={props.style}
+        style={{
+            ...props.style,
+            textDecoration: 'none',
+            cursor: 'pointer',
+        }}
         onClick={e => {
             e.stopPropagation();
             if (!isOpenNewTabEvent(e)) {

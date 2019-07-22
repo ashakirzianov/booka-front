@@ -58,7 +58,7 @@ export const defaultTheme: Theme = {
                 primary: '#f9f3e9',
                 secondary: '#e6e0d6',
                 accent: '#987',
-                highlight: '#321',
+                highlight: '#000',
                 shadow: '#000',
             },
             highlights: {

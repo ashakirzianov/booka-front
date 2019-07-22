@@ -42,9 +42,9 @@ function TagButtonC(props: TagButtonProps) {
     return <Button {...props}>
         <Column style={{
             justifyContent: 'center',
-            backgroundColor: colors(props)[props.backgroundColor],
-            borderWidth: props.borderColor ? 1 : undefined,
-            borderColor: colors(props)[props.borderColor || props.backgroundColor],
+            backgroundColor: colors(props).secondary,
+            borderWidth: 1,
+            borderColor: colors(props).secondary,
             borderRadius: 50,
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
@@ -54,7 +54,7 @@ function TagButtonC(props: TagButtonProps) {
                     text={props.text}
                     size='smallest'
                     family='menu'
-                    color={props.color}
+                    color='accent'
                 />
             </Row>
         </Column>

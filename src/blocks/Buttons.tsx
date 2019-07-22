@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 // TODO: review imports
-import { PaletteColor, PaletteName } from '../model';
+import { PaletteName } from '../model';
 import { TextLine, TextProps } from './Basics';
-import { Callback, point, Props } from './common';
+import { Callback, point } from './common';
 import { IconName } from './Icons.common';
 import { Column, Row } from './Layout';
 import { Icon } from './Icons';
@@ -19,7 +19,16 @@ export type TextButtonProps = ButtonProps<TextProps & {
     text: string,
 }>;
 export function TextButton(props: TextButtonProps) {
-    return <Button {...props}>
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: colors(props).accent,
+            ':hover': {
+                color: colors(props).highlight,
+            },
+        }}
+    >
         <TextLine
             text={props.text}
             family={props.family}
@@ -27,15 +36,22 @@ export function TextButton(props: TextButtonProps) {
             fixedSize={props.fixedSize} // TODO: remove this
             style={props.style}
         />
-    </Button>;
+    </Hyperlink>;
 }
 
 export type IconButtonProps = ButtonProps<{
     icon: IconName,
 }>;
 export function IconButton(props: IconButtonProps) {
-    return <Button
-        {...props}
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: colors(props).accent,
+            ':hover': {
+                color: colors(props).highlight,
+            },
+        }}
     >
         <Column style={{ justifyContent: 'center' }}>
             <Icon
@@ -45,23 +61,28 @@ export function IconButton(props: IconButtonProps) {
                 size={24}
             />
         </Column>
-    </Button>;
+    </Hyperlink>;
 }
 
 export type TagButtonProps = ButtonProps<{
     text: string,
-    color: PaletteColor,
-    backgroundColor: PaletteColor,
-    borderColor?: PaletteColor,
 }>;
 export function TagButton(props: TagButtonProps) {
-    return <Button {...props}>
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: colors(props).secondary,
+            backgroundColor: colors(props).accent,
+            borderWidth: 1,
+            borderRadius: 50,
+            ':hover': {
+                backgroundColor: colors(props).highlight,
+            },
+        }}
+    >
         <Column style={{
             justifyContent: 'center',
-            backgroundColor: colors(props)[props.backgroundColor],
-            borderWidth: props.borderColor ? 1 : undefined,
-            borderColor: colors(props)[props.borderColor || props.backgroundColor],
-            borderRadius: 50,
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
         }}>
@@ -70,15 +91,25 @@ export function TagButton(props: TagButtonProps) {
                     text={props.text}
                     size='smallest'
                     family='menu'
-                    color={props.color}
                 />
             </Row>
         </Column>
-    </Button>;
+    </Hyperlink>;
 }
 
 export function BorderButton(props: TextButtonProps) {
-    return <Button {...props}>
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: colors(props).accent,
+            borderColor: colors(props).accent,
+            ':hover': {
+                color: colors(props).highlight,
+                borderColor: colors(props).highlight,
+            },
+        }}
+    >
         <div
             style={{
                 borderStyle: 'solid',
@@ -95,7 +126,7 @@ export function BorderButton(props: TextButtonProps) {
                 style={props.style}
             />
         </div>
-    </Button>;
+    </Hyperlink>;
 }
 
 export type PaletteButtonProps = ButtonProps<{
@@ -104,8 +135,18 @@ export type PaletteButtonProps = ButtonProps<{
 }>;
 export function PaletteButton(props: PaletteButtonProps) {
     const theme = props.theme;
-    const cols = theme.palettes[theme.currentPalette].colors;
-    return <Button {...props}>
+    const cols = theme.palettes[props.palette].colors;
+    const selected = props.palette === theme.currentPalette;
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: cols.text,
+            ':hover': {
+                color: cols.highlight,
+            },
+        }}
+    >
         <Column style={{
             width: 50,
             height: 50,
@@ -113,30 +154,37 @@ export function PaletteButton(props: PaletteButtonProps) {
             backgroundColor: cols.primary,
             borderRadius: 50,
             borderColor: cols.highlight,
-            borderWidth: props.palette === theme.currentPalette ? 3 : 0,
+            borderWidth: selected ? 3 : 0,
             shadowColor: cols.shadow,
             shadowRadius: 5,
-            ':hover': {
-                borderWidth: 3,
-            },
         }}>
             <Row style={{ justifyContent: 'center' }}>
                 <span style={{
-                    color: cols.text,
                     fontSize: theme.fontSizes.normal,
                 }}>
                     {props.text}
                 </span>
             </Row>
         </Column>
-    </Button>;
+    </Hyperlink>;
 }
 
 export type StretchTextButtonProps = ButtonProps<{
     texts: string[],
 }>;
 export function StretchTextButton(props: StretchTextButtonProps) {
-    return <Button {...props}>
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+        style={{
+            color: colors(props).accent,
+            borderColor: colors(props).accent,
+            ':hover': {
+                color: colors(props).highlight,
+                borderColor: colors(props).highlight,
+            },
+        }}
+    >
         <div style={{
             justifyContent: 'space-between',
             flexDirection: 'row',
@@ -144,53 +192,5 @@ export function StretchTextButton(props: StretchTextButtonProps) {
         >
             {props.texts.map((t, idx) => <TextLine key={idx} text={t} />)}
         </div>
-    </Button>;
-}
-
-// =================================================
-
-// TODO: remove
-function Button({ href, onClick, theme, children }: Props<ButtonProps<{}>>) {
-    return <Hyperlink
-        href={href}
-        style={{
-            textDecoration: 'none',
-            cursor: 'pointer',
-            color: colors({ theme }).accent,
-            borderColor: colors({ theme }).accent,
-            ':hover': {
-                color: colors({ theme }).highlight,
-                borderColor: colors({ theme }).highlight,
-            },
-        }}
-        onClick={onClick}
-    >
-        {children}
     </Hyperlink>;
 }
-
-// TODO: remove ?
-// // TODO: better naming ?
-// type LinkType = {
-//     to: string | undefined,
-//     onClick: Callback<React.MouseEvent>,
-// };
-// function buildLink({ action, state, dispatch, onClick }: ButtonProps): LinkType {
-//     return {
-//         to: action
-//             ? actionToUrl(action, state)
-//             : undefined,
-//         onClick: e => {
-//             e.stopPropagation();
-//             if (!isOpenNewTabEvent(e)) {
-//                 e.preventDefault();
-//                 if (action) {
-//                     dispatch(action);
-//                 }
-//                 if (onClick) {
-//                     onClick();
-//                 }
-//             }
-//         },
-//     };
-// }
