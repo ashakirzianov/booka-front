@@ -182,10 +182,8 @@ const FontScaleButton = connectActions('incrementScale')<{
     }}>
         <TextButton
             text='Abc'
-            textProps={{
-                size: props.size,
-                color: 'accent',
-            }}
+            size={props.size}
+            color='accent'
             action={actionCreators
                 .incrementScale(props.increment)}
         />

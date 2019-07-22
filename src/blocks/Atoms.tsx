@@ -7,7 +7,7 @@ import { Color } from '../model';
 
 import { Props, Callback } from './common';
 import { RefHandler } from './Scroll';
-import { isOpenNewTabEvent } from './utils';
+import { Hyperlink } from './Web';
 
 export type TextSpanStyle = {
     color?: string,
@@ -49,23 +49,15 @@ export type TextLinkProps = {
     href?: string,
     onClick?: Callback<void>,
 };
-export function TextLink({ href: to, onClick, children }: Props<TextLinkProps>) {
-    return <a
-        href={to}
+export function TextLink({ href, onClick, children }: Props<TextLinkProps>) {
+    return <Hyperlink
+        href={href}
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
         }}
-        onClick={e => {
-            e.stopPropagation();
-            if (!isOpenNewTabEvent(e)) {
-                e.preventDefault();
-                if (onClick) {
-                    onClick();
-                }
-            }
-        }}
+        onClick={onClick}
     >
         {children}
-    </a>;
+    </Hyperlink>;
 }

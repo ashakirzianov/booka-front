@@ -189,7 +189,7 @@ export function distinct<T>(arr: T[]): T[] {
 export function uniqueKey() {
     return [0, 1, 2, 3, 4, 5]
         // tslint:disable-next-line: no-bitwise
-        .map(() => (Math.random() * 16 | 0).toString())
+        .map(() => (Math.random() * 16 | 0).toString(16))
         .join('')
         ;
 }

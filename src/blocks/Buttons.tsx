@@ -8,8 +8,8 @@ import { Callback, point, Props } from './common';
 import { IconName } from './Icons.common';
 import { Column, Row } from './Layout';
 import { Icon } from './Icons';
-import { isOpenNewTabEvent } from './utils';
 import { connectAll, colors } from './connect';
+import { Hyperlink } from './Web';
 
 export type ButtonProps = {
     state: App,
@@ -18,15 +18,17 @@ export type ButtonProps = {
     onClick?: Callback<void>,
 };
 
-export type TextButtonProps = ButtonProps & {
+export type TextButtonProps = ButtonProps & TextProps & {
     text: string,
-    textProps?: TextProps,
 };
 function TextButtonC(props: TextButtonProps) {
     return <Button {...props}>
         <TextLine
             text={props.text}
-            {...props.textProps}
+            family={props.family}
+            size={props.size}
+            fixedSize={props.fixedSize} // TODO: remove this
+            style={props.style}
         />
     </Button>;
 }
@@ -83,21 +85,20 @@ export const TagButton = connectAll(TagButtonC);
 
 function BorderButtonC(props: TextButtonProps) {
     return <Button {...props}>
-        <div style={{
-            borderStyle: 'solid',
-            borderColor: colors(props.state).accent,
-            color: colors(props.state).accent,
-            fontSize: props.state.theme.fontSizes.normal,
-            borderRadius: 10,
-            padding: point(0.3),
-            ':hover': {
-                borderColor: colors(props.state).highlight,
-                color: colors(props.state).highlight,
-            },
-        }}>
+        <div
+            style={{
+                borderStyle: 'solid',
+                fontSize: props.state.theme.fontSizes.normal,
+                borderRadius: 10,
+                padding: point(0.3),
+            }}
+        >
             <TextLine
                 text={props.text}
-                {...props.textProps}
+                family={props.family}
+                size={props.size}
+                fixedSize={props.fixedSize} // TODO: remove this
+                style={props.style}
             />
         </div>
     </Button>;
@@ -157,29 +158,32 @@ export const StretchTextButton = connectAll(StretchTextButtonC);
 
 // =================================================
 
+// TODO: extract to Atoms ?
 function Button({ action, state, dispatch, onClick, children }: Props<ButtonProps>) {
     const to = action && actionToUrl(action, state);
-    return <a
+    return <Hyperlink
         href={to}
         style={{
             textDecoration: 'none',
             cursor: 'pointer',
+            color: colors(state).accent,
+            borderColor: colors(state).accent,
+            ':hover': {
+                color: colors(state).highlight,
+                borderColor: colors(state).highlight,
+            },
         }}
-        onClick={e => {
-            e.stopPropagation();
-            if (!isOpenNewTabEvent(e)) {
-                e.preventDefault();
-                if (action) {
-                    dispatch(action);
-                }
-                if (onClick) {
-                    onClick();
-                }
+        onClick={() => {
+            if (action) {
+                dispatch(action);
+            }
+            if (onClick) {
+                onClick();
             }
         }}
     >
         {children}
-    </a>;
+    </Hyperlink>;
 }
 
 // TODO: remove ?
