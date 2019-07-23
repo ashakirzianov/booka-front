@@ -12,9 +12,9 @@ function HyperlinkC(props: Props<HyperlinkProps>) {
     return <a
         href={props.href}
         style={{
-            ...props.style,
             textDecoration: 'none',
             cursor: 'pointer',
+            ...props.style,
         }}
         onClick={e => {
             e.stopPropagation();

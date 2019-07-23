@@ -6,6 +6,7 @@ import { point } from './common';
 
 export type RichTextStyle = {
     color?: string,
+    hoverColor?: string,
     background?: string,
     fontSize?: number,
     fontFamily?: string,
@@ -41,7 +42,16 @@ type TextSegment = RichTextStyle & {
 };
 
 function TextSegmentComp(props: TextSegment) {
-    const text = <TextSpan
+    const text = props.superLink
+        ? <TextLink
+            {...props.superLink}
+            color={props.color}
+            hoverColor={props.hoverColor}
+        >
+            {props.text}
+        </TextLink>
+        : props.text;
+    const textSpan = <TextSpan
         dropCaps={props.dropCaps}
         refHandler={props.refHandler}
         background={props.background}
@@ -61,16 +71,10 @@ function TextSegmentComp(props: TextSegment) {
                 display: 'block',
             }),
         }}>
-        {props.text}
+        {text}
     </TextSpan>;
 
-    if (props.superLink) {
-        return <TextLink {...props.superLink}>
-            {text}
-        </TextLink>;
-    } else {
-        return text;
-    }
+    return textSpan;
 }
 
 function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle, number>>): TextSegment[] {

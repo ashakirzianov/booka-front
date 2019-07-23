@@ -73,10 +73,11 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
         },
     }];
 
-    const allRanges = spanRanges
+    const allRanges = ([] as RenderingRange[])
+        .concat(defaultStyles)
+        .concat(spanRanges)
         .concat(dropCaseRanges)
         .concat(colorizationRanges)
-        .concat(defaultStyles)
         ;
     const augmented = allRanges.map(r => {
         const path = props.path.concat(r.range.start);
@@ -156,10 +157,11 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
                     onClick: () => props.openFootnote(span.id),
                 },
                 color: colors(props).accent,
+                hoverColor: colors(props).highlight,
             },
         };
         return {
-            ranges: [current].concat(inside.ranges),
+            ranges: inside.ranges.concat(current),
             length: inside.length,
         };
     } else {

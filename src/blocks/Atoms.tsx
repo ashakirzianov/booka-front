@@ -46,15 +46,20 @@ export function TextSpan(props: Props<TextSpanProps>) {
 }
 
 export type TextLinkProps = {
+    color?: string,
+    hoverColor?: string,
     href?: string,
     onClick?: Callback<void>,
 };
-export function TextLink({ href, onClick, children }: Props<TextLinkProps>) {
+export function TextLink({ color, hoverColor, href, onClick, children }: Props<TextLinkProps>) {
     return <Hyperlink
         href={href}
         style={{
-            textDecoration: 'none',
-            cursor: 'pointer',
+            color: color,
+            ':hover': {
+                color: hoverColor,
+                textDecoration: 'solid',
+            },
         }}
         onClick={onClick}
     >
