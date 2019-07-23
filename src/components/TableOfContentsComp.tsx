@@ -18,7 +18,7 @@ type TocItemProps = TableOfContentsItem & {
 function TocItemComp(props: TocItemProps) {
     return <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <Column style={{ flex: 1 }}>
+        <Column>
             <StretchTextButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
@@ -34,7 +34,7 @@ function TocItemComp(props: TocItemProps) {
 export function TableOfContentsComp(props: TableOfContents) {
     const { id, items } = props;
     const maxLevel = items.reduce((max, i) => Math.max(max, i.level), 0);
-    return <Column style={{ margin: point(2) }}>
+    return <Column margin={point(2)}>
         {items.map(i =>
             <TocItemComp
                 key={i.path.join('-')}

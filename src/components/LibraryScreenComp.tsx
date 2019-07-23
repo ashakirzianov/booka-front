@@ -1,14 +1,11 @@
 import * as React from 'react';
 
 import { LibraryScreen } from '../model';
-import { Comp, TextLine, Row, percent } from '../blocks';
+import { Comp, TextLine, Row } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 
 export const LibraryScreenHeader: Comp = (props =>
-    <Row style={{
-        width: percent(100),
-        justifyContent: 'center',
-    }}>
+    <Row centered fullWidth>
         <TextLine text='Library' />
     </Row>
 );

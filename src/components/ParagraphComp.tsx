@@ -19,7 +19,7 @@ export type ParagraphProps = {
 export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps>(function ParagraphCompC(props) {
     return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
         <SpanComp
-            {...props}
+            {...props} // TODO: remove ?
             path={props.path.concat([0])}
             span={props.p.span}
             colorization={props.highlights && props.highlights.quote && {

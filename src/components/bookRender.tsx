@@ -71,10 +71,7 @@ function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
 }
 
 const ChapterTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
+    <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text && props.text.toLocaleUpperCase()}
@@ -88,10 +85,7 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
 );
 
 const PartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
+    <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text}
@@ -106,10 +100,7 @@ const PartTitle: Comp<{ text?: string }> = (props =>
 );
 
 const SubpartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'flex-start',
-        width: '100%',
-    }}>
+    <Row fullWidth>
         <TextLine
             color='text'
             text={props.text}
@@ -122,7 +113,7 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
 );
 
 const BookTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{ justifyContent: 'center', width: '100%' }}>
+    <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text}

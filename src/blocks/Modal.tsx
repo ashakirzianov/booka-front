@@ -8,7 +8,7 @@ import { OverlayBox } from './OverlayBox';
 import { Callback, Props, point } from './common';
 import { Themeable, themed } from './connect';
 import { defaults } from './defaults';
-import { Column, Row } from './Layout';
+import { View } from 'react-native';
 
 export type ModalProps = Themeable<{
     open: boolean,
@@ -37,15 +37,16 @@ function ModalC(props: Props<ModalProps>) {
                         entered: state === 'entered',
                     }}
                     theme={props.theme}>
-                    <Column style={{
+                    <View style={{
                         justifyContent: 'center',
                         height: point(defaults.headerHeight),
                     }}>
-                        <Row style={{
+                        <View style={{
                             flex: 1,
+                            flexDirection: 'row',
                             justifyContent: 'center',
                         }}>
-                            <Column style={{
+                            <View style={{
                                 position: 'absolute',
                                 top: 0, left: 0, bottom: 0, right: 0,
                                 justifyContent: 'center',
@@ -55,18 +56,18 @@ function ModalC(props: Props<ModalProps>) {
                                     onClick={props.toggle}
                                     icon='close'
                                 />
-                            </Column>
-                            <Column style={{
+                            </View>
+                            <View style={{
                                 justifyContent: 'center',
                             }}>
                                 <TextLine
                                     color='text'
                                     text={props.title}
                                 />
-                            </Column>
-                            <Column />
-                        </Row>
-                    </Column>
+                            </View>
+                            <View />
+                        </View>
+                    </View>
                     <div style={{
                         alignItems: 'stretch',
                         width: '100%',

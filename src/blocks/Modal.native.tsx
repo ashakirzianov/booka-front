@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import {
-    SafeAreaView, Modal as NativeModal,
+    SafeAreaView, Modal as NativeModal, View,
 } from 'react-native';
-import { Column, Row } from './Layout';
 import { percent, Props } from './common';
 import { IconButton } from './Buttons';
 import { TextLine } from './Basics';
@@ -18,14 +17,15 @@ export function Modal({ theme, open, title, toggle, children }: Props<ModalProps
         onRequestClose={toggle}
     >
         <SafeAreaView>
-            <Column style={{
+            <View style={{
                 width: percent(100),
             }}>
-                <Row style={{
+                <View style={{
+                    flexDirection: 'row',
                     justifyContent: 'center',
                     height: percent(5),
                 }}>
-                    <Column style={{
+                    <View style={{
                         justifyContent: 'center',
                         position: 'absolute',
                         left: 0,
@@ -35,18 +35,23 @@ export function Modal({ theme, open, title, toggle, children }: Props<ModalProps
                             onClick={toggle}
                             icon='close'
                         />
-                    </Column>
-                    <Column style={{ justifyContent: 'center' }}>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
                         <TextLine
                             text={title}
                             size='normal'
                         />
-                    </Column>
-                </Row>
-                <Row style={{
-                    height: percent(95),
-                }}>{children}</Row>
-            </Column>
+                    </View>
+                </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        height: percent(95),
+                    }}
+                >
+                    {children}
+                </View>
+            </View>
         </SafeAreaView>
     </NativeModal>;
 }

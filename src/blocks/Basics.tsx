@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import { Theme, PaletteColor, colors, fontSize } from '../model';
 import { Themeable, themed } from './connect';
-import { Column, Row } from './Layout';
 import { defaults } from './defaults';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { percent, point, Size, Props } from './common';
 import { platformValue } from '../utils';
 
@@ -38,22 +37,25 @@ function TextLineC(props: Themeable<TextLineProps>) {
 export const TextLine = themed(TextLineC);
 
 function FullScreenActivityIndicatorC(props: Themeable) {
-    return <Column style={{
-        position: 'fixed' as any,
-        top: 0, left: 0,
-        minHeight: '100%',
-        minWidth: '100%',
-        width: '100%',
-        height: '100%',
-        backgroundColor: defaults.semiTransparent,
-        justifyContent: 'center',
-        zIndex: 10,
-    }}>
+    return <View
+        style={{
+            position: 'fixed' as any,
+            flexDirection: 'column',
+            top: 0, left: 0,
+            minHeight: '100%',
+            minWidth: '100%',
+            width: '100%',
+            height: '100%',
+            backgroundColor: defaults.semiTransparent,
+            justifyContent: 'center',
+            zIndex: 10,
+        }}
+    >
         <ActivityIndicator
             size='large'
             color={colors(props.theme).primary}
         />
-    </Column>;
+    </View>;
 }
 export const FullScreenActivityIndicator = themed(FullScreenActivityIndicatorC);
 
@@ -67,12 +69,15 @@ export function Separator() {
 
 // TODO: remove ?
 export function Line(props: Props) {
-    return <Row style={{
-        width: '100%',
-        justifyContent: 'space-between',
-    }}>
+    return <View
+        style={{
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
+        }}
+    >
         {props.children}
-    </Row>;
+    </View>;
 }
 
 // TODO: remove ?
@@ -92,22 +97,25 @@ export function Tab() {
 
 // TODO: remove ?
 function LayerC(props: Props<Themeable>) {
-    return <Column style={{
-        position: 'absolute',
-        minHeight: '100%',
-        minWidth: '100%',
-        width: platformValue({ mobile: '100%' }),
-        height: platformValue({ mobile: '100%' }),
-        backgroundColor: colors(props.theme).primary,
-    }}>
+    return <View
+        style={{
+            position: 'absolute',
+            minHeight: '100%',
+            minWidth: '100%',
+            width: platformValue({ mobile: '100%' }),
+            height: platformValue({ mobile: '100%' }),
+            backgroundColor: colors(props.theme).primary,
+        }}
+    >
         {props.children}
-    </Column>;
+    </View>;
 }
 export const Layer = themed(LayerC);
 
 export function EmptyLine() {
-    return <Row
+    return <View
         style={{
+            flexDirection: 'row',
             height: point(defaults.headerHeight),
         }}
     />;

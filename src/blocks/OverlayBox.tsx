@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Props, percent, point } from './common';
 import { Themeable } from './connect';
-import { Column } from './Layout';
 import { defaults } from './defaults';
 import { colors } from '../model';
+import { View } from 'react-native';
 
 export type OverlayBoxProps = {
     animation?: {
@@ -11,7 +11,7 @@ export type OverlayBoxProps = {
     },
 };
 export function OverlayBox(props: Props<Themeable<OverlayBoxProps>>) {
-    return <Column style={{
+    return <View style={{
         alignSelf: 'center',
         backgroundColor: colors(props.theme).secondary,
         width: percent(100),
@@ -33,5 +33,5 @@ export function OverlayBox(props: Props<Themeable<OverlayBoxProps>>) {
         <div onClick={e => e.stopPropagation()}>
             {props.children}
         </div>
-    </Column>;
+    </View>;
 }

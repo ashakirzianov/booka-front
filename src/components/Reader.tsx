@@ -6,7 +6,7 @@ import {
 import {
     Comp, Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    percent, Scroll, Clickable, EmptyLine,
+    Scroll, Clickable, EmptyLine,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -100,18 +100,12 @@ export class Reader extends React.Component<ReaderProps> {
         return <Scroll
             onScroll={this.handleScroll}
         >
-            <Row style={{
-                maxWidth: point(50),
-            }}>
-                <Column style={{
-                    width: percent(100),
-                    padding: point(1),
-                    alignItems: 'center',
-                }}>
+            <Row maxWidth={point(50)} fullWidth aligned centered>
+                <Column fullWidth padding={point(1)} aligned centered>
                     <EmptyLine />
                     <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                     <Clickable onClick={this.props.toggleControls}>
-                        <Column>
+                        <Column centered>
                             {buildBook(volume, params)}
                         </Column>
                     </Clickable>
@@ -141,10 +135,7 @@ type PathLinkProps = {
 };
 const PathLink: Comp<PathLinkProps> = (props =>
     props.path === undefined ? null :
-        <Row style={{
-            justifyContent: 'center',
-            margin: point(1),
-        }}>
+        <Row centered margin={point(1)}>
             <BorderButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}

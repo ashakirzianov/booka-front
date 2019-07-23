@@ -57,21 +57,15 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
         currentPage = pagination.pageForPath(path);
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
-    return <Row style={{
-        position: 'relative',
-    }}>
-        <Column style={{
-            height: '100%', width: '100%',
-            justifyContent: 'center',
-        }}>
-            <Row style={{ justifyContent: 'center' }}>
+    return <Row>
+        <Column centered fullWidth fullHeight>
+            <Row centered>
                 <TocButton current={currentPage} total={total} />
             </Row>
         </Column>
-        <Column style={{
-            position: 'absolute',
-            right: 10, top: 0, height: '100%',
-            justifyContent: 'center',
+        <Column centered fullHeight absolutePosition={{
+            right: 10,
+            top: 0,
         }}>
             <TextLine
                 text={`${left} pages left`}
@@ -116,11 +110,7 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
         toggle={props.toggleToc}
         open={props.open}
     >
-        <Column style={{
-            overflow: 'scroll',
-            alignSelf: 'stretch',
-            flex: 1,
-        }}>
+        <Column scroll>
             <TableOfContentsComp {...props.toc} />
         </Column>
     </Modal>
@@ -141,7 +131,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
     >
         {
             !props.footnote ? null :
-                <Row style={{ overflow: 'scroll' }}>
+                <Row scroll>
                     <FootnoteComp {...props.footnote} />
                 </Row>
         }
@@ -149,9 +139,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
 );
 
 const ThemePicker: Comp = (props =>
-    <Column style={{
-        width: point(14),
-    }}>
+    <Column width={point(14)}>
         <FontScale />
         <Separator />
         <PalettePicker />
@@ -159,11 +147,8 @@ const ThemePicker: Comp = (props =>
 );
 
 const FontScale: Comp = (() =>
-    <Column style={{
-        justifyContent: 'center',
-        height: point(5),
-    }}>
-        <Row style={{ justifyContent: 'space-around' }}>
+    <Column centered height={point(5)}>
+        <Row centered>
             <FontScaleButton increment={-0.1} size='smallest' />
             <FontScaleButton increment={0.1} size='largest' />
         </Row>
@@ -174,9 +159,7 @@ const FontScaleButton = connectActions('incrementScale')<{
     increment: number,
     size: 'largest' | 'smallest',
 }>(props => {
-    return <Column style={{
-        justifyContent: 'center',
-    }}>
+    return <Column centered>
         <TextButton
             text='Abc'
             size={props.size}
@@ -188,11 +171,8 @@ const FontScaleButton = connectActions('incrementScale')<{
 });
 
 const PalettePicker: Comp = (() =>
-    <Column style={{
-        justifyContent: 'center',
-        height: point(5),
-    }}>
-        <Row style={{ justifyContent: 'space-around' }}>
+    <Column centered height={point(5)}>
+        <Row centered>
             <SelectPaletteButton name='light' text='L' />
             <SelectPaletteButton name='sepia' text='S' />
             <SelectPaletteButton name='dark' text='D' />

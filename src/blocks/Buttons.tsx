@@ -5,10 +5,10 @@ import { PaletteName, colors, fontSize } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { Callback, point } from './common';
 import { IconName } from './Icons.common';
-import { Column, Row } from './Layout';
 import { Icon } from './Icons';
 import { Themeable } from './connect';
 import { Hyperlink } from './Web';
+import { View } from 'react-native';
 
 export type ButtonProps<T> = T & Themeable<{
     href?: string,
@@ -52,14 +52,14 @@ export function IconButton(props: IconButtonProps) {
             },
         }}
     >
-        <Column style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
                 color={colors(props.theme).accent}
                 hoverColor={colors(props.theme).highlight}
                 size={24}
             />
-        </Column>
+        </View>
     </Hyperlink>;
 }
 
@@ -80,19 +80,23 @@ export function TagButton(props: TagButtonProps) {
             },
         }}
     >
-        <Column style={{
+        <View style={{
+            flexDirection: 'column',
             justifyContent: 'center',
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
         }}>
-            <Row style={{ justifyContent: 'center' }}>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+            }}>
                 <TextLine
                     text={props.text}
                     size='smallest'
                     family='menu'
                 />
-            </Row>
-        </Column>
+            </View>
+        </View>
     </Hyperlink>;
 }
 
@@ -146,7 +150,8 @@ export function PaletteButton(props: PaletteButtonProps) {
             },
         }}
     >
-        <Column style={{
+        <View style={{
+            flexDirection: 'column',
             width: 50,
             height: 50,
             justifyContent: 'center',
@@ -157,10 +162,15 @@ export function PaletteButton(props: PaletteButtonProps) {
             shadowColor: cols.shadow,
             shadowRadius: 5,
         }}>
-            <Row style={{ justifyContent: 'center' }}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                }}
+            >
                 <span>{props.text}</span>
-            </Row>
-        </Column>
+            </View>
+        </View>
     </Hyperlink>;
 }
 
