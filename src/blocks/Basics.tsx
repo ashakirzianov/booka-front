@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Theme, PaletteColor } from '../model';
-import { Themeable, colors, themed } from './connect';
+import { Theme, PaletteColor, colors } from '../model';
+import { Themeable, themed } from './connect';
 import { Column, Row } from './Layout';
 import { defaults } from './defaults';
 import { ActivityIndicator } from 'react-native';
@@ -32,7 +32,7 @@ function TextLineC(props: Themeable<TextLineProps>) {
         style={{
             fontSize,
             fontFamily,
-            color: props.color !== undefined ? colors(props)[props.color] : undefined,
+            color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             ...props.style,
         }}
     >
@@ -55,7 +55,7 @@ function FullScreenActivityIndicatorC(props: Themeable) {
     }}>
         <ActivityIndicator
             size='large'
-            color={colors(props).primary}
+            color={colors(props.theme).primary}
         />
     </Column>;
 }
@@ -102,7 +102,7 @@ function LayerC(props: Props<Themeable>) {
         minWidth: '100%',
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
-        backgroundColor: colors(props).primary,
+        backgroundColor: colors(props.theme).primary,
     }}>
         {props.children}
     </Column>;

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Props, point } from './common';
-import { Themeable, colors, themed } from './connect';
+import { Themeable, themed } from './connect';
 import { FadeIn } from './Animations';
 import { defaults } from './defaults';
+import { colors } from '../model';
 
 export type BarProps = {
     open: boolean,
@@ -21,8 +22,8 @@ function bar(top: boolean) {
                 bottom: !top ? 0 : undefined,
                 left: 0,
                 zIndex: 5,
-                boxShadow: `0px 0px 2px ${colors(props).shadow}`,
-                backgroundColor: colors(props).secondary,
+                boxShadow: `0px 0px 2px ${colors(props.theme).shadow}`,
+                backgroundColor: colors(props.theme).secondary,
             }}>
                 {props.children}
             </div>

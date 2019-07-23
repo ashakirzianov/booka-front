@@ -2,12 +2,13 @@ import * as React from 'react';
 
 import { Text, ActivityIndicator, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
 
-import { Themeable, colors, themed } from './connect';
+import { Themeable, themed } from './connect';
 import { TextLineProps, ClickableProps } from './Basics';
 import { Column, Row } from './Layout';
 import { defaults } from './defaults';
 import { Props, point } from './common';
 import { platformValue } from '../utils';
+import { colors } from '../model';
 
 function TextLineC(props: Themeable<TextLineProps>) {
     const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
@@ -17,7 +18,7 @@ function TextLineC(props: Themeable<TextLineProps>) {
         style={{
             fontSize,
             fontFamily,
-            color: props.color !== undefined ? colors(props)[props.color] : undefined,
+            color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             ...(props.style && {
                 textAlign: props.style.textAlign,
                 margin: props.style.margin,
@@ -43,7 +44,7 @@ function FullScreenActivityIndicatorC(props: Themeable) {
     }}>
         <ActivityIndicator
             size='large'
-            color={colors(props).primary}
+            color={colors(props.theme).primary}
         />
     </Column>;
 }
@@ -87,7 +88,7 @@ function LayerC(props: Props<Themeable>) {
         minWidth: '100%',
         width: platformValue({ mobile: '100%' }),
         height: platformValue({ mobile: '100%' }),
-        backgroundColor: colors(props).primary,
+        backgroundColor: colors(props.theme).primary,
     }}>
         {props.children}
     </Column>;

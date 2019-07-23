@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {
-    highlights, point, connect,
+    point, connect,
 } from '../blocks';
 import {
-    ParagraphNode, Highlights, BookPath,
+    ParagraphNode, Highlights, BookPath, highlights,
 } from '../model';
 import { ParagraphContainer } from './ParagraphComp.platform';
 import { SpanComp } from './SpanComp';
@@ -24,7 +24,7 @@ export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps
             span={props.p.span}
             colorization={props.highlights && props.highlights.quote && {
                 ranges: [{
-                    color: highlights(props).quote,
+                    color: highlights(props.theme).quote,
                     range: props.highlights.quote,
                 }],
             }}

@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 // TODO: review imports
-import { PaletteName } from '../model';
+import { PaletteName, colors } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { Callback, point } from './common';
 import { IconName } from './Icons.common';
 import { Column, Row } from './Layout';
 import { Icon } from './Icons';
-import { colors, Themeable } from './connect';
+import { Themeable } from './connect';
 import { Hyperlink } from './Web';
 
 export type ButtonProps<T> = T & Themeable<{
@@ -23,9 +23,9 @@ export function TextButton(props: TextButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props).accent,
+            color: colors(props.theme).accent,
             ':hover': {
-                color: colors(props).highlight,
+                color: colors(props.theme).highlight,
             },
         }}
     >
@@ -47,17 +47,17 @@ export function IconButton(props: IconButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props).accent,
+            color: colors(props.theme).accent,
             ':hover': {
-                color: colors(props).highlight,
+                color: colors(props.theme).highlight,
             },
         }}
     >
         <Column style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
-                color={colors(props).accent}
-                hoverColor={colors(props).highlight}
+                color={colors(props.theme).accent}
+                hoverColor={colors(props.theme).highlight}
                 size={24}
             />
         </Column>
@@ -72,12 +72,12 @@ export function TagButton(props: TagButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props).secondary,
-            backgroundColor: colors(props).accent,
+            color: colors(props.theme).secondary,
+            backgroundColor: colors(props.theme).accent,
             borderWidth: 1,
             borderRadius: 50,
             ':hover': {
-                backgroundColor: colors(props).highlight,
+                backgroundColor: colors(props.theme).highlight,
             },
         }}
     >
@@ -102,11 +102,11 @@ export function BorderButton(props: TextButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props).accent,
-            borderColor: colors(props).accent,
+            color: colors(props.theme).accent,
+            borderColor: colors(props.theme).accent,
             ':hover': {
-                color: colors(props).highlight,
-                borderColor: colors(props).highlight,
+                color: colors(props.theme).highlight,
+                borderColor: colors(props.theme).highlight,
             },
         }}
     >
@@ -177,11 +177,11 @@ export function StretchTextButton(props: StretchTextButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props).accent,
-            borderColor: colors(props).accent,
+            color: colors(props.theme).accent,
+            borderColor: colors(props.theme).accent,
             ':hover': {
-                color: colors(props).highlight,
-                borderColor: colors(props).highlight,
+                color: colors(props.theme).highlight,
+                borderColor: colors(props.theme).highlight,
             },
         }}
     >

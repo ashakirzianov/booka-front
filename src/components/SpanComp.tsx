@@ -3,10 +3,10 @@ import * as React from 'react';
 import {
     Color, BookRange, BookPath, isSimple, Span,
     isCompound, isAttributed, isFootnote,
-    pathLessThan, isPrefix, attrs, Theme,
+    pathLessThan, isPrefix, attrs, Theme, colors,
 } from '../model';
 import {
-    RichTextStyle, RichText, Callback, colors,
+    RichTextStyle, RichText, Callback,
 } from '../blocks';
 import {
     assertNever, filterUndefined,
@@ -69,7 +69,7 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
         tag: {
             fontSize: props.theme.fontSizes.normal * props.theme.fontScale,
             fontFamily: props.theme.fontFamilies.book,
-            color: colors(props).text,
+            color: colors(props.theme).text,
         },
     }];
 
@@ -156,8 +156,8 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
                 superLink: {
                     onClick: () => props.openFootnote(span.id),
                 },
-                color: colors(props).accent,
-                hoverColor: colors(props).highlight,
+                color: colors(props.theme).accent,
+                hoverColor: colors(props.theme).highlight,
             },
         };
         return {

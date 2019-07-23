@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import { View, SafeAreaView } from 'react-native';
 
-import { themed, colors } from './connect';
+import { themed } from './connect';
 import { FadeIn } from './Animations.native';
 import { BarProps } from './Bars';
 import { point } from './common';
+import { colors } from '../model';
 
 const viewOffset = 3.5;
 export const headerHeight = 3.5;
@@ -24,7 +25,7 @@ function bar(top: boolean) {
                 bottom: !top ? 0 : undefined,
                 left: 0,
                 zIndex: 5,
-                backgroundColor: colors(props).secondary,
+                backgroundColor: colors(props.theme).secondary,
             }}>
                 <SafeAreaView>
                     {props.children}

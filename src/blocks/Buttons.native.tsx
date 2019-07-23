@@ -6,8 +6,9 @@ import { TextLine } from './Basics';
 import { point, Props } from './common';
 import { Column, Row } from './Layout';
 import { Icon } from './Icons';
-import { connectAll, colors } from './connect';
+import { connectAll } from './connect';
 import { TextButtonProps, IconButtonProps, TagButtonProps, PaletteButtonProps, StretchTextButtonProps, ButtonProps } from './Buttons';
+import { colors } from '../model';
 
 function TextButtonC(props: TextButtonProps) {
     return <Link {...props}>
@@ -29,8 +30,8 @@ function IconButtonC(props: IconButtonProps) {
         <Column style={{ justifyContent: 'center' }}>
             <Icon
                 name={props.icon}
-                color={colors(props).accent}
-                hoverColor={colors(props).highlight}
+                color={colors(props.theme).accent}
+                hoverColor={colors(props.theme).highlight}
                 size={24}
             />
         </Column>
@@ -42,9 +43,9 @@ function TagButtonC(props: TagButtonProps) {
     return <Button {...props}>
         <Column style={{
             justifyContent: 'center',
-            backgroundColor: colors(props).secondary,
+            backgroundColor: colors(props.theme).secondary,
             borderWidth: 1,
-            borderColor: colors(props).secondary,
+            borderColor: colors(props.theme).secondary,
             borderRadius: 50,
             paddingHorizontal: point(1),
             paddingVertical: point(0.2),
@@ -66,8 +67,8 @@ function BorderButtonC(props: TextButtonProps) {
     return <Button {...props}>
         <View style={{
             borderStyle: 'solid',
-            borderColor: colors(props).accent,
-            color: colors(props).accent,
+            borderColor: colors(props.theme).accent,
+            color: colors(props.theme).accent,
             fontSize: props.theme.fontSizes.normal,
             borderRadius: 10,
             padding: point(0.3),
