@@ -4,6 +4,7 @@ import { Props, Callback, point } from './common';
 import { Hyperlink } from './Web';
 
 type Color = string;
+// TODO: rename ?
 export type RichTextStyle = {
     color?: Color,
     hoverColor?: Color,

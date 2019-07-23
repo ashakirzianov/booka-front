@@ -5,7 +5,15 @@ import {
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
 import { Props } from './common';
-import { IconProps, IconName } from './Icons.common';
+
+export type IconName = 'close' | 'left' | 'items' | 'letter';
+
+export type IconProps = {
+    color?: string,
+    hoverColor?: string,
+    name: IconName,
+    size?: number,
+};
 
 function iconForName(name: IconName) {
     switch (name) {

@@ -1,5 +1,5 @@
 import { Callback } from '../blocks';
-import { BookSelection } from './Reader.common';
+import { BookSelection } from './Reader.plat';
 
 // TODO: implement
 export function getSelectionRange(): BookSelection | undefined {

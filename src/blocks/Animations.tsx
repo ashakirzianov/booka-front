@@ -3,8 +3,10 @@ import * as React from 'react';
 import { Transition } from 'react-transition-group';
 import { Props } from './common';
 import { defaults } from './defaults';
-import { FadeInProps } from './Animations.common';
 
+export type FadeInProps = {
+    visible: boolean,
+};
 export function FadeIn(props: Props<FadeInProps>) {
     return <Animated
         in={props.visible}

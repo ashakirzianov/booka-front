@@ -10,9 +10,8 @@ import {
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
-    getSelectionRange, subscribe, unsubscribe,
-} from './Reader.platform';
-import { BookSelection } from './Reader.common';
+    getSelectionRange, subscribe, unsubscribe, BookSelection,
+} from './Reader.plat';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
 import { BorderButton } from './Connected';

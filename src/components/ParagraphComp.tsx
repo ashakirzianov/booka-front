@@ -5,7 +5,7 @@ import {
 import {
     ParagraphNode, Highlights, BookPath, highlights,
 } from '../model';
-import { ParagraphContainer } from './ParagraphComp.platform';
+import { ParagraphContainer } from './ParagraphComp.plat';
 import { SpanComp } from './SpanComp';
 import { RefPathHandler } from './common';
 

@@ -1,4 +1,4 @@
-import { wireHistoryNavigation } from './historyNavigation.platform';
+import { wireHistoryNavigation } from './historyNavigation';
 import { subscribe } from './store';
 import { stores, setCurrentPosition } from './persistent';
 import { emptyPath } from '../model';
