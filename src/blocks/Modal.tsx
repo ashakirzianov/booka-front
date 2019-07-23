@@ -9,6 +9,7 @@ import { Callback, Props } from './common';
 import { Themeable, themed } from './connect';
 import { defaults } from './defaults';
 import { Triad } from './Layout';
+import { View } from 'react-native';
 
 export type ModalProps = Themeable<{
     open: boolean,
@@ -37,27 +38,28 @@ function ModalC(props: Props<ModalProps>) {
                         entered: state === 'entered',
                     }}
                     theme={props.theme}>
-                    <Triad
-                        center={<TextLine
-                            color='text'
-                            text={props.title}
-                        />}
-                        left={<IconButton
-                            theme={props.theme}
-                            onClick={props.toggle}
-                            icon='close'
-                        />}
-                    />
-                    <div style={{
-                        alignItems: 'stretch',
-                        width: '100%',
-                        overflowY: 'scroll',
-                        maxHeight: '90%',
-                    }}>
-                        {props.children}
-                    </div>
+                    <View style={{ flex: 1 }}>
+                        <Triad
+                            center={<TextLine
+                                color='text'
+                                text={props.title}
+                            />}
+                            left={<IconButton
+                                theme={props.theme}
+                                onClick={props.toggle}
+                                icon='close'
+                            />}
+                        />
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'stretch',
+                            overflowY: 'scroll',
+                        }}
+                        >
+                            {props.children}
+                        </View>
+                    </View>
                 </OverlayBox>
-
             </div>
         }
     </Transition>;

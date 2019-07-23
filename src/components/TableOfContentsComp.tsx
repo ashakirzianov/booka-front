@@ -34,7 +34,7 @@ function TocItemComp(props: TocItemProps) {
 export function TableOfContentsComp(props: TableOfContents) {
     const { id, items } = props;
     const maxLevel = items.reduce((max, i) => Math.max(max, i.level), 0);
-    return <Column margin={point(2)}>
+    return <Column margin={point(1)}>
         {items.map(i =>
             <TocItemComp
                 key={i.path.join('-')}

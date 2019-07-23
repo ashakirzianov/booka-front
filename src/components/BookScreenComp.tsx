@@ -102,9 +102,7 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
         toggle={props.toggleToc}
         open={props.open}
     >
-        <Column scroll>
-            <TableOfContentsComp {...props.toc} />
-        </Column>
+        <TableOfContentsComp {...props.toc} />
     </Modal>
 );
 
@@ -123,9 +121,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
     >
         {
             !props.footnote ? null :
-                <Row scroll>
-                    <FootnoteComp {...props.footnote} />
-                </Row>
+                <FootnoteComp {...props.footnote} />
         }
     </Modal>
 );

@@ -5,7 +5,6 @@ import { View, ViewStyle } from 'react-native';
 export type LayoutProps = {
     aligned?: boolean,
     centered?: boolean,
-    scroll?: boolean,
     fullWidth?: boolean,
     fullHeight?: boolean,
     width?: Size,
@@ -98,7 +97,6 @@ function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
         alignItems: props.aligned ? 'center' : 'stretch',
         justifyContent: props.centered ? 'space-around' : 'flex-start',
-        overflow: props.scroll ? 'scroll' : undefined,
         width: props.fullWidth ? '100%' : props.width,
         height: props.fullHeight ? '100%' : props.height,
         maxWidth: props.maxWidth,
