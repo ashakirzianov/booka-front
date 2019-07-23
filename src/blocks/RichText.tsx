@@ -1,23 +1,7 @@
 import * as React from 'react';
 
 import { TaggedRange, overlaps } from '../utils';
-import { TextLink, TextSpan, TextLinkProps } from './Atoms';
-import { point } from './common';
-
-export type RichTextStyle = {
-    color?: string,
-    hoverColor?: string,
-    background?: string,
-    fontSize?: number,
-    fontFamily?: string,
-    dropCaps?: boolean,
-    italic?: boolean,
-    bold?: boolean,
-    line?: boolean,
-    id?: string,
-    refHandler?: (ref: any) => void,
-    superLink?: TextLinkProps,
-};
+import { TextLink, RichTextSpan, RichTextStyle } from './RichText.plat';
 
 export type RichTextProps = {
     text: string,
@@ -51,28 +35,11 @@ function TextSegmentComp(props: TextSegment) {
             {props.text}
         </TextLink>
         : props.text;
-    const textSpan = <TextSpan
-        dropCaps={props.dropCaps}
-        refHandler={props.refHandler}
-        background={props.background}
-        id={props.id}
-        style={{
-            color: props.color,
-            fontSize: props.fontSize,
-            fontFamily: props.fontFamily,
-            fontStyle: props.italic
-                ? 'italic' as 'italic'
-                : 'normal' as 'normal',
-            fontWeight: props.bold
-                ? 'bold' as 'bold'
-                : 'normal' as 'normal',
-            ...(props.line && {
-                textIndent: point(2),
-                display: 'block',
-            }),
-        }}>
+    const textSpan = <RichTextSpan
+        {...props}
+    >
         {text}
-    </TextSpan>;
+    </RichTextSpan>;
 
     return textSpan;
 }

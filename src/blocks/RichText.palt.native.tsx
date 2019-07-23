@@ -1,25 +1,20 @@
-// TODO: review and rethink this
-// Make it 'RichText.<something>' ?
-
 import * as React from 'react';
 
 import { Text } from 'react-native';
 
 import { Props, Callback } from './common';
-import { TextSpanProps } from './Atoms';
+import { RichTextStyle } from './RichText.plat';
 
-export function TextSpan(props: Props<TextSpanProps>) {
+export function TextSpan(props: Props<RichTextStyle>) {
     return <Text
         ref={props.refHandler}
         style={{
-            ...(props.style && {
-                fontFamily: props.style.fontFamily,
-                fontSize: props.style.fontSize,
-                fontWeight: props.style.fontWeight,
-                fontStyle: props.style.fontStyle,
-                color: props.style.color,
-            }),
+            color: props.color,
             backgroundColor: props.background,
+            fontFamily: props.fontFamily,
+            fontSize: props.fontSize,
+            fontStyle: props.italic ? 'italic' : undefined,
+            fontWeight: props.bold ? 'bold' : undefined,
         }}
     >
         {props.children}

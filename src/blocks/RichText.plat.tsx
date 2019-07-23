@@ -1,43 +1,43 @@
-// TODO: review and rethink this
-// Make it 'RichText.<something>' ?
-
 import * as React from 'react';
 
-import { Color } from '../model';
-
-import { Props, Callback } from './common';
-import { RefHandler } from './Scroll';
+import { Props, Callback, point } from './common';
 import { Hyperlink } from './Web';
 
-export type TextSpanStyle = {
-    color?: string,
+type Color = string;
+export type RichTextStyle = {
+    color?: Color,
+    hoverColor?: Color,
+    background?: Color,
     fontSize?: number,
     fontFamily?: string,
-    fontStyle?: 'italic' | 'normal',
-    fontWeight?: 'bold' | 'normal',
-    textIndent?: string | number,
-    display?: 'block',
-};
-export type TextSpanProps = {
-    // TODO: extract ?
-    style?: TextSpanStyle,
-    background?: Color,
     dropCaps?: boolean,
-    refHandler?: RefHandler,
+    italic?: boolean,
+    bold?: boolean,
+    line?: boolean,
     id?: string,
+    refHandler?: (ref: any) => void,
+    superLink?: TextLinkProps,
 };
-export function TextSpan(props: Props<TextSpanProps>) {
+export function RichTextSpan(props: Props<RichTextStyle>) {
     return <span
         ref={props.refHandler}
         id={props.id}
         style={{
-            ...props.style,
             wordBreak: 'break-word',
+            color: props.color,
             background: props.background,
+            fontSize: props.fontSize,
+            fontFamily: props.fontFamily,
+            fontStyle: props.italic ? 'italic' : undefined,
+            fontWeight: props.bold ? 'bold' : undefined,
+            ...(props.line && {
+                textIndent: point(2),
+                display: 'block',
+            }),
             ...(props.dropCaps && {
                 float: 'left',
-                fontSize: props.style && props.style.fontSize
-                    ? props.style.fontSize * 4
+                fontSize: props.fontSize
+                    ? props.fontSize * 4
                     : '400%',
                 lineHeight: '80%',
             }),
