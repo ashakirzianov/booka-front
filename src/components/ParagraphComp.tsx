@@ -1,11 +1,8 @@
 import * as React from 'react';
-import {
-    point, connect,
-} from '../blocks';
+import { connect, Pph } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath, highlights,
 } from '../model';
-import { ParagraphContainer } from './ParagraphComp.plat';
 import { SpanComp } from './SpanComp';
 import { RefPathHandler } from './common';
 
@@ -17,7 +14,7 @@ export type ParagraphProps = {
     highlights?: Highlights,
 };
 export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps>(function ParagraphCompC(props) {
-    return <ParagraphContainer textIndent={point(props.first ? 0 : 2)}>
+    return <Pph indent={props.first}>
         <SpanComp
             {...props} // TODO: remove ?
             path={props.path.concat([0])}
@@ -29,5 +26,5 @@ export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps
                 }],
             }}
         />
-    </ParagraphContainer>;
+    </Pph>;
 });

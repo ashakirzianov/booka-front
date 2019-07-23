@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Text, ActivityIndicator, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
 
 import { Themeable, themed } from './connect';
-import { TextLineProps, ClickableProps } from './Basics';
+import { TextLineProps, ClickableProps, PphProps } from './Basics';
 import { defaults } from './defaults';
 import { Props, point } from './common';
 import { platformValue } from '../utils';
@@ -103,4 +103,8 @@ export function EmptyLine() {
             }}
         />
     </SafeAreaView>;
+}
+
+export function Pph({ children }: Props<PphProps>) {
+    return <Text>{children}</Text>;
 }

@@ -122,3 +122,19 @@ export function EmptyLine() {
         }}
     />;
 }
+
+export type PphProps = {
+    indent?: boolean,
+};
+export function Pph({ indent, children }: Props<PphProps>) {
+    return <div style={{
+        display: 'flex',
+        textAlign: 'justify',
+        float: 'left',
+        textIndent: indent ? point(0) : point(2),
+    }}>
+        <span>
+            {children}
+        </span>
+    </div>;
+}
