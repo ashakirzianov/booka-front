@@ -59,7 +59,10 @@ function ModalC(props: Props<ModalProps>) {
                             <Column style={{
                                 justifyContent: 'center',
                             }}>
-                                <TextLine text={props.title} />
+                                <TextLine
+                                    color='text'
+                                    text={props.title}
+                                />
                             </Column>
                             <Column />
                         </Row>

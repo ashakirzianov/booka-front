@@ -14,6 +14,7 @@ type BookItemProps = {
 function BookItem({ meta, id }: BookItemProps) {
     return <Row>
         <TextButton
+            color='text'
             text={meta.title}
             action={actionCreators.navigateToBook(
                 bookLocator(remoteBookId(id), locationCurrent()))}

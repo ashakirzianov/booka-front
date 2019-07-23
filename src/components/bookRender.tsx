@@ -76,6 +76,7 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
         width: '100%',
     }}>
         <TextLine
+            color='text'
             text={props.text && props.text.toLocaleUpperCase()}
             style={{
                 letterSpacing: point(0.15),
@@ -92,6 +93,7 @@ const PartTitle: Comp<{ text?: string }> = (props =>
         width: '100%',
     }}>
         <TextLine
+            color='text'
             text={props.text}
             size='large'
             style={{
@@ -109,6 +111,7 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
         width: '100%',
     }}>
         <TextLine
+            color='text'
             text={props.text}
             style={{
                 fontStyle: 'italic',
@@ -121,6 +124,7 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
 const BookTitle: Comp<{ text?: string }> = (props =>
     <Row style={{ justifyContent: 'center', width: '100%' }}>
         <TextLine
+            color='text'
             text={props.text}
             size='largest'
             style={{
