@@ -9,13 +9,14 @@ import { connectAll } from './connect';
 import { TextButtonProps, IconButtonProps, TagButtonProps, PaletteButtonProps, StretchTextButtonProps, ButtonProps } from './Buttons';
 import { colors, fontSize } from '../model';
 
+// TODO: "disconnect" buttons in this file
+
 function TextButtonC(props: TextButtonProps) {
     return <Link {...props}>
         <TextLine
             text={props.text}
             family={props.family}
             size={props.size}
-            style={props.style}
         />
     </Link>;
 }
@@ -89,7 +90,6 @@ function BorderButtonC(props: TextButtonProps) {
                 text={props.text}
                 family={props.family}
                 size={props.size}
-                style={props.style}
             />
         </View>
     </Button>;

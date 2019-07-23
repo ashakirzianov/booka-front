@@ -33,7 +33,7 @@ export function TextButton(props: TextButtonProps) {
             text={props.text}
             family={props.family}
             size={props.size}
-            style={props.style}
+            letterSpacing={props.letterSpacing}
         />
     </Hyperlink>;
 }
@@ -125,7 +125,7 @@ export function BorderButton(props: TextButtonProps) {
                 text={props.text}
                 family={props.family}
                 size={props.size}
-                style={props.style}
+                letterSpacing={props.letterSpacing}
             />
         </div>
     </Hyperlink>;

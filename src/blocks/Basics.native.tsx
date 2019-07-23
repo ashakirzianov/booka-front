@@ -15,10 +15,8 @@ function TextLineC(props: Themeable<TextLineProps>) {
             fontFamily: props.theme.fontFamilies[props.family || 'book'],
             fontSize: fontSize(props.theme, props.size),
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
-            ...(props.style && {
-                textAlign: props.style.textAlign,
-                margin: props.style.margin,
-            }),
+            textAlign: props.textAlign,
+            margin: props.margin,
         }}
     >
         {props.text}

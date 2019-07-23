@@ -75,11 +75,9 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
         <TextLine
             color='text'
             text={props.text && props.text.toLocaleUpperCase()}
-            style={{
-                letterSpacing: point(0.15),
-                textAlign: 'center',
-                margin: point(1),
-            }}
+            letterSpacing={point(0.15)}
+            margin={point(1)}
+            textAlign='center'
         />
     </Row>
 );
@@ -90,11 +88,9 @@ const PartTitle: Comp<{ text?: string }> = (props =>
             color='text'
             text={props.text}
             size='large'
-            style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                margin: point(1),
-            }}
+            bold
+            textAlign='center'
+            margin={point(1)}
         />
     </Row>
 );
@@ -104,10 +100,8 @@ const SubpartTitle: Comp<{ text?: string }> = (props =>
         <TextLine
             color='text'
             text={props.text}
-            style={{
-                fontStyle: 'italic',
-                margin: point(1),
-            }}
+            italic
+            margin={point(1)}
         />
     </Row>
 );
@@ -118,10 +112,8 @@ const BookTitle: Comp<{ text?: string }> = (props =>
             color='text'
             text={props.text}
             size='largest'
-            style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-            }}
+            bold
+            textAlign='center'
         />
     </Row>
 );

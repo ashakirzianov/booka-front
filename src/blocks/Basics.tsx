@@ -7,17 +7,15 @@ import { ActivityIndicator, View } from 'react-native';
 import { percent, point, Size, Props } from './common';
 import { platformValue } from '../utils';
 
-export type TextLineStyle = {
-    letterSpacing?: Size,
-    margin?: Size,
-    textAlign?: 'center',
-};
 export type TextProps = {
-    // TODO: consider extract ?
-    style?: TextLineStyle,
-    family?: keyof Theme['fontFamilies'],
-    size?: keyof Theme['fontSizes'],
+    family?: keyof Theme['fontFamilies'], // TODO: rename to 'fontFamily'
+    size?: keyof Theme['fontSizes'], // TODO: rename to 'fontSize'
     color?: PaletteColor,
+    bold?: boolean,
+    italic?: boolean,
+    letterSpacing?: Size,
+    margin?: Size, // TODO: remove ?
+    textAlign?: 'center', // TODO: remove ?
 };
 export type TextLineProps = TextProps & {
     text: string | undefined,
@@ -28,7 +26,11 @@ function TextLineC(props: Themeable<TextLineProps>) {
             fontSize: fontSize(props.theme, props.size),
             fontFamily: props.theme.fontFamilies[props.family || 'book'],
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
-            ...props.style,
+            letterSpacing: props.letterSpacing,
+            margin: props.margin,
+            textAlign: props.textAlign,
+            fontWeight: props.bold ? 'bold' : 'normal',
+            fontStyle: props.italic ? 'italic' : 'normal',
         }}
     >
         {props.text}
