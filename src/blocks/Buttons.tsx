@@ -33,7 +33,6 @@ export function TextButton(props: TextButtonProps) {
             text={props.text}
             family={props.family}
             size={props.size}
-            fixedSize={props.fixedSize} // TODO: remove this
             style={props.style}
         />
     </Hyperlink>;
@@ -122,7 +121,6 @@ export function BorderButton(props: TextButtonProps) {
                 text={props.text}
                 family={props.family}
                 size={props.size}
-                fixedSize={props.fixedSize} // TODO: remove this
                 style={props.style}
             />
         </div>

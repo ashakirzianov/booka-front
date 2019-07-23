@@ -18,7 +18,6 @@ export type TextProps = {
     style?: TextLineStyle,
     family?: keyof Theme['fontFamilies'],
     size?: keyof Theme['fontSizes'],
-    fixedSize?: boolean,
     color?: PaletteColor,
 };
 export type TextLineProps = TextProps & {

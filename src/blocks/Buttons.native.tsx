@@ -16,7 +16,6 @@ function TextButtonC(props: TextButtonProps) {
             text={props.text}
             family={props.family}
             size={props.size}
-            fixedSize={props.fixedSize} // TODO: remove this
             style={props.style}
         />
     </Link>;
@@ -77,7 +76,6 @@ function BorderButtonC(props: TextButtonProps) {
                 text={props.text}
                 family={props.family}
                 size={props.size}
-                fixedSize={props.fixedSize} // TODO: remove this
                 style={props.style}
             />
         </View>

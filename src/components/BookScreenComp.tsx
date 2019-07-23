@@ -76,7 +76,6 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             <TextLine
                 text={`${left} pages left`}
                 size='smallest'
-                fixedSize={true}
                 family='menu'
                 color='accent'
             />
