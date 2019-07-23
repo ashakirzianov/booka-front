@@ -8,16 +8,13 @@ import { Column, Row } from './Layout';
 import { defaults } from './defaults';
 import { Props, point } from './common';
 import { platformValue } from '../utils';
-import { colors } from '../model';
+import { colors, fontSize } from '../model';
 
 function TextLineC(props: Themeable<TextLineProps>) {
-    const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
-    const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
-    const fontFamily = props.theme.fontFamilies[props.family || 'book'];
     return <Text
         style={{
-            fontSize,
-            fontFamily,
+            fontFamily: props.theme.fontFamilies[props.family || 'book'],
+            fontSize: fontSize(props.theme, props.size),
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             ...(props.style && {
                 textAlign: props.style.textAlign,

@@ -8,7 +8,7 @@ import { Column, Row } from './Layout';
 import { Icon } from './Icons';
 import { connectAll } from './connect';
 import { TextButtonProps, IconButtonProps, TagButtonProps, PaletteButtonProps, StretchTextButtonProps, ButtonProps } from './Buttons';
-import { colors } from '../model';
+import { colors, fontSize } from '../model';
 
 function TextButtonC(props: TextButtonProps) {
     return <Link {...props}>
@@ -69,7 +69,7 @@ function BorderButtonC(props: TextButtonProps) {
             borderStyle: 'solid',
             borderColor: colors(props.theme).accent,
             color: colors(props.theme).accent,
-            fontSize: props.theme.fontSizes.normal,
+            fontSize: fontSize(props.theme, 'normal'),
             borderRadius: 10,
             padding: point(0.3),
         }}>
@@ -103,7 +103,7 @@ function PaletteButtonC(props: PaletteButtonProps) {
             <Row style={{ justifyContent: 'center' }}>
                 <Text style={{
                     color: cols.text,
-                    fontSize: theme.fontSizes.normal,
+                    fontSize: fontSize(props.theme, 'normal'),
                 }}>
                     {props.text}
                 </Text>

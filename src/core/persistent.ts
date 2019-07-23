@@ -90,6 +90,7 @@ export const defaultTheme: Theme = {
         normal: 26,
         large: 30,
         largest: 36,
+        text: 26,
     },
     fontScale: 1,
     radius: 5,

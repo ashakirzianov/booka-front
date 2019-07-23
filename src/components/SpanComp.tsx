@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     Color, BookRange, BookPath, isSimple, Span,
     isCompound, isAttributed, isFootnote,
-    pathLessThan, isPrefix, attrs, Theme, colors,
+    pathLessThan, isPrefix, attrs, Theme, colors, fontSize,
 } from '../model';
 import {
     RichTextStyle, RichText, Callback,
@@ -67,7 +67,7 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
     const defaultStyles: RenderingRange[] = [{
         range: range(0),
         tag: {
-            fontSize: props.theme.fontSizes.normal * props.theme.fontScale,
+            fontSize: fontSize(props.theme, 'text'),
             fontFamily: props.theme.fontFamilies.book,
             color: colors(props.theme).text,
         },

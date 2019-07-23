@@ -23,6 +23,7 @@ export type FontSizes = {
     normal: FontSize,
     large: FontSize,
     largest: FontSize,
+    text: FontSize,
 };
 export type FontFamilies = {
     book: FontFamily,
@@ -51,4 +52,10 @@ export function colors(theme: Theme): Palette['colors'] {
 
 export function highlights(theme: Theme): Palette['highlights'] {
     return theme.palettes[theme.currentPalette].highlights;
+}
+
+export function fontSize(theme: Theme, size?: keyof FontSizes): number {
+    return size === 'text'
+        ? theme.fontSizes.text * theme.fontScale
+        : theme.fontSizes[size || 'normal'];
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Theme, PaletteColor, colors } from '../model';
+import { Theme, PaletteColor, colors, fontSize } from '../model';
 import { Themeable, themed } from './connect';
 import { Column, Row } from './Layout';
 import { defaults } from './defaults';
@@ -25,13 +25,10 @@ export type TextLineProps = TextProps & {
     text: string | undefined,
 };
 function TextLineC(props: Themeable<TextLineProps>) {
-    const fontScale = props.fixedSize ? 1 : props.theme.fontScale;
-    const fontSize = props.theme.fontSizes[props.size || 'normal'] * fontScale;
-    const fontFamily = props.theme.fontFamilies[props.family || 'book'];
     return <span
         style={{
-            fontSize,
-            fontFamily,
+            fontSize: fontSize(props.theme, props.size),
+            fontFamily: props.theme.fontFamilies[props.family || 'book'],
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             ...props.style,
         }}

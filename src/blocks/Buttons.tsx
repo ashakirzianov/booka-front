@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 // TODO: review imports
-import { PaletteName, colors } from '../model';
+import { PaletteName, colors, fontSize } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { Callback, point } from './common';
 import { IconName } from './Icons.common';
@@ -113,7 +113,7 @@ export function BorderButton(props: TextButtonProps) {
         <div
             style={{
                 borderStyle: 'solid',
-                fontSize: props.theme.fontSizes.normal,
+                fontSize: fontSize(props.theme, 'normal'),
                 borderRadius: 10,
                 padding: point(0.3),
             }}
@@ -142,6 +142,7 @@ export function PaletteButton(props: PaletteButtonProps) {
         onClick={props.onClick}
         style={{
             color: cols.text,
+            fontSize: fontSize(props.theme, 'normal'),
             ':hover': {
                 color: cols.highlight,
             },
@@ -159,11 +160,7 @@ export function PaletteButton(props: PaletteButtonProps) {
             shadowRadius: 5,
         }}>
             <Row style={{ justifyContent: 'center' }}>
-                <span style={{
-                    fontSize: theme.fontSizes.normal,
-                }}>
-                    {props.text}
-                </span>
+                <span>{props.text}</span>
             </Row>
         </Column>
     </Hyperlink>;

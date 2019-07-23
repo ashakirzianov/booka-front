@@ -36,7 +36,9 @@ export function TextSpan(props: Props<TextSpanProps>) {
             background: props.background,
             ...(props.dropCaps && {
                 float: 'left',
-                fontSize: '400%',
+                fontSize: props.style && props.style.fontSize
+                    ? props.style.fontSize * 4
+                    : '400%',
                 lineHeight: '80%',
             }),
         }}
