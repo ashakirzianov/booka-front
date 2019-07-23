@@ -6,13 +6,6 @@ export type LayoutProps = {
     aligned?: boolean,
     centered?: boolean,
     scroll?: boolean,
-    // TODO: remove when 'Left/Center/Right' implemented ?
-    absolutePosition?: {
-        top?: number,
-        bottom?: number,
-        left?: number,
-        right?: number,
-    },
     fullWidth?: boolean,
     fullHeight?: boolean,
     width?: Size,
@@ -45,6 +38,62 @@ export function Row(props: Props<LayoutProps>) {
     </View>;
 }
 
+export type TriadProps = {
+    left?: React.ReactNode,
+    center?: React.ReactNode,
+    right?: React.ReactNode,
+    leftPadding?: number,
+    rightPadding?: number,
+};
+export function Triad(props: TriadProps) {
+    return <View style={{ flexDirection: 'row' }}>
+        {
+            !props.center ? null :
+                <View
+                    key='center'
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    {props.center}
+                </View>
+        }
+        {
+            !props.left ? null :
+                <View
+                    key='left'
+                    style={{
+                        height: '100%',
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        left: props.leftPadding || 0,
+                        top: 0,
+                    }}
+                >
+                    {props.left}
+                </View>
+        }
+        {
+            !props.right ? null :
+                <View
+                    key='right'
+                    style={{
+                        height: '100%',
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        right: props.rightPadding || 0,
+                        top: 0,
+                    }}
+                >
+                    {props.right}
+                </View>
+        }
+    </View>;
+}
+
 function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
         alignItems: props.aligned ? 'center' : 'stretch',
@@ -55,10 +104,6 @@ function buildStyle(props: LayoutProps): ViewStyle | undefined {
         maxWidth: props.maxWidth,
         margin: props.margin,
         padding: props.padding,
-        ...(props.absolutePosition && {
-            position: 'absolute',
-            ...props.absolutePosition,
-        }),
         ...(props.borderColor && {
             borderColor: props.borderColor,
             borderStyle: 'solid',

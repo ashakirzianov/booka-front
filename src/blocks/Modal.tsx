@@ -5,10 +5,10 @@ import { Transition } from 'react-transition-group';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
-import { Callback, Props, point } from './common';
+import { Callback, Props } from './common';
 import { Themeable, themed } from './connect';
 import { defaults } from './defaults';
-import { View } from 'react-native';
+import { Triad } from './Layout';
 
 export type ModalProps = Themeable<{
     open: boolean,
@@ -37,37 +37,17 @@ function ModalC(props: Props<ModalProps>) {
                         entered: state === 'entered',
                     }}
                     theme={props.theme}>
-                    <View style={{
-                        justifyContent: 'center',
-                        height: point(defaults.headerHeight),
-                    }}>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                        }}>
-                            <View style={{
-                                position: 'absolute',
-                                top: 0, left: 0, bottom: 0, right: 0,
-                                justifyContent: 'center',
-                            }}>
-                                <IconButton
-                                    theme={props.theme}
-                                    onClick={props.toggle}
-                                    icon='close'
-                                />
-                            </View>
-                            <View style={{
-                                justifyContent: 'center',
-                            }}>
-                                <TextLine
-                                    color='text'
-                                    text={props.title}
-                                />
-                            </View>
-                            <View />
-                        </View>
-                    </View>
+                    <Triad
+                        center={<TextLine
+                            color='text'
+                            text={props.title}
+                        />}
+                        left={<IconButton
+                            theme={props.theme}
+                            onClick={props.toggle}
+                            icon='close'
+                        />}
+                    />
                     <div style={{
                         alignItems: 'stretch',
                         width: '100%',

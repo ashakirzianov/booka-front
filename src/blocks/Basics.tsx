@@ -64,8 +64,6 @@ export const FullScreenActivityIndicator = themed(FullScreenActivityIndicatorC);
 export function Separator() {
     return <hr style={{
         width: percent(100),
-        marginTop: point(1),
-        marginBottom: point(1),
     }} />;
 }
 

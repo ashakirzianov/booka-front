@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     connectActions, Row, Modal,
     Comp, WithPopover, Line, Column,
-    Separator, TextLine, point,
+    Separator, TextLine, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -57,24 +57,16 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
         currentPage = pagination.pageForPath(path);
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
-    return <Row>
-        <Column centered fullWidth fullHeight>
-            <Row centered>
-                <TocButton current={currentPage} total={total} />
-            </Row>
-        </Column>
-        <Column centered fullHeight absolutePosition={{
-            right: 10,
-            top: 0,
-        }}>
-            <TextLine
-                text={`${left} pages left`}
-                size='smallest'
-                family='menu'
-                color='accent'
-            />
-        </Column>
-    </Row>;
+    return <Triad
+        center={<TocButton current={currentPage} total={total} />}
+        right={<TextLine
+            text={`${left} pages left`}
+            size='smallest'
+            family='menu'
+            color='accent'
+        />}
+        rightPadding={10}
+    />;
 });
 
 type TocButtonProps = { current: number, total: number };
