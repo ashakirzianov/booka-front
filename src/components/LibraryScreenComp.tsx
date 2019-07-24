@@ -1,15 +1,18 @@
 import * as React from 'react';
 
 import { LibraryScreen } from '../model';
-import { Comp, TextLine, Row } from '../blocks';
+import { TextLine, Row } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 
-export const LibraryScreenHeader: Comp = (props =>
-    <Row centered fullWidth>
+export function LibraryScreenHeader() {
+    return <Row centered fullWidth>
         <TextLine text='Library' />
-    </Row>
-);
+    </Row>;
+}
 
-export const LibraryScreenComp: Comp<LibraryScreen> = (props =>
-    <LibraryComp {...props.library} />
-);
+export type LibraryScreenProps = {
+    screen: LibraryScreen,
+};
+export function LibraryScreenComp({ screen }: LibraryScreenProps) {
+    return <LibraryComp library={screen.library} />;
+}

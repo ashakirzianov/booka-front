@@ -6,13 +6,16 @@ import { TextLine } from './Basics';
 import { point, Props } from './common';
 import { Icon } from './Icons';
 import { connectAll } from './connect';
-import { TextButtonProps, IconButtonProps, TagButtonProps, PaletteButtonProps, StretchTextButtonProps, ButtonProps } from './Buttons';
+import {
+    TextButtonProps, IconButtonProps, TagButtonProps,
+    PaletteButtonProps, StretchTextButtonProps, SuperLink,
+} from './Buttons';
 import { colors, fontSize } from '../model';
 
 // TODO: "disconnect" buttons in this file
 
 function TextButtonC(props: TextButtonProps) {
-    return <Link {...props}>
+    return <Link onClick={props.onClick}>
         <TextLine
             text={props.text}
             family={props.family}
@@ -23,9 +26,7 @@ function TextButtonC(props: TextButtonProps) {
 export const TextButton = connectAll(TextButtonC);
 
 function IconButtonC(props: IconButtonProps) {
-    return <Button
-        {...props}
-    >
+    return <Button onClick={props.onClick}>
         <View
             style={{
                 justifyContent: 'center',
@@ -42,7 +43,7 @@ function IconButtonC(props: IconButtonProps) {
 export const IconButton = connectAll(IconButtonC);
 
 function TagButtonC(props: TagButtonProps) {
-    return <Button {...props}>
+    return <Button onClick={props.onClick}>
         <View
             style={{
                 flexDirection: 'column',
@@ -75,7 +76,7 @@ function TagButtonC(props: TagButtonProps) {
 export const TagButton = connectAll(TagButtonC);
 
 function BorderButtonC(props: TextButtonProps) {
-    return <Button {...props}>
+    return <Button onClick={props.onClick}>
         <View style={{
             borderStyle: 'solid',
             borderColor: colors(props.theme).accent,
@@ -97,7 +98,7 @@ export const BorderButton = connectAll(BorderButtonC);
 function PaletteButtonC(props: PaletteButtonProps) {
     const theme = props.theme;
     const cols = theme.palettes[theme.currentPalette].colors;
-    return <Button {...props}>
+    return <Button onClick={props.onClick}>
         <View
             style={{
                 flexDirection: 'column',
@@ -130,7 +131,7 @@ function PaletteButtonC(props: PaletteButtonProps) {
 export const PaletteButton = connectAll(PaletteButtonC);
 
 function StretchTextButtonC(props: Props<StretchTextButtonProps>) {
-    return <Button {...props}>
+    return <Button onClick={props.onClick}>
         <View style={{
             justifyContent: 'space-between',
             flexDirection: 'row',
@@ -144,18 +145,14 @@ export const StretchTextButton = connectAll(StretchTextButtonC);
 
 // =================================================
 
-function Link({ onClick, children }: Props<ButtonProps<{}>>) {
-    return <Text
-        onPress={onClick}
-    >
+function Link({ onClick, children }: Props<SuperLink>) {
+    return <Text onPress={onClick}>
         {children}
     </Text>;
 }
 
-function Button({ onClick, children }: Props<ButtonProps<{}>>) {
-    return <View
-        onTouchEnd={onClick}
-    >
+function Button({ onClick, children }: Props<SuperLink>) {
+    return <View onTouchEnd={onClick}>
         {children}
     </View>;
 }

@@ -16,7 +16,10 @@ export type ParagraphProps = {
 export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps>(function ParagraphCompC(props) {
     return <Pph indent={props.first}>
         <SpanComp
-            {...props} // TODO: remove ?
+            first={props.first}
+            refPathHandler={props.refPathHandler}
+            openFootnote={props.openFootnote}
+            theme={props.theme}
             path={props.path.concat([0])}
             span={props.p.span}
             colorization={props.highlights && props.highlights.quote && {

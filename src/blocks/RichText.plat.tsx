@@ -4,6 +4,10 @@ import { Props, Callback, point } from './common';
 import { Hyperlink } from './Web';
 
 type Color = string;
+type SuperLink = {
+    href?: string,
+    onClick?: Callback<void>,
+};
 // TODO: rename ?
 export type RichTextStyle = {
     color?: Color,
@@ -17,42 +21,43 @@ export type RichTextStyle = {
     line?: boolean,
     id?: string,
     refHandler?: (ref: any) => void,
-    superLink?: TextLinkProps,
+    superLink?: SuperLink,
 };
-export function RichTextSpan(props: Props<RichTextStyle>) {
+export type RichTextSpanProps = {
+    style: RichTextStyle,
+};
+export function RichTextSpan({ style, children }: Props<RichTextSpanProps>) {
     return <span
-        ref={props.refHandler}
-        id={props.id}
+        ref={style.refHandler}
+        id={style.id}
         style={{
             wordBreak: 'break-word',
-            color: props.color,
-            background: props.background,
-            fontSize: props.fontSize,
-            fontFamily: props.fontFamily,
-            fontStyle: props.italic ? 'italic' : undefined,
-            fontWeight: props.bold ? 'bold' : undefined,
-            ...(props.line && {
+            color: style.color,
+            background: style.background,
+            fontSize: style.fontSize,
+            fontFamily: style.fontFamily,
+            fontStyle: style.italic ? 'italic' : undefined,
+            fontWeight: style.bold ? 'bold' : undefined,
+            ...(style.line && {
                 textIndent: point(2),
                 display: 'block',
             }),
-            ...(props.dropCaps && {
+            ...(style.dropCaps && {
                 float: 'left',
-                fontSize: props.fontSize
-                    ? props.fontSize * 4
+                fontSize: style.fontSize
+                    ? style.fontSize * 4
                     : '400%',
                 lineHeight: '80%',
             }),
         }}
     >
-        {props.children}
+        {children}
     </span>;
 }
 
-export type TextLinkProps = {
+export type TextLinkProps = SuperLink & {
     color?: string,
     hoverColor?: string,
-    href?: string,
-    onClick?: Callback<void>,
 };
 export function TextLink({ color, hoverColor, href, onClick, children }: Props<TextLinkProps>) {
     return <Hyperlink

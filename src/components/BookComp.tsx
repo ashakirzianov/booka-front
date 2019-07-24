@@ -8,13 +8,14 @@ import {
 import { TableOfContents, TableOfContentsItem } from '../model';
 import { Reader } from './Reader';
 
-export type BookProps = Book & {
+export type BookProps = {
+    book: Book,
     quoteRange: BookRange | undefined,
 };
 export const BookComp = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])<BookProps>(props => {
     const {
         pathToOpen, updateBookPosition, toggleControls,
-        volume, id, toc,
+        book: { volume, id, toc },
     } = props;
     const { prev, current, next } = buildPaths(pathToOpen || emptyPath(), toc);
     return <Reader

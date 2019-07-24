@@ -12,33 +12,32 @@ export function RichText({ text, styles }: RichTextProps) {
     const segments = buildTextSegments(text, styles);
     const children = segments.map((seg, idx) => {
         return <TextSegmentComp
-            {...seg}
             key={idx.toString()}
-            refHandler={seg.refHandler}
+            text={seg.text}
+            style={seg.style}
         />;
     });
 
     return <>{children}</>;
 }
 
-type TextSegment = RichTextStyle & {
+type TextSegment = {
     text: string,
+    style: RichTextStyle,
 };
-
-function TextSegmentComp(props: TextSegment) {
-    const text = props.superLink
+function TextSegmentComp({ text, style }: TextSegment) {
+    const textEl = style.superLink
         ? <TextLink
-            {...props.superLink}
-            color={props.color}
-            hoverColor={props.hoverColor}
+            href={style.superLink.href}
+            onClick={style.superLink.onClick}
+            color={style.color}
+            hoverColor={style.hoverColor}
         >
-            {props.text}
+            {text}
         </TextLink>
-        : props.text;
-    const textSpan = <RichTextSpan
-        {...props}
-    >
-        {text}
+        : text;
+    const textSpan = <RichTextSpan style={style}>
+        {textEl}
     </RichTextSpan>;
 
     return textSpan;
@@ -48,7 +47,7 @@ function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle
     const renderings = overlaps(ranges, (l, r) => l < r);
     const result: TextSegment[] = renderings.map(taggedRange => ({
         text: text.substring(taggedRange.range.start, taggedRange.range.end),
-        ...taggedRange.tag.reduce((res, r) => ({ ...res, ...r }), {}),
+        style: taggedRange.tag.reduce((res, r) => ({ ...res, ...r }), {}),
     }));
 
     return result;

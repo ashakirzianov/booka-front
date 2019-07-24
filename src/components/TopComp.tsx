@@ -6,7 +6,7 @@ import { ScreenComp } from './ScreenComp';
 export const TopComp = connectState('screen')(function TopCompC(props) {
     return <Layer>
         <Column centered>
-            <ScreenComp {...props.screen} />
+            <ScreenComp screen={props.screen} />
         </Column>
     </Layer>;
 });

@@ -16,27 +16,31 @@ import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import { TagButton, IconButton, TextButton, PaletteButton } from './Connected';
 
-export function BookScreenComp(props: BookScreen) {
+export type BookScreenProps = {
+    screen: BookScreen,
+};
+export function BookScreenComp({ screen }: BookScreenProps) {
+    const { book, bl } = screen;
     return <>
         <BookComp
-            {...props.book}
-            quoteRange={props.bl.quote}
+            book={book}
+            quoteRange={bl.quote}
         />
         <TableOfContentsBox
-            toc={props.book.toc}
-            open={props.bl.toc}
+            toc={book.toc}
+            open={bl.toc}
         />
         <FootnoteBox
             footnote={
-                props.bl.footnoteId !== undefined
-                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
+                bl.footnoteId !== undefined
+                    ? footnoteForId(book.volume, bl.footnoteId)
                     : undefined
             }
         />
     </>;
 }
 
-export function BookScreenHeader(props: BookScreen) {
+export function BookScreenHeader() {
     return <Line paddingHorizontal={point(1)}>
         <Row>
             <LibButton key='back' />
@@ -47,13 +51,16 @@ export function BookScreenHeader(props: BookScreen) {
     </Line>;
 }
 
-export function BookScreenFooter(props: BookScreen) {
-    const pagination = new Pagination(props.book.volume);
+export type BookScreenFooterProps = {
+    screen: BookScreen,
+};
+export function BookScreenFooter({ screen }: BookScreenFooterProps) {
+    const pagination = new Pagination(screen.book.volume);
     const total = pagination.totalPages();
     let currentPage = 1;
     let left = 0;
-    if (props.bl.location.location === 'path') {
-        const path = props.bl.location.path;
+    if (screen.bl.location.location === 'path') {
+        const path = screen.bl.location.path;
         currentPage = pagination.pageForPath(path);
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
@@ -105,7 +112,7 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
         toggle={props.toggleToc}
         open={props.open}
     >
-        <TableOfContentsComp {...props.toc} />
+        <TableOfContentsComp toc={props.toc} />
     </Modal>
 );
 

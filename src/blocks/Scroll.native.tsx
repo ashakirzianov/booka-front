@@ -18,7 +18,7 @@ export function Scroll(props: Props<ScrollProps>) {
 // TODO: rename to 'scrollable' ? add path support ?
 export function refable<P = {}>(C: React.ComponentType<P>) {
     return React.forwardRef<View, P & { children?: React.ReactNode }>((props, ref) =>
-        <View style={{ display: 'flex' }}>
+        <View ref={ref} style={{ display: 'flex' }}>
             <C {...props} />
         </View>
     );

@@ -9,10 +9,11 @@ import { Themeable } from './connect';
 import { Hyperlink } from './Web';
 import { View } from 'react-native';
 
-export type ButtonProps<T> = T & Themeable<{
+export type SuperLink = {
     href?: string,
     onClick?: Callback<void>,
-}>;
+};
+export type ButtonProps<T> = Themeable<T> & SuperLink;
 
 export type TextButtonProps = ButtonProps<TextProps & {
     text: string,

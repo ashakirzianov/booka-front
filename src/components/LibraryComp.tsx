@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
 import {
-    Comp, Row, SafeAreaView, Column, EmptyLine,
+    Row, SafeAreaView, Column, EmptyLine,
 } from '../blocks';
 import { actionCreators } from '../core';
 import { TextButton } from './Connected';
@@ -22,21 +22,24 @@ function BookItem({ meta, id }: BookItemProps) {
     </Row>;
 }
 
-export const LibraryComp: Comp<Library> = (props =>
-    <SafeAreaView>
+export type LibraryProps = {
+    library: Library,
+};
+export function LibraryComp({ library }: LibraryProps) {
+    return <SafeAreaView>
         <Column>
             <EmptyLine />
             {
-                Object.keys(props.books).map(
+                Object.keys(library.books).map(
                     id =>
                         <BookItem
                             key={id}
-                            meta={props.books[id]!}
+                            meta={library.books[id]!}
                             id={id}
                         />
                 )
             }
             <EmptyLine />
         </Column>
-    </SafeAreaView>
-);
+    </SafeAreaView>;
+}

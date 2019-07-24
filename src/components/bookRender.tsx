@@ -5,7 +5,7 @@ import {
     isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
-    Comp, Row, TextLine, refable, point,
+    Row, TextLine, refable, point,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
@@ -19,7 +19,12 @@ export type Params = {
 
 export function buildBook(book: VolumeNode, params: Params) {
     const head = params.pageRange.start.length === 0
-        ? [<BookTitle key={`bt`} text={book.meta.title} />]
+        ? [
+            <BookTitle
+                key={`bt`}
+                text={book.meta.title}
+            />,
+        ]
         : [];
 
     return head
@@ -49,29 +54,42 @@ function buildNode(node: ContentNode, path: BookPath, params: Params) {
 
 function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
     return inBookRange(path, params.pageRange)
-        ? [<ParagraphComp
-            key={`p-${pathToString(path)}`}
-            p={paragraph}
-            path={path}
-            first={last(path) === 0}
-            highlights={params.quoteRange && {
-                quote: params.quoteRange,
-            }}
-            refPathHandler={params.refPathHandler}
-        />]
+        ? [
+            <ParagraphComp
+                key={`p-${pathToString(path)}`}
+                p={paragraph}
+                path={path}
+                first={last(path) === 0}
+                highlights={params.quoteRange && {
+                    quote: params.quoteRange,
+                }}
+                refPathHandler={params.refPathHandler}
+            />,
+        ]
         : [];
 }
 
 function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
     const head = inBookRange(path, params.pageRange)
-        ? [<ChapterHeader ref={ref => params.refPathHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+        ? [
+            <ChapterHeader
+                key={`ch-${pathToString(path)}`}
+                ref={ref => params.refPathHandler(ref, path)}
+                level={chapter.level}
+                title={chapter.title}
+            />,
+        ]
         : [];
     return head
         .concat(buildNodes(chapter.nodes, path, params));
 }
 
-const ChapterTitle: Comp<{ text?: string }> = (props =>
-    <Row centered fullWidth>
+type TitleProps = {
+    text?: string,
+};
+
+function ChapterTitle(props: TitleProps) {
+    return <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text && props.text.toLocaleUpperCase()}
@@ -79,11 +97,11 @@ const ChapterTitle: Comp<{ text?: string }> = (props =>
             margin={point(1)}
             textAlign='center'
         />
-    </Row>
-);
+    </Row>;
+}
 
-const PartTitle: Comp<{ text?: string }> = (props =>
-    <Row centered fullWidth>
+function PartTitle(props: TitleProps) {
+    return <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text}
@@ -92,22 +110,22 @@ const PartTitle: Comp<{ text?: string }> = (props =>
             textAlign='center'
             margin={point(1)}
         />
-    </Row>
-);
+    </Row>;
+}
 
-const SubpartTitle: Comp<{ text?: string }> = (props =>
-    <Row fullWidth>
+function SubpartTitle(props: TitleProps) {
+    return <Row fullWidth>
         <TextLine
             color='text'
             text={props.text}
             italic
             margin={point(1)}
         />
-    </Row>
-);
+    </Row>;
+}
 
-const BookTitle: Comp<{ text?: string }> = (props =>
-    <Row centered fullWidth>
+function BookTitle(props: TitleProps) {
+    return <Row centered fullWidth>
         <TextLine
             color='text'
             text={props.text}
@@ -115,17 +133,22 @@ const BookTitle: Comp<{ text?: string }> = (props =>
             bold
             textAlign='center'
         />
-    </Row>
-);
+    </Row>;
+}
 
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(function ChapterHeaderC(props) {
-    const TitleComp = props.level === 0 ? ChapterTitle
-        : props.level > 0 ? PartTitle
+type ChapterHeaderProps = {
+    level: number,
+    title: string[],
+};
+function ChapterHeaderC({ level, title }: ChapterHeaderProps) {
+    const TitleComp = level === 0 ? ChapterTitle
+        : level > 0 ? PartTitle
             : SubpartTitle;
     return <>
         {
-            props.title.map((line, idx) =>
+            title.map((line, idx) =>
                 <TitleComp key={idx} text={line} />)
         }
     </>;
-});
+}
+const ChapterHeader = refable(ChapterHeaderC);
