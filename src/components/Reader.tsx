@@ -111,6 +111,7 @@ export function BookNodesComp(props: BookNodesProps) {
             buildNodes(props.nodes, [], {
                 refPathHandler: () => undefined,
                 pageRange: bookRange(),
+                omitDropCase: true,
             })
         }
     </>;

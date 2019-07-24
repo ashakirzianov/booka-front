@@ -15,6 +15,7 @@ export type Params = {
     refPathHandler: RefPathHandler,
     pageRange: BookRange,
     quoteRange?: BookRange,
+    omitDropCase?: boolean,
 };
 
 export function buildBook(book: VolumeNode, params: Params) {
@@ -59,7 +60,7 @@ function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params
                 key={`p-${pathToString(path)}`}
                 p={paragraph}
                 path={path}
-                first={last(path) === 0}
+                first={params.omitDropCase ? false : last(path) === 0}
                 highlights={params.quoteRange && {
                     quote: params.quoteRange,
                 }}
