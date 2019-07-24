@@ -177,6 +177,8 @@ export function StretchTextButton(props: Props<StretchTextButtonProps>) {
         href={props.href}
         onClick={props.onClick}
         style={{
+            alignSelf: 'stretch',
+            flexGrow: 1,
             color: colors(props.theme).accent,
             borderColor: colors(props.theme).accent,
             ':hover': {
@@ -185,12 +187,11 @@ export function StretchTextButton(props: Props<StretchTextButtonProps>) {
             },
         }}
     >
-        <div style={{
-            justifyContent: 'space-between',
+        <View style={{
             flexDirection: 'row',
-        }}
-        >
+            justifyContent: 'space-between',
+        }}>
             {props.children}
-        </div>
+        </View>
     </Hyperlink>;
 }

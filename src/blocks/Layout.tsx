@@ -15,6 +15,23 @@ export type LayoutProps = {
     borderColor?: string,
 };
 
+function buildStyle(props: LayoutProps): ViewStyle | undefined {
+    return {
+        alignItems: props.aligned ? 'center' : 'stretch',
+        justifyContent: props.centered ? 'space-around' : 'flex-start',
+        width: props.fullWidth ? '100%' : props.width,
+        height: props.fullHeight ? '100%' : props.height,
+        maxWidth: props.maxWidth,
+        margin: props.margin,
+        padding: props.padding,
+        ...(props.borderColor && {
+            borderColor: props.borderColor,
+            borderStyle: 'solid',
+            borderWidth: 1,
+        }),
+    };
+}
+
 export function Column(props: Props<LayoutProps>) {
     return <View
         style={{
@@ -101,21 +118,4 @@ export function Line(props: Props<LineProps>) {
     >
         {props.children}
     </View>;
-}
-
-function buildStyle(props: LayoutProps): ViewStyle | undefined {
-    return {
-        alignItems: props.aligned ? 'center' : 'stretch',
-        justifyContent: props.centered ? 'space-around' : 'flex-start',
-        width: props.fullWidth ? '100%' : props.width,
-        height: props.fullHeight ? '100%' : props.height,
-        maxWidth: props.maxWidth,
-        margin: props.margin,
-        padding: props.padding,
-        ...(props.borderColor && {
-            borderColor: props.borderColor,
-            borderStyle: 'solid',
-            borderWidth: 1,
-        }),
-    };
 }

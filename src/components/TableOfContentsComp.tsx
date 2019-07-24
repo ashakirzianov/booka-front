@@ -18,15 +18,13 @@ type TocItemProps = TableOfContentsItem & {
 function TocItemComp(props: TocItemProps) {
     return <Row>
         {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <Column>
-            <StretchTextButton
-                action={actionCreators
-                    .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-            >
-                <TextLine key='title' text={props.title} family='menu' />
-                <TextLine key='pn' text={props.pageNumber.toString()} family='menu' />
-            </StretchTextButton>
-        </Column>
+        <StretchTextButton
+            action={actionCreators
+                .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
+        >
+            <TextLine key='title' text={props.title} family='menu' />
+            <TextLine key='pn' text={props.pageNumber.toString()} family='menu' />
+        </StretchTextButton>
     </Row>;
 }
 
