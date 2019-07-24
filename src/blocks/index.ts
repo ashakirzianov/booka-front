@@ -2,6 +2,7 @@
 export * from './connect';
 
 export * from './common';
+export * from './subscribeEffects';
 export * from './Basics';
 export * from './Bars';
 export * from './Modal';

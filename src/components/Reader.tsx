@@ -6,11 +6,11 @@ import {
 import {
     Comp, Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    Scroll, Clickable, EmptyLine,
+    Scroll, Clickable, EmptyLine, useCopy, useSelection,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
-    getSelectionRange, subscribe, unsubscribe, BookSelection,
+    getSelectionRange, BookSelection,
 } from './Reader.plat';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
@@ -48,34 +48,23 @@ export function Reader(props: ReaderProps) {
                 // In case we navigate to character
                 || refMap.current[pathToString(parentPath(pathToNavigate))]
                 ;
-            if (!scrollToRef(refToNavigate)) {
-                setTimeout(scrollToCurrentPath, 250);
-            }
+            scrollToRef(refToNavigate);
+            // if (!scrollToRef(refToNavigate)) {
+            //     setTimeout(scrollToCurrentPath, 250);
+            // }
         }
     }, [pathToNavigate]);
 
-    React.useEffect(function () {
-        function handleSelection() {
-            selectedRange.current = getSelectionRange();
+    useSelection(function handleSelection() {
+        selectedRange.current = getSelectionRange();
+    });
+
+    useCopy(function handleCopy(e: ClipboardEvent) {
+        if (selectedRange.current && e.clipboardData) {
+            e.preventDefault();
+            const selectionText = composeSelection(selectedRange.current, id);
+            e.clipboardData.setData('text/plain', selectionText);
         }
-
-        subscribe.selection(handleSelection);
-
-        return () => unsubscribe.selection(handleSelection);
-    }, []);
-
-    React.useEffect(function () {
-        function handleCopy(e: ClipboardEvent) {
-            if (selectedRange.current && e.clipboardData) {
-                e.preventDefault();
-                const selectionText = composeSelection(selectedRange.current, id);
-                e.clipboardData.setData('text/plain', selectionText);
-            }
-        }
-
-        subscribe.copy(handleCopy);
-
-        return () => unsubscribe.copy(handleCopy);
     });
 
     const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
