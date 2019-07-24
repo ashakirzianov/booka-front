@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectActions, Row, Modal,
-    WithPopover, Line, Column,
+    WithPopover, Column,
     Separator, TextLine, point, Triad,
 } from '../blocks';
 import {
@@ -39,14 +39,10 @@ export function BookScreenComp({ screen }: BookScreenProps) {
 }
 
 export function BookScreenHeader() {
-    return <Line paddingHorizontal={point(1)}>
-        <Row>
-            <LibButton key='back' />
-        </Row>
-        <Row>
-            <AppearanceButton key='appearance' />
-        </Row>
-    </Line>;
+    return <Triad
+        left={<LibButton />}
+        right={<AppearanceButton />}
+    />;
 }
 
 export type BookScreenFooterProps = {
@@ -69,7 +65,6 @@ export function BookScreenFooter({ screen }: BookScreenFooterProps) {
             size='smallest'
             color='accent'
         />}
-        paddingHorizontal={point(1)}
     />;
 }
 

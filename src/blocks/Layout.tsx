@@ -62,48 +62,43 @@ export type TriadProps = {
     left?: React.ReactNode,
     center?: React.ReactNode,
     right?: React.ReactNode,
-    paddingHorizontal?: Size,
-    paddingVertical?: Size,
 };
 export function Triad(props: TriadProps) {
-    return <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    }}>
-        {
-            !props.left && !props.right ? null :
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    height: '100%',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    paddingHorizontal: props.paddingHorizontal,
-                    paddingVertical: props.paddingVertical,
-                }}>
-                    <View style={{ justifyContent: 'center' }}>
-                        {props.left}
-                    </View>
-                    <View style={{ justifyContent: 'center' }}>
-                        {props.right}
-                    </View>
-                </View>
-        }
-        {
-            !props.center ? null :
-                <View
-                    key='center'
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    {props.center}
-                </View>
-        }
+    return <View
+        style={{
+            flexGrow: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignSelf: 'stretch',
+        }}
+    >
+        <View style={{
+            flex: 1,
+            flexBasis: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+        }}>
+            {props.left}
+        </View>
+        <View style={{
+            flex: 1,
+            flexBasis: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            {props.center}
+        </View>
+        <View style={{
+            flex: 1,
+            flexBasis: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+        }}>
+            {props.right}
+        </View>
     </View>;
 }
 

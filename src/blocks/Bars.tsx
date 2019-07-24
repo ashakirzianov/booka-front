@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Props, point, defaults } from './common';
+import { Props, point, defaults, Size } from './common';
 import { Themeable, themed } from './connect';
 import { FadeIn } from './Animations';
 import { colors } from '../model';
+import { View } from 'react-native';
 
 export type BarProps = {
     open: boolean,
+    paddingHorizontal?: Size,
 };
 function bar(top: boolean) {
     return function Bar(props: Props<Themeable<BarProps>>) {
@@ -23,8 +25,14 @@ function bar(top: boolean) {
                 zIndex: 5,
                 boxShadow: `0px 0px 2px ${colors(props.theme).shadow}`,
                 backgroundColor: colors(props.theme).secondary,
+
             }}>
-                {props.children}
+                <View style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: props.paddingHorizontal,
+                }}>
+                    {props.children}
+                </View>
             </div>
         </FadeIn >;
     };

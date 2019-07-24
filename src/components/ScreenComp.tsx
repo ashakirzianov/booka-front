@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectState, FullScreenActivityIndicator,
-    Column, TopBar, BottomBar,
+    Column, TopBar, BottomBar, point,
 } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
@@ -41,7 +41,7 @@ type BarProps = {
     controlsVisible: boolean,
 };
 function Header({ screen, controlsVisible }: BarProps) {
-    return <TopBar open={controlsVisible}>
+    return <TopBar open={controlsVisible} paddingHorizontal={point(1)}>
         {
             screen.screen === 'library' ? <LibraryScreenHeader />
                 : screen.screen === 'book' ? <BookScreenHeader />
@@ -55,7 +55,7 @@ function Footer({ screen, controlsVisible }: BarProps) {
         return null;
     }
 
-    return <BottomBar open={controlsVisible}>
+    return <BottomBar open={controlsVisible} paddingHorizontal={point(1)}>
         <BookScreenFooter screen={screen} />
     </BottomBar>;
 }
