@@ -23,8 +23,8 @@ function TocItemComp({ item, tabs, id }: TocItemProps) {
             action={actionCreators
                 .navigateToBook(bookLocator(id, locationPath(item.path)))}
         >
-            <TextLine key='title' text={item.title} family='menu' />
-            <TextLine key='pn' text={item.pageNumber.toString()} family='menu' />
+            <TextLine key='title' text={item.title} />
+            <TextLine key='pn' text={item.pageNumber.toString()} />
         </StretchTextButton>
     </Row>;
 }

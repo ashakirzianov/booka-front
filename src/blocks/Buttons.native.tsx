@@ -66,7 +66,6 @@ function TagButtonC(props: TagButtonProps) {
                 <TextLine
                     text={props.text}
                     size='smallest'
-                    family='menu'
                     color='accent'
                 />
             </View>

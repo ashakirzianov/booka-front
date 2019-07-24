@@ -91,7 +91,6 @@ export function TagButton(props: TagButtonProps) {
                 <TextLine
                     text={props.text}
                     size='smallest'
-                    family='menu'
                 />
             </View>
         </View>

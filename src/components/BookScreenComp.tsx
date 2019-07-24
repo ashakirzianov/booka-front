@@ -67,7 +67,6 @@ export function BookScreenFooter({ screen }: BookScreenFooterProps) {
         right={<TextLine
             text={`${left} pages left`}
             size='smallest'
-            family='menu'
             color='accent'
         />}
         paddingHorizontal={point(1)}
@@ -152,6 +151,7 @@ type FontScaleButtonProps = {
 function FontScaleButton(props: FontScaleButtonProps) {
     return <Column centered>
         <TextButton
+            family='book'
             text='Abc'
             size={props.size}
             color='accent'

@@ -91,6 +91,7 @@ type TitleProps = {
 function ChapterTitle(props: TitleProps) {
     return <Row centered fullWidth>
         <TextLine
+            family='book'
             color='text'
             text={props.text && props.text.toLocaleUpperCase()}
             letterSpacing={point(0.15)}
@@ -103,6 +104,7 @@ function ChapterTitle(props: TitleProps) {
 function PartTitle(props: TitleProps) {
     return <Row centered fullWidth>
         <TextLine
+            family='book'
             color='text'
             text={props.text}
             size='large'
@@ -116,6 +118,7 @@ function PartTitle(props: TitleProps) {
 function SubpartTitle(props: TitleProps) {
     return <Row fullWidth>
         <TextLine
+            family='book'
             color='text'
             text={props.text}
             italic
@@ -127,6 +130,7 @@ function SubpartTitle(props: TitleProps) {
 function BookTitle(props: TitleProps) {
     return <Row centered fullWidth>
         <TextLine
+            family='book'
             color='text'
             text={props.text}
             size='largest'

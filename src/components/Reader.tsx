@@ -128,6 +128,7 @@ function PathLink(props: PathLinkProps) {
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
                 text={props.text}
+                family='book'
             />
         </Row>;
 }

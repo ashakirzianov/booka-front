@@ -23,7 +23,7 @@ function TextLineC(props: Themeable<TextLineProps>) {
     return <span
         style={{
             fontSize: fontSize(props.theme, props.size),
-            fontFamily: props.theme.fontFamilies[props.family || 'book'],
+            fontFamily: props.theme.fontFamilies[props.family || 'menu'],
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             letterSpacing: props.letterSpacing,
             margin: props.margin,
