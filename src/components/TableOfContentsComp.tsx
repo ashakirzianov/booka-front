@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Row, Tab, Column, point,
+    Row, Tab, Column, point, TextLine,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -22,11 +22,10 @@ function TocItemComp(props: TocItemProps) {
             <StretchTextButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-                texts={[
-                    props.title,
-                    props.pageNumber.toString(),
-                ]}
-            />
+            >
+                <TextLine key='title' text={props.title} family='menu' />
+                <TextLine key='pn' text={props.pageNumber.toString()} family='menu' />
+            </StretchTextButton>
         </Column>
     </Row>;
 }

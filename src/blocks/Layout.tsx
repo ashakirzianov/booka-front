@@ -50,20 +50,6 @@ export function Triad(props: TriadProps) {
         justifyContent: 'space-between',
     }}>
         {
-            !props.center ? null :
-                <View
-                    key='center'
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    {props.center}
-                </View>
-        }
-        {
             !props.left && !props.right ? null :
                 <View style={{
                     flex: 1,
@@ -81,6 +67,20 @@ export function Triad(props: TriadProps) {
                     <View style={{ justifyContent: 'center' }}>
                         {props.right}
                     </View>
+                </View>
+        }
+        {
+            !props.center ? null :
+                <View
+                    key='center'
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    {props.center}
                 </View>
         }
     </View>;

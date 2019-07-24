@@ -34,8 +34,6 @@ function IconButtonC(props: IconButtonProps) {
         >
             <Icon
                 name={props.icon}
-                color={colors(props.theme).accent}
-                hoverColor={colors(props.theme).highlight}
                 size={24}
             />
         </View>
@@ -131,14 +129,14 @@ function PaletteButtonC(props: PaletteButtonProps) {
 }
 export const PaletteButton = connectAll(PaletteButtonC);
 
-function StretchTextButtonC(props: StretchTextButtonProps) {
+function StretchTextButtonC(props: Props<StretchTextButtonProps>) {
     return <Button {...props}>
         <View style={{
             justifyContent: 'space-between',
             flexDirection: 'row',
         }}
         >
-            {props.texts.map((t, idx) => <TextLine key={idx} text={t} />)}
+            {props.children}
         </View>
     </Button>;
 }

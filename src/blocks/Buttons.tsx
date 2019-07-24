@@ -3,7 +3,7 @@ import * as React from 'react';
 // TODO: review imports
 import { PaletteName, colors, fontSize } from '../model';
 import { TextLine, TextProps } from './Basics';
-import { Callback, point } from './common';
+import { Callback, point, Props } from './common';
 import { Icon, IconName } from './Icons';
 import { Themeable } from './connect';
 import { Hyperlink } from './Web';
@@ -54,8 +54,6 @@ export function IconButton(props: IconButtonProps) {
         <View>
             <Icon
                 name={props.icon}
-                color={colors(props.theme).accent}
-                hoverColor={colors(props.theme).highlight}
                 size={24}
             />
         </View>
@@ -173,10 +171,8 @@ export function PaletteButton(props: PaletteButtonProps) {
     </Hyperlink>;
 }
 
-export type StretchTextButtonProps = ButtonProps<{
-    texts: string[],
-}>;
-export function StretchTextButton(props: StretchTextButtonProps) {
+export type StretchTextButtonProps = ButtonProps<{}>;
+export function StretchTextButton(props: Props<StretchTextButtonProps>) {
     return <Hyperlink
         href={props.href}
         onClick={props.onClick}
@@ -194,7 +190,7 @@ export function StretchTextButton(props: StretchTextButtonProps) {
             flexDirection: 'row',
         }}
         >
-            {props.texts.map((t, idx) => <TextLine key={idx} text={t} />)}
+            {props.children}
         </div>
     </Hyperlink>;
 }
