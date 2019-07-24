@@ -101,20 +101,3 @@ export function Triad(props: TriadProps) {
         </View>
     </View>;
 }
-
-// TODO: remove once Triad is fixed
-export type LineProps = {
-    paddingHorizontal?: Size,
-};
-export function Line(props: Props<LineProps>) {
-    return <View
-        style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-            paddingHorizontal: props.paddingHorizontal,
-        }}
-    >
-        {props.children}
-    </View>;
-}
