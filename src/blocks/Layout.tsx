@@ -41,11 +41,14 @@ export type TriadProps = {
     left?: React.ReactNode,
     center?: React.ReactNode,
     right?: React.ReactNode,
-    leftPadding?: number,
-    rightPadding?: number,
+    paddingHorizontal?: Size,
+    paddingVertical?: Size,
 };
 export function Triad(props: TriadProps) {
-    return <View style={{ flexDirection: 'row' }}>
+    return <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    }}>
         {
             !props.center ? null :
                 <View
@@ -61,35 +64,42 @@ export function Triad(props: TriadProps) {
                 </View>
         }
         {
-            !props.left ? null :
-                <View
-                    key='left'
-                    style={{
-                        height: '100%',
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        left: props.leftPadding || 0,
-                        top: 0,
-                    }}
-                >
-                    {props.left}
+            !props.left && !props.right ? null :
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    height: '100%',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: props.paddingHorizontal,
+                    paddingVertical: props.paddingVertical,
+                }}>
+                    <View style={{ justifyContent: 'center' }}>
+                        {props.left}
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
+                        {props.right}
+                    </View>
                 </View>
         }
-        {
-            !props.right ? null :
-                <View
-                    key='right'
-                    style={{
-                        height: '100%',
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        right: props.rightPadding || 0,
-                        top: 0,
-                    }}
-                >
-                    {props.right}
-                </View>
-        }
+    </View>;
+}
+
+// TODO: remove once Triad is fixed
+export type LineProps = {
+    paddingHorizontal?: Size,
+};
+export function Line(props: Props<LineProps>) {
+    return <View
+        style={{
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
+            paddingHorizontal: props.paddingHorizontal,
+        }}
+    >
+        {props.children}
     </View>;
 }
 

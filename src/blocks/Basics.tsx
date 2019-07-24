@@ -68,19 +68,6 @@ export function Separator() {
 }
 
 // TODO: remove ?
-export function Line(props: Props) {
-    return <View
-        style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-        }}
-    >
-        {props.children}
-    </View>;
-}
-
-// TODO: remove ?
 export type ClickableProps = {
     onClick: () => void,
 };

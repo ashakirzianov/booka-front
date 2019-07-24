@@ -31,14 +31,13 @@ function iconForName(name: IconName) {
 }
 
 export function Icon({ size, name, color, hoverColor }: Props<IconProps>) {
-    return React.createElement('div',
-        {
-            color,
-            ':hover': {
-                color: hoverColor,
-            },
-        },
-        React.createElement(iconForName(name), {
+    return <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }}>
+        {React.createElement(iconForName(name), {
             size: size || '1em',
-        }));
+        })}
+    </div>;
 }

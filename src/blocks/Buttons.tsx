@@ -51,7 +51,7 @@ export function IconButton(props: IconButtonProps) {
             },
         }}
     >
-        <View style={{ justifyContent: 'center' }}>
+        <View>
             <Icon
                 name={props.icon}
                 color={colors(props.theme).accent}

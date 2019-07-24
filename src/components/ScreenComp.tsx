@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    connectState, Comp, Row, FullScreenActivityIndicator,
+    connectState, Comp, FullScreenActivityIndicator,
     Column, TopBar, BottomBar,
 } from '../blocks';
 import { AppScreen } from '../model';
@@ -29,13 +29,11 @@ type BarProps = AppScreen & {
 };
 const Header: Comp<BarProps> = (props =>
     <TopBar open={props.controlsVisible}>
-        <Row>
-            {
-                props.screen === 'library' ? <LibraryScreenHeader />
-                    : props.screen === 'book' ? <BookScreenHeader {...props} />
-                        : assertNever(props)
-            }
-        </Row>
+        {
+            props.screen === 'library' ? <LibraryScreenHeader />
+                : props.screen === 'book' ? <BookScreenHeader {...props} />
+                    : assertNever(props)
+        }
     </TopBar>
 );
 

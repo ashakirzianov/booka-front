@@ -37,7 +37,7 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
 );
 
 export const BookScreenHeader: Comp<BookScreen> = (props =>
-    <Line>
+    <Line paddingHorizontal={point(1)}>
         <Row>
             <LibButton key='back' />
         </Row>
@@ -65,7 +65,7 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
             family='menu'
             color='accent'
         />}
-        rightPadding={10}
+        paddingHorizontal={point(1)}
     />;
 });
 
