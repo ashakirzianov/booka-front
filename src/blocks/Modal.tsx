@@ -7,7 +7,7 @@ import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
 import { Callback, Props, defaults } from './common';
 import { Themeable, themed } from './connect';
-import { Triad } from './Layout';
+import { Triad, Row } from './Layout';
 import { View } from 'react-native';
 
 export type ModalProps = Themeable<{
@@ -38,17 +38,19 @@ function ModalC(props: Props<ModalProps>) {
                     }}
                     theme={props.theme}>
                     <View style={{ flex: 1 }}>
-                        <Triad
-                            center={<TextLine
-                                color='text'
-                                text={props.title}
-                            />}
-                            left={<IconButton
-                                theme={props.theme}
-                                onClick={props.toggle}
-                                icon='close'
-                            />}
-                        />
+                        <Row>
+                            <Triad
+                                center={<TextLine
+                                    color='text'
+                                    text={props.title}
+                                />}
+                                left={<IconButton
+                                    theme={props.theme}
+                                    onClick={props.toggle}
+                                    icon='close'
+                                />}
+                            />
+                        </Row>
                         <View style={{
                             flex: 1,
                             alignItems: 'stretch',

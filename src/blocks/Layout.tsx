@@ -69,7 +69,7 @@ export function Triad(props: TriadProps) {
             flexGrow: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignSelf: 'stretch',
+            // alignSelf: 'stretch',
         }}
     >
         <View style={{
