@@ -3,7 +3,8 @@ import { Props, Size } from './common';
 import { View, ViewStyle } from 'react-native';
 
 export type LayoutProps = {
-    aligned?: boolean,
+    stretched?: boolean,
+    justified?: boolean,
     centered?: boolean,
     fullWidth?: boolean,
     fullHeight?: boolean,
@@ -17,8 +18,11 @@ export type LayoutProps = {
 
 function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
-        alignItems: props.aligned ? 'center' : 'stretch',
-        justifyContent: props.centered ? 'space-around' : 'flex-start',
+        alignSelf: props.stretched ? 'stretch' : undefined,
+        alignItems: props.centered ? 'center' : 'stretch',
+        justifyContent: props.justified ? 'space-around'
+            : props.centered ? 'center'
+                : undefined,
         width: props.fullWidth ? '100%' : props.width,
         height: props.fullHeight ? '100%' : props.height,
         maxWidth: props.maxWidth,

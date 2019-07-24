@@ -99,8 +99,8 @@ export class Reader extends React.Component<ReaderProps> {
         return <Scroll
             onScroll={this.handleScroll}
         >
-            <Row maxWidth={point(50)} fullWidth aligned centered>
-                <Column fullWidth padding={point(1)} aligned centered>
+            <Row maxWidth={point(50)} fullWidth centered>
+                <Column fullWidth padding={point(1)} centered>
                     <EmptyLine />
                     <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                     <Clickable onClick={this.props.toggleControls}>

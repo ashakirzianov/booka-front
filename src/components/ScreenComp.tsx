@@ -10,7 +10,7 @@ import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreen
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 
 export const ScreenComp = connectState('controlsVisible', 'loading')<AppScreen>(props =>
-    <Column centered aligned fullWidth fullHeight>
+    <Column centered fullWidth fullHeight>
         {props.loading ? <FullScreenActivityIndicator /> : null}
         <Header {...props} />
         <Footer {...props} />

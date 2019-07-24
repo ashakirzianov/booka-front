@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     connectActions, Row, Modal,
-    Comp, WithPopover, Line, Column,
+    WithPopover, Line, Column,
     Separator, TextLine, point, Triad,
 } from '../blocks';
 import {
@@ -16,8 +16,8 @@ import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import { TagButton, IconButton, TextButton, PaletteButton } from './Connected';
 
-export const BookScreenComp: Comp<BookScreen> = (props =>
-    <>
+export function BookScreenComp(props: BookScreen) {
+    return <>
         <BookComp
             {...props.book}
             quoteRange={props.bl.quote}
@@ -33,21 +33,21 @@ export const BookScreenComp: Comp<BookScreen> = (props =>
                     : undefined
             }
         />
-    </>
-);
+    </>;
+}
 
-export const BookScreenHeader: Comp<BookScreen> = (props =>
-    <Line paddingHorizontal={point(1)}>
+export function BookScreenHeader(props: BookScreen) {
+    return <Line paddingHorizontal={point(1)}>
         <Row>
             <LibButton key='back' />
         </Row>
         <Row>
             <AppearanceButton key='appearance' />
         </Row>
-    </Line>
-);
+    </Line>;
+}
 
-export const BookScreenFooter: Comp<BookScreen> = (props => {
+export function BookScreenFooter(props: BookScreen) {
     const pagination = new Pagination(props.book.volume);
     const total = pagination.totalPages();
     let currentPage = 1;
@@ -67,9 +67,12 @@ export const BookScreenFooter: Comp<BookScreen> = (props => {
         />}
         paddingHorizontal={point(1)}
     />;
-});
+}
 
-type TocButtonProps = { current: number, total: number };
+type TocButtonProps = {
+    current: number,
+    total: number,
+};
 function TocButton(props: TocButtonProps) {
     return <TagButton
         text={`${props.current} of ${props.total}`}
@@ -77,15 +80,15 @@ function TocButton(props: TocButtonProps) {
     />;
 }
 
-const LibButton: Comp = (() =>
-    <IconButton
+function LibButton() {
+    return <IconButton
         icon='left'
         action={actionCreators.navigateToLibrary()}
-    />
-);
+    />;
+}
 
-const AppearanceButton: Comp = (() =>
-    <WithPopover
+function AppearanceButton() {
+    return <WithPopover
         popoverPlacement='bottom'
         body={<ThemePicker />}
     >
@@ -93,8 +96,8 @@ const AppearanceButton: Comp = (() =>
             onClick =>
                 <IconButton icon='letter' onClick={onClick} />
         }
-    </WithPopover>
-);
+    </WithPopover>;
+}
 
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
     <Modal
@@ -106,13 +109,6 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-const FootnoteComp: Comp<FootnoteSpan> = (props =>
-    <BookNodesComp nodes={[{
-        node: 'paragraph',
-        span: props.footnote,
-    }]} />
-);
-
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(props =>
     <Modal
         title={props.footnote && props.footnote.title[0]}
@@ -121,32 +117,34 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
     >
         {
             !props.footnote ? null :
-                <FootnoteComp {...props.footnote} />
+                <BookNodesComp nodes={[{
+                    node: 'paragraph',
+                    span: props.footnote,
+                }]} />
         }
     </Modal>
 );
 
-const ThemePicker: Comp = (props =>
-    <Column width={point(14)}>
+function ThemePicker() {
+    return <Column width={point(14)}>
         <FontScale />
         <Separator />
         <PalettePicker />
-    </Column>
-);
+    </Column>;
+}
 
-const FontScale: Comp = (() =>
-    <Column centered height={point(5)}>
-        <Row centered>
-            <FontScaleButton increment={-0.1} size='smallest' />
-            <FontScaleButton increment={0.1} size='largest' />
-        </Row>
-    </Column>
-);
+function FontScale() {
+    return <Row centered justified height={point(5)}>
+        <FontScaleButton increment={-0.1} size='smallest' />
+        <FontScaleButton increment={0.1} size='largest' />
+    </Row>;
+}
 
-const FontScaleButton = connectActions('incrementScale')<{
+type FontScaleButtonProps = {
     increment: number,
     size: 'largest' | 'smallest',
-}>(props => {
+};
+function FontScaleButton(props: FontScaleButtonProps) {
     return <Column centered>
         <TextButton
             text='Abc'
@@ -156,17 +154,15 @@ const FontScaleButton = connectActions('incrementScale')<{
                 .incrementScale(props.increment)}
         />
     </Column>;
-});
+}
 
-const PalettePicker: Comp = (() =>
-    <Column centered height={point(5)}>
-        <Row centered>
-            <SelectPaletteButton name='light' text='L' />
-            <SelectPaletteButton name='sepia' text='S' />
-            <SelectPaletteButton name='dark' text='D' />
-        </Row>
-    </Column>
-);
+function PalettePicker() {
+    return <Row centered justified height={point(5)}>
+        <SelectPaletteButton name='light' text='L' />
+        <SelectPaletteButton name='sepia' text='S' />
+        <SelectPaletteButton name='dark' text='D' />
+    </Row>;
+}
 
 type PaletteButtonProps = {
     name: PaletteName,
