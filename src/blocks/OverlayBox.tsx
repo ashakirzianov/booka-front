@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Props, percent, point } from './common';
+import { Props, percent, point, defaults } from './common';
 import { Themeable } from './connect';
-import { defaults } from './defaults';
 import { colors } from '../model';
 import { View } from 'react-native';
 

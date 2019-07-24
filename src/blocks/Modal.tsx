@@ -5,9 +5,8 @@ import { Transition } from 'react-transition-group';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
-import { Callback, Props } from './common';
+import { Callback, Props, defaults } from './common';
 import { Themeable, themed } from './connect';
-import { defaults } from './defaults';
 import { Triad } from './Layout';
 import { View } from 'react-native';
 

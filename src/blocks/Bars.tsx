@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Props, point } from './common';
+import { Props, point, defaults } from './common';
 import { Themeable, themed } from './connect';
 import { FadeIn } from './Animations';
-import { defaults } from './defaults';
 import { colors } from '../model';
 
 export type BarProps = {

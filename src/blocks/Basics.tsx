@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import { Theme, PaletteColor, colors, fontSize } from '../model';
 import { Themeable, themed } from './connect';
-import { defaults } from './defaults';
 import { ActivityIndicator, View } from 'react-native';
-import { percent, point, Size, Props } from './common';
+import { percent, point, Size, Props, defaults } from './common';
 import { platformValue } from '../utils';
 
 export type TextProps = {

@@ -1,11 +1,13 @@
 import * as React from 'react';
 
-import { Text, ActivityIndicator, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
+import {
+    Text, ActivityIndicator, TouchableWithoutFeedback,
+    View, SafeAreaView,
+} from 'react-native';
 
+import { Props, point, defaults } from './common';
 import { Themeable, themed } from './connect';
 import { TextLineProps, ClickableProps, PphProps } from './Basics';
-import { defaults } from './defaults';
-import { Props, point } from './common';
 import { platformValue } from '../utils';
 import { colors, fontSize } from '../model';
 
