@@ -47,7 +47,8 @@
         "subpath",
         "succ",
         "timeouted",
-        "webfonts"
+        "webfonts",
+        "webview"
     ],
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.wordWrap": "bounded",

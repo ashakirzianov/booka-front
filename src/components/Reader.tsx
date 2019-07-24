@@ -28,92 +28,89 @@ export type ReaderProps = {
     quoteRange: BookRange | undefined,
     id: BookId,
 };
-export class Reader extends React.Component<ReaderProps> {
-    public refMap: RefMap = {};
-    public selectedRange: BookSelection | undefined = undefined;
 
-    public handleScroll = async () => {
-        const newCurrentPath = await computeCurrentPath(this.refMap);
-        if (newCurrentPath) {
-            this.props.updateBookPosition(newCurrentPath);
-        }
-    }
+export function Reader(props: ReaderProps) {
+    const {
+        quoteRange, range,
+        prevPath, nextPath, pathToNavigate,
+        id, volume,
+        updateBookPosition, toggleControls,
+    } = props;
 
-    public handleSelection = () => {
-        this.selectedRange = getSelectionRange();
-    }
+    const refMap = React.useRef<RefMap>({});
+    const selectedRange = React.useRef<BookSelection | undefined>(undefined);
 
-    public handleCopy = (e: ClipboardEvent) => {
-        if (this.selectedRange && e.clipboardData) {
-            e.preventDefault();
-            const selectionText = composeSelection(this.selectedRange, this.props.id);
-            e.clipboardData.setData('text/plain', selectionText);
-        }
-    }
-
-    public scrollToCurrentPath = () => {
-        const props = this.props;
-        const refMap = this.refMap;
-        if (props && props.pathToNavigate) {
+    React.useEffect(function scrollToCurrentPath() {
+        if (pathToNavigate) {
             const refToNavigate =
-                refMap[pathToString(props.pathToNavigate)]
+                refMap.current[pathToString(pathToNavigate)]
                 // TODO: find better solution
                 // In case we navigate to character
-                || refMap[pathToString(parentPath(props.pathToNavigate))]
+                || refMap.current[pathToString(parentPath(pathToNavigate))]
                 ;
             if (!scrollToRef(refToNavigate)) {
-                setTimeout(this.scrollToCurrentPath.bind(this), 250);
+                setTimeout(scrollToCurrentPath, 250);
             }
         }
-    }
+    }, [pathToNavigate]);
 
-    public componentDidMount() {
-        subscribe.scroll(this.handleScroll);
-        subscribe.selection(this.handleSelection);
-        subscribe.copy(this.handleCopy);
-        this.scrollToCurrentPath();
+    React.useEffect(function () {
+        function handleSelection() {
+            selectedRange.current = getSelectionRange();
+        }
 
-    }
+        subscribe.selection(handleSelection);
 
-    public componentDidUpdate() {
-        this.scrollToCurrentPath();
-    }
+        return () => unsubscribe.selection(handleSelection);
+    }, []);
 
-    public componentWillUnmount() {
-        unsubscribe.scroll(this.handleScroll);
-        unsubscribe.selection(this.handleSelection);
-        unsubscribe.copy(this.handleCopy);
-    }
+    React.useEffect(function () {
+        function handleCopy(e: ClipboardEvent) {
+            if (selectedRange.current && e.clipboardData) {
+                e.preventDefault();
+                const selectionText = composeSelection(selectedRange.current, id);
+                e.clipboardData.setData('text/plain', selectionText);
+            }
+        }
 
-    public render() {
-        const { range, prevPath, nextPath, id, volume } = this.props;
-        const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
-        const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
-        const params: Params = {
-            pageRange: range,
-            refPathHandler: (ref, path) => {
-                this.refMap[pathToString(path)] = ref;
-            },
-            quoteRange: this.props.quoteRange,
-        };
-        return <Scroll
-            onScroll={this.handleScroll}
-        >
-            <Row maxWidth={point(50)} fullWidth centered>
-                <Column fullWidth padding={point(1)} centered>
-                    <EmptyLine />
-                    <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
-                    <Clickable onClick={this.props.toggleControls}>
-                        <Column>
-                            {buildBook(volume, params)}
-                        </Column>
-                    </Clickable>
-                    <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
-                    <EmptyLine />
-                </Column>
-            </Row>
-        </Scroll>;
-    }
+        subscribe.copy(handleCopy);
+
+        return () => unsubscribe.copy(handleCopy);
+    });
+
+    const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
+    const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
+    const params: Params = {
+        pageRange: range,
+        refPathHandler: (ref, path) => {
+            refMap.current[pathToString(path)] = ref;
+        },
+        quoteRange: quoteRange,
+    };
+
+    return <Scroll
+        // TODO: use 'useCallback' ?
+        onScroll={async () => {
+            const newCurrentPath = await computeCurrentPath(refMap.current);
+            if (newCurrentPath) {
+                updateBookPosition(newCurrentPath);
+            }
+        }}
+    >
+        <Row maxWidth={point(50)} fullWidth centered>
+            <Column fullWidth padding={point(1)} centered>
+                <EmptyLine />
+                <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
+                <Clickable onClick={toggleControls}>
+                    <Column>
+                        {buildBook(volume, params)}
+                    </Column>
+                </Clickable>
+                <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+                <EmptyLine />
+            </Column>
+        </Row>
+    </Scroll>;
 }
 
 export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>

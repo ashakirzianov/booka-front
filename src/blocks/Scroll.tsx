@@ -4,9 +4,18 @@ import { Props, Callback } from './common';
 export type ScrollProps = {
     onScroll?: Callback<void>,
 };
-export function Scroll(props: Props<ScrollProps>) {
+export function Scroll({ onScroll, children }: Props<ScrollProps>) {
+    React.useEffect(() => {
+        if (onScroll) {
+            window.addEventListener('scroll', onScroll);
+        }
+
+        return onScroll && function unsubscribe() {
+            window.removeEventListener('scroll', onScroll);
+        };
+    }, [onScroll]);
     return <>
-        {props.children}
+        {children}
     </>;
 }
 
