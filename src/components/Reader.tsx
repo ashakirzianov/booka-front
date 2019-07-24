@@ -104,7 +104,7 @@ export class Reader extends React.Component<ReaderProps> {
                     <EmptyLine />
                     <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                     <Clickable onClick={this.props.toggleControls}>
-                        <Column centered>
+                        <Column>
                             {buildBook(volume, params)}
                         </Column>
                     </Clickable>
