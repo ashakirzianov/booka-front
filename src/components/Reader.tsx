@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
     BookPath, BookId, bookLocator, BookRange, ContentNode,
-    VolumeNode, bookRange, locationPath, parentPath, titleForPath,
+    bookRange, locationPath, parentPath, titleForPath, Book, isFirstSubpath, inBookRange, emptyPath, TableOfContentsItem, TableOfContents,
 } from '../model';
 import {
     Comp, Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    Scroll, Clickable, EmptyLine, useCopy, useSelection,
+    Scroll, Clickable, EmptyLine, useCopy, useSelection, connect,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import {
@@ -18,42 +18,39 @@ import { BorderButton } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
-    volume: VolumeNode,
-    pathToNavigate: BookPath | null,
+    book: Book,
+    pathToOpen: BookPath | null,
     updateBookPosition: Callback<BookPath>,
     toggleControls: Callback<void>,
-    range: BookRange,
-    prevPath?: BookPath,
-    nextPath?: BookPath,
     quoteRange: BookRange | undefined,
-    id: BookId,
 };
-
-export function Reader(props: ReaderProps) {
+function ReaderC(props: ReaderProps) {
     const {
-        quoteRange, range,
-        prevPath, nextPath, pathToNavigate,
-        id, volume,
+        quoteRange, pathToOpen,
+        book: { id, volume, toc },
         updateBookPosition, toggleControls,
     } = props;
+    const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
+
+    const range = bookRange(currentPath, nextPath);
 
     const refMap = React.useRef<RefMap>({});
     const selectedRange = React.useRef<BookSelection | undefined>(undefined);
 
     React.useEffect(function scrollToCurrentPath() {
-        if (pathToNavigate) {
+        if (pathToOpen) {
             const refToNavigate =
-                refMap.current[pathToString(pathToNavigate)]
+                refMap.current[pathToString(pathToOpen)]
                 // TODO: find better solution
                 // In case we navigate to character
-                || refMap.current[pathToString(parentPath(pathToNavigate))]
+                || refMap.current[pathToString(parentPath(pathToOpen))]
                 ;
             scrollToRef(refToNavigate);
             // if (!scrollToRef(refToNavigate)) {
             //     setTimeout(scrollToCurrentPath, 250);
             // }
         }
-    }, [pathToNavigate]);
+    }, [pathToOpen]);
 
     useSelection(function handleSelection() {
         selectedRange.current = getSelectionRange();
@@ -101,6 +98,7 @@ export function Reader(props: ReaderProps) {
         </Row>
     </Scroll>;
 }
+export const Reader = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])(ReaderC);
 
 export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
     <>
@@ -145,4 +143,46 @@ async function computeCurrentPath(refMap: RefMap) {
     }
 
     return undefined;
+}
+
+function buildPaths(path: BookPath, toc: TableOfContents): {
+    prevPath?: BookPath,
+    currentPath: BookPath,
+    nextPath?: BookPath,
+} {
+    function tocItemCondition(item: TableOfContentsItem): boolean {
+        return true;
+    }
+
+    let currentPath = emptyPath();
+    let prevPath: BookPath | undefined;
+
+    for (let idx = 1; idx < toc.items.length; idx++) {
+        const item = toc.items[idx];
+        if (tocItemCondition(item)) {
+            let nextPath = item.path;
+
+            // If next chapter is directly bellow current chapter
+            // (e.g. no paragraphs between) we merge them together
+            while (isFirstSubpath(currentPath, nextPath)) {
+                idx++;
+                const candidate = toc.items[idx];
+                if (!candidate) {
+                    break;
+                }
+                if (tocItemCondition(candidate)) {
+                    nextPath = candidate.path;
+                }
+            }
+
+            if (inBookRange(path, bookRange(currentPath, nextPath))) {
+                return { prevPath, currentPath, nextPath };
+            }
+
+            prevPath = currentPath;
+            currentPath = nextPath;
+        }
+    }
+
+    return { prevPath, currentPath };
 }

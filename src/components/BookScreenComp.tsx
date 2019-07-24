@@ -9,9 +9,7 @@ import {
     BookScreen, TableOfContents, PaletteName,
     FootnoteSpan, footnoteForId, Pagination,
 } from '../model';
-import { BookNodesComp } from './Reader';
-
-import { BookComp } from './BookComp';
+import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import { TagButton, IconButton, TextButton, PaletteButton } from './Connected';
@@ -22,7 +20,7 @@ export type BookScreenProps = {
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
     return <>
-        <BookComp
+        <Reader
             book={book}
             quoteRange={bl.quote}
         />
