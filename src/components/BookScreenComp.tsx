@@ -118,7 +118,7 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
             !props.footnote ? null :
                 <BookNodesComp nodes={[{
                     node: 'paragraph',
-                    span: props.footnote,
+                    span: props.footnote.footnote,
                 }]} />
         }
     </Modal>
