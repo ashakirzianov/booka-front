@@ -1,4 +1,4 @@
-import { BookSelection } from './Reader.plat';
+import { BookSelection } from './platform';
 
 // TODO: implement
 export function getSelectionRange(): BookSelection | undefined {

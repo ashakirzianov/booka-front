@@ -11,7 +11,7 @@ import {
 import { actionCreators, generateQuoteLink } from '../core';
 import {
     getSelectionRange, BookSelection,
-} from './Reader.plat';
+} from './platform';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
 import { BorderButton } from './Connected';
