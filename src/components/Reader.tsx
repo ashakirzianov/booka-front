@@ -1,17 +1,19 @@
 import * as React from 'react';
+
 import {
     BookPath, BookId, bookLocator, BookRange, ContentNode,
-    bookRange, locationPath, parentPath, titleForPath, Book, isFirstSubpath, inBookRange, emptyPath, TableOfContentsItem, TableOfContents,
+    bookRange, locationPath, parentPath, titleForPath, Book,
+    isFirstSubpath, inBookRange, emptyPath,
+    TableOfContentsItem, TableOfContents,
 } from '../model';
 import {
-    Comp, Callback, Row, RefType,
+    Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
-    Scroll, Clickable, EmptyLine, useCopy, useSelection, connect,
+    Scroll, Clickable, EmptyLine, useCopy, useSelection,
+    connect,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
-import {
-    getSelectionRange, BookSelection,
-} from './platform';
+import { getSelectionRange, BookSelection } from './platform';
 import { buildNodes, buildBook, Params } from './bookRender';
 import { pathToString, parsePath } from './common';
 import { BorderButton } from './Connected';
@@ -100,32 +102,35 @@ function ReaderC(props: ReaderProps) {
 }
 export const Reader = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])(ReaderC);
 
-export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
-    <>
+export type BookNodesProps = {
+    nodes: ContentNode[],
+};
+export function BookNodesComp(props: BookNodesProps) {
+    return <>
         {
             buildNodes(props.nodes, [], {
                 refPathHandler: () => undefined,
                 pageRange: bookRange(),
             })
         }
-    </>
-);
+    </>;
+}
 
 type PathLinkProps = {
     path: BookPath | undefined,
     id: BookId,
     text: string,
 };
-const PathLink: Comp<PathLinkProps> = (props =>
-    props.path === undefined ? null :
+function PathLink(props: PathLinkProps) {
+    return props.path === undefined ? null :
         <Row centered margin={point(1)}>
             <BorderButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
                 text={props.text}
             />
-        </Row>
-);
+        </Row>;
+}
 
 function composeSelection(selection: BookSelection, id: BookId) {
     return `${selection.text}\n${generateQuoteLink(id, selection.range)}`;
