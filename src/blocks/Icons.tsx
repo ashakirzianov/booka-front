@@ -9,8 +9,6 @@ import { Props } from './common';
 export type IconName = 'close' | 'left' | 'items' | 'letter';
 
 export type IconProps = {
-    color?: string,
-    hoverColor?: string,
     name: IconName,
     size?: number,
 };
@@ -30,7 +28,7 @@ function iconForName(name: IconName) {
     }
 }
 
-export function Icon({ size, name, color, hoverColor }: Props<IconProps>) {
+export function Icon({ size, name }: Props<IconProps>) {
     return <div style={{
         display: 'flex',
         justifyContent: 'center',
