@@ -54,7 +54,7 @@ export function Modal(props: WithChildren<ModalProps>) {
                         <View style={{
                             flex: 1,
                             alignItems: 'stretch',
-                            overflowY: 'scroll',
+                            overflow: 'scroll',
                         }}
                         >
                             {props.children}

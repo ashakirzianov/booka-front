@@ -75,12 +75,11 @@ export function BorderButton(props: TextButtonProps) {
         <View style={{
             borderStyle: 'solid',
             borderColor: colors(props.theme).accent,
-            color: colors(props.theme).accent,
-            fontSize: fontSize(props.theme, 'normal'),
             borderRadius: 10,
             padding: point(0.3),
         }}>
             <TextLine
+                color='accent'
                 theme={props.theme}
                 text={props.text}
                 fontFamily={props.fontFamily}
