@@ -1,14 +1,14 @@
-import { ContentNode, isChapter, isParagraph, VolumeNode, Span } from './bookVolume';
+import {
+    ContentNode, isChapter, isParagraph, VolumeNode, Span,
+    FootnoteSpan, isFootnote, isCompound, ChapterTitle,
+    isSimple, isAttributed, BookNode, hasSubnodes,
+} from './bookVolume';
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
 import {
     iterateToPath, bookIterator, nextIterator, buildPath,
     OptBookIterator, OptParentIterator, nextChapter, iterateUntilCan,
 } from './bookIterator';
-import {
-    FootnoteSpan, isSimple, isAttributed, isFootnote,
-    isCompound, ChapterTitle, BookNode, hasSubnodes,
-} from '../contracts';
 
 export function footnoteForId(book: VolumeNode, id: string): FootnoteSpan | undefined {
     return firstDefined(book.nodes, n => footnoteFromNode(n, id));

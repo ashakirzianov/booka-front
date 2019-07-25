@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 
 import { TextLine } from './Basics';
-import { point, Props } from './common';
+import { point, WithChildren } from './common';
 import { Icon } from './Icons';
 import {
     TextButtonProps, IconButtonProps, TagButtonProps,
@@ -11,15 +11,13 @@ import {
 } from './Buttons';
 import { colors, fontSize } from '../model';
 
-// TODO: "disconnect" buttons in this file
-
 export function TextButton(props: TextButtonProps) {
     return <Link onClick={props.onClick}>
         <TextLine
             theme={props.theme}
             text={props.text}
-            family={props.family}
-            size={props.size}
+            fontFamily={props.fontFamily}
+            fontSize={props.fontSize}
         />
     </Link>;
 }
@@ -64,7 +62,7 @@ export function TagButton(props: TagButtonProps) {
                 <TextLine
                     theme={props.theme}
                     text={props.text}
-                    size='smallest'
+                    fontSize='smallest'
                     color='accent'
                 />
             </View>
@@ -85,8 +83,8 @@ export function BorderButton(props: TextButtonProps) {
             <TextLine
                 theme={props.theme}
                 text={props.text}
-                family={props.family}
-                size={props.size}
+                fontFamily={props.fontFamily}
+                fontSize={props.fontSize}
             />
         </View>
     </Button>;
@@ -126,7 +124,7 @@ export function PaletteButton(props: PaletteButtonProps) {
     </Button>;
 }
 
-export function StretchTextButton(props: Props<StretchTextButtonProps>) {
+export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
     return <Button onClick={props.onClick}>
         <View style={{
             justifyContent: 'space-between',
@@ -140,13 +138,13 @@ export function StretchTextButton(props: Props<StretchTextButtonProps>) {
 
 // =================================================
 
-function Link({ onClick, children }: Props<SuperLink>) {
+function Link({ onClick, children }: WithChildren<SuperLink>) {
     return <Text onPress={onClick}>
         {children}
     </Text>;
 }
 
-function Button({ onClick, children }: Props<SuperLink>) {
+function Button({ onClick, children }: WithChildren<SuperLink>) {
     return <View onTouchEnd={onClick}>
         {children}
     </View>;

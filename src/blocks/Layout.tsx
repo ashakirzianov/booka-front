@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Props, Size } from './common';
+import { WithChildren, Size } from './common';
 import { View, ViewStyle } from 'react-native';
 
 export type LayoutProps = {
@@ -36,7 +36,7 @@ function buildStyle(props: LayoutProps): ViewStyle | undefined {
     };
 }
 
-export function Column(props: Props<LayoutProps>) {
+export function Column(props: WithChildren<LayoutProps>) {
     return <View
         style={{
             ...buildStyle(props),
@@ -47,7 +47,7 @@ export function Column(props: Props<LayoutProps>) {
     </View>;
 }
 
-export function Row(props: Props<LayoutProps>) {
+export function Row(props: WithChildren<LayoutProps>) {
     return <View
         style={{
             ...buildStyle(props),

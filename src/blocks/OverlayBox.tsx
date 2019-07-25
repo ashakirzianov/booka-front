@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import { colors, Theme } from '../model';
-import { Props, percent, point, defaults } from './common';
+import { WithChildren, percent, point, defaults } from './common';
 
 export type OverlayBoxProps = {
     theme: Theme,
@@ -10,7 +10,7 @@ export type OverlayBoxProps = {
         entered: boolean,
     },
 };
-export function OverlayBox(props: Props<OverlayBoxProps>) {
+export function OverlayBox(props: WithChildren<OverlayBoxProps>) {
     return <View
         style={{
             alignSelf: 'center',

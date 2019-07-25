@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import Radium from 'radium';
-import { Callback, Props } from './common';
+import { Callback, WithChildren } from './common';
 
 export type HyperlinkProps = {
     style?: React.CSSProperties,
     href?: string,
     onClick?: Callback<void>,
 };
-function HyperlinkC(props: Props<HyperlinkProps>) {
+function HyperlinkC(props: WithChildren<HyperlinkProps>) {
     return <a
         href={props.href}
         style={{

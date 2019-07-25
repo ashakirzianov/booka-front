@@ -1,12 +1,11 @@
 import * as React from 'react';
+import { View } from 'react-native';
 
-// TODO: review imports
 import { PaletteName, colors, fontSize, Theme } from '../model';
 import { TextLine, TextProps } from './Basics';
-import { Callback, point, Props } from './common';
+import { Callback, point, WithChildren } from './common';
 import { Icon, IconName } from './Icons';
 import { Hyperlink } from './Web';
-import { View } from 'react-native';
 
 export type SuperLink = {
     href?: string,
@@ -33,8 +32,8 @@ export function TextButton(props: TextButtonProps) {
         <TextLine
             theme={props.theme}
             text={props.text}
-            family={props.family}
-            size={props.size}
+            fontFamily={props.fontFamily}
+            fontSize={props.fontSize}
             letterSpacing={props.letterSpacing}
         />
     </Hyperlink>;
@@ -93,7 +92,7 @@ export function TagButton(props: TagButtonProps) {
                 <TextLine
                     theme={props.theme}
                     text={props.text}
-                    size='smallest'
+                    fontSize='smallest'
                 />
             </View>
         </View>
@@ -124,8 +123,8 @@ export function BorderButton(props: TextButtonProps) {
             <TextLine
                 theme={props.theme}
                 text={props.text}
-                family={props.family}
-                size={props.size}
+                fontFamily={props.fontFamily}
+                fontSize={props.fontSize}
                 letterSpacing={props.letterSpacing}
             />
         </div>
@@ -176,7 +175,7 @@ export function PaletteButton(props: PaletteButtonProps) {
 }
 
 export type StretchTextButtonProps = ButtonProps<{}>;
-export function StretchTextButton(props: Props<StretchTextButtonProps>) {
+export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
     return <Hyperlink
         href={props.href}
         onClick={props.onClick}

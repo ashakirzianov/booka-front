@@ -62,7 +62,7 @@ export function BookScreenFooter({ screen }: BookScreenFooterProps) {
         center={<TocButton current={currentPage} total={total} />}
         right={<TextLine
             text={`${left} pages left`}
-            size='smallest'
+            fontSize='smallest'
             color='accent'
         />}
     />;
@@ -146,9 +146,9 @@ type FontScaleButtonProps = {
 function FontScaleButton(props: FontScaleButtonProps) {
     return <Column centered>
         <TextButton
-            family='book'
+            fontFamily='book'
             text='Abc'
-            size={props.size}
+            fontSize={props.size}
             color='accent'
             action={actionCreators
                 .incrementScale(props.increment)}

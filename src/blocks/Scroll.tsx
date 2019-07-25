@@ -1,20 +1,13 @@
 import * as React from 'react';
-import { Props, Callback } from './common';
+import { WithChildren, Callback } from './common';
+import { useScroll } from './subscribeEffects';
 
 export type ScrollProps = {
     onScroll?: Callback<void>,
 };
-export function Scroll({ onScroll, children }: Props<ScrollProps>) {
-    // TODO: use 'useScroll' effect
-    React.useEffect(() => {
-        if (onScroll) {
-            window.addEventListener('scroll', onScroll);
-        }
+export function Scroll({ onScroll, children }: WithChildren<ScrollProps>) {
+    useScroll(onScroll);
 
-        return onScroll && function unsubscribe() {
-            window.removeEventListener('scroll', onScroll);
-        };
-    }, [onScroll]);
     return <>
         {children}
     </>;

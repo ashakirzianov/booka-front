@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     Color, BookRange, BookPath, isSimple, Span,
     isCompound, isAttributed, isFootnote,
-    pathLessThan, isPrefix, attrs, Theme, colors, fontSize,
+    pathLessThan, isPrefix, attrs, Theme, colors, fontSize, spanText,
 } from '../model';
 import {
     RichTextStyle, RichText, Callback,
@@ -190,21 +190,4 @@ function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range<number> | 
     return start !== undefined
         ? range(start, end)
         : undefined;
-}
-
-// TODO: move to model utils
-function spanText(span: Span): string {
-    if (isSimple(span)) {
-        return span;
-    } else if (isAttributed(span)) {
-        return spanText(span.content);
-    } else if (isCompound(span)) {
-        return span.spans
-            .map(spanText)
-            .join('');
-    } else if (isFootnote(span)) {
-        return spanText(span.content);
-    }
-
-    return assertNever(span);
 }

@@ -47,6 +47,7 @@ function ReaderC(props: ReaderProps) {
                 || refMap.current[pathToString(parentPath(pathToOpen))]
                 ;
             scrollToRef(refToNavigate);
+            // TODO: consider uncomment
             // if (!scrollToRef(refToNavigate)) {
             //     setTimeout(scrollToCurrentPath, 250);
             // }
@@ -128,7 +129,7 @@ function PathLink(props: PathLinkProps) {
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
                 text={props.text}
-                family='book'
+                fontFamily='book'
             />
         </Row>;
 }

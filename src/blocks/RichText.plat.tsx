@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Props, Callback, point } from './common';
+import { WithChildren, Callback, point } from './common';
 import { Hyperlink } from './Web';
 
 type Color = string;
@@ -8,7 +8,6 @@ type SuperLink = {
     href?: string,
     onClick?: Callback<void>,
 };
-// TODO: rename ?
 export type RichTextStyle = {
     color?: Color,
     hoverColor?: Color,
@@ -26,7 +25,7 @@ export type RichTextStyle = {
 export type RichTextSpanProps = {
     style: RichTextStyle,
 };
-export function RichTextSpan({ style, children }: Props<RichTextSpanProps>) {
+export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps>) {
     return <span
         ref={style.refHandler}
         id={style.id}
@@ -59,7 +58,7 @@ export type TextLinkProps = SuperLink & {
     color?: string,
     hoverColor?: string,
 };
-export function TextLink({ color, hoverColor, href, onClick, children }: Props<TextLinkProps>) {
+export function TextLink({ color, hoverColor, href, onClick, children }: WithChildren<TextLinkProps>) {
     return <Hyperlink
         href={href}
         style={{

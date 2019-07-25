@@ -6,7 +6,7 @@ import { Theme } from '../model';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
-import { Callback, Props, defaults } from './common';
+import { Callback, WithChildren, defaults } from './common';
 import { Triad, Row } from './Layout';
 
 export type ModalProps = {
@@ -15,7 +15,7 @@ export type ModalProps = {
     title?: string,
     toggle: Callback<void>,
 };
-export function Modal(props: Props<ModalProps>) {
+export function Modal(props: WithChildren<ModalProps>) {
     return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{

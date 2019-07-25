@@ -91,53 +91,47 @@ type TitleProps = {
 };
 
 function ChapterTitle(props: TitleProps) {
-    return <Row centered fullWidth>
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
-            family='book'
+            fontFamily='book'
             color='text'
             text={props.text && props.text.toLocaleUpperCase()}
             letterSpacing={point(0.15)}
-            margin={point(1)}
-            textAlign='center'
         />
     </Row>;
 }
 
 function PartTitle(props: TitleProps) {
-    return <Row centered fullWidth>
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
-            family='book'
+            fontFamily='book'
             color='text'
             text={props.text}
-            size='large'
+            fontSize='large'
             bold
-            textAlign='center'
-            margin={point(1)}
         />
     </Row>;
 }
 
 function SubpartTitle(props: TitleProps) {
-    return <Row fullWidth>
+    return <Row fullWidth margin={point(1)}>
         <TextLine
-            family='book'
+            fontFamily='book'
             color='text'
             text={props.text}
             italic
-            margin={point(1)}
         />
     </Row>;
 }
 
 function BookTitle(props: TitleProps) {
-    return <Row centered fullWidth>
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
-            family='book'
+            fontFamily='book'
             color='text'
             text={props.text}
-            size='largest'
+            fontSize='largest'
             bold
-            textAlign='center'
         />
     </Row>;
 }

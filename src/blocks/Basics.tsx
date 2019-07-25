@@ -2,18 +2,16 @@ import * as React from 'react';
 
 import { Theme, PaletteColor, colors, fontSize } from '../model';
 import { ActivityIndicator, View } from 'react-native';
-import { percent, point, Size, Props, defaults } from './common';
+import { percent, point, Size, WithChildren, defaults } from './common';
 import { platformValue } from '../utils';
 
 export type TextProps = {
-    family?: keyof Theme['fontFamilies'], // TODO: rename to 'fontFamily'
-    size?: keyof Theme['fontSizes'], // TODO: rename to 'fontSize'
+    fontFamily?: keyof Theme['fontFamilies'],
+    fontSize?: keyof Theme['fontSizes'],
     color?: PaletteColor,
     bold?: boolean,
     italic?: boolean,
     letterSpacing?: Size,
-    margin?: Size, // TODO: remove ?
-    textAlign?: 'center', // TODO: remove ?
 };
 export type TextLineProps = TextProps & {
     text: string | undefined,
@@ -22,12 +20,10 @@ export type TextLineProps = TextProps & {
 export function TextLine(props: TextLineProps) {
     return <span
         style={{
-            fontSize: fontSize(props.theme, props.size),
-            fontFamily: props.theme.fontFamilies[props.family || 'menu'],
+            fontSize: fontSize(props.theme, props.fontSize),
+            fontFamily: props.theme.fontFamilies[props.fontFamily || 'menu'],
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
             letterSpacing: props.letterSpacing,
-            margin: props.margin,
-            textAlign: props.textAlign,
             fontWeight: props.bold ? 'bold' : 'normal',
             fontStyle: props.italic ? 'italic' : 'normal',
         }}
@@ -71,7 +67,7 @@ export function Separator() {
 export type ClickableProps = {
     onClick: () => void,
 };
-export function Clickable(props: Props<ClickableProps>) {
+export function Clickable(props: WithChildren<ClickableProps>) {
     return <div onClick={props.onClick}>
         {props.children}
     </div>;
@@ -86,7 +82,7 @@ export function Tab() {
 export type LayerProps = {
     theme: Theme,
 };
-export function Layer(props: Props<LayerProps>) {
+export function Layer(props: WithChildren<LayerProps>) {
     return <View
         style={{
             position: 'absolute',
@@ -113,12 +109,12 @@ export function EmptyLine() {
 export type PphProps = {
     indent?: boolean,
 };
-export function Pph({ indent, children }: Props<PphProps>) {
+export function Pph({ indent, children }: WithChildren<PphProps>) {
     return <div style={{
         display: 'flex',
         textAlign: 'justify',
         float: 'left',
-        textIndent: indent ? point(0) : point(2),
+        textIndent: indent ? point(0) : point(4),
     }}>
         <span>
             {children}

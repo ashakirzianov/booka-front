@@ -12,8 +12,7 @@ export type Callbacks<A> = {
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type Comp<P = {}> = React.ComponentType<P>;
 
-// TODO: rename ?
-export type Props<P = {}> = React.PropsWithChildren<P>;
+export type WithChildren<P = {}> = React.PropsWithChildren<P>;
 
 export type Size = string | number;
 export function percent(size: number) {

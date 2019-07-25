@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { Transition } from 'react-transition-group';
-import { Props, defaults } from './common';
+import { WithChildren, defaults } from './common';
 
 export type FadeInProps = {
     visible: boolean,
 };
-export function FadeIn(props: Props<FadeInProps>) {
+export function FadeIn(props: WithChildren<FadeInProps>) {
     return <Animated
         in={props.visible}
         start={{ opacity: 0.01 }}
@@ -26,7 +26,7 @@ type AnimatedProps = {
     start: AnimationStyles,
     end: AnimationStyles,
 };
-function Animated(props: Props<AnimatedProps>) {
+function Animated(props: WithChildren<AnimatedProps>) {
     const duration = props.duration || defaults.animationDuration;
     return <Transition in={props.in} timeout={duration}>
         {state =>

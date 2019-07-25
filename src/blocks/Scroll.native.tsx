@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { NativeMethodsMixinStatic, View, ScrollView } from 'react-native';
 import { ScrollProps } from './Scroll';
-import { Props } from './common';
+import { WithChildren } from './common';
 
 export type RefType = NativeMethodsMixinStatic | null;
 export type RefHandler = (ref: any) => void;
 
-export function Scroll(props: Props<ScrollProps>) {
+export function Scroll(props: WithChildren<ScrollProps>) {
     return <ScrollView
         onScroll={props.onScroll}
         scrollEventThrottle={1024}
@@ -15,7 +15,6 @@ export function Scroll(props: Props<ScrollProps>) {
     </ScrollView>;
 }
 
-// TODO: rename to 'scrollable' ? add path support ?
 export function refable<P = {}>(C: React.ComponentType<P>) {
     return React.forwardRef<View, P & { children?: React.ReactNode }>((props, ref) =>
         <View ref={ref} style={{ display: 'flex' }}>

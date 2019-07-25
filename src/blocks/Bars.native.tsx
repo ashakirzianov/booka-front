@@ -4,13 +4,13 @@ import { View, SafeAreaView } from 'react-native';
 
 import { FadeIn } from './Animations.native';
 import { BarProps } from './Bars';
-import { point, Props } from './common';
+import { point, WithChildren } from './common';
 import { colors } from '../model';
 
 const viewOffset = 3.5;
 export const headerHeight = 3.5;
 function bar(top: boolean) {
-    return (props: Props<BarProps>) =>
+    return (props: WithChildren<BarProps>) =>
         <FadeIn visible={props.open}>
             <View style={{
                 display: 'flex',

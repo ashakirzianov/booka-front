@@ -3,12 +3,12 @@ import {
     SafeAreaView, Modal as NativeModal, View,
 } from 'react-native';
 
-import { percent, Props } from './common';
+import { percent, WithChildren } from './common';
 import { IconButton } from './Buttons';
 import { TextLine } from './Basics';
 import { ModalProps } from './Modal';
 
-export function Modal({ theme, open, title, toggle, children }: Props<ModalProps>) {
+export function Modal({ theme, open, title, toggle, children }: WithChildren<ModalProps>) {
     return <NativeModal
         visible={open}
         animationType='slide'
@@ -38,7 +38,7 @@ export function Modal({ theme, open, title, toggle, children }: Props<ModalProps
                         <TextLine
                             theme={theme}
                             text={title}
-                            size='normal'
+                            fontSize='normal'
                         />
                     </View>
                 </View>

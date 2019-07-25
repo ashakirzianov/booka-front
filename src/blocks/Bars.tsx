@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import { colors, Theme } from '../model';
-import { Props, point, defaults, Size } from './common';
+import { WithChildren, point, defaults, Size } from './common';
 import { FadeIn } from './Animations';
 
 export type BarProps = {
@@ -11,7 +11,7 @@ export type BarProps = {
     paddingHorizontal?: Size,
 };
 function bar(top: boolean) {
-    return function Bar(props: Props<BarProps>) {
+    return function Bar(props: WithChildren<BarProps>) {
         return <FadeIn visible={props.open}>
             <div style={{
                 display: 'flex',

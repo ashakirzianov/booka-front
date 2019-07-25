@@ -20,3 +20,15 @@ export function useCopy(callback: Callback<ClipboardEvent>) {
         };
     }, [callback]);
 }
+
+export function useScroll(callback?: Callback<Event>) {
+    useEffect(() => {
+        if (callback) {
+            window.addEventListener('scroll', callback);
+        }
+
+        return callback && function unsubscribe() {
+            window.removeEventListener('scroll', callback);
+        };
+    }, [callback]);
+}

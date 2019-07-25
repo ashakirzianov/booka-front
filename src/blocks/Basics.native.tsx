@@ -6,17 +6,16 @@ import {
 
 import { platformValue } from '../utils';
 import { colors, fontSize } from '../model';
-import { Props, point, defaults } from './common';
+import { WithChildren, point, defaults } from './common';
 import { TextLineProps, ClickableProps, PphProps, FullScreenActivityIndicatorProps, LayerProps } from './Basics';
 
 export function TextLine(props: TextLineProps) {
     return <Text
         style={{
-            fontFamily: props.theme.fontFamilies[props.family || 'book'],
-            fontSize: fontSize(props.theme, props.size),
+            fontFamily: props.theme.fontFamilies[props.fontFamily || 'book'],
+            fontSize: fontSize(props.theme, props.fontSize),
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
-            textAlign: props.textAlign,
-            margin: props.margin,
+
         }}
     >
         {props.text}
@@ -48,20 +47,7 @@ export function Separator() {
 }
 
 // TODO: remove ?
-export function Line(props: Props) {
-    return <View
-        style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-        }}
-    >
-        {props.children}
-    </View>;
-}
-
-// TODO: remove ?
-export function Clickable(props: Props<ClickableProps>) {
+export function Clickable(props: WithChildren<ClickableProps>) {
     return <TouchableWithoutFeedback
         onPress={props.onClick}
     >
@@ -77,7 +63,7 @@ export function Tab() {
 }
 
 // TODO: remove ?
-export function Layer(props: Props<LayerProps>) {
+export function Layer(props: WithChildren<LayerProps>) {
     return <View
         style={{
             position: 'absolute',
@@ -102,6 +88,6 @@ export function EmptyLine() {
     </SafeAreaView>;
 }
 
-export function Pph({ children }: Props<PphProps>) {
+export function Pph({ children }: WithChildren<PphProps>) {
     return <Text>{children}</Text>;
 }
