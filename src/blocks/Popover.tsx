@@ -2,17 +2,16 @@ import * as React from 'react';
 
 import { PopperProps, Manager, Reference, Popper } from 'react-popper';
 
-import { platformValue } from '../utils';
+import { platformValue, Callback } from '../utils';
 import { OverlayBox } from './OverlayBox';
-import { ReactContent, Callback } from './common';
 import { FadeIn } from './Animations';
 import { Theme } from '../model';
 
 export type WithPopoverProps = {
     theme: Theme,
-    body: ReactContent,
+    body: React.ReactNode,
     popoverPlacement: PopperProps['placement'],
-    children: (onClick: Callback<void>) => ReactContent,
+    children: (onClick: Callback<void>) => React.ReactNode,
 };
 
 type WithPopoverState = {

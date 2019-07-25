@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
+import { Callback } from '../utils';
 import { PaletteName, colors, fontSize, Theme } from '../model';
 import { TextLine, TextProps } from './Basics';
-import { Callback, point, WithChildren } from './common';
+import { point, WithChildren } from './common';
 import { Icon, IconName } from './Icons';
 import { Hyperlink } from './Web';
 

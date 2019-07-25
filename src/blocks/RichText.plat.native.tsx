@@ -1,8 +1,8 @@
 import * as React from 'react';
-
 import { Text } from 'react-native';
 
-import { WithChildren, Callback } from './common';
+import { Callback } from '../utils';
+import { WithChildren } from './common';
 import { RichTextSpanProps } from './RichText.plat';
 
 export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps>) {

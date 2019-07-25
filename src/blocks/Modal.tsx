@@ -3,10 +3,11 @@ import { View } from 'react-native';
 import { Transition } from 'react-transition-group';
 
 import { Theme } from '../model';
+import { Callback } from '../utils';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
-import { Callback, WithChildren, defaults } from './common';
+import { WithChildren, defaults } from './common';
 import { Triad, Row } from './Layout';
 
 export type ModalProps = {

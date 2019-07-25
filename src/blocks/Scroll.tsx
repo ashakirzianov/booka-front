@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { WithChildren, Callback } from './common';
+
+import { Callback } from '../utils';
+import { WithChildren } from './common';
 import { useScroll } from './subscribeEffects';
 
 export type ScrollProps = {

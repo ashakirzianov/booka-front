@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Callback } from '../blocks';
+import { Callback } from '../utils';
 import { Action, actionToUrl } from '../core';
 import { App } from '../model';
 import * as Blocks from '../blocks';

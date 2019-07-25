@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { WithChildren, Callback, point } from './common';
+import { Callback } from '../utils';
+import { WithChildren, point } from './common';
 import { Hyperlink } from './Web';
 
 type Color = string;

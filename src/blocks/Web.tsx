@@ -1,7 +1,8 @@
 import * as React from 'react';
-
 import Radium from 'radium';
-import { Callback, WithChildren } from './common';
+
+import { Callback } from '../utils';
+import { WithChildren } from './common';
 
 export type HyperlinkProps = {
     style?: React.CSSProperties,

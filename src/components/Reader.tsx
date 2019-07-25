@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Callback } from '../utils';
 import {
     BookPath, BookId, bookLocator, BookRange, ContentNode,
     bookRange, locationPath, parentPath, titleForPath, Book,
@@ -7,7 +8,7 @@ import {
     TableOfContentsItem, TableOfContents,
 } from '../model';
 import {
-    Callback, Row, RefType,
+    Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
     Scroll, Clickable, EmptyLine, useCopy, useSelection,
 } from '../blocks';
