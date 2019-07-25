@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader';
 
 import { ConnectedProvider, TestProvider } from '../core';
 import { TopComp } from './TopComp';
