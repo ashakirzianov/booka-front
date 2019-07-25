@@ -85,8 +85,8 @@ function ReaderC(props: ReaderProps) {
             }
         }}
     >
-        <Row maxWidth={point(50)} fullWidth centered>
-            <Column fullWidth padding={point(1)} centered>
+        <Row fullWidth centered>
+            <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
                 <EmptyLine />
                 <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                 <Clickable onClick={toggleControls}>

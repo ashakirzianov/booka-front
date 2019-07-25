@@ -127,8 +127,10 @@ export function PaletteButton(props: PaletteButtonProps) {
 export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
     return <Button onClick={props.onClick}>
         <View style={{
-            justifyContent: 'space-between',
             flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignSelf: 'stretch',
+            flexGrow: 1,
         }}
         >
             {props.children}

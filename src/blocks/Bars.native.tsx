@@ -16,7 +16,7 @@ function bar(top: boolean) {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center',
+                alignItems: 'stretch',
                 width: '100%',
                 height: point(headerHeight + viewOffset),
                 position: 'absolute',
@@ -27,7 +27,13 @@ function bar(top: boolean) {
                 backgroundColor: colors(props.theme).secondary,
             }}>
                 <SafeAreaView>
-                    {props.children}
+                    <View style={{
+                        flexDirection: 'row',
+                        alignSelf: 'stretch',
+                        paddingHorizontal: props.paddingHorizontal,
+                    }}>
+                        {props.children}
+                    </View>
                 </SafeAreaView>
             </View >
         </FadeIn>;

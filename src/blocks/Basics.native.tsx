@@ -12,7 +12,7 @@ import { TextLineProps, ClickableProps, PphProps, FullScreenActivityIndicatorPro
 export function TextLine(props: TextLineProps) {
     return <Text
         style={{
-            fontFamily: props.theme.fontFamilies[props.fontFamily || 'book'],
+            fontFamily: props.theme.fontFamilies[props.fontFamily || 'menu'],
             fontSize: fontSize(props.theme, props.fontSize),
             color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
 
@@ -25,6 +25,7 @@ export function TextLine(props: TextLineProps) {
 export function FullScreenActivityIndicator(props: FullScreenActivityIndicatorProps) {
     return <View
         style={{
+            position: 'absolute',
             top: 0, left: 0,
             minHeight: '100%',
             minWidth: '100%',

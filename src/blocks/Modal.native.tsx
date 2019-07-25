@@ -7,6 +7,7 @@ import { percent, WithChildren } from './common';
 import { IconButton } from './Buttons';
 import { TextLine } from './Basics';
 import { ModalProps } from './Modal';
+import { Row, Triad } from './Layout';
 
 export function Modal({ theme, open, title, toggle, children }: WithChildren<ModalProps>) {
     return <NativeModal
@@ -18,30 +19,20 @@ export function Modal({ theme, open, title, toggle, children }: WithChildren<Mod
             <View style={{
                 width: percent(100),
             }}>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    height: percent(5),
-                }}>
-                    <View style={{
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        left: 0,
-                    }}>
-                        <IconButton
+                <Row>
+                    <Triad
+                        center={<TextLine
+                            theme={theme}
+                            color='text'
+                            text={title}
+                        />}
+                        left={<IconButton
                             theme={theme}
                             onClick={toggle}
                             icon='close'
-                        />
-                    </View>
-                    <View style={{ justifyContent: 'center' }}>
-                        <TextLine
-                            theme={theme}
-                            text={title}
-                            fontSize='normal'
-                        />
-                    </View>
-                </View>
+                        />}
+                    />
+                </Row>
                 <View
                     style={{
                         flexDirection: 'row',
