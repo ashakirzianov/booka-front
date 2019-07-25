@@ -4,13 +4,13 @@ import { hot } from 'react-hot-loader/root';
 
 import { ConnectedProvider, TestProvider } from '../core';
 import { TopComp } from './TopComp';
+import { config } from '../config';
 
-export const AppProd: React.SFC = props =>
-    <ConnectedProvider><TopComp /></ConnectedProvider>;
+const Provider = config().useTestStore
+    ? TestProvider
+    : ConnectedProvider;
 
-export const AppTest: React.SFC = () =>
-    <TestProvider><TopComp /></TestProvider>;
-
-const AppCompC = AppProd;
+export const AppCompC: React.SFC = props =>
+    <Provider><TopComp /></Provider>;
 
 export const AppComp = hot(AppCompC);
