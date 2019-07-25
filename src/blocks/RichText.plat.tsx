@@ -23,10 +23,10 @@ export type RichTextStyle = {
     refHandler?: (ref: any) => void,
     superLink?: SuperLink,
 };
-export type RichTextSpanProps = {
+export type RichTextSpanProps = WithChildren<{
     style: RichTextStyle,
-};
-export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps>) {
+}>;
+export function RichTextSpan({ style, children }: RichTextSpanProps) {
     return <span
         ref={style.refHandler}
         id={style.id}
@@ -55,11 +55,11 @@ export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps
     </span>;
 }
 
-export type TextLinkProps = SuperLink & {
+export type TextLinkProps = WithChildren<SuperLink & {
     color?: string,
     hoverColor?: string,
-};
-export function TextLink({ color, hoverColor, href, onClick, children }: WithChildren<TextLinkProps>) {
+}>;
+export function TextLink({ color, hoverColor, href, onClick, children }: TextLinkProps) {
     return <Hyperlink
         href={href}
         style={{

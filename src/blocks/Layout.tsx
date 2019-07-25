@@ -2,7 +2,7 @@ import * as React from 'react';
 import { WithChildren, Size } from './common';
 import { View, ViewStyle } from 'react-native';
 
-export type LayoutProps = {
+export type LayoutProps = WithChildren<{
     stretched?: boolean,
     justified?: boolean,
     centered?: boolean,
@@ -14,7 +14,7 @@ export type LayoutProps = {
     margin?: Size,
     padding?: Size,
     borderColor?: string,
-};
+}>;
 
 function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
@@ -37,7 +37,7 @@ function buildStyle(props: LayoutProps): ViewStyle | undefined {
     };
 }
 
-export function Column(props: WithChildren<LayoutProps>) {
+export function Column(props: LayoutProps) {
     return <View
         style={{
             ...buildStyle(props),
@@ -48,7 +48,7 @@ export function Column(props: WithChildren<LayoutProps>) {
     </View>;
 }
 
-export function Row(props: WithChildren<LayoutProps>) {
+export function Row(props: LayoutProps) {
     return <View
         style={{
             ...buildStyle(props),

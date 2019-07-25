@@ -123,7 +123,7 @@ export function PaletteButton(props: PaletteButtonProps) {
     </Button>;
 }
 
-export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
+export function StretchTextButton(props: StretchTextButtonProps) {
     return <Button onClick={props.onClick}>
         <View style={{
             flexDirection: 'row',

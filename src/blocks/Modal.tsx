@@ -10,13 +10,13 @@ import { OverlayBox } from './OverlayBox';
 import { WithChildren, defaults } from './common';
 import { Triad, Row } from './Layout';
 
-export type ModalProps = {
+export type ModalProps = WithChildren<{
     theme: Theme,
     open: boolean,
     title?: string,
     toggle: Callback<void>,
-};
-export function Modal(props: WithChildren<ModalProps>) {
+}>;
+export function Modal(props: ModalProps) {
     return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 
-import { Callback } from '../utils';
-import { WithChildren } from './common';
-import { RichTextSpanProps } from './RichText.plat';
+import { RichTextSpanProps, TextLinkProps } from './RichText.plat';
 
-export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps>) {
+export function RichTextSpan({ style, children }: RichTextSpanProps) {
     return <Text
         ref={style.refHandler}
         style={{
@@ -21,11 +19,7 @@ export function RichTextSpan({ style, children }: WithChildren<RichTextSpanProps
     </Text>;
 }
 
-export type TextLinkProps = {
-    href?: string,
-    onClick?: Callback<void>,
-};
-export function TextLink({ onClick, children }: WithChildren<TextLinkProps>) {
+export function TextLink({ onClick, children }: TextLinkProps) {
     return <Text
         onPress={onClick}
     >

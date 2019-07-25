@@ -175,8 +175,8 @@ export function PaletteButton(props: PaletteButtonProps) {
     </Hyperlink>;
 }
 
-export type StretchTextButtonProps = ButtonProps<{}>;
-export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
+export type StretchTextButtonProps = WithChildren<ButtonProps<{}>>;
+export function StretchTextButton(props: StretchTextButtonProps) {
     return <Hyperlink
         href={props.href}
         onClick={props.onClick}

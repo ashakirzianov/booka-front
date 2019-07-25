@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Transition } from 'react-transition-group';
 import { WithChildren, defaults } from './common';
 
-export type FadeInProps = {
+export type FadeInProps = WithChildren<{
     visible: boolean,
-};
-export function FadeIn(props: WithChildren<FadeInProps>) {
+}>;
+export function FadeIn(props: FadeInProps) {
     return <Animated
         in={props.visible}
         start={{ opacity: 0.01 }}

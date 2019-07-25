@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { NativeMethodsMixinStatic, View, ScrollView } from 'react-native';
 import { ScrollProps } from './Scroll';
-import { WithChildren } from './common';
 
 export type RefType = NativeMethodsMixinStatic | null;
 export type RefHandler = (ref: any) => void;
 
-export function Scroll(props: WithChildren<ScrollProps>) {
+export function Scroll(props: ScrollProps) {
     return <ScrollView
         onScroll={props.onScroll}
         scrollEventThrottle={1024}

@@ -64,10 +64,10 @@ export function Separator() {
 }
 
 // TODO: remove ?
-export type ClickableProps = {
+export type ClickableProps = WithChildren<{
     onClick: () => void,
-};
-export function Clickable(props: WithChildren<ClickableProps>) {
+}>;
+export function Clickable(props: ClickableProps) {
     return <div onClick={props.onClick}>
         {props.children}
     </div>;
@@ -79,10 +79,10 @@ export function Tab() {
 }
 
 // TODO: remove ?
-export type LayerProps = {
+export type LayerProps = WithChildren<{
     theme: Theme,
-};
-export function Layer(props: WithChildren<LayerProps>) {
+}>;
+export function Layer(props: LayerProps) {
     return <View
         style={{
             position: 'absolute',
@@ -106,10 +106,10 @@ export function EmptyLine() {
     />;
 }
 
-export type PphProps = {
+export type PphProps = WithChildren<{
     indent?: boolean,
-};
-export function Pph({ indent, children }: WithChildren<PphProps>) {
+}>;
+export function Pph({ indent, children }: PphProps) {
     return <div style={{
         display: 'flex',
         textAlign: 'justify',
