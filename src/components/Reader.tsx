@@ -48,24 +48,27 @@ function ReaderC(props: ReaderProps) {
                 || refMap.current[pathToString(parentPath(pathToOpen))]
                 ;
             scrollToRef(refToNavigate);
-            // TODO: consider uncomment
-            // if (!scrollToRef(refToNavigate)) {
-            //     setTimeout(scrollToCurrentPath, 250);
-            // }
         }
     }, [pathToOpen]);
 
-    useSelection(function handleSelection() {
+    useSelection(React.useCallback(() => {
         selectedRange.current = getSelectionRange();
-    });
+    }, []));
 
-    useCopy(function handleCopy(e: ClipboardEvent) {
+    useCopy(React.useCallback((e: ClipboardEvent) => {
         if (selectedRange.current && e.clipboardData) {
             e.preventDefault();
             const selectionText = composeSelection(selectedRange.current, id);
             e.clipboardData.setData('text/plain', selectionText);
         }
-    });
+    }, [id]));
+
+    const onScroll = React.useCallback(async () => {
+        const newCurrentPath = await computeCurrentPath(refMap.current);
+        if (newCurrentPath) {
+            updateBookPosition(newCurrentPath);
+        }
+    }, [updateBookPosition]);
 
     const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
     const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
@@ -78,13 +81,7 @@ function ReaderC(props: ReaderProps) {
     };
 
     return <Scroll
-        // TODO: use 'useCallback' ?
-        onScroll={async () => {
-            const newCurrentPath = await computeCurrentPath(refMap.current);
-            if (newCurrentPath) {
-                updateBookPosition(newCurrentPath);
-            }
-        }}
+        onScroll={onScroll}
     >
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
