@@ -15,8 +15,8 @@ import {
 import { actionCreators, generateQuoteLink } from '../core';
 import { getSelectionRange, BookSelection } from './platform';
 import { buildNodes, buildBook, Params } from './bookRender';
-import { pathToString, parsePath, connect } from './common';
-import { BorderButton } from './Connected';
+import { pathToString, parsePath } from './common';
+import { BorderButton, connect } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {

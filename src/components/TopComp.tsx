@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Column, Layer } from '../blocks';
 import { ScreenComp } from './ScreenComp';
-import { connectState } from './common';
+import { connectState } from './Connected';
 
 export const TopComp = connectState('screen', 'theme')(function TopCompC(props) {
     return <Layer theme={props.theme}>

@@ -5,8 +5,10 @@ import { AppScreen } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
-import { connectState } from './common';
-import { FullScreenActivityIndicator, TopBar, BottomBar } from './Connected';
+import {
+    connectState,
+    FullScreenActivityIndicator, TopBar, BottomBar,
+} from './Connected';
 
 export type ScreenProps = {
     screen: AppScreen,
