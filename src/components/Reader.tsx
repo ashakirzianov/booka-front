@@ -14,7 +14,7 @@ import {
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import { getSelectionRange, BookSelection } from './platform';
-import { buildNodes, buildBook, Params } from './bookRender';
+import { Params, VolumeComp, ContentNodesComp } from './VolumeComp';
 import { pathToString, parsePath } from './common';
 import { BorderButton, connect } from './Connected';
 
@@ -89,7 +89,10 @@ function ReaderC(props: ReaderProps) {
                 <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                 <Clickable onClick={toggleControls}>
                     <Column>
-                        {buildBook(volume, params)}
+                        <VolumeComp
+                            volume={volume}
+                            params={params}
+                        />
                     </Column>
                 </Clickable>
                 <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
@@ -104,15 +107,17 @@ export type BookNodesProps = {
     nodes: ContentNode[],
 };
 export function BookNodesComp(props: BookNodesProps) {
-    return <>
-        {
-            buildNodes(props.nodes, [], {
-                refPathHandler: () => undefined,
-                pageRange: bookRange(),
-                omitDropCase: true,
-            })
-        }
-    </>;
+    const params = {
+        refPathHandler: () => undefined,
+        pageRange: bookRange(),
+        omitDropCase: true,
+    };
+
+    return <ContentNodesComp
+        nodes={props.nodes}
+        headPath={[]}
+        params={params}
+    />;
 }
 
 type PathLinkProps = {
