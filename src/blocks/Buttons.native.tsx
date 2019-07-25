@@ -5,7 +5,6 @@ import { Text, View } from 'react-native';
 import { TextLine } from './Basics';
 import { point, Props } from './common';
 import { Icon } from './Icons';
-import { connectAll } from './connect';
 import {
     TextButtonProps, IconButtonProps, TagButtonProps,
     PaletteButtonProps, StretchTextButtonProps, SuperLink,
@@ -14,18 +13,18 @@ import { colors, fontSize } from '../model';
 
 // TODO: "disconnect" buttons in this file
 
-function TextButtonC(props: TextButtonProps) {
+export function TextButton(props: TextButtonProps) {
     return <Link onClick={props.onClick}>
         <TextLine
+            theme={props.theme}
             text={props.text}
             family={props.family}
             size={props.size}
         />
     </Link>;
 }
-export const TextButton = connectAll(TextButtonC);
 
-function IconButtonC(props: IconButtonProps) {
+export function IconButton(props: IconButtonProps) {
     return <Button onClick={props.onClick}>
         <View
             style={{
@@ -40,9 +39,8 @@ function IconButtonC(props: IconButtonProps) {
         </View>
     </Button>;
 }
-export const IconButton = connectAll(IconButtonC);
 
-function TagButtonC(props: TagButtonProps) {
+export function TagButton(props: TagButtonProps) {
     return <Button onClick={props.onClick}>
         <View
             style={{
@@ -64,6 +62,7 @@ function TagButtonC(props: TagButtonProps) {
                 }
             >
                 <TextLine
+                    theme={props.theme}
                     text={props.text}
                     size='smallest'
                     color='accent'
@@ -72,9 +71,8 @@ function TagButtonC(props: TagButtonProps) {
         </View>
     </Button>;
 }
-export const TagButton = connectAll(TagButtonC);
 
-function BorderButtonC(props: TextButtonProps) {
+export function BorderButton(props: TextButtonProps) {
     return <Button onClick={props.onClick}>
         <View style={{
             borderStyle: 'solid',
@@ -85,6 +83,7 @@ function BorderButtonC(props: TextButtonProps) {
             padding: point(0.3),
         }}>
             <TextLine
+                theme={props.theme}
                 text={props.text}
                 family={props.family}
                 size={props.size}
@@ -92,9 +91,8 @@ function BorderButtonC(props: TextButtonProps) {
         </View>
     </Button>;
 }
-export const BorderButton = connectAll(BorderButtonC);
 
-function PaletteButtonC(props: PaletteButtonProps) {
+export function PaletteButton(props: PaletteButtonProps) {
     const theme = props.theme;
     const cols = theme.palettes[theme.currentPalette].colors;
     return <Button onClick={props.onClick}>
@@ -127,9 +125,8 @@ function PaletteButtonC(props: PaletteButtonProps) {
         </View>
     </Button>;
 }
-export const PaletteButton = connectAll(PaletteButtonC);
 
-function StretchTextButtonC(props: Props<StretchTextButtonProps>) {
+export function StretchTextButton(props: Props<StretchTextButtonProps>) {
     return <Button onClick={props.onClick}>
         <View style={{
             justifyContent: 'space-between',
@@ -140,7 +137,6 @@ function StretchTextButtonC(props: Props<StretchTextButtonProps>) {
         </View>
     </Button>;
 }
-export const StretchTextButton = connectAll(StretchTextButtonC);
 
 // =================================================
 

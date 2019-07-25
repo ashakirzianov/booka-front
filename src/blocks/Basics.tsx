@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Theme, PaletteColor, colors, fontSize } from '../model';
-import { Themeable, themed } from './connect';
 import { ActivityIndicator, View } from 'react-native';
 import { percent, point, Size, Props, defaults } from './common';
 import { platformValue } from '../utils';
@@ -18,8 +17,9 @@ export type TextProps = {
 };
 export type TextLineProps = TextProps & {
     text: string | undefined,
+    theme: Theme,
 };
-function TextLineC(props: Themeable<TextLineProps>) {
+export function TextLine(props: TextLineProps) {
     return <span
         style={{
             fontSize: fontSize(props.theme, props.size),
@@ -35,9 +35,11 @@ function TextLineC(props: Themeable<TextLineProps>) {
         {props.text}
     </span>;
 }
-export const TextLine = themed(TextLineC);
 
-function FullScreenActivityIndicatorC(props: Themeable) {
+export type FullScreenActivityIndicatorProps = {
+    theme: Theme,
+};
+export function FullScreenActivityIndicator(props: FullScreenActivityIndicatorProps) {
     return <View
         style={{
             position: 'fixed' as any,
@@ -58,7 +60,6 @@ function FullScreenActivityIndicatorC(props: Themeable) {
         />
     </View>;
 }
-export const FullScreenActivityIndicator = themed(FullScreenActivityIndicatorC);
 
 export function Separator() {
     return <hr style={{
@@ -82,7 +83,10 @@ export function Tab() {
 }
 
 // TODO: remove ?
-function LayerC(props: Props<Themeable>) {
+export type LayerProps = {
+    theme: Theme,
+};
+export function Layer(props: Props<LayerProps>) {
     return <View
         style={{
             position: 'absolute',
@@ -96,7 +100,6 @@ function LayerC(props: Props<Themeable>) {
         {props.children}
     </View>;
 }
-export const Layer = themed(LayerC);
 
 export function EmptyLine() {
     return <View

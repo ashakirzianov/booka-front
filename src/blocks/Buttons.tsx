@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 // TODO: review imports
-import { PaletteName, colors, fontSize } from '../model';
+import { PaletteName, colors, fontSize, Theme } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { Callback, point, Props } from './common';
 import { Icon, IconName } from './Icons';
-import { Themeable } from './connect';
 import { Hyperlink } from './Web';
 import { View } from 'react-native';
 
@@ -13,7 +12,9 @@ export type SuperLink = {
     href?: string,
     onClick?: Callback<void>,
 };
-export type ButtonProps<T> = Themeable<T> & SuperLink;
+export type ButtonProps<T> = T & SuperLink & {
+    theme: Theme,
+};
 
 export type TextButtonProps = ButtonProps<TextProps & {
     text: string,
@@ -30,6 +31,7 @@ export function TextButton(props: TextButtonProps) {
         }}
     >
         <TextLine
+            theme={props.theme}
             text={props.text}
             family={props.family}
             size={props.size}
@@ -89,6 +91,7 @@ export function TagButton(props: TagButtonProps) {
                 justifyContent: 'center',
             }}>
                 <TextLine
+                    theme={props.theme}
                     text={props.text}
                     size='smallest'
                 />
@@ -119,6 +122,7 @@ export function BorderButton(props: TextButtonProps) {
             }}
         >
             <TextLine
+                theme={props.theme}
                 text={props.text}
                 family={props.family}
                 size={props.size}

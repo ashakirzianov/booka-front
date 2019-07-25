@@ -1,5 +1,10 @@
 import { BookPath } from '../model';
 import { RefType } from '../blocks';
+import { buildConnectRedux } from '../utils';
+import { App } from '../model';
+import { actionCreators } from '../core';
+
+export const { connect, connectState, connectActions, connectAll } = buildConnectRedux<App, typeof actionCreators>(actionCreators);
 
 export type RefPathHandler = (ref: RefType, path: BookPath) => void;
 

@@ -5,6 +5,7 @@ export type ScrollProps = {
     onScroll?: Callback<void>,
 };
 export function Scroll({ onScroll, children }: Props<ScrollProps>) {
+    // TODO: use 'useScroll' effect
     React.useEffect(() => {
         if (onScroll) {
             window.addEventListener('scroll', onScroll);

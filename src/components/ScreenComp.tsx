@@ -1,13 +1,12 @@
 import * as React from 'react';
 
-import {
-    connectState, FullScreenActivityIndicator,
-    Column, TopBar, BottomBar, point,
-} from '../blocks';
+import { Column, point } from '../blocks';
 import { AppScreen } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
+import { connectState } from './common';
+import { FullScreenActivityIndicator, TopBar, BottomBar } from './Connected';
 
 export type ScreenProps = {
     screen: AppScreen,

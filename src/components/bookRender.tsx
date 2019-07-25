@@ -5,11 +5,12 @@ import {
     isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
-    Row, TextLine, refable, point,
+    Row, refable, point,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
+import { TextLine } from './Connected';
 
 export type Params = {
     refPathHandler: RefPathHandler,

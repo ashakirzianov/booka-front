@@ -1,14 +1,12 @@
 import * as React from 'react';
-
 import {
     SafeAreaView, Modal as NativeModal, View,
 } from 'react-native';
+
 import { percent, Props } from './common';
 import { IconButton } from './Buttons';
 import { TextLine } from './Basics';
 import { ModalProps } from './Modal';
-
-export { Layer } from './Basics.native';
 
 export function Modal({ theme, open, title, toggle, children }: Props<ModalProps>) {
     return <NativeModal
@@ -38,6 +36,7 @@ export function Modal({ theme, open, title, toggle, children }: Props<ModalProps
                     </View>
                     <View style={{ justifyContent: 'center' }}>
                         <TextLine
+                            theme={theme}
                             text={title}
                             size='normal'
                         />

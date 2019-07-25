@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Props, percent, point, defaults } from './common';
-import { Themeable } from './connect';
-import { colors } from '../model';
 import { View } from 'react-native';
 
+import { colors, Theme } from '../model';
+import { Props, percent, point, defaults } from './common';
+
 export type OverlayBoxProps = {
+    theme: Theme,
     animation?: {
         entered: boolean,
     },
 };
-export function OverlayBox(props: Props<Themeable<OverlayBoxProps>>) {
+export function OverlayBox(props: Props<OverlayBoxProps>) {
     return <View
         style={{
             alignSelf: 'center',

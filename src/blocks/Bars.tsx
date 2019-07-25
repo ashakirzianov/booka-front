@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { Props, point, defaults, Size } from './common';
-import { Themeable, themed } from './connect';
-import { FadeIn } from './Animations';
-import { colors } from '../model';
 import { View } from 'react-native';
 
+import { colors, Theme } from '../model';
+import { Props, point, defaults, Size } from './common';
+import { FadeIn } from './Animations';
+
 export type BarProps = {
+    theme: Theme,
     open: boolean,
     paddingHorizontal?: Size,
 };
 function bar(top: boolean) {
-    return function Bar(props: Props<Themeable<BarProps>>) {
+    return function Bar(props: Props<BarProps>) {
         return <FadeIn visible={props.open}>
             <div style={{
                 display: 'flex',
@@ -38,5 +39,5 @@ function bar(top: boolean) {
     };
 }
 
-export const TopBar = themed(bar(true));
-export const BottomBar = themed(bar(false));
+export const TopBar = bar(true);
+export const BottomBar = bar(false);

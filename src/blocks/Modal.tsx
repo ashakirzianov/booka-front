@@ -1,22 +1,21 @@
 import * as React from 'react';
-
+import { View } from 'react-native';
 import { Transition } from 'react-transition-group';
 
+import { Theme } from '../model';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
 import { Callback, Props, defaults } from './common';
-import { Themeable, themed } from './connect';
 import { Triad, Row } from './Layout';
-import { View } from 'react-native';
 
-export type ModalProps = Themeable<{
+export type ModalProps = {
+    theme: Theme,
     open: boolean,
     title?: string,
     toggle: Callback<void>,
-}>;
-
-function ModalC(props: Props<ModalProps>) {
+};
+export function Modal(props: Props<ModalProps>) {
     return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{
@@ -41,6 +40,7 @@ function ModalC(props: Props<ModalProps>) {
                         <Row>
                             <Triad
                                 center={<TextLine
+                                    theme={props.theme}
                                     color='text'
                                     text={props.title}
                                 />}
@@ -65,4 +65,3 @@ function ModalC(props: Props<ModalProps>) {
         }
     </Transition>;
 }
-export const Modal = themed(ModalC);

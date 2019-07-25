@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { connect, Pph } from '../blocks';
+import { Pph } from '../blocks';
 import {
     ParagraphNode, Highlights, BookPath, highlights,
 } from '../model';
 import { SpanComp } from './SpanComp';
-import { RefPathHandler } from './common';
+import { RefPathHandler, connect } from './common';
 
 export type ParagraphProps = {
     p: ParagraphNode,

@@ -5,10 +5,11 @@ import { PopperProps, Manager, Reference, Popper } from 'react-popper';
 import { platformValue } from '../utils';
 import { OverlayBox } from './OverlayBox';
 import { ReactContent, Callback } from './common';
-import { Themeable, themed } from './connect';
 import { FadeIn } from './Animations';
+import { Theme } from '../model';
 
 export type WithPopoverProps = {
+    theme: Theme,
     body: ReactContent,
     popoverPlacement: PopperProps['placement'],
     children: (onClick: Callback<void>) => ReactContent,
@@ -17,7 +18,7 @@ export type WithPopoverProps = {
 type WithPopoverState = {
     open: boolean,
 };
-class WithPopoverC extends React.Component<Themeable<WithPopoverProps>, WithPopoverState> {
+export class WithPopover extends React.Component<WithPopoverProps, WithPopoverState> {
     public state = { open: false };
 
     public toggleVisibility() {
@@ -74,4 +75,3 @@ class WithPopoverC extends React.Component<Themeable<WithPopoverProps>, WithPopo
         </Manager >;
     }
 }
-export const WithPopover = themed(WithPopoverC);

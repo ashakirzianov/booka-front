@@ -1,22 +1,31 @@
 import * as React from 'react';
 
-import { Callback, connectAll } from '../blocks';
+import { Callback } from '../blocks';
 import { Action, actionToUrl } from '../core';
 import { App } from '../model';
-import * as Buttons from '../blocks/Buttons';
+import * as Blocks from '../blocks';
+import { connectAll, connectState } from './common';
 
-export const TextButton = connectButton(Buttons.TextButton);
-export const IconButton = connectButton(Buttons.IconButton);
-export const TagButton = connectButton(Buttons.TagButton);
-export const PaletteButton = connectButton(Buttons.PaletteButton);
-export const BorderButton = connectButton(Buttons.BorderButton);
-export const StretchTextButton = connectButton(Buttons.StretchTextButton);
+export const TextButton = connectButton(Blocks.TextButton);
+export const IconButton = connectButton(Blocks.IconButton);
+export const TagButton = connectButton(Blocks.TagButton);
+export const PaletteButton = connectButton(Blocks.PaletteButton);
+export const BorderButton = connectButton(Blocks.BorderButton);
+export const StretchTextButton = connectButton(Blocks.StretchTextButton);
 
-export type ConnectedButton<T> = T & {
+const theme = connectState('theme');
+export const TextLine = theme(Blocks.TextLine);
+export const TopBar = theme(Blocks.TopBar);
+export const BottomBar = theme(Blocks.BottomBar);
+export const FullScreenActivityIndicator = theme(Blocks.FullScreenActivityIndicator);
+export const Modal = theme(Blocks.Modal);
+export const WithPopover = theme(Blocks.WithPopover);
+
+type ConnectedButton<T> = T & {
     action?: Action,
     onClick?: Callback<void>,
 };
-function connectButton<T>(Button: React.ComponentType<Buttons.ButtonProps<T>>): React.ComponentType<ConnectedButton<T>> {
+function connectButton<T>(Button: React.ComponentType<Blocks.ButtonProps<T>>): React.ComponentType<ConnectedButton<T>> {
     type ResultT = ConnectedButton<T>;
     type ConnectedProps = {
         state: App,

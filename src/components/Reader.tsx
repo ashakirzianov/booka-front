@@ -10,12 +10,11 @@ import {
     Callback, Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
     Scroll, Clickable, EmptyLine, useCopy, useSelection,
-    connect,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import { getSelectionRange, BookSelection } from './platform';
 import { buildNodes, buildBook, Params } from './bookRender';
-import { pathToString, parsePath } from './common';
+import { pathToString, parsePath, connect } from './common';
 import { BorderButton } from './Connected';
 
 type RefMap = { [k in string]?: RefType };

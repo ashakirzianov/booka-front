@@ -1,17 +1,15 @@
 import * as React from 'react';
-
 import {
     Text, ActivityIndicator, TouchableWithoutFeedback,
     View, SafeAreaView,
 } from 'react-native';
 
-import { Props, point, defaults } from './common';
-import { Themeable, themed } from './connect';
-import { TextLineProps, ClickableProps, PphProps } from './Basics';
 import { platformValue } from '../utils';
 import { colors, fontSize } from '../model';
+import { Props, point, defaults } from './common';
+import { TextLineProps, ClickableProps, PphProps, FullScreenActivityIndicatorProps, LayerProps } from './Basics';
 
-function TextLineC(props: Themeable<TextLineProps>) {
+export function TextLine(props: TextLineProps) {
     return <Text
         style={{
             fontFamily: props.theme.fontFamilies[props.family || 'book'],
@@ -24,9 +22,8 @@ function TextLineC(props: Themeable<TextLineProps>) {
         {props.text}
     </Text>;
 }
-export const TextLine = themed(TextLineC);
 
-function FullScreenActivityIndicatorC(props: Themeable) {
+export function FullScreenActivityIndicator(props: FullScreenActivityIndicatorProps) {
     return <View
         style={{
             top: 0, left: 0,
@@ -45,7 +42,6 @@ function FullScreenActivityIndicatorC(props: Themeable) {
         />
     </View>;
 }
-export const FullScreenActivityIndicator = themed(FullScreenActivityIndicatorC);
 
 export function Separator() {
     return null;
@@ -81,7 +77,7 @@ export function Tab() {
 }
 
 // TODO: remove ?
-function LayerC(props: Props<Themeable>) {
+export function Layer(props: Props<LayerProps>) {
     return <View
         style={{
             position: 'absolute',
@@ -94,7 +90,6 @@ function LayerC(props: Props<Themeable>) {
         {props.children}
     </View>;
 }
-export const Layer = themed(LayerC);
 
 export function EmptyLine() {
     return <SafeAreaView>

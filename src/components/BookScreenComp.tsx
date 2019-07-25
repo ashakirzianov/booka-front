@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, Modal,
-    WithPopover, Column,
-    Separator, TextLine, point, Triad,
+    Row, Column,
+    Separator, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
@@ -12,7 +11,8 @@ import {
 import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
-import { TagButton, IconButton, TextButton, PaletteButton } from './Connected';
+import { TagButton, IconButton, TextButton, PaletteButton, TextLine, WithPopover, Modal } from './Connected';
+import { connectActions } from './common';
 
 export type BookScreenProps = {
     screen: BookScreen,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    Row, Tab, Column, point, TextLine,
+    Row, Tab, Column, point,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -9,7 +9,7 @@ import {
 } from '../model';
 import { nums } from '../utils';
 import { actionCreators } from '../core';
-import { StretchTextButton } from './Connected';
+import { StretchTextButton, TextLine } from './Connected';
 
 type TocItemProps = {
     tabs: number,
