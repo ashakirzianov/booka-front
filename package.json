@@ -53,6 +53,7 @@
     "@types/react-transition-group": "^4.2.0",
     "babel-preset-expo": "^5.2.0",
     "expo": "33.0.7",
+    "react-hot-loader": "^4.12.9",
     "schedule": "^0.5.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
