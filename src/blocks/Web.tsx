@@ -35,7 +35,7 @@ export const Hyperlink = hoverable(HyperlinkC);
 type HoverableProps<T> = T extends { style?: infer S }
     ? T & { style?: S & { ':hover'?: S } }
     : T;
-function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<HoverableProps<T>> {
+export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<HoverableProps<T>> {
     const result = Radium(Cmp);
     result.displayName = (Cmp.displayName || (Cmp as any).name);
 
