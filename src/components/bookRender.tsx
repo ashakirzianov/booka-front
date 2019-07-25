@@ -5,7 +5,7 @@ import {
     isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
-    Row, refable, point,
+    Row, refable, point, Column, percent,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
@@ -144,11 +144,15 @@ function ChapterHeaderC({ level, title }: ChapterHeaderProps) {
     const TitleComp = level === 0 ? ChapterTitle
         : level > 0 ? PartTitle
             : SubpartTitle;
-    return <>
+    return <Column
+        centered
+        stretched
+        maxWidth={percent(100)}
+    >
         {
             title.map((line, idx) =>
                 <TitleComp key={idx} text={line} />)
         }
-    </>;
+    </Column>;
 }
 const ChapterHeader = refable(ChapterHeaderC);

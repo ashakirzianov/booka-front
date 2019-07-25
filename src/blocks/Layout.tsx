@@ -19,6 +19,7 @@ export type LayoutProps = {
 function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
         alignSelf: props.stretched ? 'stretch' : undefined,
+        flexGrow: props.stretched ? 1 : undefined,
         alignItems: props.centered ? 'center' : 'stretch',
         justifyContent: props.justified ? 'space-around'
             : props.centered ? 'center'
@@ -31,7 +32,7 @@ function buildStyle(props: LayoutProps): ViewStyle | undefined {
         ...(props.borderColor && {
             borderColor: props.borderColor,
             borderStyle: 'solid',
-            borderWidth: 1,
+            borderWidth: 2,
         }),
     };
 }
