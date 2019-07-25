@@ -1,4 +1,17 @@
 import * as React from 'react';
+import { WithChildren, Callback } from './common';
+import { useScroll } from './subscribeEffects';
+
+export type ScrollProps = {
+    onScroll?: Callback<void>,
+};
+export function Scroll({ onScroll, children }: WithChildren<ScrollProps>) {
+    useScroll(onScroll);
+
+    return <>
+        {children}
+    </>;
+}
 
 export type RefType = HTMLElement | null;
 export type RefHandler = (ref: any) => void;

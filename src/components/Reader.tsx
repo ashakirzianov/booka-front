@@ -1,161 +1,137 @@
 import * as React from 'react';
+
 import {
     BookPath, BookId, bookLocator, BookRange, ContentNode,
-    VolumeNode, bookRange, locationPath, parentPath, titleForPath,
+    bookRange, locationPath, parentPath, titleForPath, Book,
+    isFirstSubpath, inBookRange, emptyPath,
+    TableOfContentsItem, TableOfContents,
 } from '../model';
 import {
-    Comp, Callback, Row, RefType,
-    isPartiallyVisible, scrollToRef, LinkButton, Column, point, percent, SafeAreaView, Scroll,
+    Callback, Row, RefType,
+    isPartiallyVisible, scrollToRef, Column, point,
+    Scroll, Clickable, EmptyLine, useCopy, useSelection,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
-import {
-    getSelectionRange, subscribe, unsubscribe,
-} from './Reader.platform';
-import { BookSelection } from './Reader.common';
+import { getSelectionRange, BookSelection } from './platform';
 import { buildNodes, buildBook, Params } from './bookRender';
-import { pathToString, parsePath } from './common';
-import { Clickable, headerHeight } from '../blocks';
+import { pathToString, parsePath, connect } from './common';
+import { BorderButton } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
-    volume: VolumeNode,
-    pathToNavigate: BookPath | null,
+    book: Book,
+    pathToOpen: BookPath | null,
     updateBookPosition: Callback<BookPath>,
     toggleControls: Callback<void>,
-    range: BookRange,
-    prevPath?: BookPath,
-    nextPath?: BookPath,
     quoteRange: BookRange | undefined,
-    id: BookId,
 };
-export class Reader extends React.Component<ReaderProps> {
-    public refMap: RefMap = {};
-    public selectedRange: BookSelection | undefined = undefined;
+function ReaderC(props: ReaderProps) {
+    const {
+        quoteRange, pathToOpen,
+        book: { id, volume, toc },
+        updateBookPosition, toggleControls,
+    } = props;
+    const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
-    public handleScroll = async () => {
-        const newCurrentPath = await computeCurrentPath(this.refMap);
-        if (newCurrentPath) {
-            this.props.updateBookPosition(newCurrentPath);
-        }
-    }
+    const range = bookRange(currentPath, nextPath);
 
-    public handleSelection = () => {
-        this.selectedRange = getSelectionRange();
-    }
+    const refMap = React.useRef<RefMap>({});
+    const selectedRange = React.useRef<BookSelection | undefined>(undefined);
 
-    public handleCopy = (e: ClipboardEvent) => {
-        if (this.selectedRange && e.clipboardData) {
-            e.preventDefault();
-            const selectionText = composeSelection(this.selectedRange, this.props.id);
-            e.clipboardData.setData('text/plain', selectionText);
-        }
-    }
-
-    public scrollToCurrentPath = () => {
-        const props = this.props;
-        const refMap = this.refMap;
-        if (props && props.pathToNavigate) {
+    React.useEffect(function scrollToCurrentPath() {
+        if (pathToOpen) {
             const refToNavigate =
-                refMap[pathToString(props.pathToNavigate)]
+                refMap.current[pathToString(pathToOpen)]
                 // TODO: find better solution
                 // In case we navigate to character
-                || refMap[pathToString(parentPath(props.pathToNavigate))]
+                || refMap.current[pathToString(parentPath(pathToOpen))]
                 ;
-            if (!scrollToRef(refToNavigate)) {
-                setTimeout(this.scrollToCurrentPath.bind(this), 250);
-            }
+            scrollToRef(refToNavigate);
+            // TODO: consider uncomment
+            // if (!scrollToRef(refToNavigate)) {
+            //     setTimeout(scrollToCurrentPath, 250);
+            // }
         }
-    }
+    }, [pathToOpen]);
 
-    public componentDidMount() {
-        subscribe.scroll(this.handleScroll);
-        subscribe.selection(this.handleSelection);
-        subscribe.copy(this.handleCopy);
-        this.scrollToCurrentPath();
+    useSelection(function handleSelection() {
+        selectedRange.current = getSelectionRange();
+    });
 
-    }
+    useCopy(function handleCopy(e: ClipboardEvent) {
+        if (selectedRange.current && e.clipboardData) {
+            e.preventDefault();
+            const selectionText = composeSelection(selectedRange.current, id);
+            e.clipboardData.setData('text/plain', selectionText);
+        }
+    });
 
-    public componentDidUpdate() {
-        this.scrollToCurrentPath();
-    }
+    const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
+    const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
+    const params: Params = {
+        pageRange: range,
+        refPathHandler: (ref, path) => {
+            refMap.current[pathToString(path)] = ref;
+        },
+        quoteRange: quoteRange,
+    };
 
-    public componentWillUnmount() {
-        unsubscribe.scroll(this.handleScroll);
-        unsubscribe.selection(this.handleSelection);
-        unsubscribe.copy(this.handleCopy);
-    }
-
-    public render() {
-        const { range, prevPath, nextPath, id, volume } = this.props;
-        const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
-        const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
-        const params: Params = {
-            pageRange: range,
-            refPathHandler: (ref, path) => {
-                this.refMap[pathToString(path)] = ref;
-            },
-            quoteRange: this.props.quoteRange,
-        };
-        return <Scroll
-            onScroll={this.handleScroll}
-        >
-            <Row style={{
-                maxWidth: point(50),
-            }}>
-                <Column style={{
-                    width: percent(100),
-                    padding: point(1),
-                    alignItems: 'center',
-                }}>
-                    <EmptyLine />
-                    <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
-                    <Clickable onClick={this.props.toggleControls}>
-                        <Column>
-                            {buildBook(volume, params)}
-                        </Column>
-                    </Clickable>
-                    <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
-                    <EmptyLine />
-                </Column>
-            </Row>
-        </Scroll>;
-    }
+    return <Scroll
+        // TODO: use 'useCallback' ?
+        onScroll={async () => {
+            const newCurrentPath = await computeCurrentPath(refMap.current);
+            if (newCurrentPath) {
+                updateBookPosition(newCurrentPath);
+            }
+        }}
+    >
+        <Row fullWidth centered>
+            <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
+                <EmptyLine />
+                <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
+                <Clickable onClick={toggleControls}>
+                    <Column>
+                        {buildBook(volume, params)}
+                    </Column>
+                </Clickable>
+                <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+                <EmptyLine />
+            </Column>
+        </Row>
+    </Scroll>;
 }
+export const Reader = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])(ReaderC);
 
-export const BookNodesComp: Comp<{ nodes: ContentNode[] }> = (props =>
-    <>
+export type BookNodesProps = {
+    nodes: ContentNode[],
+};
+export function BookNodesComp(props: BookNodesProps) {
+    return <>
         {
             buildNodes(props.nodes, [], {
                 refPathHandler: () => undefined,
                 pageRange: bookRange(),
+                omitDropCase: true,
             })
         }
-    </>
-);
+    </>;
+}
 
 type PathLinkProps = {
     path: BookPath | undefined,
     id: BookId,
     text: string,
 };
-const PathLink: Comp<PathLinkProps> = (props =>
-    props.path === undefined ? null :
-        <Row style={{
-            justifyContent: 'center',
-            margin: point(1),
-        }}>
-            <LinkButton
+function PathLink(props: PathLinkProps) {
+    return props.path === undefined ? null :
+        <Row centered margin={point(1)}>
+            <BorderButton
                 action={actionCreators
                     .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
                 text={props.text}
+                fontFamily='book'
             />
-        </Row>
-);
-
-function EmptyLine() {
-    return <SafeAreaView>
-        <Row style={{ height: point(headerHeight) }} />
-    </SafeAreaView>;
+        </Row>;
 }
 
 function composeSelection(selection: BookSelection, id: BookId) {
@@ -174,4 +150,46 @@ async function computeCurrentPath(refMap: RefMap) {
     }
 
     return undefined;
+}
+
+function buildPaths(path: BookPath, toc: TableOfContents): {
+    prevPath?: BookPath,
+    currentPath: BookPath,
+    nextPath?: BookPath,
+} {
+    function tocItemCondition(item: TableOfContentsItem): boolean {
+        return true;
+    }
+
+    let currentPath = emptyPath();
+    let prevPath: BookPath | undefined;
+
+    for (let idx = 1; idx < toc.items.length; idx++) {
+        const item = toc.items[idx];
+        if (tocItemCondition(item)) {
+            let nextPath = item.path;
+
+            // If next chapter is directly bellow current chapter
+            // (e.g. no paragraphs between) we merge them together
+            while (isFirstSubpath(currentPath, nextPath)) {
+                idx++;
+                const candidate = toc.items[idx];
+                if (!candidate) {
+                    break;
+                }
+                if (tocItemCondition(candidate)) {
+                    nextPath = candidate.path;
+                }
+            }
+
+            if (inBookRange(path, bookRange(currentPath, nextPath))) {
+                return { prevPath, currentPath, nextPath };
+            }
+
+            prevPath = currentPath;
+            currentPath = nextPath;
+        }
+    }
+
+    return { prevPath, currentPath };
 }

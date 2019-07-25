@@ -6,6 +6,7 @@ export {
 };
 
 export * from './misc';
+export * from './range';
 export * from './parseUrl';
 export * from './platform';
 export * from './debug';

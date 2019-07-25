@@ -1,7 +1,10 @@
-import { Callback } from '../blocks';
-import { BookPath, bookRangeUnordered } from '../model';
+import { BookPath, bookRangeUnordered, BookRange } from '../model';
 import { idToPath } from './common';
-import { BookSelection } from './Reader.common';
+
+export type BookSelection = {
+    text: string,
+    range: BookRange,
+};
 
 export function getSelectionRange(): BookSelection | undefined {
     const selection = window.getSelection();
@@ -42,27 +45,3 @@ function pathForHtmlElement(element: HTMLElement | null): BookPath | undefined {
         return pathForHtmlElement(element.parentElement);
     }
 }
-
-export const subscribe = {
-    scroll(handler: Callback<Event>) {
-        window.addEventListener('scroll', handler);
-    },
-    selection(handler: Callback<Event>) {
-        window.document.addEventListener('selectionchange', handler);
-    },
-    copy(handler: Callback<ClipboardEvent>) {
-        window.addEventListener('copy', handler as any);
-    },
-};
-
-export const unsubscribe = {
-    copy(handler: Callback<ClipboardEvent>) {
-        window.removeEventListener('copy', handler as any);
-    },
-    selection(handler: Callback<Event>) {
-        window.document.removeEventListener('selectionchange', handler);
-    },
-    scroll(handler: Callback<Event>) {
-        window.removeEventListener('scroll', handler);
-    },
-};

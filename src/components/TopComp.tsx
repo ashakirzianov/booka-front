@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { connectState, Column, Layer } from '../blocks';
+import { Column, Layer } from '../blocks';
 import { ScreenComp } from './ScreenComp';
+import { connectState } from './common';
 
-export const TopComp = connectState('screen')(function TopCompC(props) {
-    return <Layer>
-        <Column style={{ alignItems: 'center' }}>
-            {<ScreenComp {...props.screen} />}
+export const TopComp = connectState('screen', 'theme')(function TopCompC(props) {
+    return <Layer theme={props.theme}>
+        <Column centered>
+            <ScreenComp screen={props.screen} />
         </Column>
     </Layer>;
 });

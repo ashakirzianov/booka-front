@@ -11,7 +11,8 @@ export type Callbacks<A> = {
 };
 export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 export type Comp<P = {}> = React.ComponentType<P>;
-export type Props<P = {}> = React.PropsWithChildren<P>;
+
+export type WithChildren<P = {}> = React.PropsWithChildren<P>;
 
 export type Size = string | number;
 export function percent(size: number) {
@@ -24,3 +25,9 @@ export function point(size: number) {
         default: size * 12,
     });
 }
+
+export const defaults = {
+    semiTransparent: 'rgba(0, 0, 0, 0.3)',
+    animationDuration: 400,
+    headerHeight: 2,
+};

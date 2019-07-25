@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import {
-    Comp, Row, Tab,
-    Column, DottedLine, StretchLink, TextLine, point,
+    Row, Tab, Column, point,
 } from '../blocks';
 import {
     bookLocator, locationPath, BookId,
@@ -10,35 +9,40 @@ import {
 } from '../model';
 import { nums } from '../utils';
 import { actionCreators } from '../core';
+import { StretchTextButton, TextLine } from './Connected';
 
-type TocItemProps = TableOfContentsItem & {
+type TocItemProps = {
     tabs: number,
     id: BookId,
+    item: TableOfContentsItem,
 };
-const TocItemComp: Comp<TocItemProps> = (props =>
-    <Row>
-        {nums(0, props.tabs).map(i => <Tab key={i.toString()} />)}
-        <StretchLink action={actionCreators
-            .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
+function TocItemComp({ item, tabs, id }: TocItemProps) {
+    return <Row>
+        {nums(0, tabs).map(i => <Tab key={i.toString()} />)}
+        <StretchTextButton
+            action={actionCreators
+                .navigateToBook(bookLocator(id, locationPath(item.path)))}
         >
-            <TextLine text={props.title} />
-            <DottedLine />
-            <TextLine text={props.pageNumber.toString()} />
-        </StretchLink>
-    </Row>
-);
+            <TextLine key='title' text={item.title} />
+            <TextLine key='pn' text={item.pageNumber.toString()} />
+        </StretchTextButton>
+    </Row>;
+}
 
-export const TableOfContentsComp: Comp<TableOfContents> = (props => {
-    const { id, items } = props;
+export type TableOfContentsProps = {
+    toc: TableOfContents,
+};
+export function TableOfContentsComp({ toc }: TableOfContentsProps) {
+    const { id, items } = toc;
     const maxLevel = items.reduce((max, i) => Math.max(max, i.level), 0);
-    return <Column style={{ margin: point(2) }}>
+    return <Column margin={point(1)}>
         {items.map(i =>
             <TocItemComp
                 key={i.path.join('-')}
                 id={id}
                 tabs={maxLevel - i.level}
-                {...i}
+                item={i}
             />
         )}
     </Column>;
-});
+}

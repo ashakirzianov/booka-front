@@ -4,9 +4,14 @@ import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
-import { Props } from './common';
-import { IconProps, IconName } from './Icons.common';
-import { HoverableText } from './Basic';
+import { WithChildren } from './common';
+
+export type IconName = 'close' | 'left' | 'items' | 'letter';
+
+export type IconProps = {
+    name: IconName,
+    size?: number,
+};
 
 function iconForName(name: IconName) {
     switch (name) {
@@ -23,13 +28,14 @@ function iconForName(name: IconName) {
     }
 }
 
-export function Icon({ size, name, color, hover }: Props<IconProps>) {
-    return React.createElement(HoverableText,
-        {
-            color: color,
-            hoverColor: hover,
-        },
-        React.createElement(iconForName(name), {
+export function Icon({ size, name }: WithChildren<IconProps>) {
+    return <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }}>
+        {React.createElement(iconForName(name), {
             size: size || '1em',
-        }));
+        })}
+    </div>;
 }

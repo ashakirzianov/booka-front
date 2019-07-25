@@ -5,21 +5,28 @@ import {
     isChapter, inBookRange, ChapterNode,
 } from '../model';
 import {
-    Comp, Row, TextLine, refable, point,
+    Row, refable, point,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
+import { TextLine } from './Connected';
 
 export type Params = {
     refPathHandler: RefPathHandler,
     pageRange: BookRange,
     quoteRange?: BookRange,
+    omitDropCase?: boolean,
 };
 
 export function buildBook(book: VolumeNode, params: Params) {
     const head = params.pageRange.start.length === 0
-        ? [<BookTitle key={`bt`} text={book.meta.title} />]
+        ? [
+            <BookTitle
+                key={`bt`}
+                text={book.meta.title}
+            />,
+        ]
         : [];
 
     return head
@@ -49,96 +56,99 @@ function buildNode(node: ContentNode, path: BookPath, params: Params) {
 
 function buildParagraph(paragraph: ParagraphNode, path: BookPath, params: Params) {
     return inBookRange(path, params.pageRange)
-        ? [<ParagraphComp
-            key={`p-${pathToString(path)}`}
-            p={paragraph}
-            path={path}
-            first={last(path) === 0}
-            highlights={params.quoteRange && {
-                quote: params.quoteRange,
-            }}
-            refPathHandler={params.refPathHandler}
-        />]
+        ? [
+            <ParagraphComp
+                key={`p-${pathToString(path)}`}
+                p={paragraph}
+                path={path}
+                first={params.omitDropCase ? false : last(path) === 0}
+                highlights={params.quoteRange && {
+                    quote: params.quoteRange,
+                }}
+                refPathHandler={params.refPathHandler}
+            />,
+        ]
         : [];
 }
 
 function buildChapter(chapter: ChapterNode, path: BookPath, params: Params) {
     const head = inBookRange(path, params.pageRange)
-        ? [<ChapterHeader ref={ref => params.refPathHandler(ref, path)} key={`ch-${pathToString(path)}`} path={path} {...chapter} />]
+        ? [
+            <ChapterHeader
+                key={`ch-${pathToString(path)}`}
+                ref={ref => params.refPathHandler(ref, path)}
+                level={chapter.level}
+                title={chapter.title}
+            />,
+        ]
         : [];
     return head
         .concat(buildNodes(chapter.nodes, path, params));
 }
 
-const ChapterTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
+type TitleProps = {
+    text?: string,
+};
+
+function ChapterTitle(props: TitleProps) {
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
+            fontFamily='book'
+            color='text'
             text={props.text && props.text.toLocaleUpperCase()}
-            style={{
-                letterSpacing: point(0.15),
-                textAlign: 'center',
-                margin: point(1),
-            }}
+            letterSpacing={point(0.15)}
         />
-    </Row>
-);
+    </Row>;
+}
 
-const PartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'center',
-        width: '100%',
-    }}>
+function PartTitle(props: TitleProps) {
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
+            fontFamily='book'
+            color='text'
             text={props.text}
-            size='large'
-            style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                margin: point(1),
-            }}
+            fontSize='large'
+            bold
         />
-    </Row>
-);
+    </Row>;
+}
 
-const SubpartTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{
-        justifyContent: 'flex-start',
-        width: '100%',
-    }}>
+function SubpartTitle(props: TitleProps) {
+    return <Row fullWidth margin={point(1)}>
         <TextLine
+            fontFamily='book'
+            color='text'
             text={props.text}
-            style={{
-                fontStyle: 'italic',
-                margin: point(1),
-            }}
+            italic
         />
-    </Row>
-);
+    </Row>;
+}
 
-const BookTitle: Comp<{ text?: string }> = (props =>
-    <Row style={{ justifyContent: 'center', width: '100%' }}>
+function BookTitle(props: TitleProps) {
+    return <Row centered fullWidth margin={point(1)}>
         <TextLine
+            fontFamily='book'
+            color='text'
             text={props.text}
-            size='largest'
-            style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-            }}
+            fontSize='largest'
+            bold
         />
-    </Row>
-);
+    </Row>;
+}
 
-const ChapterHeader = refable<ChapterNode & { path: BookPath }>(function ChapterHeaderC(props) {
-    const TitleComp = props.level === 0 ? ChapterTitle
-        : props.level > 0 ? PartTitle
+type ChapterHeaderProps = {
+    level: number,
+    title: string[],
+};
+function ChapterHeaderC({ level, title }: ChapterHeaderProps) {
+    const TitleComp = level === 0 ? ChapterTitle
+        : level > 0 ? PartTitle
             : SubpartTitle;
     return <>
         {
-            props.title.map((line, idx) =>
+            title.map((line, idx) =>
                 <TitleComp key={idx} text={line} />)
         }
     </>;
-});
+}
+const ChapterHeader = refable(ChapterHeaderC);

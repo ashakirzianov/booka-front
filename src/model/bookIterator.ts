@@ -1,6 +1,5 @@
 import { BookPath, appendPath, emptyPath, pathHead, pathTail } from './bookRange';
-import { ContentNode, VolumeNode, children } from './bookVolume';
-import { isChapter } from '../contracts';
+import { ContentNode, VolumeNode, children, isChapter } from './bookVolume';
 
 export type RootIterator = {
     node: undefined,

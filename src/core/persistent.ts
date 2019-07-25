@@ -58,7 +58,7 @@ export const defaultTheme: Theme = {
                 primary: '#f9f3e9',
                 secondary: '#e6e0d6',
                 accent: '#987',
-                highlight: '#321',
+                highlight: '#000',
                 shadow: '#000',
             },
             highlights: {
@@ -81,7 +81,7 @@ export const defaultTheme: Theme = {
     },
     currentPalette: 'light',
     fontFamilies: {
-        main: 'Georgia',
+        book: 'Georgia',
         menu: 'Helvetica',
     },
     fontSizes: {
@@ -90,6 +90,7 @@ export const defaultTheme: Theme = {
         normal: 26,
         large: 30,
         largest: 36,
+        text: 26,
     },
     fontScale: 1,
     radius: 5,

@@ -1,12 +1,3 @@
-// TODO: add some comment explaining whe we need this type. It's a bit cryptic.
-export type KeyRestriction<T, U extends PropertyKey> = {
-    [k in U]?: never;
-} & {
-        [k in U]?: undefined;
-    } & {
-        [k in keyof T]: T[k];
-    };
-
 export type PromiseType<T> = T extends Promise<infer U> ? U : any;
 
 export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>;
@@ -26,6 +17,8 @@ export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {
         ? (v as any)()
         : v;
 }
+
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export function letExp<T, U>(x: T, f: (x: T) => U) {
     return f(x);
@@ -184,64 +177,10 @@ export function distinct<T>(arr: T[]): T[] {
     }, []);
 }
 
-export type Range<T> = {
-    start: T,
-    end?: T,
-};
-export function range<T>(start: T, end?: T) {
-    return { start, end };
-}
-
-export function inRange<T>(point: T, r: Range<T>, lessThanF: (l: T, r: T) => boolean) {
-    if (!lessThanF(point, r.start)) {
-        if (r.end === undefined || lessThanF(point, r.end)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-export type TaggedRange<T, U = number> = {
-    tag: T | undefined,
-    range: Range<U>,
-};
-export function overlaps<T, U = number>(taggedRanges: Array<TaggedRange<T, U>>, lessThanF: (l: U, r: U) => boolean) {
-    let isEndInfinity = false;
-    const points = distinct(taggedRanges.reduce<U[]>(
-        (pts, tagged) => {
-            pts.push(tagged.range.start);
-            if (tagged.range.end) {
-                pts.push(tagged.range.end);
-            } else {
-                isEndInfinity = true;
-            }
-
-            return pts;
-        }, []))
-        .sort((a, b) => lessThanF(a, b) ? -1 : +1);
-
-    const result: Array<{
-        tag: T[],
-        range: Range<U>,
-    }> = [];
-    const lastIndex = isEndInfinity
-        ? points.length + 1
-        : points.length;
-    for (let idx = 1; idx < lastIndex; idx++) {
-        const prevPoint = points[idx - 1];
-        const point = points[idx];
-        const tags = taggedRanges
-            .filter(tr => inRange(prevPoint, tr.range, lessThanF))
-            .map(tr => tr.tag)
-            .reduce<T[]>((acc, ts) => ts !== undefined ? acc.concat(ts) : acc, []);
-        result.push({
-            tag: tags,
-            range: {
-                start: prevPoint,
-                end: point,
-            },
-        });
-    }
-
-    return result;
+export function uniqueKey() {
+    return [0, 1, 2, 3, 4, 5]
+        // tslint:disable-next-line: no-bitwise
+        .map(() => (Math.random() * 16 | 0).toString(16))
+        .join('')
+        ;
 }

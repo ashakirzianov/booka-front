@@ -53,11 +53,11 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
         return connect([], actionKs);
     }
 
-    type ConnectAllProps = {
+    type ConnectAllProps<T> = T & {
         dispatch: Dispatch<Action>,
         state: State,
     };
-    function connectAll<P>(Comp: React.ComponentType<P & ConnectAllProps>): React.ComponentType<P> {
+    function connectAll<P>(Comp: React.ComponentType<ConnectAllProps<P>>): React.ComponentType<P> {
         return connectReactRedux(state => ({ state }))(Comp as any) as any;
     }
 

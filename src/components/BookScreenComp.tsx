@@ -1,136 +1,111 @@
 import * as React from 'react';
 
 import {
-    connectActions, Row, Modal, PanelButton,
-    Comp, WithPopover, Line, Column,
-    hoverable, View, Separator, connectState, TextLine, themed,
-    colors, TagButton, ActionLink, ThemedHoverable, ActionButton,
-    point,
+    Row, Column,
+    Separator, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
     FootnoteSpan, footnoteForId, Pagination,
 } from '../model';
-import { BookNodesComp } from './Reader';
-
-import { BookComp } from './BookComp';
+import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
+import { TagButton, IconButton, TextButton, PaletteButton, TextLine, WithPopover, Modal } from './Connected';
+import { connectActions } from './common';
 
-export const BookScreenComp: Comp<BookScreen> = (props =>
-    <>
-        <BookComp
-            {...props.book}
-            quoteRange={props.bl.quote}
+export type BookScreenProps = {
+    screen: BookScreen,
+};
+export function BookScreenComp({ screen }: BookScreenProps) {
+    const { book, bl } = screen;
+    return <>
+        <Reader
+            book={book}
+            quoteRange={bl.quote}
         />
         <TableOfContentsBox
-            toc={props.book.toc}
-            open={props.bl.toc}
+            toc={book.toc}
+            open={bl.toc}
         />
         <FootnoteBox
             footnote={
-                props.bl.footnoteId !== undefined
-                    ? footnoteForId(props.book.volume, props.bl.footnoteId)
+                bl.footnoteId !== undefined
+                    ? footnoteForId(book.volume, bl.footnoteId)
                     : undefined
             }
         />
-    </>
-);
+    </>;
+}
 
-export const BookScreenHeader: Comp<BookScreen> = (props =>
-    <Line>
-        <Row>
-            <LibButton key='back' />
-        </Row>
-        <Row>
-            <AppearanceButton key='appearance' />
-        </Row>
-    </Line>
-);
+export function BookScreenHeader() {
+    return <Triad
+        left={<LibButton />}
+        right={<AppearanceButton />}
+    />;
+}
 
-export const BookScreenFooter: Comp<BookScreen> = (props => {
-    const pagination = new Pagination(props.book.volume);
+export type BookScreenFooterProps = {
+    screen: BookScreen,
+};
+export function BookScreenFooter({ screen }: BookScreenFooterProps) {
+    const pagination = new Pagination(screen.book.volume);
     const total = pagination.totalPages();
     let currentPage = 1;
     let left = 0;
-    if (props.bl.location.location === 'path') {
-        const path = props.bl.location.path;
+    if (screen.bl.location.location === 'path') {
+        const path = screen.bl.location.path;
         currentPage = pagination.pageForPath(path);
         left = pagination.lastPageOfChapter(path) - currentPage;
     }
-    return <Row style={{
-        position: 'relative',
-    }}>
-        <Column style={{
-            height: '100%', width: '100%',
-            justifyContent: 'center',
-        }}>
-            <Row style={{ justifyContent: 'center' }}>
-                <TocButton current={currentPage} total={total} />
-            </Row>
-        </Column>
-        <Column style={{
-            position: 'absolute',
-            right: 10, top: 0, height: '100%',
-            justifyContent: 'center',
-        }}>
-            <TextLine
-                text={`${left} pages left`}
-                size='smallest'
-                fixedSize={true}
-                family='menu'
-                color='accent'
-            />
-        </Column>
-    </Row>;
-});
+    return <Triad
+        center={<TocButton current={currentPage} total={total} />}
+        right={<TextLine
+            text={`${left} pages left`}
+            fontSize='smallest'
+            color='accent'
+        />}
+    />;
+}
 
-type TocButtonProps = { current: number, total: number };
-const TocButton = themed<TocButtonProps>(props =>
-    <ActionButton action={actionCreators.toggleToc()}>
-        <TagButton color={colors(props).accent}>
-            <TextLine
-                text={`${props.current} of ${props.total}`}
-                size='smallest'
-                fixedSize={true}
-                family='menu'
-                color='secondary'
-            />
-        </TagButton>
-    </ActionButton>
-);
+type TocButtonProps = {
+    current: number,
+    total: number,
+};
+function TocButton(props: TocButtonProps) {
+    return <TagButton
+        text={`${props.current} of ${props.total}`}
+        action={actionCreators.toggleToc()}
+    />;
+}
 
-const LibButton: Comp = (() =>
-    <PanelButton icon='left' action={actionCreators.navigateToLibrary()} />
-);
+function LibButton() {
+    return <IconButton
+        icon='left'
+        action={actionCreators.navigateToLibrary()}
+    />;
+}
 
-const AppearanceButton: Comp = (() =>
-    <WithPopover
+function AppearanceButton() {
+    return <WithPopover
         popoverPlacement='bottom'
         body={<ThemePicker />}
     >
-        {onClick => <PanelButton icon='letter' onClick={onClick} />}
-    </WithPopover>
-);
+        {
+            onClick =>
+                <IconButton icon='letter' onClick={onClick} />
+        }
+    </WithPopover>;
+}
 
 const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
-    <Modal title={props.toc.title} toggle={props.toggleToc} open={props.open}
+    <Modal
+        title={props.toc.title}
+        toggle={props.toggleToc}
+        open={props.open}
     >
-        <Column style={{
-            overflow: 'scroll',
-            alignSelf: 'stretch',
-            flex: 1,
-        }}>
-            <TableOfContentsComp {...props.toc} />
-        </Column>
+        <TableOfContentsComp toc={props.toc} />
     </Modal>
-);
-
-const FootnoteComp: Comp<FootnoteSpan> = (props =>
-    <BookNodesComp nodes={[{
-        node: 'paragraph',
-        span: props.footnote,
-    }]} />
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(props =>
@@ -141,98 +116,62 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(
     >
         {
             !props.footnote ? null :
-                <Row style={{ overflow: 'scroll' }}>
-                    <FootnoteComp {...props.footnote} />
-                </Row>
+                <BookNodesComp nodes={[{
+                    node: 'paragraph',
+                    span: props.footnote.footnote,
+                }]} />
         }
     </Modal>
 );
 
-const ThemePicker: Comp = (props =>
-    <Column style={{
-        width: point(14),
-    }}>
+function ThemePicker() {
+    return <Column width={point(14)}>
         <FontScale />
         <Separator />
         <PalettePicker />
-    </Column>
-);
+    </Column>;
+}
 
-const FontScale: Comp = (() =>
-    <Column style={{
-        justifyContent: 'center',
-        height: point(5),
-    }}>
-        <Row style={{ justifyContent: 'space-around' }}>
-            <FontScaleButton increment={-0.1} size='smallest' />
-            <FontScaleButton increment={0.1} size='largest' />
-        </Row>
-    </Column>
-);
+function FontScale() {
+    return <Row centered justified height={point(5)}>
+        <FontScaleButton increment={-0.1} size='smallest' />
+        <FontScaleButton increment={0.1} size='largest' />
+    </Row>;
+}
 
-const FontScaleButton = connectActions('incrementScale')<{
+type FontScaleButtonProps = {
     increment: number,
     size: 'largest' | 'smallest',
-}>(props =>
-    <Column style={{
-        justifyContent: 'center',
-    }}>
-        <ActionLink action={actionCreators.incrementScale(props.increment)}>
-            <ThemedHoverable>
-                <TextLine
-                    fixedSize
-                    size={props.size}
-                    color='accent'
-                    text='Abc'
-                />
-            </ThemedHoverable>
-        </ActionLink>
-    </Column>
-);
+};
+function FontScaleButton(props: FontScaleButtonProps) {
+    return <Column centered>
+        <TextButton
+            fontFamily='book'
+            text='Abc'
+            fontSize={props.size}
+            color='accent'
+            action={actionCreators
+                .incrementScale(props.increment)}
+        />
+    </Column>;
+}
 
-const PalettePicker: Comp = (() =>
-    <Column style={{
-        justifyContent: 'center',
-        height: point(5),
-    }}>
-        <Row style={{ justifyContent: 'space-around' }}>
-            <PaletteButton name='light' text='L' />
-            <PaletteButton name='sepia' text='S' />
-            <PaletteButton name='dark' text='D' />
-        </Row>
-    </Column>
-);
-
-const HoverableView = hoverable(View);
+function PalettePicker() {
+    return <Row centered justified height={point(5)}>
+        <SelectPaletteButton name='light' text='L' />
+        <SelectPaletteButton name='sepia' text='S' />
+        <SelectPaletteButton name='dark' text='D' />
+    </Row>;
+}
 
 type PaletteButtonProps = {
     name: PaletteName,
     text: string,
 };
-const PaletteButton = connectState('theme')<PaletteButtonProps>(function PaletteButtonC(props) {
-    const palette = props.theme.palettes[props.name].colors;
-    return <ActionButton action={actionCreators.setPalette(props.name)}>
-        <HoverableView style={{
-            width: 50,
-            height: 50,
-            justifyContent: 'center',
-            backgroundColor: palette.primary,
-            borderRadius: 50,
-            borderColor: palette.highlight, // 'orange' ?
-            borderWidth: props.name === props.theme.currentPalette ? 3 : 0,
-            shadowColor: palette.shadow,
-            shadowRadius: 5,
-            ':hover': {
-                borderWidth: 3,
-            },
-        }}>
-            <Row style={{ justifyContent: 'center' }}>
-                <TextLine
-                    text={props.text}
-                    size='normal'
-                    color='text'
-                />
-            </Row>
-        </HoverableView>
-    </ActionButton>;
-});
+function SelectPaletteButton(props: PaletteButtonProps) {
+    return <PaletteButton
+        text={props.text}
+        palette={props.name}
+        action={actionCreators.setPalette(props.name)}
+    />;
+}
