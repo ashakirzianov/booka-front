@@ -21,11 +21,19 @@ export function combineReducers<State, Action extends ReduxAction>(map: Reducers
 }
 
 export function createEnhancedStore<State, A extends ReduxAction>(reducer: ReducerRedux<State, A>, initial: DeepPartial<State> | undefined, middlewares: Array<Middleware<{}, State, any>> | undefined = []) {
+    const w = window as any;
+    const composeEnhancers =
+        typeof w === 'object' &&
+            w.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+            ? w.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+                // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+            })
+            : compose;
     const middlewareEnhancer = applyMiddleware(
         ...middlewares
     );
     const loopEnhancer = install();
-    return createStore(reducer, initial, compose(
+    return createStore(reducer, initial, composeEnhancers(
         loopEnhancer,
         middlewareEnhancer
     ));
