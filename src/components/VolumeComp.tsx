@@ -69,6 +69,7 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
 
     if (isParagraph(node)) {
         return <ParagraphNodeComp
+            ref={ref => params.refPathHandler(ref, path)}
             paragraph={node}
             path={path}
             params={params}
@@ -89,7 +90,7 @@ type ParagraphNodeProps = {
     path: BookPath,
     params: Params,
 };
-function ParagraphNodeComp({ paragraph, path, params }: ParagraphNodeProps) {
+function ParagraphNodeCompC({ paragraph, path, params }: ParagraphNodeProps) {
     return !inBookRange(path, params.pageRange) ? null :
         <ParagraphComp
             key={`p-${pathToString(path)}`}
@@ -102,6 +103,7 @@ function ParagraphNodeComp({ paragraph, path, params }: ParagraphNodeProps) {
             refPathHandler={params.refPathHandler}
         />;
 }
+const ParagraphNodeComp = refable(ParagraphNodeCompC);
 
 type ChapterNodeProps = {
     chapter: ChapterNode,
