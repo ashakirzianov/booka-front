@@ -40,6 +40,16 @@ export function WithPopover({ body, popoverPlacement, theme, children }: WithPop
         </Reference>
         <FadeIn visible={isOpen}>
             <Popper
+                modifiers={{
+                    offset: {
+                        enabled: true,
+                        fn: data => {
+                            // TODO: rethink this
+                            data.offsets.popper.top += 10;
+                            return data;
+                        },
+                    },
+                }}
                 placement={popoverPlacement}
                 positionFixed={platformValue({
                     firefox: true,
