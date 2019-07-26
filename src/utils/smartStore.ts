@@ -1,8 +1,11 @@
 import * as store from 'store';
 import { values } from './misc';
-import { log } from './debug';
+import { config } from '../config';
 
-const useStore = false;
+const {
+    logger: log,
+    usePersistentStorage: useStore,
+} = config();
 
 export function smartStore<V>(key: string) {
     type K = string;

@@ -1,4 +1,4 @@
-import { Callback } from './common';
+import { Callback } from '../utils';
 
 export function useSelection(callback: Callback<Event>) {
     // TODO: implement

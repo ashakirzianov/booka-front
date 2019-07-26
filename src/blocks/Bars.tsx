@@ -5,13 +5,13 @@ import { colors, Theme } from '../model';
 import { WithChildren, point, defaults, Size } from './common';
 import { FadeIn } from './Animations';
 
-export type BarProps = {
+export type BarProps = WithChildren<{
     theme: Theme,
     open: boolean,
     paddingHorizontal?: Size,
-};
+}>;
 function bar(top: boolean) {
-    return function Bar(props: WithChildren<BarProps>) {
+    return function Bar(props: BarProps) {
         return <FadeIn visible={props.open}>
             <div style={{
                 display: 'flex',

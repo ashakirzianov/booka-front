@@ -11,8 +11,11 @@ import {
 import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
-import { TagButton, IconButton, TextButton, PaletteButton, TextLine, WithPopover, Modal } from './Connected';
-import { connectActions } from './common';
+import {
+    connectActions,
+    TagButton, IconButton, TextButton, PaletteButton, TextLine,
+    WithPopover, Modal,
+} from './Connected';
 
 export type BookScreenProps = {
     screen: BookScreen,

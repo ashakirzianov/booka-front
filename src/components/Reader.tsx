@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Callback } from '../utils';
 import {
     BookPath, BookId, bookLocator, BookRange, ContentNode,
     bookRange, locationPath, parentPath, titleForPath, Book,
@@ -7,15 +8,15 @@ import {
     TableOfContentsItem, TableOfContents,
 } from '../model';
 import {
-    Callback, Row, RefType,
+    Row, RefType,
     isPartiallyVisible, scrollToRef, Column, point,
     Scroll, Clickable, EmptyLine, useCopy, useSelection,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
 import { getSelectionRange, BookSelection } from './platform';
-import { buildNodes, buildBook, Params } from './bookRender';
-import { pathToString, parsePath, connect } from './common';
-import { BorderButton } from './Connected';
+import { Params, VolumeComp, ContentNodesComp } from './VolumeComp';
+import { pathToString, parsePath } from './common';
+import { BorderButton, connect } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
@@ -47,24 +48,27 @@ function ReaderC(props: ReaderProps) {
                 || refMap.current[pathToString(parentPath(pathToOpen))]
                 ;
             scrollToRef(refToNavigate);
-            // TODO: consider uncomment
-            // if (!scrollToRef(refToNavigate)) {
-            //     setTimeout(scrollToCurrentPath, 250);
-            // }
         }
     }, [pathToOpen]);
 
-    useSelection(function handleSelection() {
+    useSelection(React.useCallback(() => {
         selectedRange.current = getSelectionRange();
-    });
+    }, []));
 
-    useCopy(function handleCopy(e: ClipboardEvent) {
+    useCopy(React.useCallback((e: ClipboardEvent) => {
         if (selectedRange.current && e.clipboardData) {
             e.preventDefault();
             const selectionText = composeSelection(selectedRange.current, id);
             e.clipboardData.setData('text/plain', selectionText);
         }
-    });
+    }, [id]));
+
+    const onScroll = React.useCallback(async () => {
+        const newCurrentPath = await computeCurrentPath(refMap.current);
+        if (newCurrentPath) {
+            updateBookPosition(newCurrentPath);
+        }
+    }, [updateBookPosition]);
 
     const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
     const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
@@ -77,13 +81,7 @@ function ReaderC(props: ReaderProps) {
     };
 
     return <Scroll
-        // TODO: use 'useCallback' ?
-        onScroll={async () => {
-            const newCurrentPath = await computeCurrentPath(refMap.current);
-            if (newCurrentPath) {
-                updateBookPosition(newCurrentPath);
-            }
-        }}
+        onScroll={onScroll}
     >
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
@@ -91,7 +89,10 @@ function ReaderC(props: ReaderProps) {
                 <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
                 <Clickable onClick={toggleControls}>
                     <Column>
-                        {buildBook(volume, params)}
+                        <VolumeComp
+                            volume={volume}
+                            params={params}
+                        />
                     </Column>
                 </Clickable>
                 <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
@@ -106,15 +107,17 @@ export type BookNodesProps = {
     nodes: ContentNode[],
 };
 export function BookNodesComp(props: BookNodesProps) {
-    return <>
-        {
-            buildNodes(props.nodes, [], {
-                refPathHandler: () => undefined,
-                pageRange: bookRange(),
-                omitDropCase: true,
-            })
-        }
-    </>;
+    const params = {
+        refPathHandler: () => undefined,
+        pageRange: bookRange(),
+        omitDropCase: true,
+    };
+
+    return <ContentNodesComp
+        nodes={props.nodes}
+        headPath={[]}
+        params={params}
+    />;
 }
 
 type PathLinkProps = {

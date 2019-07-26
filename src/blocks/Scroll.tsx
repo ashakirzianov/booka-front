@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { WithChildren, Callback } from './common';
+
+import { Callback } from '../utils';
+import { WithChildren } from './common';
 import { useScroll } from './subscribeEffects';
 
-export type ScrollProps = {
+export type ScrollProps = WithChildren<{
     onScroll?: Callback<void>,
-};
-export function Scroll({ onScroll, children }: WithChildren<ScrollProps>) {
+}>;
+export function Scroll({ onScroll, children }: ScrollProps) {
     useScroll(onScroll);
 
     return <>

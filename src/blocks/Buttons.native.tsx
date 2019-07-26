@@ -75,12 +75,11 @@ export function BorderButton(props: TextButtonProps) {
         <View style={{
             borderStyle: 'solid',
             borderColor: colors(props.theme).accent,
-            color: colors(props.theme).accent,
-            fontSize: fontSize(props.theme, 'normal'),
             borderRadius: 10,
             padding: point(0.3),
         }}>
             <TextLine
+                color='accent'
                 theme={props.theme}
                 text={props.text}
                 fontFamily={props.fontFamily}
@@ -124,7 +123,7 @@ export function PaletteButton(props: PaletteButtonProps) {
     </Button>;
 }
 
-export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
+export function StretchTextButton(props: StretchTextButtonProps) {
     return <Button onClick={props.onClick}>
         <View style={{
             flexDirection: 'row',

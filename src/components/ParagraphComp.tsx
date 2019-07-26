@@ -4,7 +4,8 @@ import {
     ParagraphNode, Highlights, BookPath, highlights,
 } from '../model';
 import { SpanComp } from './SpanComp';
-import { RefPathHandler, connect } from './common';
+import { RefPathHandler } from './common';
+import { connect } from './Connected';
 
 export type ParagraphProps = {
     p: ParagraphNode,

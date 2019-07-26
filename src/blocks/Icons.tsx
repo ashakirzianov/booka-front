@@ -4,7 +4,6 @@ import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
-import { WithChildren } from './common';
 
 export type IconName = 'close' | 'left' | 'items' | 'letter';
 
@@ -28,7 +27,7 @@ function iconForName(name: IconName) {
     }
 }
 
-export function Icon({ size, name }: WithChildren<IconProps>) {
+export function Icon({ size, name }: IconProps) {
     return <div style={{
         display: 'flex',
         justifyContent: 'center',

@@ -1,5 +1,6 @@
-import { Callback } from './common';
 import { useEffect } from 'react';
+
+import { Callback } from '../utils';
 
 export function useSelection(callback: Callback<Event>) {
     useEffect(() => {

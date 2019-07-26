@@ -40,7 +40,7 @@ export function buildConnectRedux<State, ACs extends ActionCreatorsMap>(actionCr
             const connector = connectReactRedux(mapStateToProps, mapDispatchToProps);
 
             const connected = connector(Comp as any); // TODO: try not to use 'as any'
-            connected.displayName = `${Comp.displayName}Connected`;
+            connected.displayName = `${Comp.displayName || (Comp as any).name}Connected`;
             return connected as any; // TODO: try not to use 'as any'
         };
     }

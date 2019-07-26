@@ -1,14 +1,15 @@
 import * as React from 'react';
-
 import Radium from 'radium';
-import { Callback, WithChildren } from './common';
 
-export type HyperlinkProps = {
+import { Callback } from '../utils';
+import { WithChildren } from './common';
+
+export type HyperlinkProps = WithChildren<{
     style?: React.CSSProperties,
     href?: string,
     onClick?: Callback<void>,
-};
-function HyperlinkC(props: WithChildren<HyperlinkProps>) {
+}>;
+function HyperlinkC(props: HyperlinkProps) {
     return <a
         href={props.href}
         style={{
@@ -34,7 +35,7 @@ export const Hyperlink = hoverable(HyperlinkC);
 type HoverableProps<T> = T extends { style?: infer S }
     ? T & { style?: S & { ':hover'?: S } }
     : T;
-function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<HoverableProps<T>> {
+export function hoverable<T>(Cmp: React.ComponentType<T>): React.ComponentType<HoverableProps<T>> {
     const result = Radium(Cmp);
     result.displayName = (Cmp.displayName || (Cmp as any).name);
 

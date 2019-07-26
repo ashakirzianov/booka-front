@@ -3,19 +3,20 @@ import { View } from 'react-native';
 import { Transition } from 'react-transition-group';
 
 import { Theme } from '../model';
+import { Callback } from '../utils';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';
-import { Callback, WithChildren, defaults } from './common';
+import { WithChildren, defaults } from './common';
 import { Triad, Row } from './Layout';
 
-export type ModalProps = {
+export type ModalProps = WithChildren<{
     theme: Theme,
     open: boolean,
     title?: string,
     toggle: Callback<void>,
-};
-export function Modal(props: WithChildren<ModalProps>) {
+}>;
+export function Modal(props: ModalProps) {
     return <Transition in={props.open} timeout={300}>
         {state => state === 'exited' ? null :
             <div style={{
@@ -54,7 +55,7 @@ export function Modal(props: WithChildren<ModalProps>) {
                         <View style={{
                             flex: 1,
                             alignItems: 'stretch',
-                            overflowY: 'scroll',
+                            overflow: 'scroll',
                         }}
                         >
                             {props.children}

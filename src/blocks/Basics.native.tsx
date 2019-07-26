@@ -6,7 +6,7 @@ import {
 
 import { platformValue } from '../utils';
 import { colors, fontSize } from '../model';
-import { WithChildren, point, defaults } from './common';
+import { point, defaults } from './common';
 import { TextLineProps, ClickableProps, PphProps, FullScreenActivityIndicatorProps, LayerProps } from './Basics';
 
 export function TextLine(props: TextLineProps) {
@@ -48,7 +48,7 @@ export function Separator() {
 }
 
 // TODO: remove ?
-export function Clickable(props: WithChildren<ClickableProps>) {
+export function Clickable(props: ClickableProps) {
     return <TouchableWithoutFeedback
         onPress={props.onClick}
     >
@@ -64,7 +64,7 @@ export function Tab() {
 }
 
 // TODO: remove ?
-export function Layer(props: WithChildren<LayerProps>) {
+export function Layer(props: LayerProps) {
     return <View
         style={{
             position: 'absolute',
@@ -89,6 +89,6 @@ export function EmptyLine() {
     </SafeAreaView>;
 }
 
-export function Pph({ children }: WithChildren<PphProps>) {
+export function Pph({ children }: PphProps) {
     return <Text>{children}</Text>;
 }

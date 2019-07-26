@@ -1,10 +1,15 @@
 import * as React from 'react';
 
-import { Callback } from '../blocks';
-import { Action, actionToUrl } from '../core';
-import { App } from '../model';
 import * as Blocks from '../blocks';
-import { connectAll, connectState } from './common';
+import { Callback, buildConnectRedux } from '../utils';
+import { Action, actionToUrl, actionCreators } from '../core';
+import { App } from '../model';
+
+const connects = buildConnectRedux<App, typeof actionCreators>(actionCreators);
+export const connect = connects.connect;
+export const connectAll = connects.connectAll;
+export const connectState = connects.connectState;
+export const connectActions = connects.connectActions;
 
 export const TextButton = connectButton(Blocks.TextButton);
 export const IconButton = connectButton(Blocks.IconButton);

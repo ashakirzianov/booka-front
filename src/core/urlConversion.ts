@@ -3,8 +3,11 @@ import {
     locationPath, BookLocation, BookLocator,
     BookRange, BookId, locationNone, BookPath, bookRange,
 } from '../model';
-import { assertNever, parsePartialUrl, ParsedUrl, filterUndefined, frontendBase } from '../utils';
+import {
+    assertNever, parsePartialUrl, ParsedUrl, filterUndefined,
+} from '../utils';
 import { Action, actionCreators } from './actions';
+import { config } from '../config';
 
 export function actionToUrl(action: Action | undefined, state: App): string | undefined {
     if (!action) {
@@ -97,7 +100,7 @@ export function stateToUrl(state: App) {
 }
 
 export function generateQuoteLink(id: BookId, quote: BookRange) {
-    return frontendBase() + blToUrl(bookLocator(id, locationNone(), false, undefined, quote));
+    return config().frontendBase + blToUrl(bookLocator(id, locationNone(), false, undefined, quote));
 }
 
 function blToUrl(bl: BookLocator): string {

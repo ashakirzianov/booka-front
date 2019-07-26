@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
+import { Callback } from '../utils';
 import { PaletteName, colors, fontSize, Theme } from '../model';
 import { TextLine, TextProps } from './Basics';
-import { Callback, point, WithChildren } from './common';
+import { point, WithChildren } from './common';
 import { Icon, IconName } from './Icons';
-import { Hyperlink } from './Web';
+import { Hyperlink, hoverable } from './Web';
 
 export type SuperLink = {
     href?: string,
@@ -131,6 +132,7 @@ export function BorderButton(props: TextButtonProps) {
     </Hyperlink>;
 }
 
+const HoverableView = hoverable(View);
 export type PaletteButtonProps = ButtonProps<{
     text: string,
     palette: PaletteName,
@@ -150,7 +152,7 @@ export function PaletteButton(props: PaletteButtonProps) {
             },
         }}
     >
-        <View style={{
+        <HoverableView style={{
             flexDirection: 'column',
             width: 50,
             height: 50,
@@ -161,6 +163,9 @@ export function PaletteButton(props: PaletteButtonProps) {
             borderWidth: selected ? 3 : 0,
             shadowColor: cols.shadow,
             shadowRadius: 5,
+            ':hover': {
+                borderWidth: 3,
+            },
         }}>
             <View
                 style={{
@@ -170,12 +175,12 @@ export function PaletteButton(props: PaletteButtonProps) {
             >
                 <span>{props.text}</span>
             </View>
-        </View>
+        </HoverableView>
     </Hyperlink>;
 }
 
-export type StretchTextButtonProps = ButtonProps<{}>;
-export function StretchTextButton(props: WithChildren<StretchTextButtonProps>) {
+export type StretchTextButtonProps = WithChildren<ButtonProps<{}>>;
+export function StretchTextButton(props: StretchTextButtonProps) {
     return <Hyperlink
         href={props.href}
         onClick={props.onClick}

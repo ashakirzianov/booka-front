@@ -6,11 +6,11 @@ import {
     pathLessThan, isPrefix, attrs, Theme, colors, fontSize, spanText,
 } from '../model';
 import {
-    RichTextStyle, RichText, Callback,
+    RichTextStyle, RichText,
 } from '../blocks';
 import {
     assertNever, filterUndefined,
-    TaggedRange, range, Range,
+    TaggedRange, range, Range, Callback,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
 

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { BookId } from '../model';
 import * as Contracts from '../contracts';
-import { backendBase } from '../utils';
+import { config } from '../config';
 
-const backendUrl = backendBase() + '/';
+const backendUrl = config().backendBase + '/';
 const jsonPath = 'json/';
 const libraryApi = 'library';
 
