@@ -3,6 +3,9 @@ export type Config = {
     useTestStore: boolean,
     backendBase: string,
     frontendBase: string,
+    facebook: {
+        clientId: string,
+    },
     logger: (msg: string) => void,
 };
 
@@ -21,6 +24,7 @@ const productionConfig: Config = {
     useTestStore: false,
     backendBase: prodBack,
     frontendBase: prodFront,
+    facebook: { clientId: '335421937367699' },
     logger: () => undefined,
 };
 
@@ -35,6 +39,7 @@ const debugConfig: Config = {
     frontendBase: hostname
         ? `http://${hostname}:3000`
         : prodFront,
+    facebook: { clientId: '335421937367699' },
     // tslint:disable-next-line: no-console
     logger: msg => console.log(msg),
 };
