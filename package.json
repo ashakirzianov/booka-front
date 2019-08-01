@@ -32,6 +32,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "serve -s build",
     "debug": "react-scripts start",
+    "debug-ssl": "HTTPS=true SSL_KEY_PATH=./server.key SSL_CERT_PATH=./server.crt react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
