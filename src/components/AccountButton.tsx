@@ -1,22 +1,27 @@
 import * as React from 'react';
 
-import { TextButton, WithPopover, TextLine, connectState } from './Connected';
-import { Column, FacebookLogin, SocialLoginResult } from '../blocks';
+import { WithPopover, TextLine, connectState } from './Connected';
+import { Column, FacebookLogin, SocialLoginResult, PictureButton } from '../blocks';
 import { config } from '../config';
-import { User } from '../model';
+import { User, Theme } from '../model';
 import { loginWithFbToken } from '../core/dataAccess';
 
 export type AccountButtonProps = {
+    theme: Theme,
     user?: User,
 };
-function AccountButtonC({ user }: AccountButtonProps) {
+function AccountButtonC({ user, theme }: AccountButtonProps) {
     return <WithPopover
         popoverPlacement='bottom'
         body={<AccountPanel user={user} />}
     >
         {
             onClick =>
-                <TextButton text='Login' onClick={onClick} />
+                <PictureButton
+                    theme={theme}
+                    pictureUrl={user && user.profilePictureUrl}
+                    onClick={onClick}
+                />
         }
     </WithPopover>;
 }

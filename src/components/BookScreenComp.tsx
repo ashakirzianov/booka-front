@@ -6,7 +6,7 @@ import {
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
-    FootnoteSpan, footnoteForId, Pagination,
+    FootnoteSpan, footnoteForId, Pagination, Theme,
 } from '../model';
 import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -42,13 +42,16 @@ export function BookScreenComp({ screen }: BookScreenProps) {
     </>;
 }
 
-export function BookScreenHeader() {
+export type BookScreenHeaderProps = {
+    theme: Theme,
+};
+export function BookScreenHeader({ theme }: BookScreenHeaderProps) {
     return <Triad
         left={<LibButton />}
-        right={<Row>
+        right={<>
             <AppearanceButton />
-            <AccountButton />
-        </Row>}
+            <AccountButton theme={theme} />
+        </>}
     />;
 }
 
