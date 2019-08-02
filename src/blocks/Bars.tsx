@@ -24,12 +24,13 @@ function bar(top: boolean) {
                 bottom: !top ? 0 : undefined,
                 left: 0,
                 zIndex: 5,
-                boxShadow: `0px 0px 2px ${colors(props.theme).shadow}`,
+                boxShadow: `0px 0px 1px ${colors(props.theme).shadow}`,
                 backgroundColor: colors(props.theme).secondary,
 
             }}>
                 <View style={{
                     flexDirection: 'row',
+                    flex: 1,
                     paddingHorizontal: props.paddingHorizontal,
                 }}>
                     {props.children}

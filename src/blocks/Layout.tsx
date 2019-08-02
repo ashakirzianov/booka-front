@@ -3,6 +3,7 @@ import { WithChildren, Size } from './common';
 import { View, ViewStyle } from 'react-native';
 
 export type LayoutProps = WithChildren<{
+    flex?: number,
     stretched?: boolean,
     justified?: boolean,
     centered?: boolean,
@@ -18,6 +19,7 @@ export type LayoutProps = WithChildren<{
 
 function buildStyle(props: LayoutProps): ViewStyle | undefined {
     return {
+        flex: props.flex,
         alignSelf: props.stretched ? 'stretch' : undefined,
         flexGrow: props.stretched ? 1 : undefined,
         alignItems: props.centered ? 'center' : 'stretch',
@@ -70,7 +72,6 @@ export function Triad(props: TriadProps) {
             flexGrow: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // alignSelf: 'stretch',
         }}
     >
         <View style={{

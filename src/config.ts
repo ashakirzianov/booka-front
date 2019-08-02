@@ -31,7 +31,7 @@ const productionConfig: Config = {
 const hostname = window && window.location && window.location.hostname;
 
 const debugConfig: Config = {
-    usePersistentStorage: true,
+    usePersistentStorage: false,
     useTestStore: false,
     backendBase: hostname
         ? `http://${hostname}:3042`
