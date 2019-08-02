@@ -4,12 +4,14 @@ import * as React from 'react';
 import { Column } from '../blocks';
 import { Callback } from '../utils';
 
+type SocialLoginProvider = 'facebook';
 type SocialLoginResultFail = {
     success: false,
 };
 type SocialLoginResultSuccess = {
     success: true,
     token: string,
+    provider: SocialLoginProvider,
 };
 export type SocialLoginResult = SocialLoginResultSuccess | SocialLoginResultFail;
 
@@ -30,6 +32,7 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
                     onLogin({
                         success: true,
                         token: res.authResponse.accessToken,
+                        provider: 'facebook',
                     });
                 } else {
                     onLogin({ success: false });
@@ -42,6 +45,7 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
 }
 
 function initFbSdk(clientId: string) {
+    console.log('HERE');
     const win = window as any;
     win.fbAsyncInit = function () {
         FB.init({
@@ -54,6 +58,7 @@ function initFbSdk(clientId: string) {
 
     // Load the SDK asynchronously
     (function (d, s, id) {
+        console.log('And HERE');
         let js: any;
         const fjs: any = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {

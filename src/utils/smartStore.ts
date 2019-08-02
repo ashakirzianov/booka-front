@@ -52,7 +52,7 @@ export function smartStore<V>(key: string) {
     };
 }
 
-export function singleValueStore<V extends object>(key: string) {
+export function singleValueStore<V extends object | string>(key: string) {
     return {
         get(): V | undefined {
             return useStore
