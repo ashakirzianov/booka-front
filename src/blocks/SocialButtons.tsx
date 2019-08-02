@@ -15,7 +15,7 @@ export type SocialLoginResult = SocialLoginResultSuccess | SocialLoginResultFail
 
 type SocialButtonProps = {
     clientId: string,
-    onLogin?: Callback<SocialLoginResult>,
+    onLogin: Callback<SocialLoginResult>,
 };
 
 export type FacebookLoginProps = SocialButtonProps;
@@ -24,9 +24,20 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
         initFbSdk(clientId);
     }, [clientId]);
     return <Column>
-        <button onClick={() => FB.login(res => {
-            console.log(res);
-        })}>Login with facebook</button>
+        <button
+            onClick={() => FB.login(res => {
+                if (res.status === 'connected') {
+                    onLogin({
+                        success: true,
+                        token: res.authResponse.accessToken,
+                    });
+                } else {
+                    onLogin({ success: false });
+                }
+            })}
+        >
+            <span>Continue with facebook</span>
+        </button>
     </Column>;
 }
 

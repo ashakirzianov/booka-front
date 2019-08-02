@@ -1,4 +1,3 @@
-/*global FB*/
 import * as React from 'react';
 
 import { TextButton, WithPopover } from './Connected';
@@ -21,6 +20,9 @@ function LoginOptions() {
     return <Column>
         <FacebookLogin
             clientId={config().facebook.clientId}
+            onLogin={res => {
+                console.log(res);
+            }}
         />
     </Column>;
 }

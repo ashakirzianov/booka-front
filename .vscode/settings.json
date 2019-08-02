@@ -34,6 +34,7 @@
         "collapsable",
         "eofline",
         "esnext",
+        "homescreen",
         "jssdk",
         "middlewares",
         "nums",
