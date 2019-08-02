@@ -16,7 +16,7 @@ import {
     TagButton, IconButton, TextButton, PaletteButton, TextLine,
     WithPopover, Modal,
 } from './Connected';
-import { AccountButton } from./AccountButtonon';
+import { AccountButton } from './AccountButton';
 
 export type BookScreenProps = {
     screen: BookScreen,

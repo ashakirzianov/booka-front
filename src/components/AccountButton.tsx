@@ -4,7 +4,8 @@ import { TextButton, WithPopover, TextLine } from './Connected';
 import { Column, FacebookLogin, SocialLoginResult } from '../blocks';
 import { config } from '../config';
 import { singleValueStore } from '../utils';
-import { fetchTokenForFb } from '../api/fetch';
+import { fetchTokenForFb, fetchUserInfo } from '../api/fetch';
+import { User } from '../model';
 
 export function AccountButton() {
     return <WithPopover
@@ -18,10 +19,23 @@ export function AccountButton() {
     </WithPopover>;
 }
 
-function AccountPanel() {
+type AccountPanelProps = {
+};
+function AccountPanel(props: AccountPanelProps) {
     const [token, setToken] = React.useState(tokenStore.get());
-    if (token) {
-        return <TextLine text={token} />;
+    const [user, setUser] = React.useState<User | undefined>(undefined);
+    if (user) {
+        return <TextLine text={user.name} />;
+    } else if (token) {
+        fetchUserInfo(token)
+            .then(ui => {
+                if (ui) {
+                    setUser({
+                        name: ui.name,
+                        profilePictureUrl: ui.pictureUrl,
+                    });
+                }
+            });
     }
 
     async function onLogin(res: SocialLoginResult) {
