@@ -16,6 +16,7 @@ import {
     TagButton, IconButton, TextButton, PaletteButton, TextLine,
     WithPopover, Modal,
 } from './Connected';
+import { LoginButton } from './LoginButton';
 
 export type BookScreenProps = {
     screen: BookScreen,
@@ -44,7 +45,10 @@ export function BookScreenComp({ screen }: BookScreenProps) {
 export function BookScreenHeader() {
     return <Triad
         left={<LibButton />}
-        right={<AppearanceButton />}
+        right={<Row>
+            <AppearanceButton />
+            <LoginButton />
+        </Row>}
     />;
 }
 
