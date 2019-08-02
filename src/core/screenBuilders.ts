@@ -3,12 +3,12 @@ import {
     BookLocator, bookLocator, locationPath,
 } from '../model';
 import { bookForId, currentLibrary } from './dataAccess';
-import { resolveCurrentPosition } from './persistent';
+import { stores } from './persistent';
 
 export async function buildBookScreen(bl: BookLocator): Promise<BookScreen> {
     const book = bookForId(bl.id);
     if (bl.location.location === 'current') {
-        const position = await resolveCurrentPosition(bl.id);
+        const position = stores.positions.get(bl.id.name) || [];
         bl = bookLocator(bl.id, locationPath(position));
     }
 
