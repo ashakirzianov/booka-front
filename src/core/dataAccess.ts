@@ -1,9 +1,13 @@
 import {
     Book, Library, BookId, library,
 } from '../model';
-import { fetchBI, fetchLibrary, convertBook, convertLibrary } from '../api';
+import {
+    fetchBI, fetchLibrary, fetchUserInfo,
+    convertBook, convertLibrary, convertUserInfo, fetchTokenForFb,
+} from '../api';
 import { stores } from './persistent';
 import { forEach } from '../utils';
+import { dispatchSetUserAction } from './store';
 
 export async function bookForId(bi: BookId): Promise<Book> {
     const book = stores.books.get(bi.name);
@@ -29,5 +33,39 @@ export async function currentLibrary(): Promise<Library> {
     } catch {
         // TODO: report problems ?
         return library(stores.library.all());
+    }
+}
+
+async function loginWithToken(token: string) {
+    const userInfo = await fetchUserInfo(token);
+    if (userInfo) {
+        const user = convertUserInfo(userInfo);
+        dispatchSetUserAction(user);
+        return user;
+    } else {
+        return undefined;
+    }
+}
+
+export async function loginWithStoredToken() {
+    const token = stores.token.get();
+    if (token) {
+        return loginWithToken(token);
+    } else {
+        return undefined;
+    }
+}
+
+export async function loginWithFbToken(fbToken: string) {
+    const newToken = await fetchTokenForFb(fbToken);
+    if (newToken) {
+        const user = loginWithToken(newToken);
+        if (user) {
+            stores.token.set(newToken);
+        }
+
+        return user;
+    } else {
+        return undefined;
     }
 }

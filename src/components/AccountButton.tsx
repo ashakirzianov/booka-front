@@ -1,16 +1,18 @@
 import * as React from 'react';
 
-import { TextButton, WithPopover, TextLine } from './Connected';
+import { TextButton, WithPopover, TextLine, connectState } from './Connected';
 import { Column, FacebookLogin, SocialLoginResult } from '../blocks';
 import { config } from '../config';
-import { singleValueStore } from '../utils';
-import { fetchTokenForFb, fetchUserInfo } from '../api/fetch';
 import { User } from '../model';
+import { loginWithFbToken } from '../core/dataAccess';
 
-export function AccountButton() {
+export type AccountButtonProps = {
+    user?: User,
+};
+function AccountButtonC({ user }: AccountButtonProps) {
     return <WithPopover
         popoverPlacement='bottom'
-        body={<AccountPanel />}
+        body={<AccountPanel user={user} />}
     >
         {
             onClick =>
@@ -18,34 +20,20 @@ export function AccountButton() {
         }
     </WithPopover>;
 }
+export const AccountButton = connectState('user')(AccountButtonC);
 
 type AccountPanelProps = {
+    user: User | undefined,
 };
-function AccountPanel(props: AccountPanelProps) {
-    const [token, setToken] = React.useState(tokenStore.get());
-    const [user, setUser] = React.useState<User | undefined>(undefined);
+function AccountPanel({ user }: AccountPanelProps) {
     if (user) {
         return <TextLine text={user.name} />;
-    } else if (token) {
-        fetchUserInfo(token)
-            .then(ui => {
-                if (ui) {
-                    setUser({
-                        name: ui.name,
-                        profilePictureUrl: ui.pictureUrl,
-                    });
-                }
-            });
     }
 
     async function onLogin(res: SocialLoginResult) {
         if (res.success) {
             if (res.provider === 'facebook') {
-                const newToken = await fetchTokenForFb(res.token);
-                if (newToken) {
-                    tokenStore.set(newToken);
-                    setToken(newToken);
-                }
+                loginWithFbToken(res.token);
             }
         }
     }
@@ -57,5 +45,3 @@ function AccountPanel(props: AccountPanelProps) {
         />
     </Column>;
 }
-
-const tokenStore = singleValueStore<string>('jwt-token');
