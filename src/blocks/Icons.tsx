@@ -2,10 +2,14 @@ import * as React from 'react';
 
 import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
+    FaCircle, FaSignInAlt,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
 
-export type IconName = 'close' | 'left' | 'items' | 'letter';
+export type IconName =
+    | 'close' | 'left' | 'items' | 'letter'
+    | 'circle' | 'sign-in'
+    ;
 
 export type IconProps = {
     name: IconName,
@@ -22,6 +26,10 @@ function iconForName(name: IconName) {
             return FaBars;
         case 'letter':
             return FaFont;
+        case 'circle':
+            return FaCircle;
+        case 'sign-in':
+            return FaSignInAlt;
         default:
             return assertNever(name);
     }
