@@ -1,10 +1,11 @@
 import * as React from 'react';
 
-import { WithPopover, TextLine, connectState } from './Connected';
+import { WithPopover, TextLine, connectState, IconButton } from './Connected';
 import { Column, FacebookLogin, SocialLoginResult, PictureButton } from '../blocks';
 import { config } from '../config';
 import { User, Theme } from '../model';
 import { loginWithFbToken } from '../core/dataAccess';
+import { Callback } from '../utils';
 
 export type AccountButtonProps = {
     theme: Theme,
@@ -17,15 +18,35 @@ function AccountButtonC({ user, theme }: AccountButtonProps) {
     >
         {
             onClick =>
-                <PictureButton
+                <ActualButton
                     theme={theme}
-                    pictureUrl={user && user.profilePictureUrl}
+                    user={user}
                     onClick={onClick}
                 />
         }
     </WithPopover>;
 }
 export const AccountButton = connectState('user')(AccountButtonC);
+
+type ActualButtonProps = {
+    theme: Theme,
+    user?: User,
+    onClick: Callback<void>,
+};
+function ActualButton({ theme, user, onClick }: ActualButtonProps) {
+    if (user) {
+        return <PictureButton
+            theme={theme}
+            pictureUrl={user.profilePictureUrl}
+            onClick={onClick}
+        />;
+    } else {
+        return <IconButton
+            icon='sign-in'
+            onClick={onClick}
+        />;
+    }
+}
 
 type AccountPanelProps = {
     user: User | undefined,

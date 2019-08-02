@@ -194,8 +194,6 @@ export function PictureButton(props: PictureButtonProps) {
                 display: 'flex',
                 justifyContent: 'center',
                 borderRadius: '50%',
-                maxHeight: '100%',
-                maxWidth: '100%',
                 alignItems: 'center',
                 borderColor: colors(props.theme).accent,
                 borderWidth: 2,

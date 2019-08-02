@@ -14,6 +14,10 @@ function convertIconName(name: IconName): string {
             return 'bars';
         case 'letter':
             return 'font';
+        case 'sign-in':
+            return 'sign-in-alt';
+        case 'circle':
+            return 'circle';
         default:
             return assertNever(name);
     }
