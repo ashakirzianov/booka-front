@@ -125,7 +125,12 @@ function loading(state: boolean | undefined = false, action: Action) {
 }
 
 function user(state: User | undefined, action: Action) {
-    return state;
+    switch (action.type) {
+        case 'setUser':
+            return action.payload;
+        default:
+            return state;
+    }
 }
 
 export const reducer = combineReducers<App, Action>({
