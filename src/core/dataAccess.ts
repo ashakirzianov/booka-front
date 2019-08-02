@@ -50,7 +50,11 @@ async function loginWithToken(token: string) {
 export async function loginWithStoredToken() {
     const token = stores.token.get();
     if (token) {
-        return loginWithToken(token);
+        const result = await loginWithToken(token);
+        if (!result) {
+            stores.token.clear();
+        }
+        return result;
     } else {
         return undefined;
     }
