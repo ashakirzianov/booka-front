@@ -16,7 +16,7 @@ import {
     TagButton, IconButton, TextButton, PaletteButton, TextLine,
     WithPopover, Modal,
 } from './Connected';
-import { LoginButton } from './LoginButton';
+import { AccountButton } from./AccountButtonon';
 
 export type BookScreenProps = {
     screen: BookScreen,
@@ -47,7 +47,7 @@ export function BookScreenHeader() {
         left={<LibButton />}
         right={<Row>
             <AppearanceButton />
-            <LoginButton />
+            <AccountButton />
         </Row>}
     />;
 }

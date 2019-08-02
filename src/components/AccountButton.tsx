@@ -6,10 +6,10 @@ import { config } from '../config';
 import { singleValueStore } from '../utils';
 import { fetchTokenForFb } from '../api/fetch';
 
-export function LoginButton() {
+export function AccountButton() {
     return <WithPopover
         popoverPlacement='bottom'
-        body={<LoginOptions />}
+        body={<AccountPanel />}
     >
         {
             onClick =>
@@ -18,7 +18,7 @@ export function LoginButton() {
     </WithPopover>;
 }
 
-function LoginOptions() {
+function AccountPanel() {
     const [token, setToken] = React.useState(tokenStore.get());
     if (token) {
         return <TextLine text={token} />;
