@@ -27,7 +27,7 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
     }, [clientId]);
     return <Column>
         <button
-            onClick={() => FB.login(res => {
+            onClick={() => FB && FB.login(res => {
                 if (res.status === 'connected') {
                     onLogin({
                         success: true,
@@ -45,20 +45,26 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
 }
 
 function initFbSdk(clientId: string) {
-    console.log('HERE');
-    const win = window as any;
-    win.fbAsyncInit = function () {
-        FB.init({
-            appId: clientId,
-            cookie: true,
-            xfbml: true,
-            version: 'v2.8',
-        });
+    let timeout = 0;
+    (window as any).fbAsyncInit = function asyncInit() {
+        if (FB) {
+            FB.init({
+                appId: clientId,
+                cookie: true,
+                xfbml: true,
+                version: 'v2.8',
+            });
+        } else {
+            setTimeout(asyncInit(), timeout);
+            timeout += 1000;
+        }
     };
 
-    // Load the SDK asynchronously
+    loadSdk();
+}
+
+function loadSdk() {
     (function (d, s, id) {
-        console.log('And HERE');
         let js: any;
         const fjs: any = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {
