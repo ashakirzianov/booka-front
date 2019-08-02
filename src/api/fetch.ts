@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { BookId } from '../model';
 import * as Contracts from '../contracts';
 import { config } from '../config';
@@ -42,14 +42,15 @@ type FetchOptions = {
     accessToken?: string,
 };
 async function fetchJson<T = {}>(url: string, opts?: FetchOptions): Promise<T> {
-    const json = await axios.get(url, {
+    const axiosConf: AxiosRequestConfig = {
         responseType: 'json',
         ...(opts && opts.accessToken && {
             headers: {
-                header: `Authorization: Bearer ${opts.accessToken}`,
+                Authorization: `Bearer ${opts.accessToken}`,
             },
         }),
-    });
+    };
+    const json = await axios.get(url, axiosConf);
 
     return json.data as T;
 }
