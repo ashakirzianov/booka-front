@@ -21,13 +21,14 @@ type SocialButtonProps = {
     onLogin: Callback<SocialLoginResult>,
 };
 
+type LoginState =
+    | { state: 'checking' }
+    | { state: 'not-logged' }
+    | { state: 'logged', token?: string, name?: string, picture?: string }
+    ;
 export type FacebookLoginProps = SocialButtonProps;
 export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
-    type LoginState =
-        | { state: 'checking' }
-        | { state: 'not-logged' }
-        | { state: 'logged', response: fb.AuthResponse }
-        ;
+
     React.useEffect(() => {
         initFbSdk(clientId);
     }, [clientId]);
@@ -36,36 +37,22 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
     const [clicked, setClicked] = React.useState(false);
 
     React.useEffect(() => {
-        getLoginStatus(status => {
-            if (status.status === 'connected') {
-                setLoginState({
-                    state: 'logged',
-                    response: status.authResponse,
-                });
-            } else {
-                setLoginState({ state: 'not-logged' });
-            }
-        });
+        getLoginStatus(setLoginState);
     }, []);
 
     React.useEffect(() => {
         if (clicked) {
-            if (loginState.state === 'logged') {
+            if (loginState.state === 'logged' && loginState.token) {
                 onLogin({
                     success: true,
                     provider: 'facebook',
-                    token: loginState.response.accessToken,
+                    token: loginState.token,
                 });
+                setClicked(false);
             } else if (loginState.state === 'not-logged' && globalThis.FB) {
                 globalThis.FB.login(res => {
-                    if (res.status === 'connected') {
-                        setLoginState({
-                            state: 'logged',
-                            response: res.authResponse,
-                        });
-                    } else {
-                        onLogin({ success: false });
-                    }
+                    handleFbLoginState(res, setLoginState);
+                    setClicked(false);
                 });
             }
         }
@@ -78,7 +65,7 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
             {
                 loginState.state === 'checking' ? <span>Loading...</span>
                     : loginState.state === 'logged'
-                        ? <span>Continue as {loginState.response.toString()}</span>
+                        ? <span>Continue as {loginState.name}</span>
                         : <span>Sign in with facebook</span>
             }
         </button>
@@ -117,9 +104,36 @@ function loadSdk() {
     }(document, 'script', 'facebook-jssdk'));
 }
 
-function getLoginStatus(callback: Callback<fb.StatusResponse>) {
+function handleFbLoginState(status: fb.StatusResponse, callback: Callback<LoginState>) {
+    if (status.status === 'connected') {
+        callback({
+            state: 'logged',
+            token: status.authResponse.accessToken,
+        });
+        globalThis.FB.api('/me', { fields: 'picture,name' }, response => {
+            const anyResp = response as any;
+            const picUrl = anyResp.picture
+                && anyResp.picture.data
+                && anyResp.picture.data.url;
+            if (anyResp.name) {
+                callback({
+                    state: 'logged',
+                    name: anyResp.name,
+                    token: status.authResponse.accessToken,
+                    picture: picUrl,
+                });
+            }
+        });
+    } else {
+        callback({ state: 'not-logged' });
+    }
+}
+
+function getLoginStatus(callback: Callback<LoginState>) {
     if (globalThis.FB) {
-        globalThis.FB.getLoginStatus(callback);
+        globalThis.FB.getLoginStatus(status => {
+            handleFbLoginState(status, callback);
+        });
     } else {
         setTimeout(() => getLoginStatus(callback), 1000);
     }
