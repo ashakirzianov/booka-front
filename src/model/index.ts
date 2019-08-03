@@ -10,3 +10,4 @@ export * from './library';
 export * from './screen';
 export * from './tableOfContent';
 export * from './theme';
+export * from './user';

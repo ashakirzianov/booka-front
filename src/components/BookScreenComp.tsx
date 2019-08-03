@@ -6,7 +6,7 @@ import {
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
-    FootnoteSpan, footnoteForId, Pagination,
+    FootnoteSpan, footnoteForId, Pagination, Theme,
 } from '../model';
 import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -16,6 +16,7 @@ import {
     TagButton, IconButton, TextButton, PaletteButton, TextLine,
     WithPopover, Modal,
 } from './Connected';
+import { AccountButton } from './AccountButton';
 
 export type BookScreenProps = {
     screen: BookScreen,
@@ -41,10 +42,16 @@ export function BookScreenComp({ screen }: BookScreenProps) {
     </>;
 }
 
-export function BookScreenHeader() {
+export type BookScreenHeaderProps = {
+    theme: Theme,
+};
+export function BookScreenHeader({ theme }: BookScreenHeaderProps) {
     return <Triad
         left={<LibButton />}
-        right={<AppearanceButton />}
+        right={<>
+            <AppearanceButton />
+            <AccountButton theme={theme} />
+        </>}
     />;
 }
 

@@ -22,7 +22,7 @@ export function TextLine(props: TextLineProps) {
         style={{
             fontSize: fontSize(props.theme, props.fontSize),
             fontFamily: props.theme.fontFamilies[props.fontFamily || 'menu'],
-            color: props.color !== undefined ? colors(props.theme)[props.color] : undefined,
+            color: colors(props.theme)[props.color || 'text'],
             letterSpacing: props.letterSpacing,
             fontWeight: props.bold ? 'bold' : 'normal',
             fontStyle: props.italic ? 'italic' : 'normal',

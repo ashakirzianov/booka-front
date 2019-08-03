@@ -1,6 +1,7 @@
 import { AppScreen } from './screen';
 import { BookPath } from './bookRange';
 import { Theme } from './theme';
+import { User } from './user';
 
 export type App = {
     screen: AppScreen,
@@ -8,4 +9,5 @@ export type App = {
     controlsVisible: boolean,
     theme: Theme,
     loading: boolean,
+    user?: User,
 };

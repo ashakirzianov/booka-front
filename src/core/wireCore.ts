@@ -1,10 +1,13 @@
 import { wireHistoryNavigation } from './historyNavigation';
 import { subscribe } from './store';
-import { stores, setCurrentPosition } from './persistent';
+import { stores } from './persistent';
 import { emptyPath } from '../model';
+import { loginWithStoredToken } from './dataAccess';
 
 export function wireCore() {
     wireHistoryNavigation();
+
+    loginWithStoredToken();
 
     subscribe(state => {
         stores.theme.set(state.theme);
@@ -15,7 +18,7 @@ export function wireCore() {
         if (screen.screen === 'book' && screen.bl.location.location === 'path') {
             const id = screen.book.id;
             const position = screen.bl.location.path || emptyPath();
-            setCurrentPosition(id, position);
+            stores.positions.set(id.name, position);
         }
     });
 }

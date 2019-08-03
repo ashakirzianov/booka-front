@@ -3,6 +3,9 @@ export type Config = {
     useTestStore: boolean,
     backendBase: string,
     frontendBase: string,
+    facebook: {
+        clientId: string,
+    },
     logger: (msg: string) => void,
 };
 
@@ -21,13 +24,14 @@ const productionConfig: Config = {
     useTestStore: false,
     backendBase: prodBack,
     frontendBase: prodFront,
+    facebook: { clientId: '1527203577422306' },
     logger: () => undefined,
 };
 
 const hostname = window && window.location && window.location.hostname;
 
 const debugConfig: Config = {
-    usePersistentStorage: false,
+    usePersistentStorage: true,
     useTestStore: false,
     backendBase: hostname
         ? `http://${hostname}:3042`
@@ -35,6 +39,7 @@ const debugConfig: Config = {
     frontendBase: hostname
         ? `http://${hostname}:3000`
         : prodFront,
+    facebook: { clientId: '1527203577422306' },
     // tslint:disable-next-line: no-console
     logger: msg => console.log(msg),
 };

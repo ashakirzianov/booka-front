@@ -1,39 +1,15 @@
 import {
-    BookId, BookPath, library, Book,
-    Library, BookInfo, Theme,
+    BookPath, Book, BookInfo, Theme,
 } from '../model';
-import { smartStore, forEach, singleValueStore } from '../utils';
+import { smartStore, singleValueStore } from '../utils';
 
 export const stores = {
     books: smartStore<Book>('books'),
     library: smartStore<BookInfo>('library'),
     positions: smartStore<BookPath>('positions'),
     theme: singleValueStore<Theme>('theme'),
+    token: singleValueStore<string>('token'),
 };
-
-export function bookFromStore(bi: BookId): Book | undefined {
-    return stores.books.get(bi.name);
-}
-
-export function storeBook(book: Book) {
-    stores.books.set(book.id.name, book);
-}
-
-export function cachedLibrary(): Library {
-    return library(stores.library.all());
-}
-
-export function cacheLibrary(lib: Library) {
-    forEach(lib.books, (id, info) => stores.library.set(id, info));
-}
-
-export async function resolveCurrentPosition(bi: BookId): Promise<BookPath> {
-    return stores.positions.get(bi.name) || [];
-}
-
-export function setCurrentPosition(bookId: BookId, path: BookPath) {
-    stores.positions.set(bookId.name, path);
-}
 
 // ---- Theme
 

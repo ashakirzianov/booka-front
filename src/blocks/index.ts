@@ -9,5 +9,6 @@ export * from './Layout';
 export * from './Scroll';
 export * from './RichText';
 export * from './RichText.plat';
+export * from './FacebookLogin';
 
 export { SafeAreaView } from 'react-native';

@@ -1,17 +1,22 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { validatePersistentStorage, createEnhancedStore } from '../utils';
-import { App } from '../model';
+import { App, User } from '../model';
 import { urlToAction } from './urlConversion';
 import { reducer } from './reducers';
-import { Action } from './actions';
+import { Action, actionCreators } from './actions';
 
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);
+    // TODO: report errors ?
     if (action) {
-        // TODO: report errors ?
         store.dispatch(action);
     }
+}
+
+export function dispatchSetUserAction(user?: User) {
+    const action = actionCreators.setUser(user);
+    store.dispatch(action);
 }
 
 export function subscribe(f: (state: App) => void) {

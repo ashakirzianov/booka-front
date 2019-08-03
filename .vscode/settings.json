@@ -34,6 +34,9 @@
         "collapsable",
         "eofline",
         "esnext",
+        "fbtoken",
+        "homescreen",
+        "jssdk",
         "middlewares",
         "nums",
         "onstatechange",
@@ -48,7 +51,8 @@
         "succ",
         "timeouted",
         "webfonts",
-        "webview"
+        "webview",
+        "xfbml"
     ],
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.wordWrap": "bounded",

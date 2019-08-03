@@ -1,7 +1,8 @@
 import { combineReducers, loop } from '../utils';
 import { Action, actionCreators } from './actions';
 import {
-    App, forScreen, Theme, libraryScreen, library, AppScreen, locationPath,
+    App, forScreen, Theme, libraryScreen, library,
+    AppScreen, locationPath, User,
 } from '../model';
 import { buildLibraryScreen, buildBookScreen } from './screenBuilders';
 import { restoreTheme } from './persistent';
@@ -123,10 +124,20 @@ function loading(state: boolean | undefined = false, action: Action) {
     }
 }
 
+function user(state: User | undefined, action: Action) {
+    switch (action.type) {
+        case 'setUser':
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export const reducer = combineReducers<App, Action>({
     theme,
     screen,
     pathToOpen,
     controlsVisible,
     loading,
+    user,
 });

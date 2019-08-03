@@ -71,7 +71,6 @@ export function TagButton(props: TagButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
-            color: colors(props.theme).secondary,
             backgroundColor: colors(props.theme).accent,
             borderWidth: 1,
             borderRadius: 50,
@@ -94,6 +93,7 @@ export function TagButton(props: TagButtonProps) {
                     theme={props.theme}
                     text={props.text}
                     fontSize='smallest'
+                    color='secondary'
                 />
             </View>
         </View>
@@ -127,6 +127,7 @@ export function BorderButton(props: TextButtonProps) {
                 fontFamily={props.fontFamily}
                 fontSize={props.fontSize}
                 letterSpacing={props.letterSpacing}
+                color='accent'
             />
         </div>
     </Hyperlink>;
@@ -176,6 +177,35 @@ export function PaletteButton(props: PaletteButtonProps) {
                 <span>{props.text}</span>
             </View>
         </HoverableView>
+    </Hyperlink>;
+}
+
+export type PictureButtonProps = ButtonProps<{
+    pictureUrl?: string,
+}>;
+export function PictureButton(props: PictureButtonProps) {
+    return <Hyperlink
+        href={props.href}
+        onClick={props.onClick}
+    >
+        <img
+            src={props.pictureUrl}
+            alt='account'
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                borderRadius: '50%',
+                alignItems: 'center',
+                borderColor: colors(props.theme).accent,
+                borderWidth: 2,
+                borderStyle: 'solid',
+                ...({
+                    ':hover': {
+                        borderColor: colors(props.theme).highlight,
+                    },
+                }),
+            }}
+        />
     </Hyperlink>;
 }
 

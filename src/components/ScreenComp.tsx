@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Column, point } from '../blocks';
-import { AppScreen } from '../model';
+import { AppScreen, Theme } from '../model';
 import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
@@ -13,14 +13,16 @@ import {
 export type ScreenProps = {
     screen: AppScreen,
 };
-export const ScreenComp = connectState('controlsVisible', 'loading')<ScreenProps>(({ screen, controlsVisible, loading }) =>
+export const ScreenComp = connectState('controlsVisible', 'loading', 'theme')<ScreenProps>(({ screen, controlsVisible, loading, theme }) =>
     <Column centered fullWidth fullHeight>
         {loading ? <FullScreenActivityIndicator /> : null}
         <Header
+            theme={theme}
             controlsVisible={controlsVisible}
             screen={screen}
         />
         <Footer
+            theme={theme}
             controlsVisible={controlsVisible}
             screen={screen}
         />
@@ -38,14 +40,15 @@ function Content({ screen }: ContentProps) {
 }
 
 type BarProps = {
+    theme: Theme,
     screen: AppScreen,
     controlsVisible: boolean,
 };
-function Header({ screen, controlsVisible }: BarProps) {
+function Header({ screen, controlsVisible, theme }: BarProps) {
     return <TopBar open={controlsVisible} paddingHorizontal={point(1)}>
         {
             screen.screen === 'library' ? <LibraryScreenHeader />
-                : screen.screen === 'book' ? <BookScreenHeader />
+                : screen.screen === 'book' ? <BookScreenHeader theme={theme} />
                     : assertNever(screen)
         }
     </TopBar>;
