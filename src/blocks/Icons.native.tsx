@@ -18,6 +18,8 @@ function convertIconName(name: IconName): string {
             return 'sign-in-alt';
         case 'circle':
             return 'circle';
+        case 'facebook':
+            return 'facebook-square';
         default:
             return assertNever(name);
     }
@@ -26,6 +28,5 @@ function convertIconName(name: IconName): string {
 export function Icon({ name, size }: IconProps) {
     return <FontAwesome
         name={convertIconName(name)}
-        size={size || 24}
     />;
 }

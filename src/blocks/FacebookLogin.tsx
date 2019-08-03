@@ -1,9 +1,10 @@
-/*global FB*/
 /*global globalThis*/
 import * as React from 'react';
 
-import { Column } from '.';
+import { Column, Row } from './Layout';
 import { Callback } from '../utils';
+import { Icon } from './Icons';
+import { point } from './common';
 
 type SocialLoginProvider = 'facebook';
 type SocialLoginResultFail = {
@@ -59,24 +60,53 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
     }, [clicked, loginState, onLogin]);
 
     return <Column>
-        <button
+        <ActualButton
             onClick={() => setClicked(true)}
-        >
-            {
-                loginState.state === 'checking' ? <span>Loading...</span>
-                    : loginState.state === 'logged'
-                        ? <span>Continue as {loginState.name}</span>
-                        : <span>Sign in with facebook</span>
+            user={
+                loginState.state === 'logged' && loginState.name
+                    ? { name: loginState.name, pictureUrl: loginState.picture }
+                    : undefined
             }
-        </button>
+        />
     </Column>;
+}
+
+type ActualButtonProps = {
+    onClick: Callback<void>,
+    user?: {
+        name: string,
+        pictureUrl?: string,
+    },
+};
+function ActualButton({ onClick, user }: ActualButtonProps) {
+    const text = user
+        ? `Continue as ${user.name}`
+        : 'Continue with facebook';
+    return <button
+        onClick={onClick}
+        style={{
+            color: 'white',
+            background: '#4469b0',
+            borderStyle: 'none',
+            borderRadius: 3,
+        }}
+    >
+        <Row centered justified>
+            <Icon name='facebook' size={point(2)} />
+            <span style={{
+                fontSize: point(1.5),
+                fontFamily: 'Helvetica',
+                margin: point(0.5),
+            }}>{text}</span>
+        </Row>
+    </button>;
 }
 
 function initFbSdk(clientId: string) {
     let timeout = 0;
     (window as any).fbAsyncInit = function asyncInit() {
-        if (FB) {
-            FB.init({
+        if (globalThis.FB) {
+            globalThis.FB.init({
                 appId: clientId,
                 cookie: true,
                 xfbml: true,
