@@ -1,4 +1,5 @@
 /*global FB*/
+/*global globalThis*/
 import * as React from 'react';
 
 import { Column } from '../blocks';
@@ -22,24 +23,64 @@ type SocialButtonProps = {
 
 export type FacebookLoginProps = SocialButtonProps;
 export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
+    type LoginState =
+        | { state: 'checking' }
+        | { state: 'not-logged' }
+        | { state: 'logged', response: fb.AuthResponse }
+        ;
     React.useEffect(() => {
         initFbSdk(clientId);
     }, [clientId]);
+
+    const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
+    const [clicked, setClicked] = React.useState(false);
+
+    React.useEffect(() => {
+        getLoginStatus(status => {
+            if (status.status === 'connected') {
+                setLoginState({
+                    state: 'logged',
+                    response: status.authResponse,
+                });
+            } else {
+                setLoginState({ state: 'not-logged' });
+            }
+        });
+    }, []);
+
+    React.useEffect(() => {
+        if (clicked) {
+            if (loginState.state === 'logged') {
+                onLogin({
+                    success: true,
+                    provider: 'facebook',
+                    token: loginState.response.accessToken,
+                });
+            } else if (loginState.state === 'not-logged' && globalThis.FB) {
+                globalThis.FB.login(res => {
+                    if (res.status === 'connected') {
+                        setLoginState({
+                            state: 'logged',
+                            response: res.authResponse,
+                        });
+                    } else {
+                        onLogin({ success: false });
+                    }
+                });
+            }
+        }
+    }, [clicked, loginState, onLogin]);
+
     return <Column>
         <button
-            onClick={() => FB && FB.login(res => {
-                if (res.status === 'connected') {
-                    onLogin({
-                        success: true,
-                        token: res.authResponse.accessToken,
-                        provider: 'facebook',
-                    });
-                } else {
-                    onLogin({ success: false });
-                }
-            })}
+            onClick={() => setClicked(true)}
         >
-            <span>Continue with facebook</span>
+            {
+                loginState.state === 'checking' ? <span>Loading...</span>
+                    : loginState.state === 'logged'
+                        ? <span>Continue as {loginState.response.toString()}</span>
+                        : <span>Sign in with facebook</span>
+            }
         </button>
     </Column>;
 }
@@ -74,4 +115,12 @@ function loadSdk() {
         js.src = '//connect.facebook.net/en_US/sdk.js';
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+}
+
+function getLoginStatus(callback: Callback<fb.StatusResponse>) {
+    if (globalThis.FB) {
+        globalThis.FB.getLoginStatus(callback);
+    } else {
+        setTimeout(() => getLoginStatus(callback), 1000);
+    }
 }
