@@ -110,15 +110,15 @@ function handleFbLoginState(status: fb.StatusResponse, callback: Callback<LoginS
             state: 'logged',
             token: status.authResponse.accessToken,
         });
-        globalThis.FB.api('/me', { fields: 'picture,name' }, response => {
+        globalThis.FB.api('/me', { fields: 'picture,first_name' }, response => {
             const anyResp = response as any;
             const picUrl = anyResp.picture
                 && anyResp.picture.data
                 && anyResp.picture.data.url;
-            if (anyResp.name) {
+            if (anyResp.first_name) {
                 callback({
                     state: 'logged',
-                    name: anyResp.name,
+                    name: anyResp.first_name,
                     token: status.authResponse.accessToken,
                     picture: picUrl,
                 });
