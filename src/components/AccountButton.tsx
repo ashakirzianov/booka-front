@@ -1,10 +1,12 @@
 import * as React from 'react';
 
-import { WithPopover, TextLine, connectState, IconButton } from './Connected';
-import { Column, FacebookLogin, SocialLoginResult, PictureButton } from '../blocks';
+import { WithPopover, TextLine, connectState, IconButton, TagButton } from './Connected';
+import {
+    Column, FacebookLogin, SocialLoginResult, PictureButton, Row, point,
+} from '../blocks';
 import { config } from '../config';
 import { User, Theme } from '../model';
-import { loginWithFbToken } from '../core/dataAccess';
+import { loginWithFbToken, logout } from '../core/dataAccess';
 import { Callback } from '../utils';
 
 export type AccountButtonProps = {
@@ -14,7 +16,11 @@ export type AccountButtonProps = {
 function AccountButtonC({ user, theme }: AccountButtonProps) {
     return <WithPopover
         popoverPlacement='bottom'
-        body={<AccountPanel user={user} />}
+        body={
+            user
+                ? <AccountPanel user={user} />
+                : <SignInPanel />
+        }
     >
         {
             onClick =>
@@ -49,13 +55,20 @@ function ActualButton({ theme, user, onClick }: ActualButtonProps) {
 }
 
 type AccountPanelProps = {
-    user: User | undefined,
+    user: User,
 };
 function AccountPanel({ user }: AccountPanelProps) {
-    if (user) {
-        return <TextLine text={user.name} />;
-    }
+    return <Column>
+        <Row margin={point(1)} centered>
+            <TextLine text={user.name} fontSize='small' />
+        </Row>
+        <Row margin={point(1)} centered>
+            <TagButton text='Logout' onClick={() => logout()} />
+        </Row>
+    </Column>;
+}
 
+function SignInPanel() {
     async function onLogin(res: SocialLoginResult) {
         if (res.success) {
             if (res.provider === 'facebook') {

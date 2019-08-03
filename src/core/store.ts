@@ -14,7 +14,7 @@ export function dispatchUrlNavigation(url: string) {
     }
 }
 
-export function dispatchSetUserAction(user: User) {
+export function dispatchSetUserAction(user?: User) {
     const action = actionCreators.setUser(user);
     store.dispatch(action);
 }

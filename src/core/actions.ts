@@ -11,7 +11,7 @@ export const actionCreators = {
     openFootnote: actionCreator<string | null>()('openFootnote'),
     setPalette: actionCreator<PaletteName>()('setPalette'),
     incrementScale: actionCreator<number>()('incrementScale'),
-    setUser: actionCreator<User>()('setUser'),
+    setUser: actionCreator<User | undefined>()('setUser'),
 };
 
 export type Action = ActionFromCreators<typeof actionCreators>;

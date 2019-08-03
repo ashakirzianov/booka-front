@@ -73,3 +73,8 @@ export async function loginWithFbToken(fbToken: string) {
         return undefined;
     }
 }
+
+export async function logout() {
+    stores.token.clear();
+    dispatchSetUserAction(undefined);
+}
