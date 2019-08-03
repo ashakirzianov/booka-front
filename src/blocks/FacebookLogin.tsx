@@ -2,7 +2,7 @@
 /*global globalThis*/
 import * as React from 'react';
 
-import { Column } from '../blocks';
+import { Column } from '.';
 import { Callback } from '../utils';
 
 type SocialLoginProvider = 'facebook';
