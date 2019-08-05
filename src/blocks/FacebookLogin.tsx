@@ -82,6 +82,7 @@ function ActualButton({ onClick, user }: ActualButtonProps) {
             background: '#4469b0',
             borderStyle: 'none',
             borderRadius: 3,
+            cursor: 'pointer',
         }}
     >
         <Row centered justified>
