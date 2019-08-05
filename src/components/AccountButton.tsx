@@ -19,7 +19,8 @@ function AccountButtonC({ user, theme }: AccountButtonProps) {
         body={
             user
                 ? <AccountPanel user={user} />
-                : <SignInPanel />
+                : ({ scheduleUpdate }) =>
+                    <SignInPanel onStatusChanged={scheduleUpdate} />
         }
     >
         {
@@ -68,7 +69,10 @@ function AccountPanel({ user }: AccountPanelProps) {
     </Column>;
 }
 
-function SignInPanel() {
+type SignInPanelProps = {
+    onStatusChanged?: Callback,
+};
+function SignInPanel({ onStatusChanged }: SignInPanelProps) {
     async function onLogin(res: SocialLoginResult) {
         if (res.success) {
             if (res.provider === 'facebook') {
@@ -79,6 +83,7 @@ function SignInPanel() {
 
     return <Column>
         <FacebookLogin
+            onStatusChange={onStatusChanged}
             clientId={config().facebook.clientId}
             onLogin={onLogin}
         />

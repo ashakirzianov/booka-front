@@ -20,6 +20,7 @@ export type SocialLoginResult = SocialLoginResultSuccess | SocialLoginResultFail
 type SocialButtonProps = {
     clientId: string,
     onLogin: Callback<SocialLoginResult>,
+    onStatusChange?: Callback,
 };
 
 type LoginState =
@@ -28,40 +29,40 @@ type LoginState =
     | { state: 'logged', token?: string, name?: string, picture?: string }
     ;
 export type FacebookLoginProps = SocialButtonProps;
-export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
+export function FacebookLogin({ clientId, onLogin, onStatusChange }: FacebookLoginProps) {
+    const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
+    const updateLoginState = React.useCallback((state: LoginState) => {
+        setLoginState(state);
+        if (onStatusChange) {
+            // HACK: need to set timeout to update popover properly
+            setTimeout(onStatusChange, 200);
+        }
+    }, [onStatusChange, setLoginState]);
 
     React.useEffect(() => {
         initFbSdk(clientId);
     }, [clientId]);
 
-    const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
-    const [clicked, setClicked] = React.useState(false);
-
     React.useEffect(() => {
-        getLoginStatus(setLoginState);
-    }, []);
-
-    React.useEffect(() => {
-        if (clicked) {
-            if (loginState.state === 'logged' && loginState.token) {
-                onLogin({
-                    success: true,
-                    provider: 'facebook',
-                    token: loginState.token,
-                });
-                setClicked(false);
-            } else if (loginState.state === 'not-logged' && globalThis.FB) {
-                globalThis.FB.login(res => {
-                    handleFbLoginState(res, setLoginState);
-                    setClicked(false);
-                });
-            }
-        }
-    }, [clicked, loginState, onLogin]);
+        getLoginStatus(updateLoginState);
+    }, [updateLoginState]);
 
     return <Column>
         <ActualButton
-            onClick={() => setClicked(true)}
+            onClick={() => {
+                if (loginState.state === 'logged' && loginState.token) {
+                    onLogin({
+                        success: true,
+                        provider: 'facebook',
+                        token: loginState.token,
+                    });
+                    updateLoginState(loginState);
+                } else if (globalThis.FB) {
+                    globalThis.FB.login(res => {
+                        handleFbLoginState(res, updateLoginState);
+                    });
+                }
+            }}
             user={
                 loginState.state === 'logged' && loginState.name
                     ? { name: loginState.name, pictureUrl: loginState.picture }
@@ -89,15 +90,30 @@ function ActualButton({ onClick, user }: ActualButtonProps) {
             background: '#4469b0',
             borderStyle: 'none',
             borderRadius: 3,
+            cursor: 'pointer',
+            padding: 0,
         }}
     >
         <Row centered justified>
-            <Icon name='facebook' size={point(2)} />
+            <div style={{ marginLeft: point(0.5) }}>
+                <Icon name='facebook' size={point(2)} />
+            </div>
             <span style={{
                 fontSize: point(1.5),
                 fontFamily: 'Helvetica',
                 margin: point(0.5),
-            }}>{text}</span>
+                whiteSpace: 'pre',
+            }}>
+                {text}
+            </span>
+            {
+                user && user.pictureUrl
+                    ? <img
+                        alt=''
+                        src={user.pictureUrl}
+                    />
+                    : null
+            }
         </Row>
     </button>;
 }
@@ -110,7 +126,7 @@ function initFbSdk(clientId: string) {
                 appId: clientId,
                 cookie: true,
                 xfbml: true,
-                version: 'v2.8',
+                version: 'v4.0',
             });
         } else {
             setTimeout(asyncInit(), timeout);

@@ -29,15 +29,16 @@ const productionConfig: Config = {
 };
 
 const hostname = window && window.location && window.location.hostname;
+const localProtocol = process.env.HTTPS ? 'https' : 'http';
 
 const debugConfig: Config = {
-    usePersistentStorage: true,
+    usePersistentStorage: false,
     useTestStore: false,
     backendBase: hostname
-        ? `http://${hostname}:3042`
+        ? `https://${hostname}:3042`
         : prodBack,
     frontendBase: hostname
-        ? `http://${hostname}:3000`
+        ? `${localProtocol}://${hostname}:3000`
         : prodFront,
     facebook: { clientId: '1527203577422306' },
     // tslint:disable-next-line: no-console
