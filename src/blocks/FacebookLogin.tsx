@@ -30,22 +30,21 @@ type LoginState =
     ;
 export type FacebookLoginProps = SocialButtonProps;
 export function FacebookLogin({ clientId, onLogin, onStatusChange }: FacebookLoginProps) {
+    const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
+    const updateLoginState = React.useCallback((state: LoginState) => {
+        setLoginState(state);
+        if (onStatusChange) {
+            setTimeout(onStatusChange, 200);
+        }
+    }, [onStatusChange, setLoginState]);
 
     React.useEffect(() => {
         initFbSdk(clientId);
     }, [clientId]);
 
-    const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
-
     React.useEffect(() => {
-        getLoginStatus(setLoginState);
-    }, []);
-
-    React.useEffect(() => {
-        if (onStatusChange) {
-            onStatusChange();
-        }
-    }, [onStatusChange, loginState]);
+        getLoginStatus(updateLoginState);
+    }, [updateLoginState]);
 
     return <Column>
         <ActualButton
@@ -56,13 +55,10 @@ export function FacebookLogin({ clientId, onLogin, onStatusChange }: FacebookLog
                         provider: 'facebook',
                         token: loginState.token,
                     });
-                    if (onStatusChange) {
-                        // HACK: need to wait to schedule popover update
-                        setTimeout(onStatusChange, 200);
-                    }
+                    updateLoginState(loginState);
                 } else if (globalThis.FB) {
                     globalThis.FB.login(res => {
-                        handleFbLoginState(res, setLoginState);
+                        handleFbLoginState(res, updateLoginState);
                     });
                 }
             }}
@@ -94,15 +90,29 @@ function ActualButton({ onClick, user }: ActualButtonProps) {
             borderStyle: 'none',
             borderRadius: 3,
             cursor: 'pointer',
+            padding: 0,
         }}
     >
         <Row centered justified>
-            <Icon name='facebook' size={point(2)} />
+            <div style={{ marginLeft: point(0.5) }}>
+                <Icon name='facebook' size={point(2)} />
+            </div>
             <span style={{
                 fontSize: point(1.5),
                 fontFamily: 'Helvetica',
                 margin: point(0.5),
-            }}>{text}</span>
+                whiteSpace: 'pre',
+            }}>
+                {text}
+            </span>
+            {
+                user && user.pictureUrl
+                    ? <img
+                        alt=''
+                        src={user.pictureUrl}
+                    />
+                    : null
+            }
         </Row>
     </button>;
 }

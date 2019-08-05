@@ -16,7 +16,6 @@ export type WithPopoverProps = {
     popoverPlacement: PopperProps['placement'],
     children: (onClick: Callback<void>) => React.ReactNode,
     open?: boolean,
-    scheduleUpdate?: Callback,
 };
 
 export function WithPopover({ body, popoverPlacement, theme, children, open }: WithPopoverProps) {
