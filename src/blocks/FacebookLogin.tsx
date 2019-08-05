@@ -20,6 +20,7 @@ export type SocialLoginResult = SocialLoginResultSuccess | SocialLoginResultFail
 type SocialButtonProps = {
     clientId: string,
     onLogin: Callback<SocialLoginResult>,
+    onStatusChange?: Callback,
 };
 
 type LoginState =
@@ -28,7 +29,7 @@ type LoginState =
     | { state: 'logged', token?: string, name?: string, picture?: string }
     ;
 export type FacebookLoginProps = SocialButtonProps;
-export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
+export function FacebookLogin({ clientId, onLogin, onStatusChange }: FacebookLoginProps) {
 
     React.useEffect(() => {
         initFbSdk(clientId);
@@ -40,6 +41,12 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
         getLoginStatus(setLoginState);
     }, []);
 
+    React.useEffect(() => {
+        if (onStatusChange) {
+            onStatusChange();
+        }
+    }, [onStatusChange, loginState]);
+
     return <Column>
         <ActualButton
             onClick={() => {
@@ -49,6 +56,10 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
                         provider: 'facebook',
                         token: loginState.token,
                     });
+                    if (onStatusChange) {
+                        // HACK: need to wait to schedule popover update
+                        setTimeout(onStatusChange, 200);
+                    }
                 } else if (globalThis.FB) {
                     globalThis.FB.login(res => {
                         handleFbLoginState(res, setLoginState);

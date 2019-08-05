@@ -5,7 +5,7 @@ export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>
 export type Func<Argument, Return> = void extends Argument
     ? () => Return
     : (payload: Argument) => Return;
-export type Callback<Argument> = Func<Argument, void>;
+export type Callback<Argument = void> = Func<Argument, void>;
 
 export type Defined<T> = T extends undefined ? never : T;
 export type MaybeLazy<T> = T | (() => T);

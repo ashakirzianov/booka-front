@@ -7,12 +7,16 @@ import { OverlayBox } from './OverlayBox';
 import { FadeIn } from './Animations';
 import { Theme } from '../model';
 
+export type PopoverBodyParams = {
+    scheduleUpdate: Callback,
+};
 export type WithPopoverProps = {
     theme: Theme,
-    body: React.ReactNode,
+    body: React.ReactNode | ((params: PopoverBodyParams) => React.ReactNode),
     popoverPlacement: PopperProps['placement'],
     children: (onClick: Callback<void>) => React.ReactNode,
     open?: boolean,
+    scheduleUpdate?: Callback,
 };
 
 export function WithPopover({ body, popoverPlacement, theme, children, open }: WithPopoverProps) {
@@ -58,13 +62,17 @@ export function WithPopover({ body, popoverPlacement, theme, children, open }: W
                 })}
             >
                 {
-                    ({ ref, style, placement }) =>
+                    ({ ref, style, placement, scheduleUpdate }) =>
                         <div ref={ref} style={{
                             ...style,
                         }} data-placement={placement}>
                             {/* TODO: add arrows */}
                             <OverlayBox theme={theme}>
-                                {body}
+                                {
+                                    typeof body === 'function'
+                                        ? body({ scheduleUpdate })
+                                        : body
+                                }
                             </OverlayBox>
                         </div>
                 }
