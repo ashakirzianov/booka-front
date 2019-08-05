@@ -35,33 +35,26 @@ export function FacebookLogin({ clientId, onLogin }: FacebookLoginProps) {
     }, [clientId]);
 
     const [loginState, setLoginState] = React.useState<LoginState>({ state: 'checking' });
-    const [clicked, setClicked] = React.useState(false);
 
     React.useEffect(() => {
         getLoginStatus(setLoginState);
     }, []);
 
-    React.useEffect(() => {
-        if (clicked) {
-            if (loginState.state === 'logged' && loginState.token) {
-                onLogin({
-                    success: true,
-                    provider: 'facebook',
-                    token: loginState.token,
-                });
-                setClicked(false);
-            } else if (loginState.state === 'not-logged' && globalThis.FB) {
-                globalThis.FB.login(res => {
-                    handleFbLoginState(res, setLoginState);
-                    setClicked(false);
-                });
-            }
-        }
-    }, [clicked, loginState, onLogin]);
-
     return <Column>
         <ActualButton
-            onClick={() => setClicked(true)}
+            onClick={() => {
+                if (loginState.state === 'logged' && loginState.token) {
+                    onLogin({
+                        success: true,
+                        provider: 'facebook',
+                        token: loginState.token,
+                    });
+                } else if (globalThis.FB) {
+                    globalThis.FB.login(res => {
+                        handleFbLoginState(res, setLoginState);
+                    });
+                }
+            }}
             user={
                 loginState.state === 'logged' && loginState.name
                     ? { name: loginState.name, pictureUrl: loginState.picture }
