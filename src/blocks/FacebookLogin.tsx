@@ -34,6 +34,7 @@ export function FacebookLogin({ clientId, onLogin, onStatusChange }: FacebookLog
     const updateLoginState = React.useCallback((state: LoginState) => {
         setLoginState(state);
         if (onStatusChange) {
+            // HACK: need to set timeout to update popover properly
             setTimeout(onStatusChange, 200);
         }
     }, [onStatusChange, setLoginState]);
