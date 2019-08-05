@@ -12,10 +12,11 @@ export type WithPopoverProps = {
     body: React.ReactNode,
     popoverPlacement: PopperProps['placement'],
     children: (onClick: Callback<void>) => React.ReactNode,
+    open?: boolean,
 };
 
-export function WithPopover({ body, popoverPlacement, theme, children }: WithPopoverProps) {
-    const [isOpen, setIsOpen] = React.useState(false);
+export function WithPopover({ body, popoverPlacement, theme, children, open }: WithPopoverProps) {
+    const [isOpen, setIsOpen] = React.useState(open || false);
     const toggle = () => setIsOpen(!isOpen);
     const hide = () => setIsOpen(false);
 
