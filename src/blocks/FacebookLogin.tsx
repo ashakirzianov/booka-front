@@ -110,7 +110,7 @@ function initFbSdk(clientId: string) {
                 appId: clientId,
                 cookie: true,
                 xfbml: true,
-                version: 'v2.8',
+                version: 'v4.0',
             });
         } else {
             setTimeout(asyncInit(), timeout);
