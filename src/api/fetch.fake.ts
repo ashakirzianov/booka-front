@@ -23,10 +23,12 @@ function fetchBIStatic(bookId: BookId): Contracts.VolumeNode {
 }
 
 export const fetchLibrary = timeouted(fetchLibraryStatic);
-function fetchLibraryStatic(): Contracts.Library {
+function fetchLibraryStatic(): Contracts.BookCollection {
     return {
-        fake1: { title: 'I am not a book' },
-        fake2: { title: 'Neither am I' },
-        fake3: { title: 'We are all fake' },
+        books: [
+            { id: 'fake1', title: 'I am not a book' },
+            { id: 'fake2', title: 'Neither am I' },
+            { id: 'fake3', title: 'We are all fake' },
+        ],
     };
 }

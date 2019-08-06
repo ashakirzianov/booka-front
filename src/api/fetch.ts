@@ -23,8 +23,8 @@ export async function fetchTokenForFb(fbToken: string): Promise<string | undefin
     return response.token;
 }
 
-export async function fetchLibrary(): Promise<Contracts.Library> {
-    const lib = await fetchJson<Contracts.Library>(backendUrl + libraryApi);
+export async function fetchLibrary(): Promise<Contracts.BookCollection> {
+    const lib = await fetchJson<Contracts.BookCollection>(backendUrl + libraryApi);
     return lib;
 }
 
