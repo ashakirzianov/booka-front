@@ -7,10 +7,10 @@ const backendUrl = config().backendBase + '/';
 const jsonPath = 'json/';
 const libraryApi = 'library';
 const fbAuth = 'auth/fbtoken/';
-const user = 'user';
+const userInfo = 'me/info';
 
 export async function fetchUserInfo(token: string): Promise<Contracts.UserInfo | undefined> {
-    const response = await fetchJson<Contracts.UserInfo>(backendUrl + user, {
+    const response = await fetchJson<Contracts.UserInfo>(backendUrl + userInfo, {
         accessToken: token,
     });
 
