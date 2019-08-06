@@ -7,10 +7,10 @@ const backendUrl = config().backendBase + '/';
 const jsonPath = 'json/';
 const libraryApi = 'library';
 const fbAuth = 'auth/fbtoken/';
-const user = 'user';
+const userInfo = 'me/info';
 
 export async function fetchUserInfo(token: string): Promise<Contracts.UserInfo | undefined> {
-    const response = await fetchJson<Contracts.UserInfo>(backendUrl + user, {
+    const response = await fetchJson<Contracts.UserInfo>(backendUrl + userInfo, {
         accessToken: token,
     });
 
@@ -23,8 +23,8 @@ export async function fetchTokenForFb(fbToken: string): Promise<string | undefin
     return response.token;
 }
 
-export async function fetchLibrary(): Promise<Contracts.Library> {
-    const lib = await fetchJson<Contracts.Library>(backendUrl + libraryApi);
+export async function fetchLibrary(): Promise<Contracts.BookCollection> {
+    const lib = await fetchJson<Contracts.BookCollection>(backendUrl + libraryApi);
     return lib;
 }
 
