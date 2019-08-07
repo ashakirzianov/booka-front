@@ -6,7 +6,7 @@ export type Config = {
     facebook: {
         clientId: string,
     },
-    logger: (msg: string) => void,
+    logger: (msg?: string) => void,
 };
 
 export function config(): Config {

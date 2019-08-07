@@ -1,11 +1,11 @@
 import {
-    BookPath, Book, BookInfo, Theme,
+    BookPath, Book, BookDesc, Theme,
 } from '../model';
 import { smartStore, singleValueStore } from '../utils';
 
 export const stores = {
     books: smartStore<Book>('books'),
-    library: smartStore<BookInfo>('library'),
+    library: smartStore<BookDesc>('library'),
     positions: smartStore<BookPath>('positions'),
     theme: singleValueStore<Theme>('theme'),
     token: singleValueStore<string>('token'),

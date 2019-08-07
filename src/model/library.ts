@@ -1,11 +1,11 @@
-export type BookInfo = {
+export type BookDesc = {
     title: string,
     author?: string,
 };
 
 export type Library = {
     books: {
-        [key: string]: BookInfo | undefined;
+        [key: string]: BookDesc | undefined;
     },
 };
 
