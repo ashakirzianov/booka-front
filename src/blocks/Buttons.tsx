@@ -127,7 +127,7 @@ export function BorderButton(props: TextButtonProps) {
                 fontFamily={props.fontFamily}
                 fontSize={props.fontSize}
                 letterSpacing={props.letterSpacing}
-                color='accent'
+                color={null}
             />
         </div>
     </Hyperlink>;
