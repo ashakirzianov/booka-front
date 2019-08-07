@@ -2,10 +2,10 @@ import {
     BookNode, HasSubnodes, ChapterNode, ParagraphNode, Span,
     SimpleSpan, FootnoteSpan, AttributedSpan, CompoundSpan,
     AttributeName, VolumeNode,
-} from '../contracts/bookVolume';
+} from '../contracts/book';
 import { assertNever } from '../utils';
 
-export * from '../contracts/bookVolume';
+export * from '../contracts/book';
 
 // Helpers:
 

@@ -8,7 +8,7 @@ import { platformValue } from '../utils';
 export type TextProps = {
     fontFamily?: keyof Theme['fontFamilies'],
     fontSize?: keyof Theme['fontSizes'],
-    color?: PaletteColor,
+    color?: PaletteColor | null,
     bold?: boolean,
     italic?: boolean,
     letterSpacing?: Size,
@@ -22,7 +22,7 @@ export function TextLine(props: TextLineProps) {
         style={{
             fontSize: fontSize(props.theme, props.fontSize),
             fontFamily: props.theme.fontFamilies[props.fontFamily || 'menu'],
-            color: colors(props.theme)[props.color || 'text'],
+            color: props.color === null ? undefined : colors(props.theme)[props.color || 'text'],
             letterSpacing: props.letterSpacing,
             fontWeight: props.bold ? 'bold' : 'normal',
             fontStyle: props.italic ? 'italic' : 'normal',

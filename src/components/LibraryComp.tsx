@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import { Library, BookInfo, remoteBookId, locationCurrent, bookLocator } from '../model';
+import {
+    Library, BookDesc, remoteBookId, locationCurrent, bookLocator,
+} from '../model';
 import {
     Row, SafeAreaView, Column, EmptyLine,
 } from '../blocks';
@@ -8,7 +10,7 @@ import { actionCreators } from '../core';
 import { TextButton } from './Connected';
 
 type BookItemProps = {
-    meta: BookInfo,
+    meta: BookDesc,
     id: string,
 };
 function BookItem({ meta, id }: BookItemProps) {

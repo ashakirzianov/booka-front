@@ -3,11 +3,11 @@ import { BookId } from '../model';
 import * as Contracts from '../contracts';
 import { config } from '../config';
 
-const backendUrl = config().backendBase + '/';
-const jsonPath = 'json/';
-const libraryApi = 'library';
-const fbAuth = 'auth/fbtoken/';
-const userInfo = 'me/info';
+const backendUrl = config().backendBase;
+const bookById = '/book/id/';
+const libraryApi = '/book/all';
+const fbAuth = '/auth/fbtoken/';
+const userInfo = '/me/info';
 
 export async function fetchUserInfo(token: string): Promise<Contracts.UserInfo | undefined> {
     const response = await fetchJson<Contracts.UserInfo>(backendUrl + userInfo, {
@@ -17,31 +17,26 @@ export async function fetchUserInfo(token: string): Promise<Contracts.UserInfo |
     return response;
 }
 
-export async function fetchTokenForFb(fbToken: string): Promise<string | undefined> {
-    const response = await fetchJson<Contracts.AuthToken>(backendUrl + fbAuth + fbToken);
-
-    return response.token;
+export async function fetchTokenForFb(fbToken: string) {
+    return await fetchJson<Contracts.AuthToken>(backendUrl + fbAuth + fbToken);
 }
 
-export async function fetchLibrary(): Promise<Contracts.BookCollection> {
-    const lib = await fetchJson<Contracts.BookCollection>(backendUrl + libraryApi);
-    return lib;
+export async function fetchLibrary() {
+    return fetchJson<Contracts.BookCollection>(backendUrl + libraryApi);
 }
 
-export async function fetchBI(bookId: BookId): Promise<Contracts.VolumeNode> {
-    const backendBook = fetchBook(bookId.name);
-    return backendBook;
+export async function fetchBI(bookId: BookId) {
+    return fetchBook(bookId.name);
 }
 
-export async function fetchBook(bookName: string): Promise<Contracts.VolumeNode> {
-    const response = await fetchJson<Contracts.VolumeNode>(backendUrl + jsonPath + bookName);
-    return response;
+export async function fetchBook(bookName: string) {
+    return await fetchJson<Contracts.VolumeNode>(backendUrl + bookById + bookName);
 }
 
 type FetchOptions = {
     accessToken?: string,
 };
-async function fetchJson<T = {}>(url: string, opts?: FetchOptions): Promise<T> {
+async function fetchJson<T = {}>(url: string, opts?: FetchOptions): Promise<T | undefined> {
     const axiosConf: AxiosRequestConfig = {
         responseType: 'json',
         ...(opts && opts.accessToken && {
@@ -52,5 +47,12 @@ async function fetchJson<T = {}>(url: string, opts?: FetchOptions): Promise<T> {
     };
     const json = await axios.get(url, axiosConf);
 
-    return json.data as T;
+    const apiResult = json.data as Contracts.Result<T>;
+
+    if (apiResult.success) {
+        return apiResult.value;
+    } else {
+        config().logger(apiResult.reason);
+        return undefined;
+    }
 }
