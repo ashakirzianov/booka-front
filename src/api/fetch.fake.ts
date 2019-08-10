@@ -1,9 +1,9 @@
-import { BookId } from '../model';
+import { BookId, BookObject } from '../model';
 import { timeouted } from '../utils';
-import * as Contracts from '../contracts';
+import * as Contracts from '../backContract';
 
 export const fetchBL = timeouted(fetchBIStatic);
-function fetchBIStatic(bookId: BookId): Contracts.VolumeNode {
+function fetchBIStatic(bookId: BookId): BookObject {
     return {
         node: 'volume',
         meta: {

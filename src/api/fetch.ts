@@ -1,58 +1,38 @@
-import axios, { AxiosRequestConfig } from 'axios';
 import { BookId } from '../model';
-import * as Contracts from '../contracts';
 import { config } from '../config';
+import { createFetcher, FetchReturn } from '../common/fetcher';
+import { BackContract } from '../backContract';
+import { PathMethodContract } from '../common/contractTypes';
 
 const backendUrl = config().backendBase;
-const bookById = '/book/id/';
-const libraryApi = '/book/all';
-const fbAuth = '/auth/fbtoken/';
-const userInfo = '/me/info';
+const back = createFetcher<BackContract>(backendUrl);
 
-export async function fetchUserInfo(token: string): Promise<Contracts.UserInfo | undefined> {
-    const response = await fetchJson<Contracts.UserInfo>(backendUrl + userInfo, {
-        accessToken: token,
-    });
+async function optional<C extends PathMethodContract>(promise: Promise<FetchReturn<C>>): Promise<C['return'] | undefined> {
+    const result = await promise;
+    if (result.success) {
+        return result.value;
+    } else {
+        config().logger(result.response);
+        return undefined;
+    }
+}
 
-    return response;
+export async function fetchUserInfo(token: string) {
+    return optional(back.get('/me/info', { auth: token }));
 }
 
 export async function fetchTokenForFb(fbToken: string) {
-    return await fetchJson<Contracts.AuthToken>(backendUrl + fbAuth + fbToken);
+    return optional(back.get('/auth/fbtoken', {
+        query: { token: fbToken },
+    }));
 }
 
 export async function fetchLibrary() {
-    return fetchJson<Contracts.BookCollection>(backendUrl + libraryApi);
+    return optional(back.get('/book/all', {}));
 }
 
 export async function fetchBI(bookId: BookId) {
-    return fetchBook(bookId.name);
-}
-
-export async function fetchBook(bookName: string) {
-    return await fetchJson<Contracts.VolumeNode>(backendUrl + bookById + bookName);
-}
-
-type FetchOptions = {
-    accessToken?: string,
-};
-async function fetchJson<T = {}>(url: string, opts?: FetchOptions): Promise<T | undefined> {
-    const axiosConf: AxiosRequestConfig = {
-        responseType: 'json',
-        ...(opts && opts.accessToken && {
-            headers: {
-                Authorization: `Bearer ${opts.accessToken}`,
-            },
-        }),
-    };
-    const json = await axios.get(url, axiosConf);
-
-    const apiResult = json.data as Contracts.Result<T>;
-
-    if (apiResult.success) {
-        return apiResult.value;
-    } else {
-        config().logger(apiResult.reason);
-        return undefined;
-    }
+    return optional(back.get('/book/single', {
+        query: { id: bookId.name },
+    }));
 }
