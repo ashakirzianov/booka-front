@@ -1,5 +1,8 @@
-import * as Contracts from '../contracts';
-import { Library, BookId, Book, tocFromVolume, User } from '../model';
+import * as Contracts from '../backContract';
+import {
+    Library, BookId, Book, tocFromVolume, User,
+    VolumeNode,
+} from '../model';
 
 export function convertLibrary(lib: Contracts.BookCollection): Library {
     return {
@@ -13,7 +16,7 @@ export function convertLibrary(lib: Contracts.BookCollection): Library {
     };
 }
 
-export function convertBook(volume: Contracts.VolumeNode, id: BookId): Book {
+export function convertBook(volume: VolumeNode, id: BookId): Book {
     return {
         volume,
         id,
