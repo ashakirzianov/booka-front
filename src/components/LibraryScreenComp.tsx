@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { LibraryScreen, Theme } from '../model';
+import { LibraryScreen, Theme, User } from '../model';
 import { Triad } from '../blocks';
 import { LibraryComp } from './LibraryComp';
-import { TextLine, IconButton } from './Connected';
+import { TextLine, IconButton, connectState } from './Connected';
 import { AccountButton } from './AccountButton';
 
 export type LibraryScreenHeaderProps = {
@@ -28,6 +28,12 @@ export function LibraryScreenComp({ screen }: LibraryScreenProps) {
     return <LibraryComp library={screen.library} />;
 }
 
-function UploadButton() {
-    return <IconButton icon='upload' />;
+type UploadButtonProps = {
+    user: User | undefined,
+};
+function UploadButtonC({ user }: UploadButtonProps) {
+    return user
+        ? <IconButton icon='upload' />
+        : null;
 }
+const UploadButton = connectState('user')(UploadButtonC);
