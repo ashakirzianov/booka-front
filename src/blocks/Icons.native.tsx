@@ -20,6 +20,8 @@ function convertIconName(name: IconName): string {
             return 'circle';
         case 'facebook':
             return 'facebook-square';
+        case 'upload':
+            return 'cloud-upload-alt';
         default:
             return assertNever(name);
     }
