@@ -48,6 +48,7 @@ export function IconButton(props: IconButtonProps) {
         href={props.href}
         onClick={props.onClick}
         style={{
+            margin: point(0.5),
             color: colors(props.theme).accent,
             ':hover': {
                 color: colors(props.theme).highlight,
