@@ -10,5 +10,6 @@ export * from './Scroll';
 export * from './RichText';
 export * from './RichText.plat';
 export * from './FacebookLogin';
+export * from './FileUpload';
 
 export { SafeAreaView } from 'react-native';
