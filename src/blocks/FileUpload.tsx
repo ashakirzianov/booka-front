@@ -6,6 +6,7 @@ export type FileLike = {
     size: number,
     name: string,
     type: string,
+    slice(): any,
 };
 export type FileUploadDialogRef = {
     show: Callback,

@@ -1,9 +1,9 @@
 import {
-    Book, Library, BookId, library,
+    Book, Library, BookId, library, User,
 } from '../model';
 import {
     fetchBI, fetchLibrary, fetchUserInfo,
-    convertBook, convertLibrary, convertUserInfo, fetchTokenForFb,
+    convertBook, convertLibrary, fetchTokenForFb,
 } from '../api';
 import { stores } from './persistent';
 import { forEach } from '../utils';
@@ -48,7 +48,11 @@ export async function currentLibrary(): Promise<Library> {
 async function loginWithToken(token: string) {
     const userInfo = await fetchUserInfo(token);
     if (userInfo) {
-        const user = convertUserInfo(userInfo);
+        const user: User = {
+            token: token,
+            name: userInfo.name,
+            profilePictureUrl: userInfo.pictureUrl,
+        };
         dispatchSetUserAction(user);
         return user;
     } else {

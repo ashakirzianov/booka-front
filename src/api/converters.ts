@@ -1,6 +1,6 @@
 import * as Contracts from '../backContract';
 import {
-    Library, BookId, Book, tocFromVolume, User,
+    Library, BookId, Book, tocFromVolume,
     VolumeNode,
 } from '../model';
 
@@ -21,12 +21,5 @@ export function convertBook(volume: VolumeNode, id: BookId): Book {
         volume,
         id,
         toc: tocFromVolume(volume, id),
-    };
-}
-
-export function convertUserInfo(userInfo: Contracts.UserInfo): User {
-    return {
-        name: userInfo.name,
-        profilePictureUrl: userInfo.pictureUrl,
     };
 }

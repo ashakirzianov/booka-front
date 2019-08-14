@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { LibraryScreen, Theme, User } from '../model';
-import { Triad } from '../blocks';
+import { Triad, FileUploadDialog, FileUploadDialogRef } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 import { TextLine, IconButton, connectState } from './Connected';
 import { AccountButton } from './AccountButton';
+import { uploadBook } from '../api';
 
 export type LibraryScreenHeaderProps = {
     theme: Theme,
@@ -32,8 +33,22 @@ type UploadButtonProps = {
     user: User | undefined,
 };
 function UploadButtonC({ user }: UploadButtonProps) {
+    const uploadRef = React.useRef<FileUploadDialogRef>();
     return user
-        ? <IconButton icon='upload' />
+        ? <>
+            <FileUploadDialog
+                refCallback={r => uploadRef.current = r}
+                onFilesSelected={async files => {
+                    for (const file of files) {
+                        await uploadBook(file, user.token);
+                    }
+                }}
+            />
+            <IconButton
+                icon='upload'
+                onClick={() => uploadRef.current && uploadRef.current.show()}
+            />
+        </>
         : null;
 }
 const UploadButton = connectState('user')(UploadButtonC);
