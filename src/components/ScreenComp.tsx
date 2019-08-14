@@ -47,7 +47,7 @@ type BarProps = {
 function Header({ screen, controlsVisible, theme }: BarProps) {
     return <TopBar open={controlsVisible} paddingHorizontal={point(1)}>
         {
-            screen.screen === 'library' ? <LibraryScreenHeader />
+            screen.screen === 'library' ? <LibraryScreenHeader theme={theme} />
                 : screen.screen === 'book' ? <BookScreenHeader theme={theme} />
                     : assertNever(screen)
         }

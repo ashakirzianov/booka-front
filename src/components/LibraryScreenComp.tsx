@@ -1,14 +1,19 @@
 import * as React from 'react';
 
-import { LibraryScreen } from '../model';
-import { Row } from '../blocks';
+import { LibraryScreen, Theme } from '../model';
+import { Triad } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 import { TextLine } from './Connected';
+import { AccountButton } from './AccountButton';
 
-export function LibraryScreenHeader() {
-    return <Row centered fullWidth>
-        <TextLine text='Library' />
-    </Row>;
+export type LibraryScreenHeaderProps = {
+    theme: Theme,
+};
+export function LibraryScreenHeader({ theme }: LibraryScreenHeaderProps) {
+    return <Triad
+        center={<TextLine text='Library' />}
+        right={<AccountButton theme={theme} />}
+    />;
 }
 
 export type LibraryScreenProps = {
