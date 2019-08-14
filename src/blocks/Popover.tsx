@@ -12,32 +12,35 @@ export type PopoverBodyParams = {
 };
 export type WithPopoverProps = {
     theme: Theme,
+    children: React.ReactNode,
     body: React.ReactNode | ((params: PopoverBodyParams) => React.ReactNode),
     popoverPlacement: PopperProps['placement'],
-    children: (onClick: Callback<void>) => React.ReactNode,
     open?: boolean,
 };
 
 export function WithPopover({ body, popoverPlacement, theme, children, open }: WithPopoverProps) {
     const [isOpen, setIsOpen] = React.useState(open || false);
-    const toggle = () => setIsOpen(!isOpen);
-    const hide = () => setIsOpen(false);
+    let isInBody = false;
 
     return <Manager>
         <Reference>
             {({ ref }) =>
                 <>
-                    {!isOpen ? null :
-                        <div style={{
-                            position: 'fixed',
-                            top: 0, bottom: 0, left: 0, right: 0,
-                            zIndex: -10,
+                    <div
+                        ref={ref}
+                        style={{ display: 'flex' }}
+                        onMouseEnter={() => {
+                            setIsOpen(true);
                         }}
-                            onClick={hide}
-                        />
-                    }
-                    <div ref={ref} style={{ display: 'flex' }}>
-                        {children(toggle)}
+                        onMouseLeave={() => {
+                            setTimeout(() => {
+                                if (!isInBody) {
+                                    setIsOpen(false);
+                                }
+                            });
+                        }}
+                    >
+                        {children}
                     </div>
                 </>
             }
@@ -54,7 +57,16 @@ export function WithPopover({ body, popoverPlacement, theme, children, open }: W
                     ({ ref, style, placement, scheduleUpdate }) =>
                         <div ref={ref} style={{
                             ...style,
-                        }} data-placement={placement}>
+                        }}
+                            data-placement={placement}
+                            onMouseOver={() => {
+                                isInBody = true;
+                            }}
+                            onMouseLeave={() => {
+                                isInBody = false;
+                                setIsOpen(false);
+                            }}
+                        >
                             {/* TODO: add arrows */}
                             <OverlayBox theme={theme}>
                                 {

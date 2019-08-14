@@ -8,6 +8,8 @@ export type HyperlinkProps = WithChildren<{
     style?: React.CSSProperties,
     href?: string,
     onClick?: Callback<void>,
+    onHoverIn?: Callback,
+    onHoverOut?: Callback,
 }>;
 function HyperlinkC(props: HyperlinkProps) {
     return <a
@@ -26,6 +28,8 @@ function HyperlinkC(props: HyperlinkProps) {
                 }
             }
         }}
+        onMouseEnter={props.onHoverIn}
+        onMouseLeave={props.onHoverOut}
     >
         {props.children}
     </a>;

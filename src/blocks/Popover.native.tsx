@@ -14,7 +14,7 @@ export function WithPopover({ children, body }: WithPopoverProps) {
 
     return <View>
         <TouchableHighlight ref={button}>
-            {children(toggle)}
+            {children}
         </TouchableHighlight>
         <Popover
             isVisible={open}

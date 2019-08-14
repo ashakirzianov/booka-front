@@ -101,10 +101,7 @@ function AppearanceButton() {
         popoverPlacement='bottom'
         body={<ThemePicker />}
     >
-        {
-            onClick =>
-                <IconButton icon='letter' onClick={onClick} />
-        }
+        <IconButton icon='letter' />
     </WithPopover>;
 }
 
