@@ -37,11 +37,10 @@ function UploadButtonC({ user }: UploadButtonProps) {
     return user
         ? <>
             <FileUploadDialog
+                dataKey='book'
                 refCallback={r => uploadRef.current = r}
-                onFilesSelected={async files => {
-                    for (const file of files) {
-                        await uploadBook(file, user.token);
-                    }
+                onFilesSelected={async data => {
+                    await uploadBook(data.data, user.token);
                 }}
             />
             <IconButton

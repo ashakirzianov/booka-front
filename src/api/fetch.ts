@@ -17,13 +17,11 @@ async function optional<C extends PathMethodContract>(promise: Promise<FetchRetu
     }
 }
 
-export async function uploadBook(bookFile: File, token: string) {
-    const data = new FormData();
-    data.append('book', bookFile);
+export async function uploadBook(bookData: any, token: string) {
     await back.post('/book/upload', {
         auth: token,
         extra: {
-            postData: data,
+            postData: bookData,
         },
     });
 }

@@ -1,34 +1,26 @@
 import * as React from 'react';
 import { Callback } from '../utils';
 
-export type FileLike = {
-    lastModified: number,
-    size: number,
-    name: string,
-    type: string,
-    slice(): any,
-};
+export type Data = { data: any };
 export type FileUploadDialogRef = {
     show: Callback,
 };
 export type FileUploadDialogProps = {
+    dataKey: string,
     refCallback: Callback<FileUploadDialogRef>,
-    onFilesSelected: Callback<FileLike[]>,
+    onFilesSelected: Callback<Data>,
 };
-export function FileUploadDialog({ refCallback, onFilesSelected }: FileUploadDialogProps) {
+export function FileUploadDialog({ refCallback, onFilesSelected, dataKey }: FileUploadDialogProps) {
     return <input
         style={{ display: 'none' }}
         ref={r => refCallback({ show: () => r && r.click() })}
         type='file'
         onChange={e => {
-            if (e.target.files) {
-                const files: FileLike[] = [];
-                // tslint:disable-next-line: prefer-for-of
-                for (let idx = 0; idx < e.target.files.length; idx++) {
-                    const file = e.target.files[idx];
-                    files.push(file);
-                }
-                onFilesSelected(files);
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+                const data = new FormData();
+                data.append(dataKey, file);
+                onFilesSelected({ data });
             }
         }}
     />;
