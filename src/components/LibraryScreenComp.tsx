@@ -37,6 +37,7 @@ function UploadButtonC({ user }: UploadButtonProps) {
     return user
         ? <>
             <FileUploadDialog
+                accept='application/epub+zip'
                 dataKey='book'
                 refCallback={r => uploadRef.current = r}
                 onFilesSelected={async data => {

@@ -6,12 +6,17 @@ export type FileUploadDialogRef = {
     show: Callback,
 };
 export type FileUploadDialogProps = {
+    accept?: string,
     dataKey: string,
     refCallback: Callback<FileUploadDialogRef>,
     onFilesSelected: Callback<Data>,
 };
-export function FileUploadDialog({ refCallback, onFilesSelected, dataKey }: FileUploadDialogProps) {
+export function FileUploadDialog({
+    refCallback, onFilesSelected,
+    dataKey, accept,
+}: FileUploadDialogProps) {
     return <input
+        accept={accept}
         style={{ display: 'none' }}
         ref={r => refCallback({ show: () => r && r.click() })}
         type='file'
