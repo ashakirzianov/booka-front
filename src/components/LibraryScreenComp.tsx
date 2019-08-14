@@ -1,14 +1,25 @@
 import * as React from 'react';
 
-import { LibraryScreen } from '../model';
-import { Row } from '../blocks';
+import { LibraryScreen, Theme, User } from '../model';
+import { Triad, FileUploadDialog, FileUploadDialogRef } from '../blocks';
 import { LibraryComp } from './LibraryComp';
-import { TextLine } from './Connected';
+import { TextLine, IconButton, connectState } from './Connected';
+import { AccountButton } from './AccountButton';
+import { uploadBook } from '../api';
 
-export function LibraryScreenHeader() {
-    return <Row centered fullWidth>
-        <TextLine text='Library' />
-    </Row>;
+export type LibraryScreenHeaderProps = {
+    theme: Theme,
+};
+export function LibraryScreenHeader({ theme }: LibraryScreenHeaderProps) {
+    return <Triad
+        center={<TextLine text='Library' />}
+        right={
+            <>
+                <UploadButton />
+                <AccountButton theme={theme} />
+            </>
+        }
+    />;
 }
 
 export type LibraryScreenProps = {
@@ -17,3 +28,27 @@ export type LibraryScreenProps = {
 export function LibraryScreenComp({ screen }: LibraryScreenProps) {
     return <LibraryComp library={screen.library} />;
 }
+
+type UploadButtonProps = {
+    user: User | undefined,
+};
+function UploadButtonC({ user }: UploadButtonProps) {
+    const uploadRef = React.useRef<FileUploadDialogRef>();
+    return user
+        ? <>
+            <FileUploadDialog
+                accept='application/epub+zip'
+                dataKey='book'
+                refCallback={r => uploadRef.current = r}
+                onFilesSelected={async data => {
+                    await uploadBook(data.data, user.token);
+                }}
+            />
+            <IconButton
+                icon='upload'
+                onClick={() => uploadRef.current && uploadRef.current.show()}
+            />
+        </>
+        : null;
+}
+const UploadButton = connectState('user')(UploadButtonC);

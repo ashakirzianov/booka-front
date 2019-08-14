@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
-    FaCircle, FaSignInAlt, FaFacebookSquare,
+    FaCircle, FaSignInAlt, FaFacebookSquare, FaCloudUploadAlt,
 } from 'react-icons/fa';
 import { assertNever } from '../utils';
 import { Size } from './common';
@@ -10,6 +10,7 @@ import { Size } from './common';
 export type IconName =
     | 'close' | 'left' | 'items' | 'letter'
     | 'circle' | 'sign-in' | 'facebook'
+    | 'upload'
     ;
 
 export type IconProps = {
@@ -33,6 +34,8 @@ function iconForName(name: IconName) {
             return FaSignInAlt;
         case 'facebook':
             return FaFacebookSquare;
+        case 'upload':
+            return FaCloudUploadAlt;
         default:
             return assertNever(name);
     }

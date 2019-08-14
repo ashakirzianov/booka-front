@@ -42,17 +42,22 @@ export function TextButton(props: TextButtonProps) {
 
 export type IconButtonProps = ButtonProps<{
     icon: IconName,
+    onHoverIn?: Callback,
+    onHoverOut?: Callback,
 }>;
 export function IconButton(props: IconButtonProps) {
     return <Hyperlink
         href={props.href}
         onClick={props.onClick}
         style={{
+            margin: point(0.5),
             color: colors(props.theme).accent,
             ':hover': {
                 color: colors(props.theme).highlight,
             },
         }}
+        onHoverIn={props.onHoverIn}
+        onHoverOut={props.onHoverOut}
     >
         <View>
             <Icon

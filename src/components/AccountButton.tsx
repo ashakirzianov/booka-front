@@ -23,14 +23,10 @@ function AccountButtonC({ user, theme }: AccountButtonProps) {
                     <SignInPanel onStatusChanged={scheduleUpdate} />
         }
     >
-        {
-            onClick =>
-                <ActualButton
-                    theme={theme}
-                    user={user}
-                    onClick={onClick}
-                />
-        }
+        <ActualButton
+            theme={theme}
+            user={user}
+        />
     </WithPopover>;
 }
 export const AccountButton = connectState('user')(AccountButtonC);
@@ -38,7 +34,7 @@ export const AccountButton = connectState('user')(AccountButtonC);
 type ActualButtonProps = {
     theme: Theme,
     user?: User,
-    onClick: Callback<void>,
+    onClick?: Callback<void>,
 };
 function ActualButton({ theme, user, onClick }: ActualButtonProps) {
     if (user) {

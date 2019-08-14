@@ -17,6 +17,15 @@ async function optional<C extends PathMethodContract>(promise: Promise<FetchRetu
     }
 }
 
+export async function uploadBook(bookData: any, token: string) {
+    await back.post('/book/upload', {
+        auth: token,
+        extra: {
+            postData: bookData,
+        },
+    });
+}
+
 export async function fetchUserInfo(token: string) {
     return optional(back.get('/me/info', { auth: token }));
 }
