@@ -1,4 +1,4 @@
-import { VolumeNode } from '../model';
+import { VolumeNode } from 'booka-common';
 
 // cspell:disable
 

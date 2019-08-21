@@ -15,9 +15,9 @@ export async function bookForId(bi: BookId): Promise<Book | undefined> {
         return book;
     }
 
-    const volume = await fetchBI(bi);
-    if (volume) {
-        const converted = convertBook(volume, bi);
+    const bookObject = await fetchBI(bi);
+    if (bookObject) {
+        const converted = convertBook(bookObject.volume, bi);
         stores.books.set(converted.id.name, converted);
 
         return converted;
