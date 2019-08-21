@@ -1,8 +1,7 @@
+import { BackContract, PathMethodContract } from 'booka-common';
 import { BookId } from '../model';
 import { config } from '../config';
-import { createFetcher, FetchReturn } from '../common/fetcher';
-import { BackContract } from '../backContract';
-import { PathMethodContract } from '../common/contractTypes';
+import { createFetcher, FetchReturn } from '../fetcher';
 
 const backendUrl = config().backendBase;
 const back = createFetcher<BackContract>(backendUrl);

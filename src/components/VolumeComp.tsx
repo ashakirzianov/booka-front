@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {
-    ParagraphNode, BookPath, BookRange, VolumeNode,
-    ContentNode, subpathCouldBeInRange, isParagraph,
-    isChapter, inBookRange, ChapterNode,
+    BookPath, BookRange,
+    subpathCouldBeInRange, inBookRange,
 } from '../model';
 import {
     Row, refable, point, Column, percent,
@@ -11,6 +10,7 @@ import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
+import { VolumeNode, ContentNode, isParagraph, isChapter, ParagraphNode, ChapterNode, isImage } from 'booka-common';
 
 export type Params = {
     refPathHandler: RefPathHandler,
@@ -80,6 +80,9 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
             path={path}
             params={params}
         />;
+    } else if (isImage(node)) {
+        // TODO: support images
+        return null;
     } else {
         return assertNever(node, path.toString());
     }

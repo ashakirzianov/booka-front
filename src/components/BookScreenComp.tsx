@@ -1,12 +1,13 @@
 import * as React from 'react';
 
+import { FootnoteSpan } from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
-    FootnoteSpan, footnoteForId, Pagination, Theme,
+    footnoteForId, Pagination, Theme,
 } from '../model';
 import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';

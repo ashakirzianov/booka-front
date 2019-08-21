@@ -1,10 +1,7 @@
-import * as Contracts from '../backContract';
-import {
-    Library, BookId, Book, tocFromVolume,
-    VolumeNode,
-} from '../model';
+import { Library, BookId, Book, tocFromVolume } from '../model';
+import { BookCollection, VolumeNode } from 'booka-common';
 
-export function convertLibrary(lib: Contracts.BookCollection): Library {
+export function convertLibrary(lib: BookCollection): Library {
     return {
         books: lib.books.reduce((current, bi) => {
             current[bi.id] = {

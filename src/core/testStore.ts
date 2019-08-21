@@ -1,11 +1,12 @@
 import { Provider } from 'react-redux';
 import React from 'react';
 import { Action } from './actions';
-import { App, BookScreen, Book, BookId, VolumeNode, tocFromVolume } from '../model';
+import { App, BookScreen, Book, BookId, tocFromVolume } from '../model';
 import { reducer } from './reducers';
 import { defaultTheme } from './persistent';
 import { short } from './testBooks';
 import { createEnhancedStore } from '../utils';
+import { VolumeNode } from 'booka-common';
 
 class AppProvider extends Provider<Action> { }
 export const TestProvider: React.SFC = props =>

@@ -1,8 +1,8 @@
 import {
     ContentNode, isChapter, isParagraph, VolumeNode, Span,
     FootnoteSpan, isFootnote, isCompound, ChapterTitle,
-    isSimple, isAttributed, BookNode, hasSubnodes,
-} from './bookVolume';
+    isSimple, isAttributed, BookNode, hasSubnodes, isImage,
+} from 'booka-common';
 import { BookPath, BookRange, bookRange } from './bookRange';
 import { assertNever, firstDefined } from '../utils';
 import {
@@ -81,7 +81,7 @@ export function countToPath(nodes: ContentNode[], path: BookPath): number {
 }
 
 function countElements(node: ContentNode): number {
-    if (isParagraph(node)) {
+    if (isParagraph(node) || isImage(node)) {
         return 1;
     } else if (isChapter(node)) {
         return 1 + node.nodes
@@ -115,6 +115,8 @@ export function nodeLength(node: ContentNode): number {
         return node.nodes.reduce((len, n) => len + nodeLength(n), 0);
     } else if (isParagraph(node)) {
         return spanLength(node.span);
+    } else if (isImage(node)) {
+        return 0;
     } else {
         return assertNever(node);
     }
@@ -165,7 +167,7 @@ export function pageForPath(node: BookNode, path: BookPath): number {
         return 1;
     }
 
-    if (isParagraph(node)) {
+    if (isParagraph(node) || isImage(node)) {
         // TODO: handle remaining path properly!
         return 1;
     } else if (hasSubnodes(node)) {
@@ -205,4 +207,20 @@ function pagesInNodes(nodes: ContentNode[]): number {
 const pageLength = 1500;
 export function numberOfPages(length: number): number {
     return Math.ceil(length / pageLength);
+}
+
+export function spanText(span: Span): string {
+    if (isSimple(span)) {
+        return span;
+    } else if (isAttributed(span)) {
+        return spanText(span.content);
+    } else if (isCompound(span)) {
+        return span.spans
+            .map(spanText)
+            .join('');
+    } else if (isFootnote(span)) {
+        return spanText(span.content);
+    }
+
+    return assertNever(span);
 }

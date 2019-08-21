@@ -1,6 +1,6 @@
 import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { ContentNode, isChapter, isParagraph, VolumeNode } from './bookVolume';
+import { ContentNode, isChapter, isParagraph, VolumeNode, isImage } from 'booka-common';
 import { BookPath } from './bookRange';
 import { Pagination } from './book.utils';
 
@@ -38,7 +38,7 @@ function itemsFromBookNode(node: ContentNode, path: BookPath, pagination: Pagina
 
         const children = itemsFromBookNodes(node.nodes, path, pagination);
         return head.concat(children);
-    } else if (isParagraph(node)) {
+    } else if (isParagraph(node) || isImage(node)) {
         return [];
     } else {
         return assertNever(node);
