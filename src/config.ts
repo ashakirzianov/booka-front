@@ -30,13 +30,12 @@ const productionConfig: Config = {
 
 const hostname = window && window.location && window.location.hostname;
 const localProtocol = process.env.HTTPS ? 'https' : 'http';
+export const debugBack = `https://${hostname}:3042`;
 
 const debugConfig: Config = {
     usePersistentStorage: false,
     useTestStore: false,
-    backendBase: hostname
-        ? `https://${hostname}:3042`
-        : prodBack,
+    backendBase: prodBack,
     frontendBase: hostname
         ? `${localProtocol}://${hostname}:3000`
         : prodFront,

@@ -4,19 +4,20 @@ import {
     subpathCouldBeInRange, inBookRange,
 } from '../model';
 import {
-    Row, refable, point, Column, percent,
+    Row, refable, point, Column, percent, Image,
 } from '../blocks';
 import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
-import { VolumeNode, ContentNode, isParagraph, isChapter, ParagraphNode, ChapterNode, isImage } from 'booka-common';
+import { VolumeNode, ContentNode, isParagraph, isChapter, ParagraphNode, ChapterNode, isImage, ImageNode, IdDictionary, ObjectId } from 'booka-common';
 
 export type Params = {
     refPathHandler: RefPathHandler,
     pageRange: BookRange,
     quoteRange?: BookRange,
     omitDropCase?: boolean,
+    idDictionary: IdDictionary,
 };
 
 export type VolumeProps = {
@@ -81,8 +82,7 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
             params={params}
         />;
     } else if (isImage(node)) {
-        // TODO: support images
-        return null;
+        return <ImageNodeComp image={node} params={params} />;
     } else {
         return assertNever(node, path.toString());
     }
@@ -202,3 +202,21 @@ function ChapterHeaderC({ level, title }: ChapterHeaderProps) {
     </Column>;
 }
 const ChapterHeader = refable(ChapterHeaderC);
+
+type ImageNodeProps = {
+    image: ImageNode,
+    params: Params,
+};
+function ImageNodeComp({ image, params: { idDictionary } }: ImageNodeProps) {
+    const url = resolveId(image.id, idDictionary);
+    return url
+        ? <Image url={url} />
+        : null;
+}
+
+// TODO: move to 'booka-common'
+function resolveId(id: ObjectId, dictionary: IdDictionary): string | undefined {
+    const objectDic = dictionary[id.kind];
+
+    return objectDic[id.reference];
+}

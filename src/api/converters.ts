@@ -1,5 +1,5 @@
 import { Library, BookId, Book, tocFromVolume } from '../model';
-import { BookCollection, VolumeNode } from 'booka-common';
+import { BookCollection, BookObject } from 'booka-common';
 
 export function convertLibrary(lib: BookCollection): Library {
     return {
@@ -7,16 +7,18 @@ export function convertLibrary(lib: BookCollection): Library {
             current[bi.id] = {
                 title: bi.title,
                 author: bi.author,
+                coverUrl: bi.cover,
             };
             return current;
         }, {} as Library['books']),
     };
 }
 
-export function convertBook(volume: VolumeNode, id: BookId): Book {
+export function convertBook(bookObject: BookObject, id: BookId): Book {
     return {
-        volume,
+        volume: bookObject.volume,
         id,
-        toc: tocFromVolume(volume, id),
+        toc: tocFromVolume(bookObject.volume, id),
+        idDictionary: bookObject.idDictionary,
     };
 }

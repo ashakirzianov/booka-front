@@ -79,6 +79,7 @@ function ReaderC(props: ReaderProps) {
             refMap.current[pathToString(path)] = ref;
         },
         quoteRange: quoteRange,
+        idDictionary: props.book.idDictionary,
     };
 
     return <Scroll
@@ -112,6 +113,7 @@ export function BookNodesComp(props: BookNodesProps) {
         refPathHandler: () => undefined,
         pageRange: bookRange(),
         omitDropCase: true,
+        idDictionary: { image: {} },
     };
 
     return <ContentNodesComp
