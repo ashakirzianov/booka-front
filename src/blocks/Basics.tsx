@@ -121,3 +121,14 @@ export function Pph({ indent, children }: PphProps) {
         </span>
     </div>;
 }
+
+export type ImageProps = {
+    url: string,
+    alt?: string,
+};
+export function Image(props: ImageProps) {
+    return <img
+        src={props.url}
+        alt={props.alt || ''}
+    />;
+}

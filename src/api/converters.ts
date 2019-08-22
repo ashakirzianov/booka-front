@@ -7,6 +7,7 @@ export function convertLibrary(lib: BookCollection): Library {
             current[bi.id] = {
                 title: bi.title,
                 author: bi.author,
+                coverUrl: bi.cover,
             };
             return current;
         }, {} as Library['books']),

@@ -1,6 +1,7 @@
 export type BookDesc = {
     title: string,
     author?: string,
+    coverUrl?: string,
 };
 
 export type Library = {
