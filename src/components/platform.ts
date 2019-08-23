@@ -1,4 +1,4 @@
-import { BookPath, bookRangeUnordered, BookRange } from '../model';
+import { BookPath, bookRangeUnordered, BookRange } from 'booka-common';
 import { idToPath } from './common';
 
 export type BookSelection = {

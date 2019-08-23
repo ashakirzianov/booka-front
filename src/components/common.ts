@@ -1,4 +1,4 @@
-import { BookPath } from '../model';
+import { BookPath } from 'booka-common';
 import { RefType } from '../blocks';
 
 export type RefPathHandler = (ref: RefType, path: BookPath) => void;

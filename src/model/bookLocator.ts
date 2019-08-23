@@ -1,4 +1,4 @@
-import { BookPath, BookRange } from './bookRange';
+import { BookPath, BookRange } from 'booka-common';
 
 export type RemoteBookId = {
     name: string,

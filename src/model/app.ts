@@ -1,5 +1,5 @@
+import { BookPath } from 'booka-common';
 import { AppScreen } from './screen';
-import { BookPath } from './bookRange';
 import { Theme } from './theme';
 import { User } from './user';
 

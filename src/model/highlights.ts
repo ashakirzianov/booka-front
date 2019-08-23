@@ -1,4 +1,4 @@
-import { BookRange } from './bookRange';
+import { BookRange } from 'booka-common';
 
 export type Highlights = {
     quote?: BookRange,

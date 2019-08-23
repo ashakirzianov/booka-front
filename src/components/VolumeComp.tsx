@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {
-    BookPath, BookRange,
-    subpathCouldBeInRange, inBookRange,
-} from '../model';
+import { BookPath, BookRange, subpathCouldBeInRange } from 'booka-common';
+import { inBookRange } from '../model';
 import {
     Row, refable, point, Column, percent, Image,
 } from '../blocks';
@@ -10,7 +8,11 @@ import { assertNever, last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
-import { VolumeNode, ContentNode, isParagraph, isChapter, ParagraphNode, ChapterNode, isImage, ImageNode, IdDictionary, ObjectId } from 'booka-common';
+import {
+    VolumeNode, ContentNode, isParagraph, isChapter,
+    ParagraphNode, ChapterNode, isImage, ImageNode,
+    IdDictionary, resolveId,
+} from 'booka-common';
 
 export type Params = {
     refPathHandler: RefPathHandler,
@@ -212,11 +214,4 @@ function ImageNodeComp({ image, params: { idDictionary } }: ImageNodeProps) {
     return url
         ? <Image url={url} />
         : null;
-}
-
-// TODO: move to 'booka-common'
-function resolveId(id: ObjectId, dictionary: IdDictionary): string | undefined {
-    const objectDic = dictionary[id.kind];
-
-    return objectDic[id.reference];
 }

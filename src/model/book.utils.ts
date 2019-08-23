@@ -2,9 +2,9 @@ import {
     ContentNode, isChapter, isParagraph, VolumeNode, Span,
     FootnoteSpan, isFootnote, isCompound, ChapterTitle,
     isSimple, isAttributed, BookNode, hasSubnodes, isImage,
+    BookPath, BookRange, bookRange, pathLessThan,
 } from 'booka-common';
-import { BookPath, BookRange, bookRange } from './bookRange';
-import { assertNever, firstDefined } from '../utils';
+import { assertNever, firstDefined, inRange } from '../utils';
 import {
     iterateToPath, bookIterator, nextIterator, buildPath,
     OptBookIterator, OptParentIterator, nextChapter, iterateUntilCan,
@@ -223,4 +223,8 @@ export function spanText(span: Span): string {
     }
 
     return assertNever(span);
+}
+
+export function inBookRange(path: BookPath, range: BookRange): boolean {
+    return inRange(path, range, pathLessThan);
 }

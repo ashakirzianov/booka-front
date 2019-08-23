@@ -2,7 +2,6 @@ export * from './app';
 export * from './book';
 export * from './bookIterator';
 export * from './bookLocator';
-export * from './bookRange';
 export * from './book.utils';
 export * from './highlights';
 export * from './library';

@@ -1,7 +1,8 @@
+import { BookRange, bookRange, BookPath } from 'booka-common';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, BookLocator,
-    BookRange, BookId, locationNone, BookPath, bookRange,
+    BookId, locationNone,
 } from '../model';
 import {
     assertNever, parsePartialUrl, ParsedUrl, filterUndefined,

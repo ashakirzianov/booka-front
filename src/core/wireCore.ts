@@ -1,7 +1,7 @@
+import { emptyPath } from 'booka-common';
 import { wireHistoryNavigation } from './historyNavigation';
 import { subscribe } from './store';
 import { stores } from './persistent';
-import { emptyPath } from '../model';
 import { loginWithStoredToken } from './dataAccess';
 
 export function wireCore() {
