@@ -1,6 +1,5 @@
-import {
-    BookPath, Book, BookDesc, Theme,
-} from '../model';
+import { BookPath } from 'booka-common';
+import { Book, BookDesc, Theme } from '../model';
 import { smartStore, singleValueStore } from '../utils';
 
 export const stores = {

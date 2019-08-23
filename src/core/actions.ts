@@ -1,4 +1,5 @@
-import { PaletteName, BookPath, AppScreen, BookLocator, User } from '../model';
+import { BookPath } from 'booka-common';
+import { PaletteName, AppScreen, BookLocator, User } from '../model';
 import { actionCreator, ActionFromCreators } from '../utils';
 
 export const actionCreators = {

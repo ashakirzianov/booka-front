@@ -1,7 +1,9 @@
 import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
-import { ContentNode, isChapter, isParagraph, VolumeNode, isImage } from 'booka-common';
-import { BookPath } from './bookRange';
+import {
+    ContentNode, isChapter, isParagraph, VolumeNode,
+    isImage, BookPath,
+} from 'booka-common';
 import { Pagination } from './book.utils';
 
 export type TableOfContentsItem = {

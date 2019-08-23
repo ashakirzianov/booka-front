@@ -1,8 +1,7 @@
 import * as React from 'react';
-
+import { BookRange, BookPath, pathLessThan, isPrefix } from 'booka-common';
 import {
-    Color, BookRange, BookPath, pathLessThan,
-    isPrefix, Theme, colors, fontSize, spanText,
+    Color, Theme, colors, fontSize, spanText,
 } from '../model';
 import {
     RichTextStyle, RichText,

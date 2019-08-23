@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { ParagraphNode } from 'booka-common';
+import { ParagraphNode, BookPath } from 'booka-common';
 import { Pph } from '../blocks';
-import { Highlights, BookPath, highlights } from '../model';
+import { Highlights, highlights } from '../model';
 import { SpanComp } from './SpanComp';
 import { RefPathHandler } from './common';
 import { connect } from './Connected';

@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {
-    BookPath, BookRange,
-    subpathCouldBeInRange, inBookRange,
-} from '../model';
+import { BookPath, BookRange, subpathCouldBeInRange } from 'booka-common';
+import { inBookRange } from '../model';
 import {
     Row, refable, point, Column, percent, Image,
 } from '../blocks';
