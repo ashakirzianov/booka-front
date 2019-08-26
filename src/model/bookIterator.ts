@@ -1,5 +1,5 @@
 import {
-    ContentNode, VolumeNode, children, isChapter,
+    BookContentNode, VolumeNode, nodeChildren, isChapter,
     BookPath, appendPath, emptyPath, pathHead, pathTail,
 } from 'booka-common';
 
@@ -8,7 +8,7 @@ export type RootIterator = {
     firstChildren: BookIteratorHandler,
 };
 export type BookIterator = {
-    node: ContentNode,
+    node: BookContentNode,
     index: number,
     parent: ParentIterator,
     prevSibling: BookIteratorHandler,
@@ -61,7 +61,7 @@ export function nthSibling(iterator: OptBookIterator, n: number): OptBookIterato
     }
 }
 
-function siblingIterator(parent: ParentIterator, siblings: ContentNode[], idx: number): BookIteratorHandler {
+function siblingIterator(parent: ParentIterator, siblings: BookContentNode[], idx: number): BookIteratorHandler {
     return () => {
         if (idx < siblings.length && idx >= 0) {
             const node = siblings[idx];
@@ -74,7 +74,7 @@ function siblingIterator(parent: ParentIterator, siblings: ContentNode[], idx: n
                 firstChildren: () => undefined,
             };
 
-            const ch = children(node);
+            const ch = nodeChildren(node);
             if (ch.length > 0) {
                 iterator.firstChildren = siblingIterator(iterator, ch, 0);
             }

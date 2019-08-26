@@ -1,9 +1,9 @@
 import { BookId } from '../model';
 import { timeouted } from '../utils';
-import { BookObject, BookCollection } from 'booka-common';
+import { Book, BookCollection } from 'booka-common';
 
 export const fetchBL = timeouted(fetchBIStatic);
-function fetchBIStatic(bookId: BookId): BookObject {
+function fetchBIStatic(bookId: BookId): Book {
     return {
         volume: {
             node: 'volume',
@@ -23,7 +23,7 @@ function fetchBIStatic(bookId: BookId): BookObject {
         },
         idDictionary: {
             image: {},
-        }
+        },
     };
 }
 

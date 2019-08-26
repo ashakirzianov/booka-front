@@ -1,7 +1,7 @@
 import {
-    ContentNode, isChapter, isParagraph, VolumeNode, Span,
-    FootnoteSpan, isFootnote, isCompound, ChapterTitle,
-    isSimple, isAttributed, BookNode, hasSubnodes, isImage,
+    BookContentNode, isChapter, isParagraph, VolumeNode, Span,
+    FootnoteSpan, isFootnoteSpan, isCompoundSpan, ChapterTitle,
+    isSimpleSpan, isAttributedSpan, hasSubnodes, isImage,
     BookPath, BookRange, bookRange, pathLessThan,
 } from 'booka-common';
 import { assertNever, firstDefined, inRange } from '../utils';
@@ -14,7 +14,7 @@ export function footnoteForId(book: VolumeNode, id: string): FootnoteSpan | unde
     return firstDefined(book.nodes, n => footnoteFromNode(n, id));
 }
 
-function footnoteFromNode(bookNode: ContentNode, id: string): FootnoteSpan | undefined {
+function footnoteFromNode(bookNode: BookContentNode, id: string): FootnoteSpan | undefined {
     if (isChapter(bookNode)) {
         return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
     } else if (isParagraph(bookNode)) {
@@ -25,11 +25,11 @@ function footnoteFromNode(bookNode: ContentNode, id: string): FootnoteSpan | und
 }
 
 function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
-    if (isFootnote(span)) {
+    if (isFootnoteSpan(span)) {
         return span.id === id
             ? span
             : undefined;
-    } else if (isCompound(span)) {
+    } else if (isCompoundSpan(span)) {
         return firstDefined(span.spans, s => footnoteFromSpan(s, id));
     } else {
         return undefined;
@@ -61,7 +61,7 @@ function findChapterLevel(i: OptParentIterator): OptBookIterator {
     }
 }
 
-export function countToPath(nodes: ContentNode[], path: BookPath): number {
+export function countToPath(nodes: BookContentNode[], path: BookPath): number {
     if (path.length > 0) {
         const head = path[0];
         const countFront = nodes
@@ -80,7 +80,7 @@ export function countToPath(nodes: ContentNode[], path: BookPath): number {
     }
 }
 
-function countElements(node: ContentNode): number {
+function countElements(node: BookContentNode): number {
     if (isParagraph(node) || isImage(node)) {
         return 1;
     } else if (isChapter(node)) {
@@ -110,7 +110,7 @@ export function titleForPath(book: VolumeNode, path: BookPath): ChapterTitle {
     }
 }
 
-export function nodeLength(node: ContentNode): number {
+export function nodeLength(node: BookContentNode): number {
     if (isChapter(node)) {
         return node.nodes.reduce((len, n) => len + nodeLength(n), 0);
     } else if (isParagraph(node)) {
@@ -123,14 +123,14 @@ export function nodeLength(node: ContentNode): number {
 }
 
 export function spanLength(span: Span): number {
-    if (isSimple(span)) {
+    if (isSimpleSpan(span)) {
         return span.length;
-    } else if (isCompound(span)) {
+    } else if (isCompoundSpan(span)) {
         return span.spans.reduce((l, s) =>
             l + spanLength(s), 0);
-    } else if (isAttributed(span)) {
+    } else if (isAttributedSpan(span)) {
         return spanLength(span.content);
-    } else if (isFootnote(span)) {
+    } else if (isFootnoteSpan(span)) {
         return spanLength(span.content);
     } else {
         return assertNever(span);
@@ -162,6 +162,7 @@ export class Pagination {
     }
 }
 
+type BookNode = VolumeNode | BookContentNode;
 export function pageForPath(node: BookNode, path: BookPath): number {
     if (path.length === 0) {
         return 1;
@@ -187,7 +188,7 @@ export function pageForPath(node: BookNode, path: BookPath): number {
     }
 }
 
-function pagesInNodes(nodes: ContentNode[]): number {
+function pagesInNodes(nodes: BookContentNode[]): number {
     let result = 0;
     let currentTextLength = 0;
     for (const node of nodes) {
@@ -210,15 +211,15 @@ export function numberOfPages(length: number): number {
 }
 
 export function spanText(span: Span): string {
-    if (isSimple(span)) {
+    if (isSimpleSpan(span)) {
         return span;
-    } else if (isAttributed(span)) {
+    } else if (isAttributedSpan(span)) {
         return spanText(span.content);
-    } else if (isCompound(span)) {
+    } else if (isCompoundSpan(span)) {
         return span.spans
             .map(spanText)
             .join('');
-    } else if (isFootnote(span)) {
+    } else if (isFootnoteSpan(span)) {
         return spanText(span.content);
     }
 

@@ -9,9 +9,9 @@ import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
 import {
-    VolumeNode, ContentNode, isParagraph, isChapter,
+    VolumeNode, BookContentNode, isParagraph, isChapter,
     ParagraphNode, ChapterNode, isImage, ImageNode,
-    IdDictionary, resolveId,
+    RefDictionary, resolveRef,
 } from 'booka-common';
 
 export type Params = {
@@ -19,7 +19,7 @@ export type Params = {
     pageRange: BookRange,
     quoteRange?: BookRange,
     omitDropCase?: boolean,
-    idDictionary: IdDictionary,
+    idDictionary: RefDictionary,
 };
 
 export type VolumeProps = {
@@ -41,7 +41,7 @@ export function VolumeComp({ volume, params }: VolumeProps) {
 }
 
 export type ContentNodesProps = {
-    nodes: ContentNode[],
+    nodes: BookContentNode[],
     headPath: BookPath,
     params: Params,
 };
@@ -61,7 +61,7 @@ export function ContentNodesComp({ nodes, headPath, params }: ContentNodesProps)
 }
 
 type ContentNodeProps = {
-    node: ContentNode,
+    node: BookContentNode,
     path: BookPath,
     params: Params,
 };
@@ -210,7 +210,7 @@ type ImageNodeProps = {
     params: Params,
 };
 function ImageNodeComp({ image, params: { idDictionary } }: ImageNodeProps) {
-    const url = resolveId(image.id, idDictionary);
+    const url = resolveRef(image.ref, idDictionary);
     return url
         ? <Image url={url} />
         : null;

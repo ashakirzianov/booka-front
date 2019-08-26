@@ -1,5 +1,5 @@
 import {
-    Book, Library, BookId, library, User,
+    BookObject, Library, BookId, library, User,
 } from '../model';
 import {
     fetchBI, fetchLibrary, fetchUserInfo,
@@ -9,7 +9,7 @@ import { stores } from './persistent';
 import { forEach } from '../utils';
 import { dispatchSetUserAction } from './store';
 
-export async function bookForId(bi: BookId): Promise<Book | undefined> {
+export async function bookForId(bi: BookId): Promise<BookObject | undefined> {
     const book = stores.books.get(bi.name);
     if (book) {
         return book;
