@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import React from 'react';
 import { Action } from './actions';
-import { App, BookScreen, Book, BookId, tocFromVolume } from '../model';
+import { App, BookScreen, BookObject, BookId, tocFromVolume } from '../model';
 import { reducer } from './reducers';
 import { defaultTheme } from './persistent';
 import { short } from './testBooks';
@@ -14,7 +14,7 @@ export const TestProvider: React.SFC = props =>
 
 const volume: VolumeNode = short;
 const bookId: BookId = { name: 'test' };
-const book: Book = {
+const book: BookObject = {
     id: bookId,
     toc: tocFromVolume(volume, bookId),
     volume,

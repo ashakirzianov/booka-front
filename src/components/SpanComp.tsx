@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { BookRange, BookPath, pathLessThan, isPrefix } from 'booka-common';
 import {
     Color, Theme, colors, fontSize, spanText,
 } from '../model';
@@ -11,7 +10,11 @@ import {
     TaggedRange, range, Range, Callback,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
-import { Span, isSimple, isAttributed, attrs, isCompound, isFootnote } from 'booka-common';
+import {
+    Span, spanAttrs,
+    isSimpleSpan, isAttributedSpan, isCompoundSpan, isFootnoteSpan,
+    BookRange, BookPath, pathLessThan, isSubpath,
+} from 'booka-common';
 
 export type ColorizedRange = {
     color: Color,
@@ -103,7 +106,7 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
     ranges: RenderingRange[],
     length: number,
 } {
-    if (isSimple(span)) {
+    if (isSimpleSpan(span)) {
         return {
             ranges: [{
                 range: {
@@ -114,7 +117,7 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
             }],
             length: span.length,
         };
-    } else if (isAttributed(span)) {
+    } else if (isAttributedSpan(span)) {
         const inside = rangesForSpanHelper(span.content, offset, props);
         const current: RenderingRange = {
             range: {
@@ -122,16 +125,16 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
                 end: offset + inside.length,
             },
             tag: {
-                italic: attrs(span).italic,
-                bold: attrs(span).bold,
-                line: attrs(span).line,
+                italic: spanAttrs(span).italic,
+                bold: spanAttrs(span).bold,
+                line: spanAttrs(span).line,
             },
         };
         return {
             ranges: [current].concat(inside.ranges),
             length: inside.length,
         };
-    } else if (isCompound(span)) {
+    } else if (isCompoundSpan(span)) {
         let ranges: RenderingRange[] = [];
         let currentOffset = offset;
         for (const s of span.spans) {
@@ -144,7 +147,7 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
             ranges,
             length: currentOffset - offset,
         };
-    } else if (isFootnote(span)) {
+    } else if (isFootnoteSpan(span)) {
         const inside = rangesForSpanHelper(span.content, offset, props);
         const current: RenderingRange = {
             range: {
@@ -178,11 +181,11 @@ function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range<number> | 
     }
 
     let start: number | undefined;
-    if (isPrefix(path, bookR.start)) {
+    if (isSubpath(path, bookR.start)) {
         start = bookR.start[path.length];
     }
     let end: number | undefined;
-    if (bookR.end && isPrefix(path, bookR.end)) {
+    if (bookR.end && isSubpath(path, bookR.end)) {
         end = bookR.end[path.length];
     }
 

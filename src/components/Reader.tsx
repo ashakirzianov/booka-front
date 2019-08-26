@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import {
-    ContentNode, BookPath, BookRange,
+    BookContentNode, BookPath, BookRange,
     bookRange, parentPath, isFirstSubpath, emptyPath,
 } from 'booka-common';
 import { Callback } from '../utils';
 import {
-    BookId, bookLocator, locationPath, titleForPath, Book,
+    BookId, bookLocator, locationPath, titleForPath, BookObject,
     TableOfContentsItem, TableOfContents, inBookRange,
 } from '../model';
 import {
@@ -22,7 +22,7 @@ import { BorderButton, connect } from './Connected';
 
 type RefMap = { [k in string]?: RefType };
 export type ReaderProps = {
-    book: Book,
+    book: BookObject,
     pathToOpen: BookPath | null,
     updateBookPosition: Callback<BookPath>,
     toggleControls: Callback<void>,
@@ -107,7 +107,7 @@ function ReaderC(props: ReaderProps) {
 export const Reader = connect(['pathToOpen'], ['updateBookPosition', 'toggleControls'])(ReaderC);
 
 export type BookNodesProps = {
-    nodes: ContentNode[],
+    nodes: BookContentNode[],
 };
 export function BookNodesComp(props: BookNodesProps) {
     const params = {

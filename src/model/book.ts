@@ -1,10 +1,10 @@
-import { VolumeNode, IdDictionary } from 'booka-common';
+import { VolumeNode, RefDictionary } from 'booka-common';
 import { BookId } from './bookLocator';
 import { TableOfContents } from './tableOfContent';
 
-export type Book = {
+export type BookObject = {
     id: BookId,
     toc: TableOfContents,
     volume: VolumeNode,
-    idDictionary: IdDictionary,
+    idDictionary: RefDictionary,
 };

@@ -1,9 +1,9 @@
 import { BookPath } from 'booka-common';
-import { Book, BookDesc, Theme } from '../model';
+import { BookObject, BookDesc, Theme } from '../model';
 import { smartStore, singleValueStore } from '../utils';
 
 export const stores = {
-    books: smartStore<Book>('books'),
+    books: smartStore<BookObject>('books'),
     library: smartStore<BookDesc>('library'),
     positions: smartStore<BookPath>('positions'),
     theme: singleValueStore<Theme>('theme'),

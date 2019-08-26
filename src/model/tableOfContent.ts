@@ -1,7 +1,7 @@
 import { BookId } from './bookLocator';
 import { assertNever } from '../utils';
 import {
-    ContentNode, isChapter, isParagraph, VolumeNode,
+    BookContentNode, isChapter, isParagraph, VolumeNode,
     isImage, BookPath,
 } from 'booka-common';
 import { Pagination } from './book.utils';
@@ -29,7 +29,7 @@ export function tocFromVolume(volume: VolumeNode, id: BookId): TableOfContents {
     return tableOfContents(volume.meta.title, id, items);
 }
 
-function itemsFromBookNode(node: ContentNode, path: BookPath, pagination: Pagination): TableOfContentsItem[] {
+function itemsFromBookNode(node: BookContentNode, path: BookPath, pagination: Pagination): TableOfContentsItem[] {
     if (isChapter(node)) {
         const head: TableOfContentsItem[] = [{
             title: node.title[0],
@@ -47,7 +47,7 @@ function itemsFromBookNode(node: ContentNode, path: BookPath, pagination: Pagina
     }
 }
 
-function itemsFromBookNodes(nodes: ContentNode[], path: BookPath, pagination: Pagination): TableOfContentsItem[] {
+function itemsFromBookNodes(nodes: BookContentNode[], path: BookPath, pagination: Pagination): TableOfContentsItem[] {
     let result: TableOfContentsItem[] = [];
     for (let idx = 0; idx < nodes.length; idx++) {
         const bn = nodes[idx];

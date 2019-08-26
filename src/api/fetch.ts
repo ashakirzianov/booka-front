@@ -17,7 +17,7 @@ async function optional<C extends PathMethodContract>(promise: Promise<FetchRetu
 }
 
 export async function uploadBook(bookData: any, token: string) {
-    await back.post('/book/upload', {
+    await back.post('/books/upload', {
         auth: token,
         extra: {
             postData: bookData,
@@ -36,11 +36,11 @@ export async function fetchTokenForFb(fbToken: string) {
 }
 
 export async function fetchLibrary() {
-    return optional(back.get('/book/all', {}));
+    return optional(back.get('/books/all', {}));
 }
 
 export async function fetchBI(bookId: BookId) {
-    return optional(back.get('/book/single', {
+    return optional(back.get('/books/single', {
         query: { id: bookId.name },
     }));
 }

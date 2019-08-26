@@ -1,4 +1,4 @@
-import { Book } from './book';
+import { BookObject } from './book';
 import { BookLocator } from './bookLocator';
 import { Library } from './library';
 
@@ -78,7 +78,7 @@ export type AppScreen =
 export type BookScreen = ReturnType<typeof bookScreen>;
 export type LibraryScreen = ReturnType<typeof libraryScreen>;
 
-export function bookScreen(book: Book, bl: BookLocator) {
+export function bookScreen(book: BookObject, bl: BookLocator) {
     return {
         screen: 'book' as 'book',
         book: book,
