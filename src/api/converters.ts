@@ -1,9 +1,9 @@
 import { Library, BookId, BookObject, tocFromVolume } from '../model';
-import { BookCollection, Book } from 'booka-common';
+import { Book, BookInfo } from 'booka-common';
 
-export function convertLibrary(lib: BookCollection): Library {
+export function convertLibrary(infos: BookInfo[]): Library {
     return {
-        books: lib.books.reduce((current, bi) => {
+        books: infos.reduce((current, bi) => {
             current[bi.id] = {
                 title: bi.title,
                 author: bi.author,
@@ -19,6 +19,5 @@ export function convertBook(bookObject: Book, id: BookId): BookObject {
         volume: bookObject.volume,
         id,
         toc: tocFromVolume(bookObject.volume, id),
-        idDictionary: bookObject.idDictionary,
     };
 }

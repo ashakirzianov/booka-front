@@ -32,7 +32,7 @@ export async function currentLibrary(): Promise<Library> {
         const lib = await fetchLibrary();
 
         if (lib) {
-            const converted = convertLibrary(lib);
+            const converted = convertLibrary(lib.values);
             forEach(converted.books, (id, info) => stores.library.set(id, info));
 
             return converted;
