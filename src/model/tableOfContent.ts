@@ -26,7 +26,7 @@ export function tableOfContents(title: string, id: BookId, items: TableOfContent
 export function tocFromVolume(volume: VolumeNode, id: BookId): TableOfContents {
     const items = itemsFromBookNodes(volume.nodes, [], new Pagination(volume));
 
-    return tableOfContents(volume.meta.title, id, items);
+    return tableOfContents(volume.meta.title || 'no-title', id, items);
 }
 
 function itemsFromBookNode(node: BookContentNode, path: BookPath, pagination: Pagination): TableOfContentsItem[] {

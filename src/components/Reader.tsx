@@ -80,7 +80,6 @@ function ReaderC(props: ReaderProps) {
             refMap.current[pathToString(path)] = ref;
         },
         quoteRange: quoteRange,
-        idDictionary: props.book.idDictionary,
     };
 
     return <Scroll

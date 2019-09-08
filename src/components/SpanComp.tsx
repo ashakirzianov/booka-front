@@ -13,7 +13,7 @@ import { RefPathHandler, pathToId } from './common';
 import {
     Span, spanAttrs,
     isSimpleSpan, isAttributedSpan, isCompoundSpan, isFootnoteSpan,
-    BookRange, BookPath, pathLessThan, isSubpath,
+    BookRange, BookPath, pathLessThan, isSubpath, isSemanticSpan,
 } from 'booka-common';
 
 export type ColorizedRange = {
@@ -166,6 +166,9 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
             ranges: inside.ranges.concat(current),
             length: inside.length,
         };
+    } else if (isSemanticSpan(span)) {
+        // TODO: support
+        return { ranges: [], length: 0 };
     } else {
         return assertNever(span);
     }

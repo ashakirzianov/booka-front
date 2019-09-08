@@ -2,7 +2,7 @@ import {
     BookContentNode, isChapter, isParagraph, VolumeNode, Span,
     FootnoteSpan, isFootnoteSpan, isCompoundSpan, ChapterTitle,
     isSimpleSpan, isAttributedSpan, hasSubnodes, isImage,
-    BookPath, BookRange, bookRange, pathLessThan,
+    BookPath, BookRange, bookRange, pathLessThan, isSemanticSpan,
 } from 'booka-common';
 import { assertNever, firstDefined, inRange } from '../utils';
 import {
@@ -94,7 +94,9 @@ function countElements(node: BookContentNode): number {
 
 export function titleForPath(book: VolumeNode, path: BookPath): ChapterTitle {
     if (path.length === 0) {
-        return [book.meta.title];
+        return book.meta.title
+            ? [book.meta.title]
+            : [];
     }
 
     const iter = bookIterator(book);
@@ -131,6 +133,8 @@ export function spanLength(span: Span): number {
     } else if (isAttributedSpan(span)) {
         return spanLength(span.content);
     } else if (isFootnoteSpan(span)) {
+        return spanLength(span.content);
+    } else if (isSemanticSpan(span)) {
         return spanLength(span.content);
     } else {
         return assertNever(span);
@@ -220,6 +224,8 @@ export function spanText(span: Span): string {
             .map(spanText)
             .join('');
     } else if (isFootnoteSpan(span)) {
+        return spanText(span.content);
+    } else if (isSemanticSpan(span)) {
         return spanText(span.content);
     }
 

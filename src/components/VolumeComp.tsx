@@ -11,7 +11,6 @@ import { TextLine } from './Connected';
 import {
     VolumeNode, BookContentNode, isParagraph, isChapter,
     ParagraphNode, ChapterNode, isImage, ImageNode,
-    RefDictionary, resolveRef,
 } from 'booka-common';
 
 export type Params = {
@@ -19,7 +18,6 @@ export type Params = {
     pageRange: BookRange,
     quoteRange?: BookRange,
     omitDropCase?: boolean,
-    idDictionary: RefDictionary,
 };
 
 export type VolumeProps = {
@@ -84,7 +82,7 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
             params={params}
         />;
     } else if (isImage(node)) {
-        return <ImageNodeComp image={node} params={params} />;
+        return <ImageNodeComp image={node} />;
     } else {
         return assertNever(node, path.toString());
     }
@@ -207,11 +205,14 @@ const ChapterHeader = refable(ChapterHeaderC);
 
 type ImageNodeProps = {
     image: ImageNode,
-    params: Params,
 };
-function ImageNodeComp({ image, params: { idDictionary } }: ImageNodeProps) {
-    const url = resolveRef(image.ref, idDictionary);
-    return url
-        ? <Image url={url} />
-        : null;
+function ImageNodeComp({ image }: ImageNodeProps) {
+    switch (image.node) {
+        case 'image-url':
+            return <Image url={image.url} />;
+        case 'image-data':
+            return null;
+        default:
+            return assertNever(image);
+    }
 }

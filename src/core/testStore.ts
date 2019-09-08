@@ -18,7 +18,6 @@ const book: BookObject = {
     id: bookId,
     toc: tocFromVolume(volume, bookId),
     volume,
-    idDictionary: { image: {} },
 };
 
 export const bookScreen: BookScreen = {
