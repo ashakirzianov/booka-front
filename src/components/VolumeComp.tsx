@@ -84,7 +84,9 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
     } else if (isImage(node)) {
         return <ImageNodeComp image={node} />;
     } else {
-        return assertNever(node, path.toString());
+        // TODO: assert 'never'
+        // assertNever(node, path.toString());
+        return null;
     }
 }
 
@@ -208,8 +210,8 @@ type ImageNodeProps = {
 };
 function ImageNodeComp({ image }: ImageNodeProps) {
     switch (image.node) {
-        case 'image-url':
-            return <Image url={image.url} />;
+        case 'image-ref':
+            return <Image url={image.imageRef} />;
         case 'image-data':
             return null;
         default:

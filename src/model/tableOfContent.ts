@@ -1,5 +1,4 @@
 import { BookId } from './bookLocator';
-import { assertNever } from '../utils';
 import {
     BookContentNode, isChapter, isParagraph, VolumeNode,
     isImage, BookPath,
@@ -43,7 +42,9 @@ function itemsFromBookNode(node: BookContentNode, path: BookPath, pagination: Pa
     } else if (isParagraph(node) || isImage(node)) {
         return [];
     } else {
-        return assertNever(node);
+        // TODO: assert 'never'
+        // return assertNever(node);
+        return [];
     }
 }
 

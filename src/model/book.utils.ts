@@ -1,40 +1,44 @@
 import {
     BookContentNode, isChapter, isParagraph, VolumeNode, Span,
-    FootnoteSpan, isFootnoteSpan, isCompoundSpan, ChapterTitle,
+    isCompoundSpan, ChapterTitle,
     isSimpleSpan, isAttributedSpan, hasSubnodes, isImage,
-    BookPath, BookRange, bookRange, pathLessThan, isSemanticSpan,
+    BookPath, BookRange, bookRange, pathLessThan, RefSpan,
 } from 'booka-common';
-import { assertNever, firstDefined, inRange } from '../utils';
+import { inRange } from '../utils';
 import {
     iterateToPath, bookIterator, nextIterator, buildPath,
     OptBookIterator, OptParentIterator, nextChapter, iterateUntilCan,
 } from './bookIterator';
 
-export function footnoteForId(book: VolumeNode, id: string): FootnoteSpan | undefined {
-    return firstDefined(book.nodes, n => footnoteFromNode(n, id));
+// TODO: move to 'common' most of this
+
+export function footnoteForId(book: VolumeNode, id: string): RefSpan | undefined {
+    // TODO: implement
+    // return firstDefined(book.nodes, n => footnoteFromNode(n, id));
+    return undefined;
 }
 
-function footnoteFromNode(bookNode: BookContentNode, id: string): FootnoteSpan | undefined {
-    if (isChapter(bookNode)) {
-        return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
-    } else if (isParagraph(bookNode)) {
-        return footnoteFromSpan(bookNode.span, id);
-    } else {
-        return undefined;
-    }
-}
+// function footnoteFromNode(bookNode: BookContentNode, id: string): FootnoteSpan | undefined {
+//     if (isChapter(bookNode)) {
+//         return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
+//     } else if (isParagraph(bookNode)) {
+//         return footnoteFromSpan(bookNode.span, id);
+//     } else {
+//         return undefined;
+//     }
+// }
 
-function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
-    if (isFootnoteSpan(span)) {
-        return span.id === id
-            ? span
-            : undefined;
-    } else if (isCompoundSpan(span)) {
-        return firstDefined(span.spans, s => footnoteFromSpan(s, id));
-    } else {
-        return undefined;
-    }
-}
+// function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
+//     if (isFootnoteSpan(span)) {
+//         return span.id === id
+//             ? span
+//             : undefined;
+//     } else if (isCompoundSpan(span)) {
+//         return firstDefined(span.spans, s => footnoteFromSpan(s, id));
+//     } else {
+//         return undefined;
+//     }
+// }
 
 export function computeRangeForPath(book: VolumeNode, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);
@@ -88,7 +92,9 @@ function countElements(node: BookContentNode): number {
             .map(n => countElements(n))
             .reduce((total, curr) => total + curr);
     } else {
-        return assertNever(node);
+        // TODO: assert 'never'
+        // return assertNever(node);
+        return 0;
     }
 }
 
@@ -120,7 +126,9 @@ export function nodeLength(node: BookContentNode): number {
     } else if (isImage(node)) {
         return 0;
     } else {
-        return assertNever(node);
+        // TODO: assert 'never'
+        // return assertNever(node);
+        return 0;
     }
 }
 
@@ -132,12 +140,10 @@ export function spanLength(span: Span): number {
             l + spanLength(s), 0);
     } else if (isAttributedSpan(span)) {
         return spanLength(span.content);
-    } else if (isFootnoteSpan(span)) {
-        return spanLength(span.content);
-    } else if (isSemanticSpan(span)) {
-        return spanLength(span.content);
     } else {
-        return assertNever(span);
+        // TODO: assert never
+        // return assertNever(span);
+        return 0;
     }
 }
 
@@ -188,7 +194,9 @@ export function pageForPath(node: BookNode, path: BookPath): number {
         const inside = pageForPath(headNode, tailPath);
         return before + inside;
     } else {
-        return assertNever(node);
+        // TODO: assert 'never'
+        // return assertNever(node);
+        return 1;
     }
 }
 
@@ -214,6 +222,7 @@ export function numberOfPages(length: number): number {
     return Math.ceil(length / pageLength);
 }
 
+// TODO: remove
 export function spanText(span: Span): string {
     if (isSimpleSpan(span)) {
         return span;
@@ -223,13 +232,11 @@ export function spanText(span: Span): string {
         return span.spans
             .map(spanText)
             .join('');
-    } else if (isFootnoteSpan(span)) {
-        return spanText(span.content);
-    } else if (isSemanticSpan(span)) {
-        return spanText(span.content);
     }
 
-    return assertNever(span);
+    // TODO: assert 'never'
+    // return assertNever(span);
+    return '';
 }
 
 export function inBookRange(path: BookPath, range: BookRange): boolean {
