@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FootnoteSpan } from 'booka-common';
+import { RefSpan } from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
@@ -9,7 +9,7 @@ import {
     BookScreen, TableOfContents, PaletteName,
     footnoteForId, Pagination, Theme,
 } from '../model';
-import { Reader, BookNodesComp } from './Reader';
+import { Reader } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import {
@@ -116,19 +116,20 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: FootnoteSpan }>(props =>
+// TODO: fix
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: RefSpan }>(props =>
     <Modal
-        title={props.footnote && props.footnote.title[0]}
+        // title={props.footnote && props.footnote.title[0]}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
-        {
+        {/* {
             !props.footnote ? null :
                 <BookNodesComp nodes={[{
                     node: 'paragraph',
                     span: props.footnote.footnote,
                 }]} />
-        }
+        } */}
     </Modal>
 );
 

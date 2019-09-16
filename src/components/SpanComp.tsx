@@ -6,14 +6,14 @@ import {
     RichTextStyle, RichText,
 } from '../blocks';
 import {
-    assertNever, filterUndefined,
+    filterUndefined,
     TaggedRange, range, Range, Callback,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
 import {
     Span, spanAttrs,
-    isSimpleSpan, isAttributedSpan, isCompoundSpan, isFootnoteSpan,
-    BookRange, BookPath, pathLessThan, isSubpath, isSemanticSpan,
+    isSimpleSpan, isAttributedSpan, isCompoundSpan,
+    BookRange, BookPath, pathLessThan, isSubpath,
 } from 'booka-common';
 
 export type ColorizedRange = {
@@ -102,6 +102,7 @@ function rangesForSpan(span: Span, props: SpanProps): RenderingRange[] {
     return result.ranges;
 }
 
+// TODO: support all spans
 function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
     ranges: RenderingRange[],
     length: number,
@@ -147,30 +148,30 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
             ranges,
             length: currentOffset - offset,
         };
-    } else if (isFootnoteSpan(span)) {
-        const inside = rangesForSpanHelper(span.content, offset, props);
-        const current: RenderingRange = {
-            range: {
-                start: offset,
-                end: offset + inside.length,
-            },
-            tag: {
-                superLink: {
-                    onClick: () => props.openFootnote(span.id),
-                },
-                color: colors(props.theme).accent,
-                hoverColor: colors(props.theme).highlight,
-            },
-        };
-        return {
-            ranges: inside.ranges.concat(current),
-            length: inside.length,
-        };
-    } else if (isSemanticSpan(span)) {
-        // TODO: support
-        return { ranges: [], length: 0 };
-    } else {
-        return assertNever(span);
+    }
+    // else if (isFootnoteSpan(span)) {
+    //     const inside = rangesForSpanHelper(span.content, offset, props);
+    //     const current: RenderingRange = {
+    //         range: {
+    //             start: offset,
+    //             end: offset + inside.length,
+    //         },
+    //         tag: {
+    //             superLink: {
+    //                 onClick: () => props.openFootnote(span.id),
+    //             },
+    //             color: colors(props.theme).accent,
+    //             hoverColor: colors(props.theme).highlight,
+    //         },
+    //     };
+    //     return {
+    //         ranges: inside.ranges.concat(current),
+    //         length: inside.length,
+    //     };
+    // }
+    else {
+        // TODO: do not throw
+        throw new Error(`Unsupported span: ${span}`);
     }
 }
 
