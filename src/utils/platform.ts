@@ -1,5 +1,6 @@
 import { Platform as ReactNativePlatform } from 'react-native';
-import { assertNever, MaybeLazy, lazyValue } from './misc';
+import { assertNever } from 'booka-common';
+import { MaybeLazy, lazyValue } from './misc';
 
 export type PlatformValue<T> = Partial<{
     default: MaybeLazy<T>,
@@ -38,7 +39,8 @@ export function platformValue<T>(pv: PlatformValue<T>): T | undefined {
         case 'other-mobile':
             return lazyValue(pv.mobile || pv.default);
         default:
-            return assertNever(p);
+            assertNever(p);
+            return undefined;
     }
 }
 

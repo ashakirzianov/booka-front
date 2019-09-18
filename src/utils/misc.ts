@@ -1,6 +1,5 @@
 // TODO: move most of this to 'common'
 
-export type Defined<T> = T extends undefined ? never : T;
 export type MaybeLazy<T> = T | (() => T);
 export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {
     if (v === undefined) {
@@ -10,20 +9,6 @@ export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {
     return typeof v === 'function'
         ? (v as any)()
         : v;
-}
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
-export function letExp<T, U>(x: T, f: (x: T) => U) {
-    return f(x);
-}
-
-export function throwExp<T>(error: T): never {
-    throw error;
-}
-
-export function assertNever(arg: never, message?: string): never {
-    throw new Error(`Should have not happen: ${message} (object: ${arg})`);
 }
 
 export function combineF<S, T, U>(f: (x: T) => U, g: (x: S) => T) {

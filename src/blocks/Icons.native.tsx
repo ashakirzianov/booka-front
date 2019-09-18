@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { assertNever } from '../utils';
 import { IconProps, IconName } from './Icons';
+import { assertNever } from 'booka-common';
 
 function convertIconName(name: IconName): string {
     switch (name) {
@@ -23,7 +23,8 @@ function convertIconName(name: IconName): string {
         case 'upload':
             return 'cloud-upload-alt';
         default:
-            return assertNever(name);
+            assertNever(name);
+            return 'question';
     }
 }
 

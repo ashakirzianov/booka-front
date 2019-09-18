@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { assertNever } from 'booka-common';
 
 import { Column, point } from '../blocks';
 import { AppScreen, Theme } from '../model';
-import { assertNever } from '../utils';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 import {
@@ -36,7 +36,7 @@ type ContentProps = {
 function Content({ screen }: ContentProps) {
     return screen.screen === 'book' ? <BookScreenComp screen={screen} />
         : screen.screen === 'library' ? <LibraryScreenComp screen={screen} />
-            : assertNever(screen);
+            : (assertNever(screen), null);
 }
 
 type BarProps = {
@@ -49,7 +49,7 @@ function Header({ screen, controlsVisible, theme }: BarProps) {
         {
             screen.screen === 'library' ? <LibraryScreenHeader theme={theme} />
                 : screen.screen === 'book' ? <BookScreenHeader theme={theme} />
-                    : assertNever(screen)
+                    : assertNever(screen, () => null)
         }
     </TopBar>;
 }
