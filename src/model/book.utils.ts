@@ -1,5 +1,5 @@
 import {
-    BookContentNode, isChapter, isParagraph, VolumeNode,
+    BookContentNode, VolumeNode,
     ChapterTitle, BookPath, BookRange, pathLessThan,
     nodeTextLength, assertNever,
 } from 'booka-common';
@@ -18,12 +18,8 @@ export function titleForPath(book: VolumeNode, path: BookPath): ChapterTitle {
 
     const iter = bookIterator(book);
     const node = iterateToPath(iter, path);
-    if (node) {
-        if (isChapter(node.node)) {
-            return node.node.title;
-        } else {
-            return [];
-        }
+    if (node && node.node.node === 'chapter') {
+        return node.node.title;
     } else {
         return [];
     }
@@ -94,12 +90,16 @@ function pagesInNodes(nodes: BookContentNode[]): number {
     let result = 0;
     let currentTextLength = 0;
     for (const node of nodes) {
-        if (isChapter(node)) {
-            result += numberOfPages(currentTextLength);
-            currentTextLength = 0;
-            result += pagesInNodes(node.nodes);
-        } else if (isParagraph(node)) {
-            currentTextLength += nodeTextLength(node);
+        switch (node.node) {
+            case 'chapter':
+            case 'group':
+                result += numberOfPages(currentTextLength);
+                currentTextLength = 0;
+                result += pagesInNodes(node.nodes);
+                break;
+            case 'paragraph':
+                currentTextLength += nodeTextLength(node);
+                break;
         }
     }
 
