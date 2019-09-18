@@ -1,5 +1,5 @@
 import {
-    BookContentNode, VolumeNode, nodeChildren, isChapter,
+    BookContentNode, VolumeNode, nodeChildren,
     BookPath, appendPath, emptyPath, pathHead, pathTail,
 } from 'booka-common';
 
@@ -112,7 +112,7 @@ export function prevIterator(i: OptParentIterator): OptBookIterator {
 
 export function nextChapter(i: OptParentIterator): OptParentIterator {
     let next = nextIterator(i);
-    while (next && !isChapter(next.node)) {
+    while (next && next.node.node !== 'chapter') {
         next = nextIterator(next);
     }
 

@@ -1,7 +1,6 @@
 import { BookId } from './bookLocator';
 import {
-    BookContentNode, isChapter, isParagraph, VolumeNode,
-    isImage, BookPath,
+    BookContentNode, VolumeNode, BookPath, assertNever,
 } from 'booka-common';
 import { Pagination } from './book.utils';
 
@@ -29,22 +28,28 @@ export function tocFromVolume(volume: VolumeNode, id: BookId): TableOfContents {
 }
 
 function itemsFromBookNode(node: BookContentNode, path: BookPath, pagination: Pagination): TableOfContentsItem[] {
-    if (isChapter(node)) {
-        const head: TableOfContentsItem[] = [{
-            title: node.title[0],
-            level: node.level,
-            path: path,
-            pageNumber: pagination.pageForPath(path),
-        }];
+    switch (node.node) {
+        case 'chapter':
+            const head: TableOfContentsItem[] = [{
+                title: node.title[0],
+                level: node.level,
+                path: path,
+                pageNumber: pagination.pageForPath(path),
+            }];
 
-        const children = itemsFromBookNodes(node.nodes, path, pagination);
-        return head.concat(children);
-    } else if (isParagraph(node) || isImage(node)) {
-        return [];
-    } else {
-        // TODO: assert 'never'
-        // return assertNever(node);
-        return [];
+            const children = itemsFromBookNodes(node.nodes, path, pagination);
+            return head.concat(children);
+        case 'group':
+        case 'paragraph':
+        case 'image-data':
+        case 'image-ref':
+        case 'list':
+        case 'table':
+        case 'separator':
+            return [];
+        default:
+            assertNever(node);
+            return [];
     }
 }
 
