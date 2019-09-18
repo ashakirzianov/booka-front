@@ -33,7 +33,7 @@ const localProtocol = process.env.HTTPS ? 'https' : 'http';
 export const debugBack = `https://${hostname}:3042`;
 
 const debugConfig: Config = {
-    usePersistentStorage: false,
+    usePersistentStorage: true,
     useTestStore: false,
     backendBase: prodBack,
     frontendBase: hostname
