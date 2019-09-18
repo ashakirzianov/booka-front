@@ -194,23 +194,6 @@ export function numberOfPages(length: number): number {
     return Math.ceil(length / pageLength);
 }
 
-// TODO: remove
-export function spanText(span: Span): string {
-    if (isSimpleSpan(span)) {
-        return span;
-    } else if (isAttributedSpan(span)) {
-        return spanText(span.content);
-    } else if (isCompoundSpan(span)) {
-        return span.spans
-            .map(spanText)
-            .join('');
-    }
-
-    // TODO: assert 'never'
-    // return assertNever(span);
-    return '';
-}
-
 export function inBookRange(path: BookPath, range: BookRange): boolean {
     return inRange(path, range, pathLessThan);
 }
