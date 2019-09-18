@@ -1,16 +1,5 @@
 // TODO: move most of this to 'common'
 
-export type PromiseType<T> = T extends Promise<infer U> ? U : any;
-
-export type ExcludeKeys<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>;
-
-export type Func<Argument, Return> =
-    | void extends Argument ? () => Return
-    : undefined extends Argument ? (payload?: Argument) => Return
-    : (payload: Argument) => Return
-    ;
-export type Callback<Argument = void> = Func<Argument, void>;
-
 export type Defined<T> = T extends undefined ? never : T;
 export type MaybeLazy<T> = T | (() => T);
 export function lazyValue<T>(v: MaybeLazy<T> | undefined): T | undefined {

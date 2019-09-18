@@ -1,4 +1,4 @@
-import { Callback } from '../utils';
+import { Callback } from 'booka-common';
 
 export function useSelection(callback: Callback<Event>) {
     // TODO: implement

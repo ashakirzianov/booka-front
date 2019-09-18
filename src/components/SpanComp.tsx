@@ -1,5 +1,9 @@
 import * as React from 'react';
 import {
+    Span, spanAttrs, extractSpanText, Callback,
+    BookRange, BookPath, pathLessThan, isSubpath, assertNever,
+} from 'booka-common';
+import {
     Color, Theme, colors, fontSize,
 } from '../model';
 import {
@@ -7,13 +11,9 @@ import {
 } from '../blocks';
 import {
     filterUndefined,
-    TaggedRange, range, Range, Callback,
+    TaggedRange, range, Range,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
-import {
-    Span, spanAttrs, extractSpanText,
-    BookRange, BookPath, pathLessThan, isSubpath, assertNever,
-} from 'booka-common';
 
 export type ColorizedRange = {
     color: Color,

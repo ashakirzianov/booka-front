@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
+import { Callback } from 'booka-common';
 
-import { Callback } from '../utils';
 import { PaletteName, colors, fontSize, Theme } from '../model';
 import { TextLine, TextProps } from './Basics';
 import { point, WithChildren } from './common';

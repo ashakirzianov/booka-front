@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { Transition } from 'react-transition-group';
+import { Callback } from 'booka-common';
 
 import { Theme } from '../model';
-import { Callback } from '../utils';
 import { TextLine } from './Basics';
 import { IconButton } from './Buttons';
 import { OverlayBox } from './OverlayBox';

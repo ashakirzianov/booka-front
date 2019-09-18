@@ -1,8 +1,8 @@
 /*global globalThis*/
 import * as React from 'react';
+import { Callback } from 'booka-common';
 
 import { Column, Row } from './Layout';
-import { Callback } from '../utils';
 import { Icon } from './Icons';
 import { point } from './common';
 

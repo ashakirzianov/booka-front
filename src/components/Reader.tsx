@@ -1,10 +1,9 @@
 import * as React from 'react';
 
 import {
-    BookContentNode, BookPath, BookRange,
+    BookContentNode, BookPath, BookRange, Callback,
     bookRange, parentPath, isFirstSubpath, emptyPath,
 } from 'booka-common';
-import { Callback } from '../utils';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
     TableOfContentsItem, TableOfContents, inBookRange,

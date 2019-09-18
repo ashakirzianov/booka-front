@@ -1,14 +1,14 @@
 import * as React from 'react';
-
 import { PopperProps, Manager, Reference, Popper } from 'react-popper';
+import { Callback } from 'booka-common';
 
-import { platformValue, Callback } from '../utils';
+import { platformValue } from '../utils';
 import { OverlayBox } from './OverlayBox';
 import { FadeIn } from './Animations';
 import { Theme } from '../model';
 
 export type PopoverBodyParams = {
-    scheduleUpdate: Callback,
+    scheduleUpdate: Callback<void>,
 };
 export type WithPopoverProps = {
     theme: Theme,

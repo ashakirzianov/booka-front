@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-
-import { Callback } from '../utils';
+import { Callback } from 'booka-common';
 
 export function useSelection(callback: Callback<Event>) {
     useEffect(() => {
