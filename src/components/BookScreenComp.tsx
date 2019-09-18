@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { resolveBookReference, BookContentNode } from 'booka-common';
+import { resolveBookReference, BookContentNode, hasSemantic } from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
@@ -115,11 +115,12 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-// TODO: fix
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props =>
-    <Modal
-        // TODO: show footnote title
-        // title={props.footnote && props.footnote.title[0]}
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props => {
+    const title = props.footnote && hasSemantic(props.footnote, 'footnote')
+        ? props.footnote.title[0]
+        : undefined;
+    return <Modal
+        title={title}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
@@ -127,8 +128,8 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode 
             !props.footnote ? null :
                 <BookNodesComp nodes={[props.footnote]} />
         }
-    </Modal>
-);
+    </Modal>;
+});
 
 function ThemePicker() {
     return <Column width={point(14)}>
