@@ -2,7 +2,7 @@ import {
     BookContentNode, isChapter, isParagraph, VolumeNode, Span,
     isCompoundSpan, ChapterTitle,
     isSimpleSpan, isAttributedSpan, hasSubnodes, isImage,
-    BookPath, BookRange, bookRange, pathLessThan, RefSpan,
+    BookPath, BookRange, bookRange, pathLessThan,
 } from 'booka-common';
 import { inRange } from '../utils';
 import {
@@ -11,34 +11,6 @@ import {
 } from './bookIterator';
 
 // TODO: move to 'common' most of this
-
-export function footnoteForId(book: VolumeNode, id: string): RefSpan | undefined {
-    // TODO: implement
-    // return firstDefined(book.nodes, n => footnoteFromNode(n, id));
-    return undefined;
-}
-
-// function footnoteFromNode(bookNode: BookContentNode, id: string): FootnoteSpan | undefined {
-//     if (isChapter(bookNode)) {
-//         return firstDefined(bookNode.nodes, n => footnoteFromNode(n, id));
-//     } else if (isParagraph(bookNode)) {
-//         return footnoteFromSpan(bookNode.span, id);
-//     } else {
-//         return undefined;
-//     }
-// }
-
-// function footnoteFromSpan(span: Span, id: string): FootnoteSpan | undefined {
-//     if (isFootnoteSpan(span)) {
-//         return span.id === id
-//             ? span
-//             : undefined;
-//     } else if (isCompoundSpan(span)) {
-//         return firstDefined(span.spans, s => footnoteFromSpan(s, id));
-//     } else {
-//         return undefined;
-//     }
-// }
 
 export function computeRangeForPath(book: VolumeNode, path: BookPath): BookRange {
     const iterator = iterateToPath(bookIterator(book), path);

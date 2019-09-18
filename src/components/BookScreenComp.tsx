@@ -1,15 +1,15 @@
 import * as React from 'react';
 
-import { RefSpan } from 'booka-common';
+import { resolveBookReference, BookContentNode } from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
-    footnoteForId, Pagination, Theme,
+    Pagination, Theme,
 } from '../model';
-import { Reader } from './Reader';
+import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import {
@@ -36,7 +36,7 @@ export function BookScreenComp({ screen }: BookScreenProps) {
         <FootnoteBox
             footnote={
                 bl.footnoteId !== undefined
-                    ? footnoteForId(book.volume, bl.footnoteId)
+                    ? resolveBookReference(book.volume, bl.footnoteId)
                     : undefined
             }
         />
@@ -117,19 +117,17 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
 );
 
 // TODO: fix
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: RefSpan }>(props =>
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props =>
     <Modal
+        // TODO: show footnote title
         // title={props.footnote && props.footnote.title[0]}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
-        {/* {
+        {
             !props.footnote ? null :
-                <BookNodesComp nodes={[{
-                    node: 'paragraph',
-                    span: props.footnote.footnote,
-                }]} />
-        } */}
+                <BookNodesComp nodes={[props.footnote]} />
+        }
     </Modal>
 );
 
