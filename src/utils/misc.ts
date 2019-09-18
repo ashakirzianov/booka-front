@@ -1,5 +1,3 @@
-// TODO: move most of this to 'common'
-
 export function nums(start: number, end: number): number[] {
     const result = [];
     for (let i = start; i < end; i++) {
