@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-    Span, spanAttrs, extractSpanText, Callback,
+    Span, spanAttrs, extractSpanText, Callback, filterUndefined,
     BookRange, BookPath, pathLessThan, isSubpath, assertNever,
 } from 'booka-common';
 import {
@@ -10,7 +10,6 @@ import {
     RichTextStyle, RichText,
 } from '../blocks';
 import {
-    filterUndefined,
     TaggedRange, range, Range,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';

@@ -1,3 +1,4 @@
+import { forEach } from 'booka-common';
 import {
     BookObject, Library, BookId, library, User,
 } from '../model';
@@ -6,7 +7,6 @@ import {
     convertBook, convertLibrary, fetchTokenForFb,
 } from '../api';
 import { stores } from './persistent';
-import { forEach } from '../utils';
 import { dispatchSetUserAction } from './store';
 
 export async function bookForId(bi: BookId): Promise<BookObject | undefined> {

@@ -1,5 +1,5 @@
 import * as store from 'store';
-import { values } from './misc';
+import { values } from 'booka-common';
 import { config } from '../config';
 
 const {

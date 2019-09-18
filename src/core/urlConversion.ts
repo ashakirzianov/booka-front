@@ -1,11 +1,11 @@
-import { BookRange, bookRange, BookPath, assertNever } from 'booka-common';
+import { BookRange, bookRange, BookPath, assertNever, filterUndefined } from 'booka-common';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, BookLocator,
     BookId, locationNone,
 } from '../model';
 import {
-    parsePartialUrl, ParsedUrl, filterUndefined,
+    parsePartialUrl, ParsedUrl,
 } from '../utils';
 import { Action, actionCreators } from './actions';
 import { config } from '../config';

@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {
-    BookPath, BookRange, subpathCouldBeInRange, assertNever,
+    BookPath, BookRange, subpathCouldBeInRange, assertNever, last,
 } from 'booka-common';
 import { inBookRange } from '../model';
 import {
     Row, refable, point, Column, percent, Image,
 } from '../blocks';
-import { last } from '../utils';
 import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
