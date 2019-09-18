@@ -24,6 +24,9 @@ export type BookScreenProps = {
 };
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
+    const footnote = bl.footnoteId !== undefined
+        ? resolveBookReference(book.volume, bl.footnoteId)
+        : undefined;
     return <>
         <Reader
             book={book}
@@ -34,11 +37,7 @@ export function BookScreenComp({ screen }: BookScreenProps) {
             open={bl.toc}
         />
         <FootnoteBox
-            footnote={
-                bl.footnoteId !== undefined
-                    ? resolveBookReference(book.volume, bl.footnoteId)
-                    : undefined
-            }
+            footnote={footnote}
         />
     </>;
 }

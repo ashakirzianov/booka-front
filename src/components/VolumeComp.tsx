@@ -9,8 +9,8 @@ import { ParagraphComp } from './ParagraphComp';
 import { RefPathHandler, pathToString } from './common';
 import { TextLine } from './Connected';
 import {
-    VolumeNode, BookContentNode, isParagraph, isChapter,
-    ParagraphNode, ChapterNode, isImage, ImageNode,
+    VolumeNode, BookContentNode,
+    ParagraphNode, ChapterNode, ImageNode,
 } from 'booka-common';
 
 export type Params = {
@@ -68,25 +68,37 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
         return null;
     }
 
-    if (isParagraph(node)) {
-        return <ParagraphNodeComp
-            ref={ref => params.refPathHandler(ref, path)}
-            paragraph={node}
-            path={path}
-            params={params}
-        />;
-    } else if (isChapter(node)) {
-        return <ChapterNodeComp
-            chapter={node}
-            path={path}
-            params={params}
-        />;
-    } else if (isImage(node)) {
-        return <ImageNodeComp image={node} />;
-    } else {
-        // TODO: assert 'never'
-        // assertNever(node, path.toString());
-        return null;
+    switch (node.node) {
+        case 'paragraph':
+            return <ParagraphNodeComp
+                ref={ref => params.refPathHandler(ref, path)}
+                paragraph={node}
+                path={path}
+                params={params}
+            />;
+        case 'chapter':
+            return <ChapterNodeComp
+                chapter={node}
+                path={path}
+                params={params}
+            />;
+        case 'group':
+            return <ContentNodesComp
+                nodes={node.nodes}
+                headPath={path}
+                params={params}
+            />;
+        case 'image-data':
+        case 'image-ref':
+            return <ImageNodeComp image={node} />;
+        case 'list':
+        case 'separator':
+        case 'table':
+            // TODO: implement
+            return null;
+        default:
+            assertNever(node);
+            return null;
     }
 }
 
