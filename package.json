@@ -34,7 +34,7 @@
     "debug-http": "react-scripts start",
     "debug": "HTTPS=true SSL_KEY_PATH='server.key' SSL_CERT_PATH='server.crt' react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "start-native": "expo start",
     "eject-native": "expo eject",
