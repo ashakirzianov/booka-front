@@ -14,6 +14,7 @@ export function OverlayBox(props: OverlayBoxProps) {
     return <View
         style={{
             alignSelf: 'center',
+            overflow: 'scroll',
             backgroundColor: colors(props.theme).secondary,
             width: percent(100),
             maxWidth: point(50),
