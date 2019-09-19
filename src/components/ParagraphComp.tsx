@@ -22,7 +22,7 @@ export const ParagraphComp = connect(['theme'], ['openFootnote'])<ParagraphProps
             openFootnote={props.openFootnote}
             theme={props.theme}
             path={props.path.concat([0])}
-            span={props.p.span}
+            span={props.p}
             colorization={props.highlights && props.highlights.quote && {
                 ranges: [{
                     color: highlights(props.theme).quote,

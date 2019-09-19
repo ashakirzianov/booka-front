@@ -40,7 +40,7 @@ function itemsFromBookNode(node: BookContentNode, path: BookPath, pagination: Pa
             const children = itemsFromBookNodes(node.nodes, path, pagination);
             return head.concat(children);
         case 'group':
-        case 'paragraph':
+        case undefined:
         case 'image-data':
         case 'image-ref':
         case 'list':

@@ -56,7 +56,7 @@ export function pageForPath(node: BookNode, path: BookPath): number {
         return 1;
     }
     switch (node.node) {
-        case 'paragraph':
+        case undefined:
         case 'image-data':
         case 'image-ref':
         case 'list':
@@ -97,7 +97,7 @@ function pagesInNodes(nodes: BookContentNode[]): number {
                 currentTextLength = 0;
                 result += pagesInNodes(node.nodes);
                 break;
-            case 'paragraph':
+            case undefined:
                 currentTextLength += nodeTextLength(node);
                 break;
         }

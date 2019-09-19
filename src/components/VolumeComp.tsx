@@ -70,7 +70,7 @@ function ContentNodeComp({ node, path, params }: ContentNodeProps) {
     }
 
     switch (node.node) {
-        case 'paragraph':
+        case undefined:
             return <ParagraphNodeComp
                 ref={ref => params.refPathHandler(ref, path)}
                 paragraph={node}
