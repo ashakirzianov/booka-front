@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Callback } from '../utils';
+import { Callback } from 'booka-common';
 
 export type Data = { data: any };
 export type FileUploadDialogRef = {

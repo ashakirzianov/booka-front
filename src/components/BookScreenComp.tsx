@@ -1,15 +1,15 @@
 import * as React from 'react';
 
-import { RefSpan } from 'booka-common';
+import { resolveBookReference, BookContentNode, hasSemantic } from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
 } from '../blocks';
 import {
     BookScreen, TableOfContents, PaletteName,
-    footnoteForId, Pagination, Theme,
+    Pagination, Theme,
 } from '../model';
-import { Reader } from './Reader';
+import { Reader, BookNodesComp } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import {
@@ -24,6 +24,9 @@ export type BookScreenProps = {
 };
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
+    const footnote = bl.footnoteId !== undefined
+        ? resolveBookReference(book.volume, bl.footnoteId)
+        : undefined;
     return <>
         <Reader
             book={book}
@@ -34,11 +37,7 @@ export function BookScreenComp({ screen }: BookScreenProps) {
             open={bl.toc}
         />
         <FootnoteBox
-            footnote={
-                bl.footnoteId !== undefined
-                    ? footnoteForId(book.volume, bl.footnoteId)
-                    : undefined
-            }
+            footnote={footnote}
         />
     </>;
 }
@@ -116,22 +115,21 @@ const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, o
     </Modal>
 );
 
-// TODO: fix
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: RefSpan }>(props =>
-    <Modal
-        // title={props.footnote && props.footnote.title[0]}
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props => {
+    const title = props.footnote && hasSemantic(props.footnote, 'footnote')
+        ? props.footnote.title[0]
+        : undefined;
+    return <Modal
+        title={title}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >
-        {/* {
+        {
             !props.footnote ? null :
-                <BookNodesComp nodes={[{
-                    node: 'paragraph',
-                    span: props.footnote.footnote,
-                }]} />
-        } */}
-    </Modal>
-);
+                <BookNodesComp nodes={[props.footnote]} />
+        }
+    </Modal>;
+});
 
 function ThemePicker() {
     return <Column width={point(14)}>

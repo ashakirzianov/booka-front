@@ -1,6 +1,6 @@
 import * as React from 'react';
+import { Callback } from 'booka-common';
 
-import { Callback } from '../utils';
 import { WithChildren, point } from './common';
 import { Hyperlink } from './Web';
 

@@ -1,11 +1,11 @@
-import { BookRange, bookRange, BookPath } from 'booka-common';
+import { BookRange, bookRange, BookPath, assertNever, filterUndefined } from 'booka-common';
 import {
     App, remoteBookId, bookLocator, locationCurrent,
     locationPath, BookLocation, BookLocator,
     BookId, locationNone,
 } from '../model';
 import {
-    assertNever, parsePartialUrl, ParsedUrl, filterUndefined,
+    parsePartialUrl, ParsedUrl,
 } from '../utils';
 import { Action, actionCreators } from './actions';
 import { config } from '../config';
@@ -96,7 +96,8 @@ export function stateToUrl(state: App) {
         case 'book':
             return `${blToUrl(screen.bl)}`;
         default:
-            return assertNever(screen);
+            assertNever(screen);
+            return '/';
     }
 }
 

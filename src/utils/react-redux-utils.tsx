@@ -1,6 +1,7 @@
 import { connect as connectReactRedux } from 'react-redux';
 import { Dispatch } from 'redux';
-import { mapObject, pick, ExcludeKeys, Func } from './misc';
+import { Func, ExcludeKeys } from 'booka-common';
+import { mapObject, pick } from './misc';
 import { ActionCreatorsMap, ActionCreator, ActionFromCreators } from './redux-utils';
 
 type ActionDispatcher<Payload> = Func<Payload, void>;

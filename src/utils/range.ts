@@ -1,4 +1,4 @@
-import { distinct } from './misc';
+import { distinct } from 'booka-common';
 
 export type Range<T> = {
     start: T,

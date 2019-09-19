@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Callback } from 'booka-common';
 
 import { WithPopover, TextLine, connectState, IconButton, TagButton } from './Connected';
 import {
@@ -7,7 +8,6 @@ import {
 import { config } from '../config';
 import { User, Theme } from '../model';
 import { loginWithFbToken, logout } from '../core/dataAccess';
-import { Callback } from '../utils';
 
 export type AccountButtonProps = {
     theme: Theme,

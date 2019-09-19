@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Radium from 'radium';
+import { Callback } from 'booka-common';
 
-import { Callback } from '../utils';
 import { WithChildren } from './common';
 
 export type HyperlinkProps = WithChildren<{

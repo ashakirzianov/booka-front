@@ -1,5 +1,5 @@
 import * as store from 'store';
-import { values } from './misc';
+import { values } from 'booka-common';
 import { config } from '../config';
 
 const {
@@ -12,7 +12,7 @@ export function smartStore<V>(key: string) {
     type Cache = {
         [k in K]?: V;
     };
-    let cache: Cache = store.get(key) as any || {};
+    const cache: Cache = store.get(key) as any || {};
     return {
         all() {
             return { ...cache };
@@ -24,7 +24,6 @@ export function smartStore<V>(key: string) {
         },
 
         get(k: K): V | undefined {
-            // return cache[k];
             return useStore
                 ? cache[k]
                 : undefined;
@@ -37,9 +36,9 @@ export function smartStore<V>(key: string) {
             } catch {
                 log(`Couldn't add ${key}: '${k}'`);
                 store.remove(key);
-                cache = { [k]: value };
+                const cacheToSet = { [k]: value };
                 try {
-                    store.set(key, cache);
+                    store.set(key, cacheToSet);
                 } catch {
                     log(`Store is too small for ${key}: '${k}'`);
                 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
+import { Callback } from 'booka-common';
 
-import { Callback } from '../utils';
 import { WithChildren } from './common';
 import { useScroll } from './subscribeEffects';
 

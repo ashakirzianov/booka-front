@@ -3,9 +3,10 @@ import * as React from 'react';
 import {
     FaTimes, FaAngleLeft, FaBars, FaFont,
     FaCircle, FaSignInAlt, FaFacebookSquare, FaCloudUploadAlt,
+    FaQuestion,
 } from 'react-icons/fa';
-import { assertNever } from '../utils';
 import { Size } from './common';
+import { assertNever } from 'booka-common';
 
 export type IconName =
     | 'close' | 'left' | 'items' | 'letter'
@@ -37,7 +38,8 @@ function iconForName(name: IconName) {
         case 'upload':
             return FaCloudUploadAlt;
         default:
-            return assertNever(name);
+            assertNever(name);
+            return FaQuestion;
     }
 }
 

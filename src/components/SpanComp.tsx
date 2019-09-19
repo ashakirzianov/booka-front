@@ -1,20 +1,18 @@
 import * as React from 'react';
 import {
-    Color, Theme, colors, fontSize, spanText,
+    Span, spanAttrs, extractSpanText, Callback, filterUndefined,
+    BookRange, BookPath, pathLessThan, isSubpath, assertNever,
+} from 'booka-common';
+import {
+    Color, Theme, colors, fontSize,
 } from '../model';
 import {
     RichTextStyle, RichText,
 } from '../blocks';
 import {
-    filterUndefined,
-    TaggedRange, range, Range, Callback,
+    TaggedRange, range, Range,
 } from '../utils';
 import { RefPathHandler, pathToId } from './common';
-import {
-    Span, spanAttrs,
-    isSimpleSpan, isAttributedSpan, isCompoundSpan,
-    BookRange, BookPath, pathLessThan, isSubpath,
-} from 'booka-common';
 
 export type ColorizedRange = {
     color: Color,
@@ -35,7 +33,7 @@ export type SpanProps = {
 };
 export function SpanComp(props: SpanProps) {
     const ranges = rangesForProps(props);
-    const fullText = spanText(props.span);
+    const fullText = extractSpanText(props.span);
     return <RichText
         text={fullText}
         styles={ranges}
@@ -102,76 +100,83 @@ function rangesForSpan(span: Span, props: SpanProps): RenderingRange[] {
     return result.ranges;
 }
 
-// TODO: support all spans
 function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
     ranges: RenderingRange[],
     length: number,
 } {
-    if (isSimpleSpan(span)) {
-        return {
-            ranges: [{
-                range: {
-                    start: offset,
-                    end: offset + span.length,
-                },
-                tag: undefined,
-            }],
-            length: span.length,
-        };
-    } else if (isAttributedSpan(span)) {
-        const inside = rangesForSpanHelper(span.content, offset, props);
-        const current: RenderingRange = {
-            range: {
-                start: offset,
-                end: offset + inside.length,
-            },
-            tag: {
-                italic: spanAttrs(span).italic,
-                bold: spanAttrs(span).bold,
-                line: spanAttrs(span).line,
-            },
-        };
-        return {
-            ranges: [current].concat(inside.ranges),
-            length: inside.length,
-        };
-    } else if (isCompoundSpan(span)) {
-        let ranges: RenderingRange[] = [];
-        let currentOffset = offset;
-        for (const s of span.spans) {
-            const rs = rangesForSpanHelper(s, currentOffset, props);
-            ranges = ranges.concat(rs.ranges);
-            currentOffset += rs.length;
-        }
+    switch (span.span) {
+        case undefined:
+            return {
+                ranges: [{
+                    range: {
+                        start: offset,
+                        end: offset + span.length,
+                    },
+                    tag: undefined,
+                }],
+                length: span.length,
+            };
+        case 'attrs':
+            {
+                const inside = rangesForSpanHelper(span.content, offset, props);
+                const current: RenderingRange = {
+                    range: {
+                        start: offset,
+                        end: offset + inside.length,
+                    },
+                    tag: {
+                        italic: spanAttrs(span).italic,
+                        bold: spanAttrs(span).bold,
+                        line: spanAttrs(span).line,
+                    },
+                };
+                return {
+                    ranges: [current].concat(inside.ranges),
+                    length: inside.length,
+                };
+            }
+        case 'compound':
+            {
+                let ranges: RenderingRange[] = [];
+                let currentOffset = offset;
+                for (const s of span.spans) {
+                    const rs = rangesForSpanHelper(s, currentOffset, props);
+                    ranges = ranges.concat(rs.ranges);
+                    currentOffset += rs.length;
+                }
 
-        return {
-            ranges,
-            length: currentOffset - offset,
-        };
-    }
-    // else if (isFootnoteSpan(span)) {
-    //     const inside = rangesForSpanHelper(span.content, offset, props);
-    //     const current: RenderingRange = {
-    //         range: {
-    //             start: offset,
-    //             end: offset + inside.length,
-    //         },
-    //         tag: {
-    //             superLink: {
-    //                 onClick: () => props.openFootnote(span.id),
-    //             },
-    //             color: colors(props.theme).accent,
-    //             hoverColor: colors(props.theme).highlight,
-    //         },
-    //     };
-    //     return {
-    //         ranges: inside.ranges.concat(current),
-    //         length: inside.length,
-    //     };
-    // }
-    else {
-        // TODO: do not throw
-        throw new Error(`Unsupported span: ${span}`);
+                return {
+                    ranges,
+                    length: currentOffset - offset,
+                };
+            }
+        case 'ref':
+            {
+                const inside = rangesForSpanHelper(span.content, offset, props);
+                const current: RenderingRange = {
+                    range: {
+                        start: offset,
+                        end: offset + inside.length,
+                    },
+                    tag: {
+                        superLink: {
+                            onClick: () => props.openFootnote(span.refToId),
+                        },
+                        color: colors(props.theme).accent,
+                        hoverColor: colors(props.theme).highlight,
+                    },
+                };
+                return {
+                    ranges: inside.ranges.concat(current),
+                    length: inside.length,
+                };
+            }
+        default:
+            assertNever(span);
+            return {
+                ranges: [],
+                length: 0,
+            };
     }
 }
 
