@@ -4,7 +4,7 @@ import {
     Library, BookDesc, remoteBookId, locationCurrent, bookLocator,
 } from '../model';
 import {
-    SafeAreaView, Column, EmptyLine, Image,
+    SafeAreaView, Column, EmptyLine,
 } from '../blocks';
 import { actionCreators } from '../core';
 import { TextButton } from './Connected';
@@ -14,12 +14,7 @@ type BookItemProps = {
     id: string,
 };
 function BookItem({ meta, id }: BookItemProps) {
-    return <Column centered>
-        {
-            meta.coverUrl
-                ? <Image url={meta.coverUrl} />
-                : null
-        }
+    return <Column>
         <TextButton
             color='text'
             text={meta.title}

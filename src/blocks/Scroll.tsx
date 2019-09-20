@@ -53,7 +53,7 @@ export function scrollToRef(ref: RefType | undefined) {
     if (ref) {
         const current = currentObject(ref);
         if (current) {
-            current.scrollIntoView({ behavior: 'smooth' });
+            current.scrollIntoView();
             // TODO: find other solution ?
             // window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
             return true;
