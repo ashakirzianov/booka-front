@@ -7,12 +7,12 @@ import {
     Color, Theme, colors, fontSize,
 } from '../model';
 import {
-    RichTextStyle, RichText,
-} from '../blocks';
+    RichTextAttrs, RichText, buildTextFragments,
+} from '../reader';
 import {
     TaggedRange, range, Range,
 } from '../utils';
-import { RefPathHandler, pathToId } from './common';
+import { RefPathHandler } from './common';
 
 export type ColorizedRange = {
     color: Color,
@@ -34,13 +34,18 @@ export type SpanProps = {
 export function SpanComp(props: SpanProps) {
     const ranges = rangesForProps(props);
     const fullText = extractSpanText(props.span);
+    const fragments = buildTextFragments(fullText, ranges);
+    const blocks = [fragments];
+
     return <RichText
-        text={fullText}
-        styles={ranges}
+        blocks={blocks}
+        color={colors(props.theme).text}
+        fontFamily={props.theme.fontFamilies.book}
+        fontSize={fontSize(props.theme, 'text')}
     />;
 }
 
-type RenderingRange = TaggedRange<RichTextStyle>;
+type RenderingRange = TaggedRange<RichTextAttrs>;
 function rangesForProps(props: SpanProps): RenderingRange[] {
     const spanRanges = rangesForSpan(props.span, props);
     const dropCaseRanges = props.first
@@ -64,35 +69,13 @@ function rangesForProps(props: SpanProps): RenderingRange[] {
             })
     );
 
-    const defaultStyles: RenderingRange[] = [{
-        range: range(0),
-        tag: {
-            fontSize: fontSize(props.theme, 'text'),
-            fontFamily: props.theme.fontFamilies.book,
-            color: colors(props.theme).text,
-        },
-    }];
-
     const allRanges = ([] as RenderingRange[])
-        .concat(defaultStyles)
         .concat(spanRanges)
         .concat(dropCaseRanges)
         .concat(colorizationRanges)
         ;
-    const augmented = allRanges.map(r => {
-        const path = props.path.concat(r.range.start);
 
-        return {
-            range: r.range,
-            tag: {
-                ...r.tag,
-                id: pathToId(path),
-                refHandler: (ref: any) => props.refPathHandler(ref, path),
-            },
-        };
-    });
-
-    return augmented;
+    return allRanges;
 }
 
 function rangesForSpan(span: Span, props: SpanProps): RenderingRange[] {
@@ -159,9 +142,6 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
                         end: offset + inside.length,
                     },
                     tag: {
-                        superLink: {
-                            onClick: () => props.openFootnote(span.refToId),
-                        },
                         color: colors(props.theme).accent,
                         hoverColor: colors(props.theme).highlight,
                     },

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { TaggedRange, overlaps } from '../utils';
 
 export type Color = string;
@@ -38,10 +39,11 @@ export function RichText({ blocks, color, fontSize, fontFamily }: RichTextProps)
 
 function RichTextBlock(fragments: RichTextBlock) {
     return <span style={{
-        display: 'flex',
-        textAlign: 'justify',
-        float: 'left',
-        textIndent: '4em',
+        // TODO: re-enable
+        // display: 'flex',
+        // textAlign: 'justify',
+        // float: 'left',
+        // textIndent: '4em',
     }}>
         {fragments.map(RichTextFragment)}
     </span>;
