@@ -33,7 +33,9 @@ export type SpanProps = {
 };
 export function SpanComp(props: SpanProps) {
     const fragments = [] as any[];
-    const blocks = [fragments];
+    const blocks = [{
+        fragments,
+    }];
 
     return <RichText
         blocks={blocks}

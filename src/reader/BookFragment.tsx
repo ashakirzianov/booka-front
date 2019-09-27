@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BookContentNode, Span, flatten, spanAttrs, assertNever } from 'booka-common';
+import { BookContentNode, Span, flatten, spanAttrs, assertNever, ParagraphNode, ChapterNode } from 'booka-common';
 
 import { RichTextBlock, RichTextAttrs, RichTextFragment, RichText, Color } from './RichText';
 
@@ -12,7 +12,7 @@ export type BookFragmentProps = {
 };
 
 export function BookFragmentComp({ nodes, color, fontSize, fontFamily }: BookFragmentProps) {
-    const blocks = nodes.map(blockForNode);
+    const blocks = flatten(nodes.map(blocksForNode));
     return <RichText
         blocks={blocks}
         color={color}
@@ -21,14 +21,28 @@ export function BookFragmentComp({ nodes, color, fontSize, fontFamily }: BookFra
     />;
 }
 
-function blockForNode(node: BookContentNode): RichTextBlock {
+function blocksForNode(node: BookContentNode): RichTextBlock[] {
     switch (node.node) {
         case undefined:
-            return fragmentsForSpan(node);
+            return blocksForParagraph(node);
+        case 'chapter':
+            return blocksForChapter(node);
         default:
             // TODO: assert 'never'
             return [];
     }
+}
+
+function blocksForParagraph(node: ParagraphNode): RichTextBlock[] {
+    return [{
+        fragments: fragmentsForSpan(node),
+    }];
+}
+
+function blocksForChapter(node: ChapterNode): RichTextBlock[] {
+    // TODO: support titles
+    const inside = flatten(node.nodes.map(blocksForNode));
+    return inside;
 }
 
 function fragmentsForSpan(span: Span): RichTextFragment[] {

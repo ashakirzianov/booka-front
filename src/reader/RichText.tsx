@@ -18,7 +18,9 @@ export type RichTextFragment = {
     text: string,
     attrs: RichTextAttrs,
 };
-export type RichTextBlock = RichTextFragment[];
+export type RichTextBlock = {
+    fragments: RichTextFragment[],
+};
 
 export type RichTextProps = {
     blocks: RichTextBlock[],
@@ -32,20 +34,30 @@ export function RichText({ blocks, color, fontSize, fontFamily }: RichTextProps)
         fontSize: fontSize,
         fontFamily: fontFamily,
     }}>
-        {blocks.map(RichTextBlock)}
+        {blocks.map(
+            (block, idx) =>
+                <RichTextBlock fragments={block.fragments} key={idx} />
+        )}
     </span>;
 }
 
-function RichTextBlock(fragments: RichTextBlock) {
-    return <span style={{
-        // TODO: re-enable
-        // display: 'flex',
-        // textAlign: 'justify',
-        // float: 'left',
-        // textIndent: '4em',
+function RichTextBlock({ fragments }: RichTextBlock) {
+    return <div style={{
+        display: 'flex',
+        textAlign: 'justify',
+        float: 'left',
+        textIndent: '4em',
     }}>
-        {fragments.map(RichTextFragment)}
-    </span>;
+        <span>
+            {fragments.map(
+                (f, idx) =>
+                    <RichTextFragment
+                        text={f.text}
+                        attrs={f.attrs}
+                        key={idx}
+                    />)}
+        </span>
+    </div>;
 }
 
 function RichTextFragment({ text, attrs }: RichTextFragment) {
