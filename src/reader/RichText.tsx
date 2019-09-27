@@ -27,9 +27,22 @@ export type RichTextProps = {
     color: Color,
     fontSize: number,
     fontFamily: string,
+    onScroll?: (path: number[]) => void,
 };
-export function RichText({ blocks, color, fontSize, fontFamily }: RichTextProps) {
+export function RichText({ blocks, color, fontSize, fontFamily, onScroll }: RichTextProps) {
+
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
+    const scrollHandler = React.useCallback(() => {
+        if (!onScroll) {
+            return;
+        }
+        const newCurrentPath = computeCurrentPath(refMap.current);
+        if (newCurrentPath) {
+            onScroll(newCurrentPath);
+        }
+    }, [onScroll]);
+    useScroll(scrollHandler);
+
     return <span style={{
         color: color,
         fontSize: fontSize,
@@ -111,6 +124,8 @@ function RichTextFragment({ fragment: { text, attrs }, refCallback }: RichTextFr
     </span>;
 }
 
+// Utils:
+
 type PathMap<T> = {
     get(path: number[]): T | undefined,
     set(path: number[], value: T): void,
@@ -168,4 +183,54 @@ function makePathMap<T>(): PathMap<T> {
             }
         },
     };
+}
+
+// Scroll
+
+function useScroll(callback?: (e: Event) => void) {
+    React.useEffect(() => {
+        if (callback) {
+            window.addEventListener('scroll', callback);
+        }
+
+        return callback && function unsubscribe() {
+            window.removeEventListener('scroll', callback);
+        };
+    }, [callback]);
+}
+
+function computeCurrentPath(refMap: PathMap<RefType>) {
+    for (const [path, ref] of refMap.iterator()) {
+        const isVisible = isPartiallyVisible(ref);
+        if (isVisible) {
+            if (path) {
+                return path;
+            }
+        }
+    }
+
+    return undefined;
+}
+
+function isPartiallyVisible(ref?: RefType) {
+    if (ref) {
+        const rect = boundingClientRect(ref);
+        if (rect) {
+            const { top, height } = rect;
+            const result = top <= 0 && top + height >= 0;
+            if (result) {
+                return result;
+            }
+        }
+    }
+
+    return false;
+}
+
+function boundingClientRect(ref?: RefType) {
+    const current = ref;
+    return current
+        && current.getBoundingClientRect
+        && current.getBoundingClientRect()
+        ;
 }
