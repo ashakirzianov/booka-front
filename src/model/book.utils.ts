@@ -3,7 +3,6 @@ import {
     ChapterTitle, BookPath, BookRange, pathLessThan,
     nodeTextLength, assertNever,
 } from 'booka-common';
-import { inRange } from '../utils';
 import {
     iterateToPath, bookIterator, buildPath,
     nextChapter, iterateUntilCan,
@@ -113,5 +112,11 @@ export function numberOfPages(length: number): number {
 }
 
 export function inBookRange(path: BookPath, range: BookRange): boolean {
-    return inRange(path, range, pathLessThan);
+    if (!pathLessThan(path, range.start)) {
+        if (range.end === undefined || pathLessThan(path, range.end)) {
+            return true;
+        }
+    }
+
+    return false;
 }

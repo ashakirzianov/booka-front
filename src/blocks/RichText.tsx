@@ -43,8 +43,8 @@ function TextSegmentComp({ text, style }: TextSegment) {
     return textSpan;
 }
 
-function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle, number>>): TextSegment[] {
-    const renderings = overlaps(ranges, (l, r) => l < r);
+function buildTextSegments(text: string, ranges: Array<TaggedRange<RichTextStyle>>): TextSegment[] {
+    const renderings = overlaps(ranges);
     const result: TextSegment[] = renderings.map(taggedRange => ({
         text: text.substring(taggedRange.range.start, taggedRange.range.end),
         style: taggedRange.tag.reduce((res, r) => ({ ...res, ...r }), {}),

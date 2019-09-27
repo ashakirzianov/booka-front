@@ -40,7 +40,7 @@ export function SpanComp(props: SpanProps) {
     />;
 }
 
-type RenderingRange = TaggedRange<RichTextStyle, number>;
+type RenderingRange = TaggedRange<RichTextStyle>;
 function rangesForProps(props: SpanProps): RenderingRange[] {
     const spanRanges = rangesForSpan(props.span, props);
     const dropCaseRanges = props.first
@@ -180,7 +180,7 @@ function rangesForSpanHelper(span: Span, offset: number, props: SpanProps): {
     }
 }
 
-function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range<number> | undefined {
+function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range | undefined {
     if (bookR.end && pathLessThan(bookR.end, path)) {
         return undefined;
     }
