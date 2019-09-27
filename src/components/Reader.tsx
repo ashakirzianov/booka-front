@@ -26,17 +26,23 @@ export type ReaderProps = {
 };
 function ReaderC(props: ReaderProps) {
     const {
-        pathToOpen,
+        pathToOpen, updateBookPosition,
         book: { id, volume, toc },
         toggleControls,
         theme,
     } = props;
     const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
-    const nodes = nodesForPath(volume.nodes, currentPath.concat(0)) || [];
+    const firstNodePath = currentPath.concat(0);
+    const nodes = nodesForPath(volume.nodes, firstNodePath) || [];
 
     const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
     const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
+
+    const scrollHandler = React.useCallback((path: number[]) => {
+        const actualPath = [...firstNodePath, ...path];
+        updateBookPosition(actualPath);
+    }, [updateBookPosition, firstNodePath]);
 
     return <Scroll>
         <Row fullWidth centered>
@@ -50,6 +56,7 @@ function ReaderC(props: ReaderProps) {
                             color={colors(theme).text}
                             fontFamily={theme.fontFamilies.book}
                             fontSize={fontSize(theme, 'text')}
+                            onScroll={scrollHandler}
                         />
                     </Column>
                 </Clickable>

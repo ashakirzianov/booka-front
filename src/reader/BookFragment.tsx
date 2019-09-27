@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
     BookContentNode, Span, flatten, spanAttrs, assertNever,
-    ParagraphNode, ChapterNode,
+    ParagraphNode, ChapterNode, BookPath,
 } from 'booka-common';
 
 import {
@@ -15,40 +15,74 @@ export type BookFragmentProps = {
     color: Color,
     fontSize: number,
     fontFamily: string,
+    onScroll?: (path: BookPath) => void,
 };
+export function BookFragmentComp({ nodes, color, fontSize, fontFamily, onScroll }: BookFragmentProps) {
+    const prefixedBlocks = flatten(nodes.map(blocksForNode));
+    const scrollHandler = React.useCallback((path: number[]) => {
+        if (!onScroll) {
+            return;
+        }
+        const prefix = prefixedBlocks[path[0]].prefix;
+        const actualPath = [...prefix, path[1]];
+        onScroll(actualPath);
+    }, [onScroll, prefixedBlocks]);
 
-export function BookFragmentComp({ nodes, color, fontSize, fontFamily }: BookFragmentProps) {
-    const blocks = flatten(nodes.map(blocksForNode));
     return <RichText
-        blocks={blocks}
+        blocks={prefixedBlocks.map(b => b.block)}
         color={color}
         fontSize={fontSize}
         fontFamily={fontFamily}
+        onScroll={scrollHandler}
     />;
 }
 
-function blocksForNode(node: BookContentNode): RichTextBlock[] {
+type BlockWithPrefix = {
+    block: RichTextBlock,
+    prefix: number[],
+};
+function blocksForNode(node: BookContentNode, idx: number): BlockWithPrefix[] {
     switch (node.node) {
         case undefined:
-            return blocksForParagraph(node);
+            return blocksForParagraph(node, idx);
         case 'chapter':
-            return blocksForChapter(node);
+            return blocksForChapter(node, idx);
         default:
             // TODO: assert 'never'
             return [];
     }
 }
 
-function blocksForParagraph(node: ParagraphNode): RichTextBlock[] {
+function blocksForParagraph(node: ParagraphNode, idx: number): BlockWithPrefix[] {
     return [{
-        fragments: fragmentsForSpan(node),
+        block: {
+            fragments: fragmentsForSpan(node),
+        },
+        prefix: [idx],
     }];
 }
 
-function blocksForChapter(node: ChapterNode): RichTextBlock[] {
+function blocksForChapter(node: ChapterNode, idx: number): BlockWithPrefix[] {
     // TODO: support titles
-    const inside = flatten(node.nodes.map(blocksForNode));
-    return inside;
+    const title: BlockWithPrefix = {
+        block: {
+            fragments: node.title.map(line => ({
+                text: line,
+                attrs: {},
+            })),
+        },
+        prefix: [idx],
+    };
+    const inside = flatten(
+        node.nodes
+            .map((n, i) =>
+                blocksForNode(n, i)
+                    .map(b => ({
+                        ...b, prefix: [idx, ...b.prefix],
+                    }))
+            )
+    );
+    return [title, ...inside];
 }
 
 function fragmentsForSpan(span: Span): RichTextFragment[] {
