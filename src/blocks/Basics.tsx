@@ -106,6 +106,7 @@ export function EmptyLine() {
     />;
 }
 
+// TODO: remove ?
 export type PphProps = WithChildren<{
     indent?: boolean,
 }>;
