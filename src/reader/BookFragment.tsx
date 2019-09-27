@@ -1,8 +1,14 @@
 import * as React from 'react';
 
-import { BookContentNode, Span, flatten, spanAttrs, assertNever, ParagraphNode, ChapterNode } from 'booka-common';
+import {
+    BookContentNode, Span, flatten, spanAttrs, assertNever,
+    ParagraphNode, ChapterNode,
+} from 'booka-common';
 
-import { RichTextBlock, RichTextAttrs, RichTextFragment, RichText, Color } from './RichText';
+import {
+    RichTextBlock, RichTextAttrs, RichTextFragment, RichText,
+    Color,
+} from './RichText';
 
 export type BookFragmentProps = {
     nodes: BookContentNode[],
