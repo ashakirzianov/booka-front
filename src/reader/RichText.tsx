@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { TaggedRange, overlaps } from '../utils';
 
 export type Color = string;
 export type RichTextAttrs = Partial<{
@@ -74,16 +73,4 @@ function RichTextFragment({ text, attrs }: RichTextFragment) {
     >
         {text}
     </span>;
-}
-
-// TODO: move from here
-export type AttrsRange = TaggedRange<RichTextAttrs>;
-export function buildTextFragments(text: string, ranges: AttrsRange[]): RichTextFragment[] {
-    const renderings = overlaps(ranges);
-    const result: RichTextFragment[] = renderings.map(taggedRange => ({
-        text: text.substring(taggedRange.range.start, taggedRange.range.end),
-        attrs: taggedRange.tag.reduce((res, r) => ({ ...res, ...r }), {}),
-    }));
-
-    return result;
 }
