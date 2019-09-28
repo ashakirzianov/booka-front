@@ -2,12 +2,13 @@ import * as React from 'react';
 
 import {
     BookContentNode, Span, flatten, spanAttrs, assertNever,
-    ParagraphNode, ChapterNode, BookPath,
+    ParagraphNode, ChapterNode, BookPath, isSubpath,
 } from 'booka-common';
 
 import {
     RichTextBlock, RichTextAttrs, RichTextFragment, RichText,
     Color,
+    Path,
 } from './RichText';
 
 export type BookFragmentProps = {
@@ -15,26 +16,60 @@ export type BookFragmentProps = {
     color: Color,
     fontSize: number,
     fontFamily: string,
+    pathToScroll?: BookPath,
     onScroll?: (path: BookPath) => void,
 };
-export function BookFragmentComp({ nodes, color, fontSize, fontFamily, onScroll }: BookFragmentProps) {
-    const prefixedBlocks = flatten(nodes.map(blocksForNode));
-    const scrollHandler = React.useCallback((path: number[]) => {
+export function BookFragmentComp({
+    nodes, color, fontSize, fontFamily, pathToScroll, onScroll,
+}: BookFragmentProps) {
+    const blocksData = buildBlocksData(nodes);
+    const scrollHandler = React.useCallback((path: Path) => {
         if (!onScroll) {
             return;
+        } else {
+            const bookPath = blocksData.blockPathToBookPath(path);
+            onScroll(bookPath);
         }
-        const prefix = prefixedBlocks[path[0]].prefix;
-        const actualPath = [...prefix, path[1]];
-        onScroll(actualPath);
-    }, [onScroll, prefixedBlocks]);
+    }, [onScroll, blocksData]);
+
+    const blockPathToScroll = pathToScroll && blocksData.bookPathToBlockPath(pathToScroll);
 
     return <RichText
-        blocks={prefixedBlocks.map(b => b.block)}
+        blocks={blocksData.blocks}
         color={color}
         fontSize={fontSize}
         fontFamily={fontFamily}
         onScroll={scrollHandler}
+        pathToScroll={blockPathToScroll}
     />;
+}
+
+// TODO: better naming
+type BlocksData = {
+    blocks: RichTextBlock[],
+    blockPathToBookPath(path: Path): BookPath,
+    bookPathToBlockPath(path: BookPath): Path,
+};
+
+function buildBlocksData(nodes: BookContentNode[]): BlocksData {
+    const prefixedBlocks = flatten(nodes.map(blocksForNode));
+    const blocks = prefixedBlocks.map(pb => pb.block);
+
+    return {
+        blocks,
+        blockPathToBookPath(path) {
+            const prefix = prefixedBlocks[path[0]].prefix;
+            const bookPath = [...prefix, path[1]];
+            return bookPath;
+        },
+        bookPathToBlockPath(path) {
+            const blockIndex = prefixedBlocks
+                .reverse()
+                .findIndex(pb => isSubpath(pb.prefix, path));
+            // TODO: implement
+            return [blockIndex];
+        },
+    };
 }
 
 type BlockWithPrefix = {

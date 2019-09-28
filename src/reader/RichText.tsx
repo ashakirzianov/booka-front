@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export type Color = string;
+export type Path = number[];
 export type RichTextAttrs = Partial<{
     color: Color,
     hoverColor: Color,
@@ -27,9 +28,10 @@ export type RichTextProps = {
     color: Color,
     fontSize: number,
     fontFamily: string,
-    onScroll?: (path: number[]) => void,
+    pathToScroll?: Path,
+    onScroll?: (path: Path) => void,
 };
-export function RichText({ blocks, color, fontSize, fontFamily, onScroll }: RichTextProps) {
+export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, onScroll }: RichTextProps) {
 
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
     const scrollHandler = React.useCallback(() => {
@@ -42,6 +44,15 @@ export function RichText({ blocks, color, fontSize, fontFamily, onScroll }: Rich
         }
     }, [onScroll]);
     useScroll(scrollHandler);
+
+    React.useEffect(function scrollToCurrentPath() {
+        if (pathToScroll) {
+            const refToNavigate = refMap.current.get(pathToScroll);
+            if (refToNavigate) {
+                scrollToRef(refToNavigate);
+            }
+        }
+    }, [pathToScroll]);
 
     return <span style={{
         color: color,
@@ -127,9 +138,9 @@ function RichTextFragment({ fragment: { text, attrs }, refCallback }: RichTextFr
 // Utils:
 
 type PathMap<T> = {
-    get(path: number[]): T | undefined,
-    set(path: number[], value: T): void,
-    iterator(): IterableIterator<[number[], T]>,
+    get(path: Path): T | undefined,
+    set(path: Path, value: T): void,
+    iterator(): IterableIterator<[Path, T]>,
 };
 
 function makePathMap<T>(): PathMap<T> {
@@ -233,4 +244,14 @@ function boundingClientRect(ref?: RefType) {
         && current.getBoundingClientRect
         && current.getBoundingClientRect()
         ;
+}
+
+function scrollToRef(ref: RefType) {
+    if (ref) {
+        ref.scrollIntoView();
+        // TODO: find other solution ?
+        // window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
+        return true;
+    }
+    return false;
 }
