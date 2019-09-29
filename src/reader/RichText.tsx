@@ -126,7 +126,10 @@ function RichTextBlock({ block, refCallback, path }: RichTextBlockProps) {
         float: 'left',
         textIndent: '4em',
     }}>
-        <span ref={ref => refCallback(ref, path)}>
+        <span
+            id={pathToId(path)}
+            ref={ref => refCallback(ref, path)}
+        >
             {children}
         </span>
     </div>;
