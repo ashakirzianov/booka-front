@@ -156,7 +156,8 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
             }
         }
     }
-    if (env.path[env.path.length - 1] === 0) {
+    const isFirstParagraph = env.path[env.path.length - 1] === 0;
+    if (isFirstParagraph) {
         const dropCaps: AttrsRange = {
             attrs: { dropCaps: true },
             start: 0,
@@ -166,6 +167,7 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
     }
     return [{
         block: {
+            dontIndent: isFirstParagraph,
             fragments,
         },
         prefix: env.path,

@@ -28,6 +28,7 @@ export type RichTextFragment = {
     attrs: RichTextAttrs,
 };
 export type RichTextBlock = {
+    dontIndent?: boolean,
     fragments: RichTextFragment[],
 };
 
@@ -123,7 +124,7 @@ function RichTextBlock({ block, refCallback, path, onRefClick }: RichTextBlockPr
         display: 'flex',
         textAlign: 'justify',
         float: 'left',
-        textIndent: '4em',
+        textIndent: !block.dontIndent ? '4em' : undefined,
     }}>
         <span
             id={pathToId(path)}
