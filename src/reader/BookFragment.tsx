@@ -156,6 +156,14 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
             }
         }
     }
+    if (env.path[env.path.length - 1] === 0) {
+        const dropCaps: AttrsRange = {
+            attrs: { dropCaps: true },
+            start: 0,
+            end: 1,
+        };
+        fragments = applyAttrsRange(fragments, dropCaps);
+    }
     return [{
         block: {
             fragments,
