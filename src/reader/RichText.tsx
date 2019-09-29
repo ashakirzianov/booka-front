@@ -54,18 +54,23 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
         }
     }, [pathToScroll]);
 
-    return <span style={{
-        color: color,
-        fontSize: fontSize,
-        fontFamily: fontFamily,
-    }}>
+    return <span
+        style={{
+            color: color,
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+        }}>
         {blocks.map(
             (block, idx) =>
                 <RichTextBlock
                     key={idx}
                     block={block}
                     refCallback={(ref, offset) => {
-                        refMap.current.set([idx, offset], ref);
+                        if (offset !== undefined) {
+                            refMap.current.set([idx, offset], ref);
+                        } else {
+                            refMap.current.set([idx], ref);
+                        }
                     }}
                 />
         )}
@@ -75,7 +80,7 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
 type RefType = HTMLSpanElement | null;
 type RichTextBlockProps = {
     block: RichTextBlock,
-    refCallback: (ref: RefType, offset: number) => void,
+    refCallback: (ref: RefType, offset?: number) => void,
 };
 function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
     const children: JSX.Element[] = [];
@@ -97,7 +102,7 @@ function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
         float: 'left',
         textIndent: '4em',
     }}>
-        <span>
+        <span ref={ref => refCallback(ref)}>
             {children}
         </span>
     </div>;
@@ -211,16 +216,17 @@ function useScroll(callback?: (e: Event) => void) {
 }
 
 function computeCurrentPath(refMap: PathMap<RefType>) {
+    let last: number[] | undefined;
     for (const [path, ref] of refMap.iterator()) {
         const isVisible = isPartiallyVisible(ref);
         if (isVisible) {
             if (path) {
-                return path;
+                last = path;
             }
         }
     }
 
-    return undefined;
+    return last;
 }
 
 function isPartiallyVisible(ref?: RefType) {

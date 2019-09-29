@@ -7,8 +7,7 @@ import {
 
 import {
     RichTextBlock, RichTextAttrs, RichTextFragment, RichText,
-    Color,
-    Path,
+    Color, Path,
 } from './RichText';
 
 export type BookFragmentProps = {
@@ -54,20 +53,27 @@ type BlocksData = {
 function buildBlocksData(nodes: BookContentNode[]): BlocksData {
     const prefixedBlocks = flatten(nodes.map(blocksForNode));
     const blocks = prefixedBlocks.map(pb => pb.block);
+    // We want to find index of last (most precise) prefix, so reverse an array
+    const prefixes = prefixedBlocks.map(pb => pb.prefix).reverse();
 
     return {
         blocks,
         blockPathToBookPath(path) {
             const prefix = prefixedBlocks[path[0]].prefix;
-            const bookPath = [...prefix, path[1]];
+            const bookPath = path[1] !== undefined
+                ? [...prefix, path[1]]
+                : prefix;
             return bookPath;
         },
         bookPathToBlockPath(path) {
-            const blockIndex = prefixedBlocks
-                .reverse()
-                .findIndex(pb => isSubpath(pb.prefix, path));
-            // TODO: implement
-            return [blockIndex];
+            const blockIndex = prefixes
+                .findIndex(pre => isSubpath(pre, path));
+            const idx = blockIndex >= 0
+                // Convert to index in original, non-reversed array
+                ? prefixes.length - blockIndex
+                : undefined;
+
+            return idx ? [idx] : [];
         },
     };
 }

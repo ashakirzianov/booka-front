@@ -44,6 +44,8 @@ function ReaderC(props: ReaderProps) {
         updateBookPosition(actualPath);
     }, [updateBookPosition, firstNodePath]);
 
+    const pathToScroll = (pathToOpen && pathToOpen.slice(firstNodePath.length)) || undefined;
+
     return <Scroll>
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
@@ -57,6 +59,7 @@ function ReaderC(props: ReaderProps) {
                             fontFamily={theme.fontFamilies.book}
                             fontSize={fontSize(theme, 'text')}
                             onScroll={scrollHandler}
+                            pathToScroll={pathToScroll}
                         />
                     </Column>
                 </Clickable>
