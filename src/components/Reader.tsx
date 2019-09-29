@@ -7,7 +7,7 @@ import {
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
     TableOfContentsItem, TableOfContents, inBookRange, colors,
-    Theme, fontSize,
+    Theme, fontSize, highlights,
 } from '../model';
 import {
     Row, Column, point,
@@ -32,6 +32,7 @@ function ReaderC({
     toggleControls,
     theme,
     openFootnote,
+    quoteRange,
 }: ReaderProps) {
     const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
@@ -60,6 +61,13 @@ function ReaderC({
 
     const pathToScroll = (pathToOpen && pathToOpen.slice(firstNodePath.length)) || undefined;
 
+    const colorization = quoteRange
+        ? [{
+            color: highlights(theme).quote,
+            range: quoteRange,
+        }]
+        : undefined;
+
     return <Scroll>
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
@@ -69,6 +77,7 @@ function ReaderC({
                     <Column>
                         <BookFragmentComp
                             nodes={nodes}
+                            colorization={colorization}
                             color={colors(theme).text}
                             refColor={colors(theme).accent}
                             refHoverColor={colors(theme).highlight}
