@@ -19,6 +19,7 @@
     "importHelpers": true,
     "suppressImplicitAnyIndexErrors": false,
     "suppressExcessPropertyErrors": false,
+    "downlevelIteration": true,
     "noUnusedLocals": true,
     "module": "esnext",
     "moduleResolution": "node",

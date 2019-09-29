@@ -4,6 +4,7 @@ import { Callback } from 'booka-common';
 import { WithChildren } from './common';
 import { useScroll } from './subscribeEffects';
 
+// TODO: delete this file ?
 export type ScrollProps = WithChildren<{
     onScroll?: Callback<void>,
 }>;

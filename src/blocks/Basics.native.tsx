@@ -7,7 +7,7 @@ import {
 import { platformValue } from '../utils';
 import { colors, fontSize } from '../model';
 import { point, defaults } from './common';
-import { TextLineProps, ClickableProps, PphProps, FullScreenActivityIndicatorProps, LayerProps } from './Basics';
+import { TextLineProps, ClickableProps, FullScreenActivityIndicatorProps, LayerProps } from './Basics';
 
 export function TextLine(props: TextLineProps) {
     return <Text
@@ -87,8 +87,4 @@ export function EmptyLine() {
             }}
         />
     </SafeAreaView>;
-}
-
-export function Pph({ children }: PphProps) {
-    return <Text>{children}</Text>;
 }

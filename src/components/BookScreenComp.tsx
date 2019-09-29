@@ -9,7 +9,7 @@ import {
     BookScreen, TableOfContents, PaletteName,
     Pagination, Theme,
 } from '../model';
-import { Reader, BookNodesComp } from './Reader';
+import { Reader } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import {
@@ -126,7 +126,8 @@ const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode 
     >
         {
             !props.footnote ? null :
-                <BookNodesComp nodes={[props.footnote]} />
+                // TODO: put back footnotes
+                null // <BookNodesComp nodes={[props.footnote]} />
         }
     </Modal>;
 });
