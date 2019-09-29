@@ -2,14 +2,18 @@ import * as React from 'react';
 
 import {
     BookContentNode, Span, flatten, spanAttrs, assertNever,
-    ParagraphNode, ChapterNode, BookPath, isSubpath,
+    ParagraphNode, ChapterNode, BookPath, isSubpath, BookRange,
 } from 'booka-common';
 
 import {
     RichTextBlock, RichTextAttrs, RichTextFragment, RichText,
-    Color, Path,
+    Color, Path, RichTextSelection,
 } from './RichText';
 
+export type BookSelection = {
+    text: string,
+    range: BookRange,
+};
 export type BookFragmentProps = {
     nodes: BookContentNode[],
     color: Color,
@@ -17,9 +21,11 @@ export type BookFragmentProps = {
     fontFamily: string,
     pathToScroll?: BookPath,
     onScroll?: (path: BookPath) => void,
+    onSelectionChange?: (selection: BookSelection | undefined) => void,
 };
 export function BookFragmentComp({
-    nodes, color, fontSize, fontFamily, pathToScroll, onScroll,
+    nodes, color, fontSize, fontFamily,
+    pathToScroll, onScroll, onSelectionChange,
 }: BookFragmentProps) {
     const blocksData = buildBlocksData(nodes);
     const scrollHandler = React.useCallback((path: Path) => {
@@ -31,6 +37,23 @@ export function BookFragmentComp({
         }
     }, [onScroll, blocksData]);
 
+    const selectionHandler = React.useCallback((richTextSelection: RichTextSelection | undefined) => {
+        if (!onSelectionChange) {
+            return;
+        }
+        if (richTextSelection === undefined) {
+            onSelectionChange(richTextSelection);
+        } else {
+            const start = blocksData.blockPathToBookPath(richTextSelection.range.start);
+            const end = blocksData.blockPathToBookPath(richTextSelection.range.end);
+            const bookSelection: BookSelection = {
+                text: richTextSelection.text,
+                range: { start, end },
+            };
+            onSelectionChange(bookSelection);
+        }
+    }, [onSelectionChange, blocksData]);
+
     const blockPathToScroll = pathToScroll && blocksData.bookPathToBlockPath(pathToScroll);
 
     return <RichText
@@ -40,6 +63,7 @@ export function BookFragmentComp({
         fontFamily={fontFamily}
         onScroll={scrollHandler}
         pathToScroll={blockPathToScroll}
+        onSelectionChange={selectionHandler}
     />;
 }
 
