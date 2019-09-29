@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import {
     BookContentNode, Span, flatten, spanAttrs, assertNever,
-    ParagraphNode, ChapterNode, BookPath, isSubpath, BookRange,
+    ParagraphNode, ChapterNode, BookPath, isSubpath,
+    BookRange, pathLessThan,
 } from 'booka-common';
 
 import {
@@ -34,11 +35,13 @@ export type BookFragmentProps = {
 export function BookFragmentComp({
     nodes, color, fontSize, fontFamily, refColor, refHoverColor,
     pathToScroll, onScroll, onSelectionChange, onRefClick,
+    colorization,
 }: BookFragmentProps) {
     const blocksData = buildBlocksData(nodes, {
         path: [],
         refColor: refColor,
         refHoverColor: refHoverColor,
+        colorization: colorization,
     });
     const scrollHandler = React.useCallback((path: Path) => {
         if (!onScroll) {
@@ -82,6 +85,7 @@ export function BookFragmentComp({
 
 type BuildBlocksEnv = {
     path: BookPath,
+    colorization: ColorizedRange[] | undefined,
     refColor: Color,
     refHoverColor: Color,
 };
@@ -143,7 +147,15 @@ function blocksForNode(node: BookContentNode, env: BuildBlocksEnv): BlockWithPre
 }
 
 function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWithPrefix[] {
-    const fragments = fragmentsForSpan(node, env);
+    let fragments = fragmentsForSpan(node, env);
+    if (env.colorization) {
+        for (const col of env.colorization) {
+            const relative = colorizationRelativeToPath(env.path, col);
+            if (relative) {
+                fragments = applyAttrsRange(fragments, relative);
+            }
+        }
+    }
     return [{
         block: {
             fragments,
@@ -282,4 +294,33 @@ function applyAttrsRange(fragments: RichTextFragment[], range: AttrsRange) {
     }
 
     return result;
+}
+
+function colorizationRelativeToPath(path: BookPath, colorized: ColorizedRange): AttrsRange | undefined {
+    const attrs: RichTextAttrs = {
+        background: colorized.color,
+    };
+    if (colorized.range.end && pathLessThan(colorized.range.end, path)) {
+        return undefined;
+    }
+
+    if (!pathLessThan(path, colorized.range.start)) {
+        return {
+            start: 0,
+            attrs,
+        };
+    }
+
+    let start: number | undefined;
+    if (isSubpath(path, colorized.range.start)) {
+        start = colorized.range.start[path.length];
+    }
+    let end: number | undefined;
+    if (colorized.range.end && isSubpath(path, colorized.range.end)) {
+        end = colorized.range.end[path.length];
+    }
+
+    return start !== undefined
+        ? { start, end, attrs }
+        : undefined;
 }
