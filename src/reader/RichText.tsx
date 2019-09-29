@@ -314,7 +314,7 @@ function scrollToRef(ref: RefType) {
     if (ref) {
         ref.scrollIntoView();
         // TODO: find other solution ?
-        // window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
+        window.scrollBy(0, 1); // Ugly -- fix issue with showing prev element path in the url after navigation
         return true;
     }
     return false;
