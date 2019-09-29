@@ -1,14 +1,10 @@
-import * as React from 'react';
 import {
     Span, Callback,
     BookRange, BookPath, pathLessThan, isSubpath,
 } from 'booka-common';
 import {
-    Color, Theme, colors, fontSize,
+    Color, Theme,
 } from '../model';
-import {
-    RichText,
-} from '../reader';
 import {
     range, Range,
 } from '../utils';
@@ -32,17 +28,7 @@ export type SpanProps = {
     openFootnote: Callback<string>,
 };
 export function SpanComp(props: SpanProps) {
-    const fragments = [] as any[];
-    const blocks = [{
-        fragments,
-    }];
-
-    return <RichText
-        blocks={blocks}
-        color={colors(props.theme).text}
-        fontFamily={props.theme.fontFamilies.book}
-        fontSize={fontSize(props.theme, 'text')}
-    />;
+    return null;
 }
 
 export function rangeRelativeToPath(path: BookPath, bookR: BookRange): Range | undefined {

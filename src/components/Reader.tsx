@@ -87,7 +87,10 @@ function ReaderC({
                 <Clickable onClick={toggleControls}>
                     <Column>
                         <BookFragmentComp
-                            nodes={nodes}
+                            fragment={{
+                                nodes,
+                                curr: firstNodePath,
+                            }}
                             colorization={colorization}
                             color={colors(theme).text}
                             refColor={colors(theme).accent}

@@ -19,7 +19,7 @@ export type BookSelection = {
     text: string,
     range: BookRange,
 };
-export type BookFragmentProps = {
+export type BookNodesProps = {
     nodes: BookContentNode[],
     colorization?: ColorizedRange[],
     color: Color,
@@ -32,11 +32,11 @@ export type BookFragmentProps = {
     onSelectionChange?: (selection: BookSelection | undefined) => void,
     onRefClick?: (refId: string) => void,
 };
-export function BookFragmentComp({
+export function BookNodesComp({
     nodes, color, fontSize, fontFamily, refColor, refHoverColor,
     pathToScroll, onScroll, onSelectionChange, onRefClick,
     colorization,
-}: BookFragmentProps) {
+}: BookNodesProps) {
     const blocksData = buildBlocksData(nodes, {
         path: [],
         refColor: refColor,
