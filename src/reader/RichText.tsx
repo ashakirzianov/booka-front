@@ -38,10 +38,16 @@ export type RichTextProps = {
     fontFamily: string,
     pathToScroll?: Path,
     onScroll?: (path: Path) => void,
+    // TODO: do we really want to handle 'onCopy' and not 'onSelection' ?
+    onCopy?: (e: ClipboardEvent, s: RichTextSelection) => void,
 };
-export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, onScroll }: RichTextProps) {
+export function RichText({
+    blocks, color, fontSize, fontFamily,
+    pathToScroll, onScroll, onCopy,
+}: RichTextProps) {
 
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
+    const selection = React.useRef<RichTextSelection | undefined>(undefined);
 
     useScroll(React.useCallback(() => {
         if (!onScroll) {
@@ -52,6 +58,17 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
             onScroll(newCurrentPath);
         }
     }, [onScroll]));
+
+    useSelection(React.useCallback(() => {
+        selection.current = getSelectionRange();
+    }, []));
+
+    useCopy(React.useCallback((e: ClipboardEvent) => {
+        if (!onCopy || !selection.current) {
+            return;
+        }
+        onCopy(e, selection.current);
+    }, [onCopy]));
 
     React.useEffect(function scrollToCurrentPath() {
         if (pathToScroll) {
@@ -126,6 +143,7 @@ function RichTextFragment({
     path,
 }: RichTextFragmentProps) {
     return <span
+        id={pathToId(path)}
         ref={ref => refCallback(ref, path)}
         style={{
             wordBreak: 'break-word',
@@ -213,7 +231,7 @@ function makePathMap<T>(): PathMap<T> {
     };
 }
 
-// Scroll
+// Effects
 
 function useScroll(callback?: (e: Event) => void) {
     React.useEffect(() => {
@@ -226,6 +244,28 @@ function useScroll(callback?: (e: Event) => void) {
         };
     }, [callback]);
 }
+
+function useSelection(callback: (e: Event) => void) {
+    React.useEffect(() => {
+        window.document.addEventListener('selectionchange', callback);
+
+        return function unsubscribe() {
+            window.document.removeEventListener('selectionchange', callback);
+        };
+    }, [callback]);
+}
+
+function useCopy(callback: (e: ClipboardEvent) => void) {
+    React.useEffect(() => {
+        window.addEventListener('copy', callback as any);
+
+        return function unsubscribe() {
+            window.removeEventListener('copy', callback as any);
+        };
+    }, [callback]);
+}
+
+// Scroll
 
 function computeCurrentPath(refMap: PathMap<RefType>) {
     let last: number[] | undefined;
@@ -272,4 +312,99 @@ function scrollToRef(ref: RefType) {
         return true;
     }
     return false;
+}
+
+// Selection:
+function getSelectionRange(): RichTextSelection | undefined {
+    const selection = window.getSelection();
+    if (!selection) {
+        return undefined;
+    }
+
+    const anchorPath = pathForNode(selection.anchorNode);
+    const focusPath = pathForNode(selection.focusNode);
+
+    if (anchorPath && focusPath) {
+        anchorPath[anchorPath.length - 1] += selection.anchorOffset;
+        focusPath[focusPath.length - 1] += selection.focusOffset;
+        const range = makeRange(anchorPath, focusPath);
+        const text = selection.toString();
+        return { range, text };
+    } else {
+        return undefined;
+    }
+}
+
+function pathForNode(node: Node | null): Path | undefined {
+    return node
+        ? pathForHtmlElement(node.parentElement)
+        : undefined;
+}
+
+function pathForHtmlElement(element: HTMLElement | null): Path | undefined {
+    if (!element) {
+        return undefined;
+    }
+
+    const idString = element.id;
+    const path = idToPath(idString);
+    if (path) {
+        return path;
+    } else {
+        return pathForHtmlElement(element.parentElement);
+    }
+}
+
+// Path & range:
+
+function makeRange(left: Path, right: Path): Range {
+    return pathLessThan(left, right)
+        ? { start: left, end: right }
+        : { start: right, end: left };
+}
+
+function pathLessThan(left: Path, right: Path): boolean {
+    for (let idx = 0; idx < right.length; idx++) {
+        const lc = left[idx];
+        if (lc === undefined) {
+            return true;
+        }
+        const rc = right[idx];
+        if (lc < rc) {
+            return true;
+        } else if (lc > rc) {
+            return false;
+        }
+    }
+
+    return left.length < right.length;
+}
+
+const idPrefix = '@id';
+function pathToId(path: Path): string {
+    return `${idPrefix}:${pathToString(path)}`;
+}
+
+function idToPath(str: string): Path | undefined {
+    const comps = str.split(':');
+    if (comps.length !== 2 || comps[0] !== idPrefix) {
+        return undefined;
+    }
+    const path = parsePath(comps[1]);
+
+    return path;
+}
+
+function pathToString(path: Path): string {
+    return `${path.join('-')}`;
+}
+
+function parsePath(pathString: string): Path | undefined {
+    const path = pathString
+        .split('-')
+        .map(pc => parseInt(pc, 10))
+        ;
+    return path.some(p => isNaN(p))
+        ? undefined
+        : path;
 }
