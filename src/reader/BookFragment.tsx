@@ -113,11 +113,12 @@ function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksD
             return bookPath;
         },
         bookPathToBlockPath(path) {
+            // TODO: implement properly
             const blockIndex = prefixes
                 .findIndex(pre => isSubpath(pre, path));
             const idx = blockIndex >= 0
                 // Convert to index in original, non-reversed array
-                ? prefixes.length - blockIndex
+                ? prefixes.length - blockIndex - 1
                 : undefined;
 
             return idx ? [idx] : [];
