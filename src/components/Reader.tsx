@@ -10,11 +10,11 @@ import {
 } from '../model';
 import {
     Row, Column, point,
-    Scroll, Clickable, EmptyLine,
+    Scroll, Clickable, EmptyLine, useCopy,
 } from '../blocks';
-import { actionCreators } from '../core';
+import { actionCreators, generateQuoteLink } from '../core';
 import { BorderButton, connect } from './Connected';
-import { BookFragmentComp } from '../reader';
+import { BookFragmentComp, BookSelection } from '../reader';
 
 export type ReaderProps = {
     book: BookObject,
@@ -39,6 +39,18 @@ function ReaderC(props: ReaderProps) {
     const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
     const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
 
+    const selection = React.useRef<BookSelection | undefined>(undefined);
+    const selectionHandler = React.useCallback((sel: BookSelection | undefined) => {
+        selection.current = sel;
+    }, []);
+    useCopy(React.useCallback((e: ClipboardEvent) => {
+        if (selection.current && e.clipboardData) {
+            e.preventDefault();
+            const selectionText = `${selection.current.text}\n${generateQuoteLink(id, selection.current.range)}`;
+            e.clipboardData.setData('text/plain', selectionText);
+        }
+    }, [id]));
+
     const scrollHandler = React.useCallback((path: number[]) => {
         const actualPath = [...firstNodePath, ...path];
         updateBookPosition(actualPath);
@@ -60,6 +72,7 @@ function ReaderC(props: ReaderProps) {
                             fontSize={fontSize(theme, 'text')}
                             onScroll={scrollHandler}
                             pathToScroll={pathToScroll}
+                            onSelectionChange={selectionHandler}
                         />
                     </Column>
                 </Clickable>
