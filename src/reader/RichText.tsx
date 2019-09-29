@@ -39,10 +39,12 @@ export type RichTextProps = {
     pathToScroll?: Path,
     onScroll?: (path: Path) => void,
     onSelectionChange?: (selection: RichTextSelection | undefined) => void,
+    onRefClick?: (refId: string) => void,
 };
 export function RichText({
     blocks, color, fontSize, fontFamily,
     pathToScroll, onScroll, onSelectionChange,
+    onRefClick,
 }: RichTextProps) {
 
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
@@ -88,6 +90,7 @@ export function RichText({
                     refCallback={(ref, path) => {
                         refMap.current.set(path, ref);
                     }}
+                    onRefClick={onRefClick}
                 />
         )}
     </span>;
@@ -98,8 +101,9 @@ type RichTextBlockProps = {
     block: RichTextBlock,
     path: Path,
     refCallback: (ref: RefType, path: Path) => void,
+    onRefClick?: (refId: string) => void,
 };
-function RichTextBlock({ block, refCallback, path }: RichTextBlockProps) {
+function RichTextBlock({ block, refCallback, path, onRefClick }: RichTextBlockProps) {
     const children: JSX.Element[] = [];
     let currentOffset = 0;
     for (let idx = 0; idx < block.fragments.length; idx++) {
@@ -110,6 +114,7 @@ function RichTextBlock({ block, refCallback, path }: RichTextBlockProps) {
             path={[...path, offset]}
             fragment={frag}
             refCallback={refCallback}
+            onRefClick={onRefClick}
         />);
         currentOffset += frag.text.length;
     }
@@ -133,11 +138,13 @@ type RichTextFragmentProps = {
     fragment: RichTextFragment,
     path: Path,
     refCallback: (ref: RefType, path: Path) => void,
+    onRefClick?: (refId: string) => void,
 };
 function RichTextFragment({
     fragment: { text, attrs },
     refCallback,
     path,
+    onRefClick,
 }: RichTextFragmentProps) {
     return <span
         id={pathToId(path)}
@@ -161,7 +168,17 @@ function RichTextFragment({
                     : '400%',
                 lineHeight: '80%',
             }),
+            cursor: attrs.ref
+                ? 'pointer'
+                : undefined,
         }}
+        onClick={
+            onRefClick === undefined || attrs.ref === undefined ? undefined :
+                e => {
+                    e.preventDefault();
+                    onRefClick(attrs.ref!);
+                }
+        }
     >
         {text}
     </span>;
