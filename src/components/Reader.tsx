@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
     BookPath, BookRange, Callback,
     bookRange, isFirstSubpath, emptyPath, nodesForPath,
+    rangeRelativeToPath,
 } from 'booka-common';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
@@ -70,10 +71,11 @@ function ReaderC({
 
     const pathToScroll = (pathToOpen && pathToOpen.slice(firstNodePath.length)) || undefined;
 
-    const colorization = quoteRange
+    const relativeQuoteRange = quoteRange && rangeRelativeToPath(quoteRange, firstNodePath);
+    const colorization = relativeQuoteRange
         ? [{
             color: highlights(theme).quote,
-            range: quoteRange,
+            range: relativeQuoteRange,
         }]
         : undefined;
 
