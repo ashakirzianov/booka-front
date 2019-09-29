@@ -10,12 +10,17 @@ import {
     Color, Path, RichTextSelection,
 } from './RichText';
 
+export type ColorizedRange = {
+    color: Color,
+    range: BookRange,
+};
 export type BookSelection = {
     text: string,
     range: BookRange,
 };
 export type BookFragmentProps = {
     nodes: BookContentNode[],
+    colorization?: ColorizedRange[],
     color: Color,
     refColor: Color,
     refHoverColor: Color,
@@ -31,6 +36,7 @@ export function BookFragmentComp({
     pathToScroll, onScroll, onSelectionChange, onRefClick,
 }: BookFragmentProps) {
     const blocksData = buildBlocksData(nodes, {
+        path: [],
         refColor: refColor,
         refHoverColor: refHoverColor,
     });
@@ -75,6 +81,7 @@ export function BookFragmentComp({
 }
 
 type BuildBlocksEnv = {
+    path: BookPath,
     refColor: Color,
     refHoverColor: Color,
 };
@@ -87,7 +94,10 @@ type BlocksData = {
 
 function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksData {
     const prefixedBlocks = flatten(
-        nodes.map((n, i) => blocksForNode(n, i, env))
+        nodes.map((n, i) => blocksForNode(n, {
+            ...env,
+            path: env.path.concat(i),
+        }))
     );
     const blocks = prefixedBlocks.map(pb => pb.block);
     // We want to find index of last (most precise) prefix, so reverse an array
@@ -119,28 +129,29 @@ type BlockWithPrefix = {
     block: RichTextBlock,
     prefix: number[],
 };
-function blocksForNode(node: BookContentNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
+function blocksForNode(node: BookContentNode, env: BuildBlocksEnv): BlockWithPrefix[] {
     switch (node.node) {
         case undefined:
-            return blocksForParagraph(node, idx, env);
+            return blocksForParagraph(node, env);
         case 'chapter':
-            return blocksForChapter(node, idx, env);
+            return blocksForChapter(node, env);
         default:
             // TODO: assert 'never'
             return [];
     }
 }
 
-function blocksForParagraph(node: ParagraphNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
+function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWithPrefix[] {
+    const fragments = fragmentsForSpan(node, env);
     return [{
         block: {
-            fragments: fragmentsForSpan(node, env),
+            fragments,
         },
-        prefix: [idx],
+        prefix: env.path,
     }];
 }
 
-function blocksForChapter(node: ChapterNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
+function blocksForChapter(node: ChapterNode, env: BuildBlocksEnv): BlockWithPrefix[] {
     // TODO: support titles
     const title: BlockWithPrefix = {
         block: {
@@ -149,15 +160,15 @@ function blocksForChapter(node: ChapterNode, idx: number, env: BuildBlocksEnv): 
                 attrs: {},
             })),
         },
-        prefix: [idx],
+        prefix: env.path,
     };
     const inside = flatten(
         node.nodes
             .map((n, i) =>
-                blocksForNode(n, i, env)
-                    .map(b => ({
-                        ...b, prefix: [idx, ...b.prefix],
-                    }))
+                blocksForNode(n, {
+                    ...env,
+                    path: env.path.concat(i),
+                })
             )
     );
     return [title, ...inside];

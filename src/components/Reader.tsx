@@ -6,7 +6,8 @@ import {
 } from 'booka-common';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
-    TableOfContentsItem, TableOfContents, inBookRange, colors, Theme, fontSize,
+    TableOfContentsItem, TableOfContents, inBookRange, colors,
+    Theme, fontSize,
 } from '../model';
 import {
     Row, Column, point,
