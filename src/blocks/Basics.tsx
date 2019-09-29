@@ -106,23 +106,6 @@ export function EmptyLine() {
     />;
 }
 
-// TODO: remove ?
-export type PphProps = WithChildren<{
-    indent?: boolean,
-}>;
-export function Pph({ indent, children }: PphProps) {
-    return <div style={{
-        display: 'flex',
-        textAlign: 'justify',
-        float: 'left',
-        textIndent: indent ? point(0) : point(4),
-    }}>
-        <span>
-            {children}
-        </span>
-    </div>;
-}
-
 export type ImageProps = {
     url: string,
     alt?: string,
