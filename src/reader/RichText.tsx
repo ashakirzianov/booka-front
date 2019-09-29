@@ -168,9 +168,11 @@ function RichTextFragment({
                     : '400%',
                 lineHeight: '80%',
             }),
-            cursor: attrs.ref
-                ? 'pointer'
-                : undefined,
+            ...(attrs.ref && {
+                cursor: 'pointer',
+                textDecorationLine: 'underline',
+                textDecorationStyle: 'dashed',
+            }),
         }}
         onClick={
             onRefClick === undefined || attrs.ref === undefined ? undefined :

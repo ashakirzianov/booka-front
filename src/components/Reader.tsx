@@ -68,6 +68,8 @@ function ReaderC(props: ReaderProps) {
                         <BookFragmentComp
                             nodes={nodes}
                             color={colors(theme).text}
+                            refColor={colors(theme).accent}
+                            refHoverColor={colors(theme).highlight}
                             fontFamily={theme.fontFamilies.book}
                             fontSize={fontSize(theme, 'text')}
                             onScroll={scrollHandler}

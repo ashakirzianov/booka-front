@@ -17,6 +17,8 @@ export type BookSelection = {
 export type BookFragmentProps = {
     nodes: BookContentNode[],
     color: Color,
+    refColor: Color,
+    refHoverColor: Color,
     fontSize: number,
     fontFamily: string,
     pathToScroll?: BookPath,
@@ -24,10 +26,13 @@ export type BookFragmentProps = {
     onSelectionChange?: (selection: BookSelection | undefined) => void,
 };
 export function BookFragmentComp({
-    nodes, color, fontSize, fontFamily,
+    nodes, color, fontSize, fontFamily, refColor, refHoverColor,
     pathToScroll, onScroll, onSelectionChange,
 }: BookFragmentProps) {
-    const blocksData = buildBlocksData(nodes);
+    const blocksData = buildBlocksData(nodes, {
+        refColor: refColor,
+        refHoverColor: refHoverColor,
+    });
     const scrollHandler = React.useCallback((path: Path) => {
         if (!onScroll) {
             return;
@@ -67,6 +72,10 @@ export function BookFragmentComp({
     />;
 }
 
+type BuildBlocksEnv = {
+    refColor: Color,
+    refHoverColor: Color,
+};
 // TODO: better naming
 type BlocksData = {
     blocks: RichTextBlock[],
@@ -74,8 +83,10 @@ type BlocksData = {
     bookPathToBlockPath(path: BookPath): Path,
 };
 
-function buildBlocksData(nodes: BookContentNode[]): BlocksData {
-    const prefixedBlocks = flatten(nodes.map(blocksForNode));
+function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksData {
+    const prefixedBlocks = flatten(
+        nodes.map((n, i) => blocksForNode(n, i, env))
+    );
     const blocks = prefixedBlocks.map(pb => pb.block);
     // We want to find index of last (most precise) prefix, so reverse an array
     const prefixes = prefixedBlocks.map(pb => pb.prefix).reverse();
@@ -106,28 +117,28 @@ type BlockWithPrefix = {
     block: RichTextBlock,
     prefix: number[],
 };
-function blocksForNode(node: BookContentNode, idx: number): BlockWithPrefix[] {
+function blocksForNode(node: BookContentNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
     switch (node.node) {
         case undefined:
-            return blocksForParagraph(node, idx);
+            return blocksForParagraph(node, idx, env);
         case 'chapter':
-            return blocksForChapter(node, idx);
+            return blocksForChapter(node, idx, env);
         default:
             // TODO: assert 'never'
             return [];
     }
 }
 
-function blocksForParagraph(node: ParagraphNode, idx: number): BlockWithPrefix[] {
+function blocksForParagraph(node: ParagraphNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
     return [{
         block: {
-            fragments: fragmentsForSpan(node),
+            fragments: fragmentsForSpan(node, env),
         },
         prefix: [idx],
     }];
 }
 
-function blocksForChapter(node: ChapterNode, idx: number): BlockWithPrefix[] {
+function blocksForChapter(node: ChapterNode, idx: number, env: BuildBlocksEnv): BlockWithPrefix[] {
     // TODO: support titles
     const title: BlockWithPrefix = {
         block: {
@@ -141,7 +152,7 @@ function blocksForChapter(node: ChapterNode, idx: number): BlockWithPrefix[] {
     const inside = flatten(
         node.nodes
             .map((n, i) =>
-                blocksForNode(n, i)
+                blocksForNode(n, i, env)
                     .map(b => ({
                         ...b, prefix: [idx, ...b.prefix],
                     }))
@@ -150,15 +161,15 @@ function blocksForChapter(node: ChapterNode, idx: number): BlockWithPrefix[] {
     return [title, ...inside];
 }
 
-function fragmentsForSpan(span: Span): RichTextFragment[] {
+function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
     switch (span.span) {
         case undefined:
             return [{ text: span, attrs: {} }];
         case 'compound':
-            return flatten(span.spans.map(fragmentsForSpan));
+            return flatten(span.spans.map(s => fragmentsForSpan(s, env)));
         case 'attrs':
             {
-                const inside = fragmentsForSpan(span.content);
+                const inside = fragmentsForSpan(span.content, env);
                 const map = spanAttrs(span);
                 const range: AttrsRange = {
                     attrs: {
@@ -173,10 +184,11 @@ function fragmentsForSpan(span: Span): RichTextFragment[] {
             }
         case 'ref':
             {
-                const inside = fragmentsForSpan(span.content);
+                const inside = fragmentsForSpan(span.content, env);
                 const range: AttrsRange = {
                     attrs: {
                         ref: span.refToId,
+                        color: env.refColor,
                     },
                     start: 0,
                 };
