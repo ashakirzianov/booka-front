@@ -38,16 +38,14 @@ export type RichTextProps = {
     fontFamily: string,
     pathToScroll?: Path,
     onScroll?: (path: Path) => void,
-    // TODO: do we really want to handle 'onCopy' and not 'onSelection' ?
-    onCopy?: (e: ClipboardEvent, s: RichTextSelection) => void,
+    onSelectionChange?: (selection: RichTextSelection | undefined) => void,
 };
 export function RichText({
     blocks, color, fontSize, fontFamily,
-    pathToScroll, onScroll, onCopy,
+    pathToScroll, onScroll, onSelectionChange,
 }: RichTextProps) {
 
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
-    const selection = React.useRef<RichTextSelection | undefined>(undefined);
 
     useScroll(React.useCallback(() => {
         if (!onScroll) {
@@ -60,15 +58,11 @@ export function RichText({
     }, [onScroll]));
 
     useSelection(React.useCallback(() => {
-        selection.current = getSelectionRange();
-    }, []));
-
-    useCopy(React.useCallback((e: ClipboardEvent) => {
-        if (!onCopy || !selection.current) {
-            return;
+        if (onSelectionChange) {
+            const selection = getSelectionRange();
+            onSelectionChange(selection);
         }
-        onCopy(e, selection.current);
-    }, [onCopy]));
+    }, [onSelectionChange]));
 
     React.useEffect(function scrollToCurrentPath() {
         if (pathToScroll) {
@@ -254,16 +248,6 @@ function useSelection(callback: (e: Event) => void) {
 
         return function unsubscribe() {
             window.document.removeEventListener('selectionchange', callback);
-        };
-    }, [callback]);
-}
-
-function useCopy(callback: (e: ClipboardEvent) => void) {
-    React.useEffect(() => {
-        window.addEventListener('copy', callback as any);
-
-        return function unsubscribe() {
-            window.removeEventListener('copy', callback as any);
         };
     }, [callback]);
 }
