@@ -24,10 +24,11 @@ export type BookFragmentProps = {
     pathToScroll?: BookPath,
     onScroll?: (path: BookPath) => void,
     onSelectionChange?: (selection: BookSelection | undefined) => void,
+    onRefClick?: (refId: string) => void,
 };
 export function BookFragmentComp({
     nodes, color, fontSize, fontFamily, refColor, refHoverColor,
-    pathToScroll, onScroll, onSelectionChange,
+    pathToScroll, onScroll, onSelectionChange, onRefClick,
 }: BookFragmentProps) {
     const blocksData = buildBlocksData(nodes, {
         refColor: refColor,
@@ -69,6 +70,7 @@ export function BookFragmentComp({
         onScroll={scrollHandler}
         pathToScroll={blockPathToScroll}
         onSelectionChange={selectionHandler}
+        onRefClick={onRefClick}
     />;
 }
 

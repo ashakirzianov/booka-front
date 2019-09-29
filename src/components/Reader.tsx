@@ -17,20 +17,21 @@ import { BorderButton, connect } from './Connected';
 import { BookFragmentComp, BookSelection } from '../reader';
 
 export type ReaderProps = {
+    theme: Theme,
     book: BookObject,
     pathToOpen: BookPath | null,
+    quoteRange: BookRange | undefined,
     updateBookPosition: Callback<BookPath>,
     toggleControls: Callback<void>,
-    quoteRange: BookRange | undefined,
-    theme: Theme,
+    openFootnote: Callback<string>,
 };
-function ReaderC(props: ReaderProps) {
-    const {
-        pathToOpen, updateBookPosition,
-        book: { id, volume, toc },
-        toggleControls,
-        theme,
-    } = props;
+function ReaderC({
+    pathToOpen, updateBookPosition,
+    book: { id, volume, toc },
+    toggleControls,
+    theme,
+    openFootnote,
+}: ReaderProps) {
     const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
     const firstNodePath = currentPath.concat(0);
@@ -75,6 +76,7 @@ function ReaderC(props: ReaderProps) {
                             onScroll={scrollHandler}
                             pathToScroll={pathToScroll}
                             onSelectionChange={selectionHandler}
+                            onRefClick={openFootnote}
                         />
                     </Column>
                 </Clickable>
@@ -84,7 +86,7 @@ function ReaderC(props: ReaderProps) {
         </Row>
     </Scroll>;
 }
-export const Reader = connect(['pathToOpen', 'theme'], ['updateBookPosition', 'toggleControls'])(ReaderC);
+export const Reader = connect(['pathToOpen', 'theme'], ['updateBookPosition', 'toggleControls', 'openFootnote'])(ReaderC);
 
 type PathLinkProps = {
     path: BookPath | undefined,
