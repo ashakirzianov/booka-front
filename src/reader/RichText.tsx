@@ -2,6 +2,14 @@ import * as React from 'react';
 
 export type Color = string;
 export type Path = number[];
+export type Range = {
+    start: Path,
+    end: Path,
+};
+export type RichTextSelection = {
+    text: string,
+    range: Range,
+};
 export type RichTextAttrs = Partial<{
     color: Color,
     hoverColor: Color,
@@ -34,7 +42,8 @@ export type RichTextProps = {
 export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, onScroll }: RichTextProps) {
 
     const refMap = React.useRef<PathMap<RefType>>(makePathMap());
-    const scrollHandler = React.useCallback(() => {
+
+    useScroll(React.useCallback(() => {
         if (!onScroll) {
             return;
         }
@@ -42,8 +51,7 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
         if (newCurrentPath) {
             onScroll(newCurrentPath);
         }
-    }, [onScroll]);
-    useScroll(scrollHandler);
+    }, [onScroll]));
 
     React.useEffect(function scrollToCurrentPath() {
         if (pathToScroll) {
@@ -64,13 +72,10 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
             (block, idx) =>
                 <RichTextBlock
                     key={idx}
+                    path={[idx]}
                     block={block}
-                    refCallback={(ref, offset) => {
-                        if (offset !== undefined) {
-                            refMap.current.set([idx, offset], ref);
-                        } else {
-                            refMap.current.set([idx], ref);
-                        }
+                    refCallback={(ref, path) => {
+                        refMap.current.set(path, ref);
                     }}
                 />
         )}
@@ -80,9 +85,10 @@ export function RichText({ blocks, color, fontSize, fontFamily, pathToScroll, on
 type RefType = HTMLSpanElement | null;
 type RichTextBlockProps = {
     block: RichTextBlock,
-    refCallback: (ref: RefType, offset?: number) => void,
+    path: Path,
+    refCallback: (ref: RefType, path: Path) => void,
 };
-function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
+function RichTextBlock({ block, refCallback, path }: RichTextBlockProps) {
     const children: JSX.Element[] = [];
     let currentOffset = 0;
     for (let idx = 0; idx < block.fragments.length; idx++) {
@@ -90,8 +96,9 @@ function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
         const offset = currentOffset;
         children.push(<RichTextFragment
             key={idx}
+            path={[...path, offset]}
             fragment={frag}
-            refCallback={ref => refCallback(ref, offset)}
+            refCallback={refCallback}
         />);
         currentOffset += frag.text.length;
     }
@@ -102,7 +109,7 @@ function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
         float: 'left',
         textIndent: '4em',
     }}>
-        <span ref={ref => refCallback(ref)}>
+        <span ref={ref => refCallback(ref, path)}>
             {children}
         </span>
     </div>;
@@ -110,11 +117,16 @@ function RichTextBlock({ block, refCallback }: RichTextBlockProps) {
 
 type RichTextFragmentProps = {
     fragment: RichTextFragment,
-    refCallback: (ref: RefType) => void,
+    path: Path,
+    refCallback: (ref: RefType, path: Path) => void,
 };
-function RichTextFragment({ fragment: { text, attrs }, refCallback }: RichTextFragmentProps) {
+function RichTextFragment({
+    fragment: { text, attrs },
+    refCallback,
+    path,
+}: RichTextFragmentProps) {
     return <span
-        ref={refCallback}
+        ref={ref => refCallback(ref, path)}
         style={{
             wordBreak: 'break-word',
             color: attrs.color,
