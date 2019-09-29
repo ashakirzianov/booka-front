@@ -3,7 +3,6 @@ import * as React from 'react';
 import {
     BookPath, BookRange, Callback,
     bookRange, isFirstSubpath, emptyPath, nodesForPath,
-    rangeRelativeToPath,
 } from 'booka-common';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
@@ -37,6 +36,7 @@ function ReaderC({
 }: ReaderProps) {
     const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
+    // TODO: fix this
     const firstNodePath = currentPath.concat(0);
     const nodes = nodesForPath(volume.nodes, firstNodePath) || [];
 
@@ -45,16 +45,7 @@ function ReaderC({
 
     const selection = React.useRef<BookSelection | undefined>(undefined);
     const selectionHandler = React.useCallback((sel: BookSelection | undefined) => {
-        if (sel) {
-            const start = [...firstNodePath, ...sel.range.start];
-            const end = [...firstNodePath, ...sel.range.end];
-            selection.current = {
-                text: sel.text,
-                range: { start, end },
-            };
-        } else {
-            selection.current = sel;
-        }
+        selection.current = sel;
     }, [firstNodePath]);
     useCopy(React.useCallback((e: ClipboardEvent) => {
         if (selection.current && e.clipboardData) {
@@ -63,19 +54,10 @@ function ReaderC({
             e.clipboardData.setData('text/plain', selectionText);
         }
     }, [id]));
-
-    const scrollHandler = React.useCallback((path: number[]) => {
-        const actualPath = [...firstNodePath, ...path];
-        updateBookPosition(actualPath);
-    }, [updateBookPosition, firstNodePath]);
-
-    const pathToScroll = (pathToOpen && pathToOpen.slice(firstNodePath.length)) || undefined;
-
-    const relativeQuoteRange = quoteRange && rangeRelativeToPath(quoteRange, firstNodePath);
-    const colorization = relativeQuoteRange
+    const colorization = quoteRange
         ? [{
             color: highlights(theme).quote,
-            range: relativeQuoteRange,
+            range: quoteRange,
         }]
         : undefined;
 
@@ -89,7 +71,7 @@ function ReaderC({
                         <BookFragmentComp
                             fragment={{
                                 nodes,
-                                curr: firstNodePath,
+                                path: firstNodePath,
                             }}
                             colorization={colorization}
                             color={colors(theme).text}
@@ -97,8 +79,8 @@ function ReaderC({
                             refHoverColor={colors(theme).highlight}
                             fontFamily={theme.fontFamilies.book}
                             fontSize={fontSize(theme, 'text')}
-                            onScroll={scrollHandler}
-                            pathToScroll={pathToScroll}
+                            onScroll={updateBookPosition}
+                            pathToScroll={pathToOpen || undefined}
                             onSelectionChange={selectionHandler}
                             onRefClick={openFootnote}
                         />
