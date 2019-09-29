@@ -42,6 +42,7 @@ export function BookFragmentComp({
         refColor: refColor,
         refHoverColor: refHoverColor,
         colorization: colorization,
+        fontSize: fontSize,
     });
     const scrollHandler = React.useCallback((path: Path) => {
         if (!onScroll) {
@@ -86,6 +87,7 @@ export function BookFragmentComp({
 type BuildBlocksEnv = {
     path: BookPath,
     colorization: ColorizedRange[] | undefined,
+    fontSize: number,
     refColor: Color,
     refHoverColor: Color,
 };
@@ -176,11 +178,26 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
 
 function blocksForChapter(node: ChapterNode, env: BuildBlocksEnv): BlockWithPrefix[] {
     // TODO: support titles
+    const attrs: RichTextAttrs = {
+        line: true,
+        letterSpacing: node.level === 0
+            ? 0.15
+            : undefined,
+        italic: node.level < 0,
+        fontSize: node.level > 0
+            ? env.fontSize * 1.5
+            : env.fontSize,
+    };
     const title: BlockWithPrefix = {
         block: {
+            margin: node.level > 0
+                ? 1
+                : 0.8,
+            center: node.level >= 0,
+            dontIndent: true,
             fragments: node.title.map(line => ({
-                text: line,
-                attrs: {},
+                text: `${line}\n`,
+                attrs,
             })),
         },
         prefix: env.path,

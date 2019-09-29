@@ -19,6 +19,7 @@ export type RichTextAttrs = Partial<{
     dropCaps: boolean,
     italic: boolean,
     bold: boolean,
+    letterSpacing: number,
     // TODO: remove ?
     line: boolean,
     ref: string,
@@ -28,7 +29,9 @@ export type RichTextFragment = {
     attrs: RichTextAttrs,
 };
 export type RichTextBlock = {
+    center?: boolean,
     dontIndent?: boolean,
+    margin?: number,
     fragments: RichTextFragment[],
 };
 
@@ -78,6 +81,9 @@ export function RichText({
 
     return <span
         style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
             color: color,
             fontSize: fontSize,
             fontFamily: fontFamily,
@@ -122,9 +128,15 @@ function RichTextBlock({ block, refCallback, path, onRefClick }: RichTextBlockPr
 
     return <div style={{
         display: 'flex',
+        alignSelf: block.center
+            ? 'center'
+            : undefined,
         textAlign: 'justify',
         float: 'left',
         textIndent: !block.dontIndent ? '4em' : undefined,
+        margin: block.margin !== undefined
+            ? `${block.margin}em`
+            : undefined,
     }}>
         <span
             id={pathToId(path)}
@@ -158,10 +170,9 @@ function RichTextFragment({
             fontFamily: attrs.fontFamily,
             fontStyle: attrs.italic ? 'italic' : undefined,
             fontWeight: attrs.bold ? 'bold' : undefined,
-            ...(attrs.line && {
-                textIndent: '2em',
-                display: 'block',
-            }),
+            letterSpacing: attrs.letterSpacing !== undefined
+                ? `${attrs.letterSpacing}em`
+                : undefined,
             ...(attrs.dropCaps && {
                 float: 'left',
                 fontSize: attrs.fontSize
@@ -183,7 +194,7 @@ function RichTextFragment({
                 }
         }
     >
-        {text}
+        {text}{attrs.line ? <br /> : null}
     </span>;
 }
 
