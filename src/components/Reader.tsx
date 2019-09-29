@@ -54,7 +54,7 @@ function ReaderC({
         } else {
             selection.current = sel;
         }
-    }, []);
+    }, [firstNodePath]);
     useCopy(React.useCallback((e: ClipboardEvent) => {
         if (selection.current && e.clipboardData) {
             e.preventDefault();
