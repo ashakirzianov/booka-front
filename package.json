@@ -26,9 +26,11 @@
     "redux-loop": "^5.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "serve": "^11.1.0",
+    "source-map-explorer": "^2.1.0",
     "store": "^2.0.12"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "serve -s build",
     "debug-http": "react-scripts start",
