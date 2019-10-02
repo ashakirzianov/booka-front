@@ -28,12 +28,13 @@ export type ReaderProps = {
 };
 function ReaderC({
     pathToOpen, updateBookPosition,
-    book: { id, volume, toc },
+    book: { id, book, toc },
     toggleControls,
     theme,
     openFootnote,
     quoteRange,
 }: ReaderProps) {
+    const volume = book.volume;
     const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
 
     // TODO: fix this

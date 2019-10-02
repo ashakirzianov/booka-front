@@ -17,7 +17,7 @@ const bookId: BookId = { name: 'test' };
 const book: BookObject = {
     id: bookId,
     toc: tocFromVolume(volume, bookId),
-    volume,
+    book: { volume, tags: [] },
 };
 
 export const bookScreen: BookScreen = {

@@ -14,10 +14,10 @@ export function convertLibrary(infos: BookInfo[]): Library {
     };
 }
 
-export function convertBook(bookObject: Book, id: BookId): BookObject {
+export function convertBook(book: Book, id: BookId): BookObject {
     return {
-        volume: bookObject.volume,
+        book: book,
         id,
-        toc: tocFromVolume(bookObject.volume, id),
+        toc: tocFromVolume(book.volume, id),
     };
 }

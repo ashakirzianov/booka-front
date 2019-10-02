@@ -25,7 +25,7 @@ export type BookScreenProps = {
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
     const footnote = bl.footnoteId !== undefined
-        ? resolveBookReference(book.volume, bl.footnoteId)
+        ? resolveBookReference(book.book.volume, bl.footnoteId)
         : undefined;
     return <>
         <Reader
@@ -59,7 +59,7 @@ export type BookScreenFooterProps = {
     screen: BookScreen,
 };
 export function BookScreenFooter({ screen }: BookScreenFooterProps) {
-    const pagination = new Pagination(screen.book.volume);
+    const pagination = new Pagination(screen.book.book.volume);
     const total = pagination.totalPages();
     let currentPage = 1;
     let left = 0;
