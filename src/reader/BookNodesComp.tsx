@@ -131,7 +131,7 @@ function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksD
                 block: idx,
                 symbol: path.length > 1
                     ? path[path.length - 1]
-                    : undefined
+                    : undefined,
             } : undefined;
         },
     };
@@ -336,15 +336,10 @@ function colorizationRelativeToPath(path: BookPath, colorized: ColorizedRange): 
         return undefined;
     }
 
-    if (!pathLessThan(path, colorized.range.start)) {
-        return {
-            start: 0,
-            attrs,
-        };
-    }
-
     let start: number | undefined;
-    if (isSubpath(path, colorized.range.start)) {
+    if (!pathLessThan(path, colorized.range.start)) {
+        start = 0;
+    } else if (isSubpath(path, colorized.range.start)) {
         start = colorized.range.start[path.length];
     }
     let end: number | undefined;
