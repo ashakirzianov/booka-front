@@ -46,7 +46,7 @@ function ReaderC({
     const selection = React.useRef<BookSelection | undefined>(undefined);
     const selectionHandler = React.useCallback((sel: BookSelection | undefined) => {
         selection.current = sel;
-    }, [firstNodePath]);
+    }, []);
     useCopy(React.useCallback((e: ClipboardEvent) => {
         if (selection.current && e.clipboardData) {
             e.preventDefault();

@@ -27,7 +27,7 @@ export function BookFragmentComp({
         } else {
             onSelectionChange(selection);
         }
-    }, [fragment.path]);
+    }, [onSelectionChange, fragment.path]);
 
     const scrollHandler = React.useCallback((path: number[]) => {
         if (onScroll) {
