@@ -1,12 +1,12 @@
 import { Provider } from 'react-redux';
 import React from 'react';
+import { VolumeNode, tocForBook, Book } from 'booka-common';
 import { Action } from './actions';
-import { App, BookScreen, BookObject, BookId, tocFromVolume } from '../model';
+import { App, BookScreen, BookObject, BookId } from '../model';
 import { reducer } from './reducers';
 import { defaultTheme } from './persistent';
 import { short } from './testBooks';
 import { createEnhancedStore } from '../utils';
-import { VolumeNode } from 'booka-common';
 
 class AppProvider extends Provider<Action> { }
 export const TestProvider: React.SFC = props =>
@@ -14,10 +14,11 @@ export const TestProvider: React.SFC = props =>
 
 const volume: VolumeNode = short;
 const bookId: BookId = { name: 'test' };
-const book: BookObject = {
+const book: Book = { volume, tags: [] };
+const bookObject: BookObject = {
     id: bookId,
-    toc: tocFromVolume(volume, bookId),
-    book: { volume, tags: [] },
+    toc: tocForBook(book),
+    book: book,
 };
 
 export const bookScreen: BookScreen = {
@@ -28,7 +29,7 @@ export const bookScreen: BookScreen = {
         footnoteId: undefined,
         location: { location: 'path', path: [] },
     },
-    book: book,
+    book: bookObject,
 };
 
 const state: App = {

@@ -26,7 +26,7 @@ export type ReaderProps = {
 };
 function ReaderC({
     pathToOpen, updateBookPosition,
-    book: { id, book, toc },
+    book: { id, book },
     toggleControls,
     theme,
     openFootnote,

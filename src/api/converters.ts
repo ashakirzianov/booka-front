@@ -1,5 +1,5 @@
-import { Library, BookId, BookObject, tocFromVolume } from '../model';
-import { Book, BookInfo } from 'booka-common';
+import { Library, BookId, BookObject } from '../model';
+import { Book, BookInfo, tocForBook } from 'booka-common';
 
 export function convertLibrary(infos: BookInfo[]): Library {
     return {
@@ -18,6 +18,6 @@ export function convertBook(book: Book, id: BookId): BookObject {
     return {
         book: book,
         id,
-        toc: tocFromVolume(book.volume, id),
+        toc: tocForBook(book),
     };
 }

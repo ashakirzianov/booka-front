@@ -1,13 +1,16 @@
 import * as React from 'react';
 
-import { resolveBookReference, BookContentNode, hasSemantic } from 'booka-common';
+import {
+    resolveBookReference, BookContentNode, hasSemantic,
+    TableOfContents,
+} from 'booka-common';
 import {
     Row, Column,
     Separator, point, Triad,
 } from '../blocks';
 import {
-    BookScreen, TableOfContents, PaletteName,
-    Pagination, Theme,
+    BookScreen, PaletteName,
+    Pagination, Theme, BookId,
 } from '../model';
 import { Reader } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -24,6 +27,7 @@ export type BookScreenProps = {
 };
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
+    const pagination = React.useRef<Pagination>(new Pagination(book.book.volume));
     const footnote = bl.footnoteId !== undefined
         ? resolveBookReference(book.book.volume, bl.footnoteId)
         : undefined;
@@ -33,8 +37,11 @@ export function BookScreenComp({ screen }: BookScreenProps) {
             quoteRange={bl.quote}
         />
         <TableOfContentsBox
+            bookId={bl.id}
+            bookTitle={book.book.volume.meta.title}
             toc={book.toc}
             open={bl.toc}
+            pagination={pagination.current}
         />
         <FootnoteBox
             footnote={footnote}
@@ -105,14 +112,26 @@ function AppearanceButton() {
     </WithPopover>;
 }
 
-const TableOfContentsBox = connectActions('toggleToc')<{ toc: TableOfContents, open: boolean }>(props =>
-    <Modal
-        title={props.toc.title}
+type TableOfContentsBoxProps = {
+    toc: TableOfContents,
+    bookTitle: string | undefined,
+    bookId: BookId,
+    open: boolean,
+    pagination: Pagination,
+};
+const TableOfContentsBox = connectActions('toggleToc')<TableOfContentsBoxProps>(props => {
+    return <Modal
+        title={props.bookTitle}
         toggle={props.toggleToc}
         open={props.open}
     >
-        <TableOfContentsComp toc={props.toc} />
-    </Modal>
+        <TableOfContentsComp
+            toc={props.toc}
+            id={props.bookId}
+            pagination={props.pagination}
+        />
+    </Modal>;
+}
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props => {
