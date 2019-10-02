@@ -213,7 +213,7 @@ function makePathMap<T>(): PathMap<T> {
     type MapNode = {
         symbols: T[],
         value?: T,
-    }
+    };
     const map: MapNode[] = [];
     return {
         get(path) {
