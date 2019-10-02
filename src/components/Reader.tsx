@@ -1,13 +1,11 @@
 import * as React from 'react';
 
 import {
-    BookPath, BookRange, Callback,
-    bookRange, isFirstSubpath, emptyPath, nodesForPath,
+    BookPath, BookRange, Callback, fragmentForPath,
 } from 'booka-common';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
-    TableOfContentsItem, TableOfContents, inBookRange, colors,
-    Theme, fontSize, highlights,
+    colors, Theme, fontSize, highlights,
 } from '../model';
 import {
     Row, Column, point,
@@ -34,15 +32,10 @@ function ReaderC({
     openFootnote,
     quoteRange,
 }: ReaderProps) {
-    const volume = book.volume;
-    const { prevPath, currentPath, nextPath } = buildPaths(pathToOpen || emptyPath(), toc);
+    const fragment = fragmentForPath(book, pathToOpen || []);
 
-    // TODO: fix this
-    const firstNodePath = currentPath.concat(0);
-    const nodes = nodesForPath(volume.nodes, firstNodePath) || [];
-
-    const prevTitle = prevPath && titleForPath(volume, prevPath)[0];
-    const nextTitle = nextPath && titleForPath(volume, nextPath)[0];
+    const prevTitle = fragment.previous && titleForPath(book.volume, fragment.previous)[0];
+    const nextTitle = fragment.next && titleForPath(book.volume, fragment.next)[0];
 
     const selection = React.useRef<BookSelection | undefined>(undefined);
     const selectionHandler = React.useCallback((sel: BookSelection | undefined) => {
@@ -66,14 +59,11 @@ function ReaderC({
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
                 <EmptyLine />
-                <PathLink path={prevPath} id={id} text={prevTitle || 'Previous'} />
+                <PathLink path={fragment.previous} id={id} text={prevTitle || 'Previous'} />
                 <Clickable onClick={toggleControls}>
                     <Column>
                         <BookFragmentComp
-                            fragment={{
-                                nodes,
-                                current: firstNodePath,
-                            }}
+                            fragment={fragment}
                             colorization={colorization}
                             color={colors(theme).text}
                             refColor={colors(theme).accent}
@@ -87,7 +77,7 @@ function ReaderC({
                         />
                     </Column>
                 </Clickable>
-                <PathLink path={nextPath} id={id} text={nextTitle || 'Next'} />
+                <PathLink path={fragment.next} id={id} text={nextTitle || 'Next'} />
                 <EmptyLine />
             </Column>
         </Row>
@@ -110,46 +100,4 @@ function PathLink(props: PathLinkProps) {
                 fontFamily='book'
             />
         </Row>;
-}
-
-function buildPaths(path: BookPath, toc: TableOfContents): {
-    prevPath?: BookPath,
-    currentPath: BookPath,
-    nextPath?: BookPath,
-} {
-    function tocItemCondition(item: TableOfContentsItem): boolean {
-        return true;
-    }
-
-    let currentPath = emptyPath();
-    let prevPath: BookPath | undefined;
-
-    for (let idx = 1; idx < toc.items.length; idx++) {
-        const item = toc.items[idx];
-        if (tocItemCondition(item)) {
-            let nextPath = item.path;
-
-            // If next chapter is directly bellow current chapter
-            // (e.g. no paragraphs between) we merge them together
-            while (isFirstSubpath(currentPath, nextPath)) {
-                idx++;
-                const candidate = toc.items[idx];
-                if (!candidate) {
-                    break;
-                }
-                if (tocItemCondition(candidate)) {
-                    nextPath = candidate.path;
-                }
-            }
-
-            if (inBookRange(path, bookRange(currentPath, nextPath))) {
-                return { prevPath, currentPath, nextPath };
-            }
-
-            prevPath = currentPath;
-            currentPath = nextPath;
-        }
-    }
-
-    return { prevPath, currentPath };
 }
