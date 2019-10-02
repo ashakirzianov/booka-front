@@ -71,7 +71,7 @@ function ReaderC({
                         <BookFragmentComp
                             fragment={{
                                 nodes,
-                                path: firstNodePath,
+                                current: firstNodePath,
                             }}
                             colorization={colorization}
                             color={colors(theme).text}
