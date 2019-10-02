@@ -27,14 +27,14 @@ export function BookFragmentComp({
         } else {
             onSelectionChange(selection);
         }
-    }, [onSelectionChange, fragment.current]);
+    }, [onSelectionChange, fragment]);
 
     const scrollHandler = React.useCallback((path: number[]) => {
         if (onScroll) {
             const actualPath = [...fragment.current, ...path];
             onScroll(actualPath);
         }
-    }, [onScroll, fragment.current]);
+    }, [onScroll, fragment]);
 
     const adjustedPathToScroll = (pathToScroll && pathToScroll.slice(fragment.current.length)) || undefined;
 
