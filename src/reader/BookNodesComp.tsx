@@ -10,6 +10,7 @@ import {
     RichTextBlock, RichTextAttrs, RichTextFragment, RichText,
     Color, Path, RichTextSelection,
 } from './RichText';
+import { GroupNode } from 'booka-common';
 
 export type ColorizedRange = {
     color: Color,
@@ -90,21 +91,17 @@ type BuildBlocksEnv = {
     fontSize: number,
     refColor: Color,
     refHoverColor: Color,
+    dontDropCase?: boolean,
 };
 // TODO: better naming
 type BlocksData = {
     blocks: RichTextBlock[],
     blockPathToBookPath(path: Path): BookPath,
-    bookPathToBlockPath(path: BookPath): Path,
+    bookPathToBlockPath(path: BookPath): Path | undefined,
 };
 
 function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksData {
-    const prefixedBlocks = flatten(
-        nodes.map((n, i) => blocksForNode(n, {
-            ...env,
-            path: env.path.concat(i),
-        }))
-    );
+    const prefixedBlocks = blocksForNodes(nodes, env);
     const blocks = prefixedBlocks.map(pb => pb.block);
     // We want to find index of last (most precise) prefix, so reverse an array
     const prefixes = prefixedBlocks.map(pb => pb.prefix).reverse();
@@ -112,14 +109,17 @@ function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksD
     return {
         blocks,
         blockPathToBookPath(path) {
-            const prefix = prefixedBlocks[path[0]].prefix;
-            const bookPath = path[1] !== undefined
-                ? [...prefix, path[1]]
+            const prefix = prefixedBlocks[path.block].prefix;
+            const bookPath = path.symbol !== undefined
+                ? [...prefix, path.symbol]
                 : prefix;
             return bookPath;
         },
         bookPathToBlockPath(path) {
             // TODO: implement properly
+            if (path.length === 0) {
+                return { block: 0 };
+            }
             const blockIndex = prefixes
                 .findIndex(pre => isSubpath(pre, path));
             const idx = blockIndex >= 0
@@ -127,7 +127,12 @@ function buildBlocksData(nodes: BookContentNode[], env: BuildBlocksEnv): BlocksD
                 ? prefixes.length - blockIndex - 1
                 : undefined;
 
-            return idx ? [idx] : [];
+            return idx ? {
+                block: idx,
+                symbol: path.length > 1
+                    ? path[path.length - 1]
+                    : undefined,
+            } : undefined;
         },
     };
 }
@@ -142,10 +147,28 @@ function blocksForNode(node: BookContentNode, env: BuildBlocksEnv): BlockWithPre
             return blocksForParagraph(node, env);
         case 'chapter':
             return blocksForChapter(node, env);
+        case 'group':
+            return blocksForGroup(node, env);
+        case 'image-data':
+        case 'image-ref':
+        case 'table':
+        case 'list':
+        case 'separator':
+            // TODO: support
+            return [];
         default:
-            // TODO: assert 'never'
+            assertNever(node);
             return [];
     }
+}
+
+function blocksForNodes(nodes: BookContentNode[], env: BuildBlocksEnv): BlockWithPrefix[] {
+    return flatten(
+        nodes.map((n, i) => blocksForNode(n, {
+            ...env,
+            path: env.path.concat(i),
+        }))
+    );
 }
 
 function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWithPrefix[] {
@@ -159,7 +182,8 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
         }
     }
     const isFirstParagraph = env.path[env.path.length - 1] === 0;
-    if (isFirstParagraph) {
+    const needDropCase = isFirstParagraph && !env.dontDropCase;
+    if (needDropCase) {
         const dropCaps: AttrsRange = {
             attrs: { dropCaps: true },
             start: 0,
@@ -169,7 +193,7 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
     }
     return [{
         block: {
-            dontIndent: isFirstParagraph,
+            dontIndent: needDropCase,
             fragments,
         },
         prefix: env.path,
@@ -177,41 +201,51 @@ function blocksForParagraph(node: ParagraphNode, env: BuildBlocksEnv): BlockWith
 }
 
 function blocksForChapter(node: ChapterNode, env: BuildBlocksEnv): BlockWithPrefix[] {
-    // TODO: support titles
+    const title = titleBlock(node.title, node.level, env);
+    const inside = blocksForNodes(node.nodes, env);
+    return [title, ...inside];
+}
+
+function blocksForGroup(node: GroupNode, env: BuildBlocksEnv): BlockWithPrefix[] {
+    if (node.semantic === 'footnote') {
+        const title = titleBlock(node.title, -1, env);
+        const inside = blocksForNodes(node.nodes, {
+            ...env,
+            dontDropCase: true,
+        });
+        return [title, ...inside];
+    } else {
+        return blocksForNodes(node.nodes, env);
+    }
+}
+
+function titleBlock(lines: string[], level: number, env: BuildBlocksEnv): BlockWithPrefix {
     const attrs: RichTextAttrs = {
         line: true,
-        letterSpacing: node.level === 0
+        letterSpacing: level === 0
             ? 0.15
             : undefined,
-        italic: node.level < 0,
-        fontSize: node.level > 0
+        italic: level < 0,
+        fontSize: level > 0
             ? env.fontSize * 1.5
             : env.fontSize,
     };
     const title: BlockWithPrefix = {
         block: {
-            margin: node.level > 0
+            margin: level > 0
                 ? 1
                 : 0.8,
-            center: node.level >= 0,
+            center: level >= 0,
             dontIndent: true,
-            fragments: node.title.map(line => ({
+            fragments: lines.map(line => ({
                 text: `${line}\n`,
                 attrs,
             })),
         },
         prefix: env.path,
     };
-    const inside = flatten(
-        node.nodes
-            .map((n, i) =>
-                blocksForNode(n, {
-                    ...env,
-                    path: env.path.concat(i),
-                })
-            )
-    );
-    return [title, ...inside];
+
+    return title;
 }
 
 function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
@@ -331,15 +365,10 @@ function colorizationRelativeToPath(path: BookPath, colorized: ColorizedRange): 
         return undefined;
     }
 
-    if (!pathLessThan(path, colorized.range.start)) {
-        return {
-            start: 0,
-            attrs,
-        };
-    }
-
     let start: number | undefined;
-    if (isSubpath(path, colorized.range.start)) {
+    if (!pathLessThan(path, colorized.range.start)) {
+        start = 0;
+    } else if (isSubpath(path, colorized.range.start)) {
         start = colorized.range.start[path.length];
     }
     let end: number | undefined;

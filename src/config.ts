@@ -29,7 +29,7 @@ const productionConfig: Config = {
 };
 
 const hostname = window && window.location && window.location.hostname;
-const localProtocol = process.env.HTTPS ? 'https' : 'http';
+const localProtocol = 'https';
 export const debugBack = `https://${hostname}:3042`;
 
 const debugConfig: Config = {

@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { BookFragment, rangeRelativeToPath, filterUndefined } from 'booka-common';
-import { BookNodesProps, BookNodesComp, BookSelection as BS } from './BookNodesComp';
+import {
+    BookFragment, rangeRelativeToPath, filterUndefined,
+    relativePath, addPaths,
+} from 'booka-common';
+import { BookNodesProps, BookNodesComp, BookSelection } from './BookNodesComp';
 
-export type BookSelection = BS;
 export type BookFragmentProps = Omit<BookNodesProps, 'nodes'> & {
     fragment: BookFragment,
 };
@@ -17,8 +19,8 @@ export function BookFragmentComp({
             return;
         }
         if (selection) {
-            const start = [...fragment.path, ...selection.range.start];
-            const end = [...fragment.path, ...selection.range.end];
+            const start = addPaths(fragment.current, selection.range.start);
+            const end = selection.range.end && addPaths(fragment.current, selection.range.end);
             const actualSelection = {
                 text: selection.text,
                 range: { start, end },
@@ -27,26 +29,27 @@ export function BookFragmentComp({
         } else {
             onSelectionChange(selection);
         }
-    }, [fragment.path]);
+    }, [onSelectionChange, fragment]);
 
     const scrollHandler = React.useCallback((path: number[]) => {
         if (onScroll) {
-            const actualPath = [...fragment.path, ...path];
+            const actualPath = addPaths(fragment.current, path);
             onScroll(actualPath);
         }
-    }, [onScroll, fragment.path]);
+    }, [onScroll, fragment]);
 
-    const adjustedPathToScroll = (pathToScroll && pathToScroll.slice(fragment.path.length)) || undefined;
+    const adjustedPathToScroll = pathToScroll && relativePath(pathToScroll, fragment.current);
 
     const adjustedColorization = colorization
         ? filterUndefined(colorization.map(col => {
-            const relativeRange = rangeRelativeToPath(col.range, fragment.path);
+            const relativeRange = rangeRelativeToPath(col.range, fragment.current);
             return relativeRange && {
                 ...col,
                 range: relativeRange,
             };
         }))
         : undefined;
+
     return <BookNodesComp
         {...rest}
         onScroll={scrollHandler}
