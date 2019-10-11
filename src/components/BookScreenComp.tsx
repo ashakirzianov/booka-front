@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    findReference, BookContentNode, getSemantic,
+    findReference, BookNode, getSemantic,
     TableOfContents,
 } from 'booka-common';
 import {
@@ -45,7 +45,7 @@ export function BookScreenComp({ screen }: BookScreenProps) {
         />
         <FootnoteBox
             // TODO: remove 'as'
-            footnote={footnote && footnote[0] as BookContentNode}
+            footnote={footnote && footnote[0] as BookNode}
         />
     </>;
 }
@@ -135,7 +135,7 @@ const TableOfContentsBox = connectActions('toggleToc')<TableOfContentsBoxProps>(
 }
 );
 
-const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props => {
+const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookNode }>(props => {
     const footnoteSemantic = props.footnote && getSemantic(props.footnote, 'footnote');
     const title = footnoteSemantic !== undefined
         ? footnoteSemantic.title[0]
