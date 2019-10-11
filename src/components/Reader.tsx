@@ -34,8 +34,8 @@ function ReaderC({
 }: ReaderProps) {
     const fragment = fragmentForPath(book, pathToOpen || []);
 
-    const prevTitle = fragment.previous && titleForPath(book.volume, fragment.previous)[0];
-    const nextTitle = fragment.next && titleForPath(book.volume, fragment.next)[0];
+    const prevTitle = fragment.previous && titleForPath(book, fragment.previous);
+    const nextTitle = fragment.next && titleForPath(book, fragment.next);
 
     const selection = React.useRef<BookSelection | undefined>(undefined);
     const selectionHandler = React.useCallback((sel: BookSelection | undefined) => {
@@ -59,7 +59,7 @@ function ReaderC({
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
                 <EmptyLine />
-                <PathLink path={fragment.previous} id={id} text={prevTitle || 'Previous'} />
+                <PathLink path={fragment.previous} id={id} text={prevTitle !== undefined ? prevTitle[0] : 'Previous'} />
                 <Clickable onClick={toggleControls}>
                     <Column>
                         <BookFragmentComp
@@ -77,7 +77,7 @@ function ReaderC({
                         />
                     </Column>
                 </Clickable>
-                <PathLink path={fragment.next} id={id} text={nextTitle || 'Next'} />
+                <PathLink path={fragment.next} id={id} text={nextTitle !== undefined ? nextTitle[0] : 'Next'} />
                 <EmptyLine />
             </Column>
         </Row>

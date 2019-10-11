@@ -1,6 +1,7 @@
+// TODO: remove
 import {
-    BookContentNode, VolumeNode, nodeChildren,
-    BookPath, appendPath, emptyPath, pathHead, pathTail,
+    BookContentNode,
+    BookPath, appendPath, emptyPath, pathHead, pathTail, Book, hasSubnodes,
 } from 'booka-common';
 
 export type RootIterator = {
@@ -20,7 +21,7 @@ export type ParentIterator = RootIterator | BookIterator;
 export type OptParentIterator = ParentIterator | undefined;
 type BookIteratorHandler = () => OptBookIterator;
 
-export function bookIterator(book: VolumeNode): RootIterator {
+export function bookIterator(book: Book): RootIterator {
     const p = {
         node: undefined,
         firstChildren: undefined as any,
@@ -74,7 +75,9 @@ function siblingIterator(parent: ParentIterator, siblings: BookContentNode[], id
                 firstChildren: () => undefined,
             };
 
-            const ch = nodeChildren(node);
+            const ch = hasSubnodes(node)
+                ? node.nodes
+                : [];
             if (ch.length > 0) {
                 iterator.firstChildren = siblingIterator(iterator, ch, 0);
             }

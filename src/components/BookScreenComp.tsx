@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-    resolveBookReference, BookContentNode, hasSemantic,
+    findReference, BookContentNode, getSemantic,
     TableOfContents,
 } from 'booka-common';
 import {
@@ -27,9 +27,9 @@ export type BookScreenProps = {
 };
 export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
-    const pagination = React.useRef<Pagination>(new Pagination(book.book.volume));
+    const pagination = React.useRef<Pagination>(new Pagination(book.book));
     const footnote = bl.footnoteId !== undefined
-        ? resolveBookReference(book.book.volume, bl.footnoteId)
+        ? findReference(bl.footnoteId, book.book.nodes)
         : undefined;
     return <>
         <Reader
@@ -38,13 +38,14 @@ export function BookScreenComp({ screen }: BookScreenProps) {
         />
         <TableOfContentsBox
             bookId={bl.id}
-            bookTitle={book.book.volume.meta.title}
+            bookTitle={book.book.meta.title}
             toc={book.toc}
             open={bl.toc}
             pagination={pagination.current}
         />
         <FootnoteBox
-            footnote={footnote}
+            // TODO: remove 'as'
+            footnote={footnote && footnote[0] as BookContentNode}
         />
     </>;
 }
@@ -66,7 +67,7 @@ export type BookScreenFooterProps = {
     screen: BookScreen,
 };
 export function BookScreenFooter({ screen }: BookScreenFooterProps) {
-    const pagination = new Pagination(screen.book.book.volume);
+    const pagination = new Pagination(screen.book.book);
     const total = pagination.totalPages();
     let currentPage = 1;
     let left = 0;
@@ -135,8 +136,9 @@ const TableOfContentsBox = connectActions('toggleToc')<TableOfContentsBoxProps>(
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookContentNode }>(props => {
-    const title = props.footnote && hasSemantic(props.footnote, 'footnote')
-        ? props.footnote.title[0]
+    const footnoteSemantic = props.footnote && getSemantic(props.footnote, 'footnote');
+    const title = footnoteSemantic !== undefined
+        ? footnoteSemantic.title[0]
         : undefined;
     return <Modal
         title={title}
