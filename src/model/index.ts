@@ -1,6 +1,5 @@
 export * from './app';
 export * from './book';
-export * from './bookIterator';
 export * from './bookLocator';
 export * from './book.utils';
 export * from './highlights';
