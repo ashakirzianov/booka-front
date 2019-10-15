@@ -36,6 +36,7 @@ export type RichTextSimpleFragment = {
 export type RichTextImageFragment = {
     frag: 'image',
     src: string,
+    title?: string,
 };
 type ListItem = RichTextFragment[];
 export type RichTextListFragment = {
@@ -49,11 +50,16 @@ export type RichTextTableFragment = {
     frag: 'table',
     rows: TableRow[],
 };
+export type RichTextLineFragment = {
+    frag: 'line',
+    direction: 'horizontal',
+};
 export type RichTextFragment =
     | RichTextSimpleFragment
     | RichTextImageFragment
     | RichTextListFragment
     | RichTextTableFragment
+    | RichTextLineFragment
     ;
 export type RichTextBlock = {
     center?: boolean,

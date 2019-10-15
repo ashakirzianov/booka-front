@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import {
-    findReference, BookNode, getSemantic,
-    TableOfContents,
+    findReference, BookNode, TableOfContents,
 } from 'booka-common';
 import {
     Row, Column,
@@ -29,7 +28,7 @@ export function BookScreenComp({ screen }: BookScreenProps) {
     const { book, bl } = screen;
     const pagination = React.useRef<Pagination>(new Pagination(book.book));
     const footnote = bl.footnoteId !== undefined
-        ? findReference(bl.footnoteId, book.book.nodes)
+        ? findReference(book.book.nodes, bl.footnoteId)
         : undefined;
     return <>
         <Reader
@@ -136,12 +135,7 @@ const TableOfContentsBox = connectActions('toggleToc')<TableOfContentsBoxProps>(
 );
 
 const FootnoteBox = connectActions('openFootnote')<{ footnote?: BookNode }>(props => {
-    const footnoteSemantic = props.footnote && getSemantic(props.footnote, 'footnote');
-    const title = footnoteSemantic !== undefined
-        ? footnoteSemantic.title[0]
-        : undefined;
     return <Modal
-        title={title}
         open={props.footnote !== undefined}
         toggle={() => props.openFootnote(null)}
     >

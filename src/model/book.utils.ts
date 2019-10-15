@@ -1,13 +1,13 @@
 import {
     BookNode, BookPath, pathLessThan,
     Book, nodeForPath, iterateNodes,
-    extractNodeText, extractBookText,
+    extractNodeText, extractBookText, extractSpanText,
 } from 'booka-common';
 
-export function titleForPath(book: Book, path: BookPath): string[] | undefined {
+export function titleForPath(book: Book, path: BookPath): string | undefined {
     const node = nodeForPath(book.nodes, path);
     if (node && node.node === 'title') {
-        return node.lines;
+        return extractSpanText(node.span);
     } else {
         return undefined;
     }

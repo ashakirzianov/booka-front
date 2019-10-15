@@ -1,9 +1,5 @@
 import {
-    BookFragment, BookPath, BookNode, assertNever,
-    flatten, ParagraphNode, pphSpan, GroupNode, getSemantic,
-    ListNode, TableNode, Span, mapSpanFull, AttributeName,
-    pathLessThan, isSubpath, iterateBookFragment, samePath,
-    BookRange, TitleNode,
+    BookFragment, BookPath, BookNode, assertNever, flatten, ParagraphNode, pphSpan, GroupNode, ListNode, TableNode, Span, mapSpanFull, AttributeName, pathLessThan, isSubpath, iterateBookFragment, samePath, BookRange, TitleNode, ImageDic, Image,
 } from 'booka-common';
 import {
     RichTextBlock, AttrsRange, applyAttrsRange, RichTextFragment,
@@ -71,6 +67,7 @@ function* generateBlocks({
     for (const [node, path] of iterateBookFragment(fragment)) {
         const block = blockForNode(node, {
             isUnderTitle, fontSize, refColor, refHoverColor,
+            images: fragment.images || {},
         });
         if (colorization) {
             block.fragments = colorizeFragments(block.fragments, colorization, path);
@@ -85,6 +82,7 @@ type BuildBlocksEnv = {
     fontSize: number,
     refColor: Color,
     refHoverColor: Color,
+    images: ImageDic,
 };
 
 function blockForNode(node: BookNode, env: BuildBlocksEnv): RichTextBlock {
@@ -101,8 +99,11 @@ function blockForNode(node: BookNode, env: BuildBlocksEnv): RichTextBlock {
         case 'table':
             return blockForTable(node, env);
         case 'separator':
-            // TODO: support
-            return { fragments: [] };
+            return {
+                fragments: [{
+                    frag: 'line', direction: 'horizontal',
+                }],
+            };
         default:
             assertNever(node);
             // TODO: do not generate empty block
@@ -129,18 +130,34 @@ function blockForParagraph(node: ParagraphNode, env: BuildBlocksEnv): RichTextBl
     };
 }
 
-function blockForTitle(titleNode: TitleNode, env: BuildBlocksEnv): RichTextBlock {
-    return titleBlock(titleNode.lines, titleNode.level, env);
+function blockForTitle({ span, level }: TitleNode, env: BuildBlocksEnv): RichTextBlock {
+    const attrs: RichTextAttrs = {
+        letterSpacing: level === 0
+            ? 0.15
+            : undefined,
+        italic: level < 0,
+        fontSize: level > 0
+            ? env.fontSize * 1.5
+            : env.fontSize,
+    };
+    let fragments = fragmentsForSpan(span, env);
+    fragments = applyAttrsRange(fragments, {
+        start: 0,
+        attrs,
+    });
+
+    return {
+        margin: level > 0
+            ? 1
+            : 0.8,
+        center: level >= 0,
+        fragments,
+    };
 }
 
 function blockForGroup(node: GroupNode, env: BuildBlocksEnv): RichTextBlock {
-    const footnote = getSemantic(node, 'footnote');
-    if (footnote !== undefined) {
-        return titleBlock(footnote.title, -1, env);
-    } else {
-        // TODO: do not generate ?
-        return { fragments: [] };
-    }
+    // TODO: return undef
+    return { fragments: [] };
 }
 
 function blockForList(node: ListNode, env: BuildBlocksEnv): RichTextBlock {
@@ -161,37 +178,17 @@ function blockForList(node: ListNode, env: BuildBlocksEnv): RichTextBlock {
 
 function blockForTable(node: TableNode, env: BuildBlocksEnv): RichTextBlock {
     const rows = node.rows.map(row => {
-        return row.cells
-            .map(cell => fragmentsForSpan(cell, env));
+        return flatten(row.cells
+            .map(cell =>
+                cell.spans.map(s => fragmentsForSpan(s, env))
+            )
+        );
     });
     const fragments: RichTextFragment[] = [{
         frag: 'table',
         rows,
     }];
     return { fragments };
-}
-
-function titleBlock(lines: string[], level: number, env: BuildBlocksEnv): RichTextBlock {
-    const attrs: RichTextAttrs = {
-        letterSpacing: level === 0
-            ? 0.15
-            : undefined,
-        italic: level < 0,
-        fontSize: level > 0
-            ? env.fontSize * 1.5
-            : env.fontSize,
-    };
-
-    return {
-        margin: level > 0
-            ? 1
-            : 0.8,
-        center: level >= 0,
-        fragments: lines.map(line => ({
-            text: `${line}\n`,
-            attrs,
-        })),
-    };
 }
 
 function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
@@ -219,12 +216,38 @@ function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
             const result = applyAttrsRange(inside, range);
             return result;
         },
-        // TODO: support images
-        image: image => [],
+        image: image => fragmentsForImage(image, env),
         // TODO: support semantics
         semantic: s => fragmentsForSpan(s, env),
+        anchor: s => fragmentsForSpan(s, env),
         default: s => [],
     });
+}
+
+function fragmentsForImage(image: Image, env: BuildBlocksEnv): RichTextFragment[] {
+    if (image.image === 'ref') {
+        const resolved = env.images[image.imageId];
+        image = resolved !== undefined
+            ? resolved
+            : image;
+    }
+    switch (image.image) {
+        case 'external':
+            return [{
+                frag: 'image',
+                src: image.url,
+                title: image.title,
+            }];
+        case 'buffer':
+            return [{
+                frag: 'image',
+                src: imageSrcFromBuffer(image.buffer),
+                title: image.title,
+            }];
+        case 'ref':
+        default:
+            return [];
+    }
 }
 
 function convertAttr(an: AttributeName): RichTextAttrs {
@@ -273,4 +296,12 @@ function colorizationRelativeToPath(path: BookPath, colorized: ColorizedRange): 
     return start !== undefined
         ? { start, end, attrs }
         : undefined;
+}
+
+function imageSrcFromBuffer(buffer: Buffer): string {
+    const arrayBufferView = new Uint8Array((buffer as any).data);
+    const blob = new Blob([arrayBufferView], { type: "image/jpg" });
+    const urlCreator = window.URL || window.webkitURL;
+    const imageUrl = urlCreator.createObjectURL(blob);
+    return imageUrl;
 }

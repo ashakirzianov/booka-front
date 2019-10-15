@@ -7,7 +7,9 @@ export const short: Book = {
     'meta': {
         'title': 'Lorem',
         'author': 'John Smith',
+        'license': 'unknown',
     },
+    'images': {},
     'nodes': [
     ],
 };
