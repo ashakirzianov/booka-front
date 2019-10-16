@@ -7,7 +7,7 @@ export function convertLibrary(infos: BookDesc[]): Library {
             current[bi.id] = {
                 title: bi.title,
                 author: bi.author,
-                coverUrl: bi.cover,
+                coverUrl: bi.smallCoverUrl || bi.coverUrl,
             };
             return current;
         }, {} as Library['books']),
