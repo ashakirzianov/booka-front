@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import React from 'react';
-import { VolumeNode, tocForBook, Book } from 'booka-common';
+import { tocForBook, Book } from 'booka-common';
 import { Action } from './actions';
 import { App, BookScreen, BookObject, BookId } from '../model';
 import { reducer } from './reducers';
@@ -12,9 +12,8 @@ class AppProvider extends Provider<Action> { }
 export const TestProvider: React.SFC = props =>
     React.createElement(AppProvider, { store: store }, props.children);
 
-const volume: VolumeNode = short;
 const bookId: BookId = { name: 'test' };
-const book: Book = { volume, tags: [] };
+const book: Book = short;
 const bookObject: BookObject = {
     id: bookId,
     toc: tocForBook(book),
