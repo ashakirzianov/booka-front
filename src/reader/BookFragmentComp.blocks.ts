@@ -1,5 +1,5 @@
 import {
-    BookFragment, BookPath, BookNode, assertNever, flatten, ParagraphNode, pphSpan, ListNode, TableNode, Span, mapSpanFull, AttributeName, pathLessThan, isSubpath, iterateBookFragment, samePath, BookRange, TitleNode, ImageDic, Image,
+    BookFragment, BookPath, BookNode, assertNever, flatten, ParagraphNode, pphSpan, ListNode, TableNode, Span, AttributeName, pathLessThan, isSubpath, iterateBookFragment, samePath, BookRange, TitleNode, ImageDic, Image, isSimpleSpan, SingleSpan, isSingleSpan,
 } from 'booka-common';
 import {
     RichTextBlock, AttrsRange, applyAttrsRange, RichTextFragment,
@@ -103,6 +103,7 @@ function blockForNode(node: BookNode, env: BuildBlocksEnv): RichTextBlock {
                 }],
             };
         case 'image': // TODO: support
+            return { fragments: fragmentsForImage(node.image, env) };
         case 'ignore':
             return { fragments: [] };
         default:
@@ -186,38 +187,61 @@ function blockForTable(node: TableNode, env: BuildBlocksEnv): RichTextBlock {
 }
 
 function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
-    return mapSpanFull<RichTextFragment[]>(span, {
-        simple: s => [{ text: s }],
-        compound: ss => flatten(ss.map(s => fragmentsForSpan(s, env))),
-        attr: (s, attr) => {
-            const inside = fragmentsForSpan(s, env);
-            const range: AttrsRange = {
-                attrs: convertAttr(attr),
-                start: 0,
-            };
-            const result = applyAttrsRange(inside, range);
-            return result;
-        },
-        complex: (s, data) => {
-            const inside = fragmentsForSpan(s, env);
-            const range: AttrsRange = data.refToId
-                ? {
-                    attrs: {
-                        ref: data.refToId,
-                        color: env.refColor,
-                    },
+    if (isSingleSpan(span)) {
+        return fragmentsForSingleSpan(span, env);
+    } else {
+        const ss = span as Span[];
+        return flatten(ss.map(s => fragmentsForSpan(s, env)))
+    }
+}
+
+function fragmentsForSingleSpan(span: SingleSpan, env: BuildBlocksEnv): RichTextFragment[] {
+    switch (span.node) {
+        case 'ref':
+            {
+                const inside = fragmentsForSpan(span.span, env);
+                const range: AttrsRange = span.refToId
+                    ? {
+                        attrs: {
+                            ref: span.refToId,
+                            color: env.refColor,
+                        },
+                        start: 0,
+                    }
+                    : { attrs: {}, start: 0 };
+                const result = applyAttrsRange(inside, range);
+                return result;
+            }
+        case 'bold': case 'italic': case 'big': case 'small':
+        case 'sub': case 'sup': case 'quote':
+            {
+                const inside = fragmentsForSpan(span.span, env);
+                const range: AttrsRange = {
+                    attrs: convertAttr(span.node),
                     start: 0,
-                }
-                : { attrs: {}, start: 0 };
-            const result = applyAttrsRange(inside, range);
-            return result;
-        },
-        image: image => fragmentsForImage(image, env),
-        default: s => [],
-    });
+                };
+                const result = applyAttrsRange(inside, range);
+                return result;
+            }
+        case 'ruby': case 'span':
+            {
+                return fragmentsForSpan(span.span, env);
+            }
+        case 'image-span':
+            return fragmentsForImage(span.image, env);
+        case undefined:
+            if (isSimpleSpan(span)) {
+                return [{ text: span }];
+            }
+        default:
+            assertNever(span);
+            return [];
+    }
 }
 
 function fragmentsForImage(image: Image, env: BuildBlocksEnv): RichTextFragment[] {
+    console.log('HERE');
+    console.log(image.imageId);
     if (image.image === 'ref') {
         const resolved = env.images[image.imageId];
         image = resolved !== undefined

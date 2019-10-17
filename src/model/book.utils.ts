@@ -1,6 +1,6 @@
 import {
     BookNode, BookPath, pathLessThan,
-    Book, nodeForPath, iterateNodes,
+    Book, nodeForPath, iterateBookNodes,
     extractNodeText, extractBookText, extractSpanText,
 } from 'booka-common';
 
@@ -39,7 +39,7 @@ export class Pagination {
 
 function pageForPath(path: BookPath, nodes: BookNode[]): number {
     let currLength = 0;
-    for (const [node, nodePath] of iterateNodes(nodes)) {
+    for (const [node, nodePath] of iterateBookNodes(nodes)) {
         if (pathLessThan(path, nodePath)) {
             break;
         }
