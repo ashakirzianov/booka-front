@@ -196,10 +196,10 @@ function fragmentsForSpan(span: Span, env: BuildBlocksEnv): RichTextFragment[] {
 }
 
 function fragmentsForSingleSpan(span: SingleSpan, env: BuildBlocksEnv): RichTextFragment[] {
-    switch (span.node) {
+    switch (span.span) {
         case 'ref':
             {
-                const inside = fragmentsForSpan(span.span, env);
+                const inside = fragmentsForSpan(span.content, env);
                 const range: AttrsRange = span.refToId
                     ? {
                         attrs: {
@@ -215,23 +215,25 @@ function fragmentsForSingleSpan(span: SingleSpan, env: BuildBlocksEnv): RichText
         case 'bold': case 'italic': case 'big': case 'small':
         case 'sub': case 'sup': case 'quote':
             {
-                const inside = fragmentsForSpan(span.span, env);
+                const inside = fragmentsForSpan(span.content, env);
                 const range: AttrsRange = {
-                    attrs: convertAttr(span.node),
+                    attrs: convertAttr(span.span),
                     start: 0,
                 };
                 const result = applyAttrsRange(inside, range);
                 return result;
             }
-        case 'ruby': case 'span':
+        case 'ruby': case 'plain':
             {
-                return fragmentsForSpan(span.span, env);
+                return fragmentsForSpan(span.content, env);
             }
-        case 'image-span':
+        case 'image':
             return fragmentsForImage(span.image, env);
         case undefined:
             if (isSimpleSpan(span)) {
                 return [{ text: span }];
+            } else {
+                return [];
             }
         default:
             assertNever(span);
