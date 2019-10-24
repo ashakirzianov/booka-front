@@ -2,6 +2,7 @@ export type Config = {
     usePersistentStorage: boolean,
     useTestStore: boolean,
     backendBase: string,
+    libBase: string,
     frontendBase: string,
     facebook: {
         clientId: string,
@@ -17,12 +18,14 @@ export function config(): Config {
 }
 
 const prodBack = 'https://reader-back.herokuapp.com';
+const prodLib = 'https://booka-lib.herokuapp.com';
 const prodFront = 'http://booka.pub';
 
 const productionConfig: Config = {
     usePersistentStorage: true,
     useTestStore: false,
     backendBase: prodBack,
+    libBase: prodLib,
     frontendBase: prodFront,
     facebook: { clientId: '1527203577422306' },
     logger: () => undefined,
@@ -35,6 +38,7 @@ export const debugBack = `https://${hostname}:3042`;
 const debugConfig: Config = {
     usePersistentStorage: true,
     useTestStore: false,
+    libBase: prodLib,
     backendBase: prodBack,
     frontendBase: hostname
         ? `${localProtocol}://${hostname}:3000`

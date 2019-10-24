@@ -1,10 +1,11 @@
-import { BackContract, PathMethodContract } from 'booka-common';
+import { BackContract, PathMethodContract, LibContract } from 'booka-common';
 import { BookId } from '../model';
 import { config } from '../config';
 import { createFetcher, FetchReturn } from './fetcher';
 
 const backendUrl = config().backendBase;
 const back = createFetcher<BackContract>(backendUrl);
+const lib = createFetcher<LibContract>(config().libBase);
 
 async function optional<C extends PathMethodContract>(promise: Promise<FetchReturn<C>>): Promise<C['return'] | undefined> {
     const result = await promise;
@@ -17,7 +18,7 @@ async function optional<C extends PathMethodContract>(promise: Promise<FetchRetu
 }
 
 export async function uploadBook(bookData: any, token: string) {
-    await back.post('/books/upload', {
+    return lib.post('/upload', {
         auth: token,
         extra: {
             postData: bookData,
@@ -36,11 +37,13 @@ export async function fetchTokenForFb(fbToken: string) {
 }
 
 export async function fetchLibrary() {
-    return optional(back.get('/books/all', {}));
+    return optional(lib.get('/all', {
+        query: { page: 0 },
+    }));
 }
 
 export async function fetchBI(bookId: BookId) {
-    return optional(back.get('/books/single', {
+    return optional(lib.get('/full', {
         query: { id: bookId.name },
     }));
 }
