@@ -1,36 +1,37 @@
 import * as React from 'react';
 
 import {
-    BookPath, BookRange, Callback, fragmentForPath,
+    BookPath, BookRange, fragmentForPath,
 } from 'booka-common';
 import {
     BookId, bookLocator, locationPath, titleForPath, BookObject,
-    colors, Theme, fontSize, highlights,
+    colors, fontSize, highlights, HasTheme, App,
 } from '../model';
 import {
-    Row, Column, point,
+    Row, Column, point, BorderButton,
     Scroll, Clickable, EmptyLine, useCopy,
 } from '../blocks';
 import { actionCreators, generateQuoteLink } from '../core';
-import { BorderButton, connect } from './Connected';
 import { BookFragmentComp, BookSelection } from '../reader';
+import { dispatch } from '../core/store';
+import { connect } from 'react-redux';
 
-export type ReaderProps = {
-    theme: Theme,
+export type ReaderProps = HasTheme & {
     book: BookObject,
     pathToOpen: BookPath | null,
     quoteRange: BookRange | undefined,
-    updateBookPosition: Callback<BookPath>,
-    toggleControls: Callback<void>,
-    openFootnote: Callback<string>,
+    // updateBookPosition: Callback<BookPath>,
+    // toggleControls: Callback<void>,
+    // openFootnote: Callback<string>,
 };
-function ReaderC({
-    pathToOpen, updateBookPosition,
+function Reader({
+    pathToOpen,
     book: { id, book },
-    toggleControls,
     theme,
-    openFootnote,
     quoteRange,
+    // updateBookPosition,
+    // toggleControls,
+    // openFootnote,
 }: ReaderProps) {
     const fragment = fragmentForPath(book, pathToOpen || []);
 
@@ -59,8 +60,15 @@ function ReaderC({
         <Row fullWidth centered>
             <Column maxWidth={point(50)} fullWidth padding={point(1)} centered>
                 <EmptyLine />
-                <PathLink path={fragment.previous} id={id} text={prevTitle !== undefined ? prevTitle[0] : 'Previous'} />
-                <Clickable onClick={toggleControls}>
+                <PathLink
+                    theme={theme}
+                    path={fragment.previous}
+                    id={id}
+                    text={prevTitle !== undefined ? prevTitle[0] : 'Previous'}
+                />
+                <Clickable onClick={() => {
+                    dispatch(actionCreators.toggleControls());
+                }}>
                     <Column>
                         <BookFragmentComp
                             fragment={fragment}
@@ -70,34 +78,58 @@ function ReaderC({
                             refHoverColor={colors(theme).highlight}
                             fontFamily={theme.fontFamilies.book}
                             fontSize={fontSize(theme, 'text')}
-                            onScroll={updateBookPosition}
+                            onScroll={path => {
+                                dispatch(actionCreators.updateBookPosition(
+                                    path
+                                ));
+                            }}
                             pathToScroll={pathToOpen || undefined}
                             onSelectionChange={selectionHandler}
-                            onRefClick={openFootnote}
+                            onRefClick={refId => {
+                                dispatch(actionCreators.openFootnote(refId));
+                            }}
                         />
                     </Column>
                 </Clickable>
-                <PathLink path={fragment.next} id={id} text={nextTitle !== undefined ? nextTitle[0] : 'Next'} />
+                <PathLink
+                    theme={theme}
+                    path={fragment.next}
+                    id={id}
+                    text={nextTitle !== undefined ? nextTitle[0] : 'Next'}
+                />
                 <EmptyLine />
             </Column>
         </Row>
     </Scroll>;
 }
-export const Reader = connect(['pathToOpen', 'theme'], ['updateBookPosition', 'toggleControls', 'openFootnote'])(ReaderC);
 
-type PathLinkProps = {
+// TODO: fix: use typed 'connect'
+export const ConnectedReader = connect(
+    ({ theme, pathToOpen }: App) => ({
+        theme, pathToOpen,
+    }),
+)(Reader);
+
+type PathLinkProps = HasTheme & {
     path: BookPath | undefined,
     id: BookId,
     text: string,
 };
 function PathLink(props: PathLinkProps) {
-    return props.path === undefined ? null :
-        <Row centered margin={point(1)}>
-            <BorderButton
-                action={actionCreators
-                    .navigateToBook(bookLocator(props.id, locationPath(props.path)))}
-                text={props.text}
-                fontFamily='book'
-            />
-        </Row>;
+    if (props.path === undefined) {
+        return null;
+    }
+    const path = props.path;
+    return <Row centered margin={point(1)}>
+        <BorderButton
+            theme={props.theme}
+            onClick={() => {
+                dispatch(actionCreators.navigateToBook(
+                    bookLocator(props.id, locationPath(path))
+                ));
+            }}
+            text={props.text}
+            fontFamily='book'
+        />
+    </Row>;
 }

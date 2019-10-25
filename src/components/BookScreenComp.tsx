@@ -13,7 +13,7 @@ import {
     BookScreen, PaletteName,
     Pagination, Theme, BookId, User, HasTheme,
 } from '../model';
-import { Reader } from './Reader';
+import { ConnectedReader } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
 import { actionCreators } from '../core';
 import { AccountButton } from './AccountButton';
@@ -26,7 +26,8 @@ export function BookScreenComp({ screen, theme }: BookScreenProps) {
     const { book, bl } = screen;
     const pagination = React.useRef<Pagination>(new Pagination(book.book));
     return <>
-        <Reader
+        <ConnectedReader
+            theme={theme}
             book={book}
             quoteRange={bl.quote}
         />
