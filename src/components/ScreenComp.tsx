@@ -2,7 +2,7 @@ import * as React from 'react';
 import { assertNever } from 'booka-common';
 
 import { Column, point } from '../blocks';
-import { AppScreen, Theme, User } from '../model';
+import { AppScreen, Theme, User, HasTheme } from '../model';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 import {
@@ -10,7 +10,7 @@ import {
     FullScreenActivityIndicator, TopBar, BottomBar,
 } from './Connected';
 
-export type ScreenProps = {
+export type ScreenProps = HasTheme & {
     screen: AppScreen,
 };
 export const ScreenComp = connectState('controlsVisible', 'loading', 'theme', 'user')<ScreenProps>(({ screen, controlsVisible, loading, theme, user }) =>
@@ -28,15 +28,15 @@ export const ScreenComp = connectState('controlsVisible', 'loading', 'theme', 'u
             controlsVisible={controlsVisible}
             screen={screen}
         />
-        <Content screen={screen} />
+        <Content theme={theme} screen={screen} />
     </Column>
 );
 
-type ContentProps = {
+type ContentProps = HasTheme & {
     screen: AppScreen,
 };
-function Content({ screen }: ContentProps) {
-    return screen.screen === 'book' ? <BookScreenComp screen={screen} />
+function Content({ screen, theme }: ContentProps) {
+    return screen.screen === 'book' ? <BookScreenComp theme={theme} screen={screen} />
         : screen.screen === 'library' ? <LibraryScreenComp screen={screen} />
             : (assertNever(screen), null);
 }
@@ -57,12 +57,12 @@ function Header({ screen, controlsVisible, theme, user }: BarProps) {
     </TopBar>;
 }
 
-function Footer({ screen, controlsVisible }: BarProps) {
+function Footer({ screen, controlsVisible, theme }: BarProps) {
     if (screen.screen !== 'book') {
         return null;
     }
 
     return <BottomBar open={controlsVisible} paddingHorizontal={point(1)}>
-        <BookScreenFooter screen={screen} />
+        <BookScreenFooter theme={theme} screen={screen} />
     </BottomBar>;
 }
