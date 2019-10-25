@@ -1,9 +1,11 @@
 import * as React from 'react';
 
 import { LibraryScreen, Theme, User, HasTheme } from '../model';
-import { Triad, FileUploadDialog, FileUploadDialogRef } from '../blocks';
+import {
+    Triad, FileUploadDialog, FileUploadDialogRef,
+    TextLine, IconButton,
+} from '../blocks';
 import { LibraryComp } from './LibraryComp';
-import { TextLine, IconButton, connectState } from './Connected';
 import { AccountButton } from './AccountButton';
 import { uploadBook } from '../api';
 
@@ -13,10 +15,15 @@ export type LibraryScreenHeaderProps = {
 };
 export function LibraryScreenHeader({ theme, user }: LibraryScreenHeaderProps) {
     return <Triad
-        center={<TextLine text='Library' />}
+        center={
+            <TextLine
+                theme={theme}
+                text='Library'
+            />
+        }
         right={
             <>
-                <UploadButton />
+                <UploadButton theme={theme} user={user} />
                 <AccountButton theme={theme} user={user} />
             </>
         }
@@ -33,10 +40,10 @@ export function LibraryScreenComp({ screen, theme }: LibraryScreenProps) {
     />;
 }
 
-type UploadButtonProps = {
+type UploadButtonProps = HasTheme & {
     user: User | undefined,
 };
-function UploadButtonC({ user }: UploadButtonProps) {
+export function UploadButton({ user, theme }: UploadButtonProps) {
     const uploadRef = React.useRef<FileUploadDialogRef>();
     return user
         ? <>
@@ -49,10 +56,10 @@ function UploadButtonC({ user }: UploadButtonProps) {
                 }}
             />
             <IconButton
+                theme={theme}
                 icon='upload'
                 onClick={() => uploadRef.current && uploadRef.current.show()}
             />
         </>
         : null;
 }
-const UploadButton = connectState('user')(UploadButtonC);
