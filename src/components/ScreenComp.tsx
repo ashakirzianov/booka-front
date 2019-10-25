@@ -37,7 +37,7 @@ type ContentProps = HasTheme & {
 };
 function Content({ screen, theme }: ContentProps) {
     return screen.screen === 'book' ? <BookScreenComp theme={theme} screen={screen} />
-        : screen.screen === 'library' ? <LibraryScreenComp screen={screen} />
+        : screen.screen === 'library' ? <LibraryScreenComp theme={theme} screen={screen} />
             : (assertNever(screen), null);
 }
 

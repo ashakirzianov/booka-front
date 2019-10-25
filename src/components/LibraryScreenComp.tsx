@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LibraryScreen, Theme, User } from '../model';
+import { LibraryScreen, Theme, User, HasTheme } from '../model';
 import { Triad, FileUploadDialog, FileUploadDialogRef } from '../blocks';
 import { LibraryComp } from './LibraryComp';
 import { TextLine, IconButton, connectState } from './Connected';
@@ -23,11 +23,14 @@ export function LibraryScreenHeader({ theme, user }: LibraryScreenHeaderProps) {
     />;
 }
 
-export type LibraryScreenProps = {
+export type LibraryScreenProps = HasTheme & {
     screen: LibraryScreen,
 };
-export function LibraryScreenComp({ screen }: LibraryScreenProps) {
-    return <LibraryComp library={screen.library} />;
+export function LibraryScreenComp({ screen, theme }: LibraryScreenProps) {
+    return <LibraryComp
+        theme={theme}
+        library={screen.library}
+    />;
 }
 
 type UploadButtonProps = {
