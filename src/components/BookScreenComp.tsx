@@ -9,7 +9,7 @@ import {
 } from '../blocks';
 import {
     BookScreen, PaletteName,
-    Pagination, Theme, BookId,
+    Pagination, Theme, BookId, User,
 } from '../model';
 import { Reader } from './Reader';
 import { TableOfContentsComp } from './TableOfContentsComp';
@@ -51,13 +51,14 @@ export function BookScreenComp({ screen }: BookScreenProps) {
 
 export type BookScreenHeaderProps = {
     theme: Theme,
+    user: User | undefined,
 };
-export function BookScreenHeader({ theme }: BookScreenHeaderProps) {
+export function BookScreenHeader({ theme, user }: BookScreenHeaderProps) {
     return <Triad
         left={<LibButton />}
         right={<>
             <AppearanceButton />
-            <AccountButton theme={theme} />
+            <AccountButton theme={theme} user={user} />
         </>}
     />;
 }

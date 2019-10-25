@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Callback } from 'booka-common';
 
-import { WithPopover, TextLine, connectState, IconButton, TagButton } from './Connected';
 import {
     Column, FacebookLogin, SocialLoginResult, PictureButton, Row, point,
+    WithPopover, TextLine, IconButton, TagButton,
 } from '../blocks';
 import { config } from '../config';
 import { User, Theme } from '../model';
@@ -11,14 +11,18 @@ import { loginWithFbToken, logout } from '../core/dataAccess';
 
 export type AccountButtonProps = {
     theme: Theme,
-    user?: User,
+    user: User | undefined,
 };
-function AccountButtonC({ user, theme }: AccountButtonProps) {
+export function AccountButton({ user, theme }: AccountButtonProps) {
     return <WithPopover
+        theme={theme}
         popoverPlacement='bottom'
         body={
             user
-                ? <AccountPanel user={user} />
+                ? <AccountPanel
+                    theme={theme}
+                    user={user}
+                />
                 : ({ scheduleUpdate }) =>
                     <SignInPanel onStatusChanged={scheduleUpdate} />
         }
@@ -29,7 +33,6 @@ function AccountButtonC({ user, theme }: AccountButtonProps) {
         />
     </WithPopover>;
 }
-export const AccountButton = connectState('user')(AccountButtonC);
 
 type ActualButtonProps = {
     theme: Theme,
@@ -45,6 +48,7 @@ function ActualButton({ theme, user, onClick }: ActualButtonProps) {
         />;
     } else {
         return <IconButton
+            theme={theme}
             icon='sign-in'
             onClick={onClick}
         />;
@@ -52,15 +56,24 @@ function ActualButton({ theme, user, onClick }: ActualButtonProps) {
 }
 
 type AccountPanelProps = {
+    theme: Theme,
     user: User,
 };
-function AccountPanel({ user }: AccountPanelProps) {
+function AccountPanel({ user, theme }: AccountPanelProps) {
     return <Column>
         <Row margin={point(1)} centered>
-            <TextLine text={user.name} fontSize='small' />
+            <TextLine
+                theme={theme}
+                text={user.name}
+                fontSize='small'
+            />
         </Row>
         <Row margin={point(1)} centered>
-            <TagButton text='Logout' onClick={() => logout()} />
+            <TagButton
+                theme={theme}
+                text='Logout'
+                onClick={() => logout()}
+            />
         </Row>
     </Column>;
 }

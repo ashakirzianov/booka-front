@@ -9,14 +9,15 @@ import { uploadBook } from '../api';
 
 export type LibraryScreenHeaderProps = {
     theme: Theme,
+    user: User | undefined,
 };
-export function LibraryScreenHeader({ theme }: LibraryScreenHeaderProps) {
+export function LibraryScreenHeader({ theme, user }: LibraryScreenHeaderProps) {
     return <Triad
         center={<TextLine text='Library' />}
         right={
             <>
                 <UploadButton />
-                <AccountButton theme={theme} />
+                <AccountButton theme={theme} user={user} />
             </>
         }
     />;

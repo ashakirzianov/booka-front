@@ -2,7 +2,7 @@ import * as React from 'react';
 import { assertNever } from 'booka-common';
 
 import { Column, point } from '../blocks';
-import { AppScreen, Theme } from '../model';
+import { AppScreen, Theme, User } from '../model';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
 import {
@@ -13,16 +13,18 @@ import {
 export type ScreenProps = {
     screen: AppScreen,
 };
-export const ScreenComp = connectState('controlsVisible', 'loading', 'theme')<ScreenProps>(({ screen, controlsVisible, loading, theme }) =>
+export const ScreenComp = connectState('controlsVisible', 'loading', 'theme', 'user')<ScreenProps>(({ screen, controlsVisible, loading, theme, user }) =>
     <Column centered fullWidth fullHeight>
         {loading ? <FullScreenActivityIndicator /> : null}
         <Header
             theme={theme}
+            user={user}
             controlsVisible={controlsVisible}
             screen={screen}
         />
         <Footer
             theme={theme}
+            user={user}
             controlsVisible={controlsVisible}
             screen={screen}
         />
@@ -41,14 +43,15 @@ function Content({ screen }: ContentProps) {
 
 type BarProps = {
     theme: Theme,
+    user: User | undefined,
     screen: AppScreen,
     controlsVisible: boolean,
 };
-function Header({ screen, controlsVisible, theme }: BarProps) {
+function Header({ screen, controlsVisible, theme, user }: BarProps) {
     return <TopBar open={controlsVisible} paddingHorizontal={point(1)}>
         {
-            screen.screen === 'library' ? <LibraryScreenHeader theme={theme} />
-                : screen.screen === 'book' ? <BookScreenHeader theme={theme} />
+            screen.screen === 'library' ? <LibraryScreenHeader theme={theme} user={user} />
+                : screen.screen === 'book' ? <BookScreenHeader theme={theme} user={user} />
                     : assertNever(screen, () => null)
         }
     </TopBar>;
