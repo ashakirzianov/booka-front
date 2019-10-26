@@ -10,7 +10,7 @@ import {
 import {
     Row, Column, point, BorderButton,
     Scroll, Clickable, EmptyLine, useCopy,
-} from '../blocks';
+} from '../atoms';
 import { actionCreators, generateQuoteLink } from '../core';
 import { BookFragmentComp, BookSelection } from '../reader';
 import { dispatch } from '../core/store';

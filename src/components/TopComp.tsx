@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Column, Layer } from '../blocks';
+import { Column, Layer } from '../atoms';
 import { ScreenComp } from './ScreenComp';
 import { App } from '../model';
 

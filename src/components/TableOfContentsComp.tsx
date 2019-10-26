@@ -3,7 +3,7 @@ import { TableOfContents, TableOfContentsItem } from 'booka-common';
 
 import {
     Row, Tab, Column, point,
-} from '../blocks';
+} from '../atoms';
 import {
     bookLocator, locationPath, BookId, Pagination,
 } from '../model';

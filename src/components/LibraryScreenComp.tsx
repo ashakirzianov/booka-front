@@ -4,7 +4,7 @@ import { LibraryScreen, Theme, User, HasTheme } from '../model';
 import {
     Triad, FileUploadDialog, FileUploadDialogRef,
     TextLine, IconButton,
-} from '../blocks';
+} from '../atoms';
 import { LibraryComp } from './LibraryComp';
 import { AccountButton } from './AccountButton';
 import { uploadBook } from '../api';

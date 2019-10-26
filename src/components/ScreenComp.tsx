@@ -4,7 +4,7 @@ import { assertNever } from 'booka-common';
 import {
     Column, point,
     FullScreenActivityIndicator, TopBar, BottomBar,
-} from '../blocks';
+} from '../atoms';
 import { AppScreen, Theme, User, HasTheme, App } from '../model';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';

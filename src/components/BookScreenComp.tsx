@@ -8,7 +8,7 @@ import {
     Separator, point, Triad,
     TagButton, IconButton, TextButton, PaletteButton, TextLine,
     WithPopover, Modal,
-} from '../blocks';
+} from '../atoms';
 import {
     BookScreen, PaletteName,
     Pagination, Theme, BookId, User, HasTheme,

@@ -5,7 +5,7 @@ import {
 } from '../model';
 import {
     SafeAreaView, Column, EmptyLine, TextButton,
-} from '../blocks';
+} from '../atoms';
 import { actionCreators } from '../core';
 import { dispatch } from '../core/store';
 

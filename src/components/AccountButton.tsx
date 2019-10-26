@@ -4,7 +4,7 @@ import { Callback } from 'booka-common';
 import {
     Column, FacebookLogin, SocialLoginResult, PictureButton, Row, point,
     WithPopover, TextLine, IconButton, TagButton,
-} from '../blocks';
+} from '../atoms';
 import { config } from '../config';
 import { User, Theme } from '../model';
 import { loginWithFbToken, logout } from '../core/dataAccess';
