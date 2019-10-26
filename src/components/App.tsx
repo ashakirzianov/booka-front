@@ -4,7 +4,7 @@ import { hot } from 'react-hot-loader/root';
 import { setConfig } from 'react-hot-loader';
 
 import { ConnectedProvider, TestProvider } from '../core';
-import { TopComp } from './TopComp';
+import { ConnectedTopCom } from './TopComp';
 import { config } from '../config';
 
 const Provider = config().useTestStore
@@ -12,7 +12,7 @@ const Provider = config().useTestStore
     : ConnectedProvider;
 
 export const AppCompC: React.SFC = props =>
-    <Provider><TopComp /></Provider>;
+    <Provider><ConnectedTopCom /></Provider>;
 
 // HACK: disable hot loader warning
 setConfig({ showReactDomPatchNotification: false } as any);

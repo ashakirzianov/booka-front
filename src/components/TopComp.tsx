@@ -1,13 +1,27 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { Column, Layer } from '../blocks';
 import { ScreenComp } from './ScreenComp';
-import { connectState } from './Connected';
+import { App } from '../model';
 
-export const TopComp = connectState('screen', 'theme')(function TopCompC(props) {
-    return <Layer theme={props.theme}>
+type TopProps = {
+    state: App,
+};
+function TopComp({ state }: TopProps) {
+    return <Layer theme={state.theme}>
         <Column centered>
-            <ScreenComp screen={props.screen} />
+            <ScreenComp
+                theme={state.theme}
+                screen={state.screen}
+                controlsVisible={state.controlsVisible}
+                loading={state.loading}
+                user={state.user}
+            />
         </Column>
     </Layer>;
-});
+}
+
+export const ConnectedTopCom = connect(
+    (state: App) => ({ state }),
+)(TopComp);

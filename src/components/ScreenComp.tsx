@@ -1,21 +1,26 @@
 import * as React from 'react';
 import { assertNever } from 'booka-common';
 
-import { Column, point } from '../blocks';
-import { AppScreen, Theme, User, HasTheme } from '../model';
+import {
+    Column, point,
+    FullScreenActivityIndicator, TopBar, BottomBar,
+} from '../blocks';
+import { AppScreen, Theme, User, HasTheme, App } from '../model';
 import { BookScreenComp, BookScreenHeader, BookScreenFooter } from './BookScreenComp';
 import { LibraryScreenComp, LibraryScreenHeader } from './LibraryScreenComp';
-import {
-    connectState,
-    FullScreenActivityIndicator, TopBar, BottomBar,
-} from './Connected';
 
 export type ScreenProps = HasTheme & {
     screen: AppScreen,
-};
-export const ScreenComp = connectState('controlsVisible', 'loading', 'theme', 'user')<ScreenProps>(({ screen, controlsVisible, loading, theme, user }) =>
-    <Column centered fullWidth fullHeight>
-        {loading ? <FullScreenActivityIndicator /> : null}
+} & Pick<App, 'controlsVisible' | 'loading' | 'user'>;
+export function ScreenComp({
+    screen, controlsVisible, loading, theme, user,
+}: ScreenProps) {
+    return <Column centered fullWidth fullHeight>
+        {
+            loading
+                ? <FullScreenActivityIndicator theme={theme} />
+                : null
+        }
         <Header
             theme={theme}
             user={user}
@@ -29,8 +34,8 @@ export const ScreenComp = connectState('controlsVisible', 'loading', 'theme', 'u
             screen={screen}
         />
         <Content theme={theme} screen={screen} />
-    </Column>
-);
+    </Column>;
+}
 
 type ContentProps = HasTheme & {
     screen: AppScreen,
@@ -48,7 +53,11 @@ type BarProps = {
     controlsVisible: boolean,
 };
 function Header({ screen, controlsVisible, theme, user }: BarProps) {
-    return <TopBar open={controlsVisible} paddingHorizontal={point(1)}>
+    return <TopBar
+        theme={theme}
+        open={controlsVisible}
+        paddingHorizontal={point(1)}
+    >
         {
             screen.screen === 'library' ? <LibraryScreenHeader theme={theme} user={user} />
                 : screen.screen === 'book' ? <BookScreenHeader theme={theme} user={user} />
@@ -62,7 +71,11 @@ function Footer({ screen, controlsVisible, theme }: BarProps) {
         return null;
     }
 
-    return <BottomBar open={controlsVisible} paddingHorizontal={point(1)}>
+    return <BottomBar
+        theme={theme}
+        open={controlsVisible}
+        paddingHorizontal={point(1)}
+    >
         <BookScreenFooter theme={theme} screen={screen} />
     </BottomBar>;
 }
