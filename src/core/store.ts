@@ -6,6 +6,11 @@ import { urlToAction } from './urlConversion';
 import { reducer } from './reducers';
 import { Action, actionCreators } from './actions';
 
+// TODO: remove
+export function dispatch(action: Action) {
+    store.dispatch(action);
+}
+
 export function dispatchUrlNavigation(url: string) {
     const action = urlToAction(url);
     // TODO: report errors ?

@@ -46,6 +46,10 @@ export type Theme = {
     radius: number,
 };
 
+export type HasTheme = {
+    theme: Theme,
+};
+
 export function colors(theme: Theme): Palette['colors'] {
     return theme.palettes[theme.currentPalette].colors;
 }

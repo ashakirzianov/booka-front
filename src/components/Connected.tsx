@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Callback } from 'booka-common';
 
-import * as Blocks from '../blocks';
+import * as Blocks from '../atoms';
 import { buildConnectRedux } from '../utils';
 import { Action, actionToUrl, actionCreators } from '../core';
 import { App } from '../model';

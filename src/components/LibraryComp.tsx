@@ -1,33 +1,37 @@
 import * as React from 'react';
 
 import {
-    Library, BookDesc, remoteBookId, locationCurrent, bookLocator,
+    Library, BookDesc, remoteBookId, locationCurrent, bookLocator, HasTheme,
 } from '../model';
 import {
-    SafeAreaView, Column, EmptyLine,
-} from '../blocks';
+    SafeAreaView, Column, EmptyLine, TextButton,
+} from '../atoms';
 import { actionCreators } from '../core';
-import { TextButton } from './Connected';
+import { dispatch } from '../core/store';
 
-type BookItemProps = {
+type BookItemProps = HasTheme & {
     meta: BookDesc,
     id: string,
 };
-function BookItem({ meta, id }: BookItemProps) {
+function BookItem({ meta, id, theme }: BookItemProps) {
     return <Column>
         <TextButton
+            theme={theme}
             color='text'
             text={meta.title}
-            action={actionCreators.navigateToBook(
-                bookLocator(remoteBookId(id), locationCurrent()))}
+            onClick={() => {
+                dispatch(actionCreators.navigateToBook(
+                    bookLocator(remoteBookId(id), locationCurrent())
+                ));
+            }}
         />
     </Column>;
 }
 
-export type LibraryProps = {
+export type LibraryProps = HasTheme & {
     library: Library,
 };
-export function LibraryComp({ library }: LibraryProps) {
+export function LibraryComp({ library, theme }: LibraryProps) {
     return <SafeAreaView>
         <Column>
             <EmptyLine />
@@ -35,6 +39,7 @@ export function LibraryComp({ library }: LibraryProps) {
                 Object.keys(library.books).map(
                     id =>
                         <BookItem
+                            theme={theme}
                             key={id}
                             meta={library.books[id]!}
                             id={id}
